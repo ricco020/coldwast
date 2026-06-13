@@ -1,0 +1,31 @@
+{
+  "cleanUrls": false,
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/blog/2013-08-20-Cabal-sandbox.html", "destination": "/e/blog/2013-08-20-Cabal-sandbox.html", "permanent": true },
+    { "source": "/blog/2013-08-21-Cabal-1-18.html", "destination": "/e/blog/2013-08-20-Cabal-sandbox.html", "permanent": true },
+    { "source": "/blog/2016-05-04-Cabal-1-24.html", "destination": "/e/blog/2017-09-09-Cabal-2-0.html", "permanent": true },
+    { "source": "/e/blog/2013-08-21-Cabal-1-18.html", "destination": "/e/blog/2013-08-20-Cabal-sandbox.html", "permanent": true },
+    { "source": "/e/blog/2016-05-04-Cabal-1-24.html", "destination": "/e/blog/2017-09-09-Cabal-2-0.html", "permanent": true },
+    { "source": "/e/blog/2011-06-03-GSocIntroduction.html", "destination": "/e/blog/2011-08-22-GSoC-Final.html", "permanent": true },
+    { "source": "/e/tags/gsoc.html", "destination": "/e/blog/2011-08-22-GSoC-Final.html", "permanent": true },
+    { "source": "/e/tags/haskell.html", "destination": "/e/", "permanent": true },
+    { "source": "/e/files/mikhail-glushenkov-cv.pdf", "destination": "/e/", "permanent": true },
+    { "source": "/e/blog", "destination": "/e/", "permanent": true },
+    { "source": "/blog", "destination": "/e/", "permanent": true }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" }
+      ]
+    },
+    {
+      "source": "/e/rss.xml",
+      "headers": [ { "key": "Content-Type", "value": "application/rss+xml; charset=utf-8" } ]
+    }
+  ]
+}

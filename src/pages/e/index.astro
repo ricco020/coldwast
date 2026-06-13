@@ -1,0 +1,34 @@
+---
+import Base from '../../layouts/Base.astro';
+const path = '/e/';
+const posts = [
+  { url: '/e/blog/2013-08-20-Cabal-sandbox.html', date: '2013-08-20', updated: '2026-06-13',
+    title: 'Cabal Sandboxes: What They Were, and What Replaced Them',
+    blurb: 'Per-project dependency isolation from cabal-install 1.18 — and the nix-style v2-build workflow that superseded it.' },
+  { url: '/e/blog/2017-09-09-Cabal-2-0.html', date: '2017-09-09', updated: '2026-06-13',
+    title: 'Cabal 2.0: the Release that Reshaped Haskell Builds',
+    blurb: 'Nix-style local builds, Backpack mixins, the caret operator and a better solver — and where each stands in 2026.' },
+  { url: '/e/blog/2011-08-22-GSoC-Final.html', date: '2011-08-22', updated: '2026-06-13',
+    title: 'Parallelising cabal-install: How Haskell Builds Use Your Cores',
+    blurb: 'Dependency-graph parallelism, -j builds and GHC job semaphores — the topic a 2011 GSoC project put on the map.' },
+];
+---
+<Base title="Guides — Coldwast Programming &amp; Dev" description="Updated, original programming guides — Haskell, Cabal and the modern dev toolchain. Independent and community-maintained." path={path}>
+  <p class="kicker">Coldwast</p>
+  <h1>Programming &amp; Dev Guides</h1>
+  <p class="meta">Original, regularly-updated references. Currently focused on the Haskell/Cabal toolchain, expanding into general developer tooling.</p>
+
+  <div class="note">A note on this site: <strong>coldwa.st</strong> was historically a Haskell blog. It is now an independent programming-resources site. The Haskell/Cabal guides below are <em>new, community-maintained rewrites</em> of those topics, updated for the current toolchain — original content, not authored by or affiliated with the previous owner.</div>
+
+  <ul class="postlist">
+    {posts.map((p) => (
+      <li>
+        <a class="t" href={p.url}>{p.title}</a>
+        <div class="d">{p.date} · updated {p.updated}</div>
+        <p>{p.blurb}</p>
+      </li>
+    ))}
+  </ul>
+
+  <p class="meta"><a href="/e/rss.xml">RSS feed</a> · <a href="/about.html">About &amp; editorial policy</a></p>
+</Base>

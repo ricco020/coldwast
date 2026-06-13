@@ -1,0 +1,130 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+  path: string;            // canonical path, e.g. /e/blog/2013-08-20-Cabal-sandbox.html
+  image?: string;
+  datePublished?: string;
+  dateModified?: string;
+  type?: string;           // 'article' | 'website'
+}
+const {
+  title,
+  description,
+  path,
+  image = 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&q=80&auto=format&fit=crop',
+  datePublished,
+  dateModified,
+  type = 'website',
+} = Astro.props;
+
+const SITE = 'https://coldwa.st';
+const canonical = SITE + path;
+const year = 2026;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={image} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="generator" content="coldwa.st" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {type === 'article' && datePublished && (
+      <script type="application/ld+json" set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'TechArticle',
+        headline: title,
+        description,
+        datePublished,
+        dateModified: dateModified || datePublished,
+        mainEntityOfPage: canonical,
+        publisher: { '@type': 'Organization', name: 'Coldwast', url: SITE },
+      })} />
+    )}
+    <style is:global>
+      :root {
+        --bg: #0f1413; --panel: #161d1b; --edge: #243330; --edge2: #35514a;
+        --ink: #e6efe9; --dim: #9fb3aa; --faint: #6b7e76;
+        --accent: #5ee0a0; --accentd: #2f9c6a; --amber: #e8b454; --code: #1b2422;
+        --maxw: 760px;
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0; background: var(--bg); color: var(--ink);
+        font-family: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+        font-size: 18px; line-height: 1.7; -webkit-font-smoothing: antialiased;
+      }
+      .mono, code, pre, h1, h2, h3, .kicker, nav, .meta, footer {
+        font-family: ui-monospace, 'SFMono-Regular', 'JetBrains Mono', 'Fira Code', Menlo, Consolas, monospace;
+      }
+      .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 22px; }
+      header.site {
+        border-bottom: 1px solid var(--edge); background: rgba(15,20,19,0.85);
+        backdrop-filter: blur(6px); position: sticky; top: 0; z-index: 10;
+      }
+      header.site .wrap { display: flex; align-items: baseline; gap: 26px; padding-top: 16px; padding-bottom: 16px; flex-wrap: wrap; }
+      .brand { font-size: 17px; font-weight: 700; color: var(--ink); text-decoration: none; letter-spacing: -0.3px; }
+      .brand b { color: var(--accent); } .brand .blink { color: var(--accent); }
+      nav { display: flex; gap: 20px; font-size: 14px; }
+      nav a { color: var(--dim); text-decoration: none; } nav a:hover { color: var(--accent); }
+      main { padding: 40px 0 20px; }
+      h1 { font-size: 31px; line-height: 1.25; letter-spacing: -0.5px; margin: 0 0 10px; color: var(--ink); }
+      h2 { font-size: 21px; margin: 38px 0 12px; color: var(--accent); }
+      h3 { font-size: 17px; margin: 26px 0 8px; color: var(--ink); }
+      .kicker { color: var(--accentd); font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px; }
+      .meta { color: var(--faint); font-size: 13px; margin: 8px 0 22px; }
+      p, li { color: var(--ink); }
+      a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--edge2); }
+      a:hover { text-decoration-color: var(--accent); }
+      hr { border: 0; border-top: 1px solid var(--edge); margin: 34px 0; }
+      img.hero { width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--edge); margin: 6px 0 8px; display: block; }
+      figcaption { color: var(--faint); font-size: 12px; margin-bottom: 22px; }
+      code { background: var(--code); color: #bfe9d2; padding: 2px 6px; border-radius: 4px; font-size: 14.5px; }
+      pre { background: var(--code); border: 1px solid var(--edge); border-radius: 8px; padding: 16px 18px; overflow-x: auto; font-size: 14px; line-height: 1.55; }
+      pre code { background: none; padding: 0; color: #cfeedd; }
+      blockquote { border-left: 3px solid var(--accentd); margin: 22px 0; padding: 6px 18px; color: var(--dim); background: var(--panel); border-radius: 0 6px 6px 0; }
+      .note { background: var(--panel); border: 1px solid var(--edge); border-left: 3px solid var(--amber); border-radius: 0 6px 6px 0; padding: 12px 16px; font-size: 14.5px; color: var(--dim); margin: 22px 0; }
+      .postlist { list-style: none; padding: 0; }
+      .postlist li { border-bottom: 1px solid var(--edge); padding: 18px 0; }
+      .postlist a.t { font-size: 19px; color: var(--ink); text-decoration: none; }
+      .postlist a.t:hover { color: var(--accent); }
+      .postlist .d { color: var(--faint); font-size: 13px; }
+      footer.site { border-top: 1px solid var(--edge); margin-top: 50px; padding: 28px 0 50px; color: var(--faint); font-size: 13px; }
+      footer.site a { color: var(--dim); }
+    </style>
+  </head>
+  <body>
+    <header class="site">
+      <div class="wrap">
+        <a class="brand" href="/">cold<b>wa.st</b><span class="blink">_</span></a>
+        <nav>
+          <a href="/e/">Guides</a>
+          <a href="/e/rss.xml">RSS</a>
+          <a href="/about.html">About</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <div class="wrap">
+        <slot />
+      </div>
+    </main>
+    <footer class="site">
+      <div class="wrap">
+        <p><strong>Coldwast — Programming &amp; Dev Guides.</strong> Independent, community-maintained programming references.</p>
+        <p>The Haskell/Cabal guides here are modern, updated rewrites of topics this domain was historically known for. They are <em>not</em> authored by, signed by, or affiliated with the domain's previous owner. All content is original.</p>
+        <p>© {year} coldwa.st · <a href="/about.html">About &amp; editorial policy</a> · <a href="/e/rss.xml">RSS</a></p>
+      </div>
+    </footer>
+  </body>
+</html>
