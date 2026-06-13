@@ -46,6 +46,7 @@ $ cabal build</code></pre>
   <p>The fix, borrowed conceptually from Nix, was to make builds <strong>content-addressed and globally shared</strong>: build any given package-version-plus-flags combination once, store it under a hash in a global immutable store, and let every project that needs that exact combination reuse it. That is "nix-style local builds", and it arrived as <code>new-build</code> in Cabal 2.0.</p>
 
   <h2 id="today">What to use today (2026)</h2>
+  <figure><img src="https://images.pexels.com/photos/2061168/pexels-photo-2061168.jpeg?auto=compress&w=1200" alt="" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /></figure>
   <p><code>cabal sandbox</code> was deprecated during the Cabal 2.x series and removed entirely in later releases. The modern, default workflow in current <code>cabal-install</code> needs <strong>no init step at all</strong> — isolation is automatic:</p>
   <pre><code># In any project directory with a .cabal file:
 $ cabal build          # nix-style local build (v2 is the default now)
