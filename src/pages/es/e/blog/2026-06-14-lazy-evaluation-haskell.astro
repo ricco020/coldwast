@@ -5,7 +5,7 @@ const title = 'La evaluación perezosa en Haskell, explicada (2026)';
 const description = 'La evaluación perezosa significa que Haskell calcula un valor solo cuando realmente se necesita — no cuando se define. Qué es la evaluación perezosa, los thunks, por qué permite estructuras de datos infinitas, la trampa de las fugas de espacio y cómo forzar la evaluación estricta con seq y BangPatterns.';
 ---
 <Base title={title} description={description} path={path} type="article" lang="es"
-  image="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
+  image="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/es/">Inicio</a><span>/</span><a href="/es/e/">Guías</a><span>/</span>Evaluación perezosa</nav>
   <p class="kicker">Haskell · conceptos · evaluación</p>
@@ -13,8 +13,8 @@ const description = 'La evaluación perezosa significa que Haskell calcula un va
   <div class="artmeta"><span>Por Coldwast</span><span>Actualizado el 14 de junio de 2026</span><span>8 min de lectura</span><span class="tag">#haskell</span><span class="tag">#laziness</span><span class="tag">#concepts</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
-    <img class="hero" src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=1200&q=80&auto=format&fit=crop" alt="Un portátil mostrando código en su pantalla" width="1200" height="420" loading="eager" />
-    <figcaption>Un portátil ejecutando código — la evaluación perezosa decide cuándo un código como este calcula realmente un valor.</figcaption>
+    <img class="hero" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80&auto=format&fit=crop" alt="Un portátil abierto mostrando código en un escritorio" width="1200" height="420" loading="eager" />
+    <figcaption>Un portátil mostrando código — la evaluación perezosa decide cuándo un código como este calcula realmente un valor.</figcaption>
   </figure>
 
   <p>La mayoría de los lenguajes son <strong>estrictos</strong>: una expresión se evalúa en cuanto se vincula a un nombre. Haskell es diferente — es <strong>perezoso</strong> (más precisamente, <em>no estricto</em>) por defecto: una expresión no se evalúa hasta que su resultado se necesita de verdad. Esta única decisión de diseño está detrás de algunos de los poderes más distintivos de Haskell <em>y</em> de su trampa más conocida. Esta guía explica qué es la evaluación perezosa, cómo funcionan los thunks, qué te aporta y cómo desactivarla cuando lo necesitas.</p>
