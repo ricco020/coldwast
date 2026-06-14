@@ -4,6 +4,9 @@
 import { localized } from '../i18n/ui.js';
 
 export const guides = [
+  { href:'/e/blog/2026-06-14-what-is-sql.html', cats:'Programming, Data, Databases', title:'What Is SQL? The Language of Databases, Explained (2026)', dek:'SQL is the standard language for storing, querying and changing data in relational databases. Core commands (SELECT, INSERT, UPDATE, DELETE), how a query works, SQL vs NoSQL, and why it is still essential in 2026.', date:'Jun 14, 2026', read:'7 min read', img:'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=1200&q=80&auto=format&fit=crop', imgAlt:'Colorful source code on a monitor',
+    title_fr:'Qu’est-ce que le SQL ? Le langage des bases de données (2026)', dek_fr:'Le SQL est le langage standard pour stocker, interroger et modifier les données dans les bases relationnelles. Les commandes clés (SELECT, INSERT, UPDATE, DELETE), le fonctionnement d’une requête, SQL vs NoSQL, et pourquoi il reste essentiel en 2026.',
+    title_es:'¿Qué es SQL? El lenguaje de las bases de datos (2026)', dek_es:'SQL es el lenguaje estándar para almacenar, consultar y modificar datos en bases de datos relacionales. Los comandos clave (SELECT, INSERT, UPDATE, DELETE), cómo funciona una consulta, SQL vs NoSQL, y por qué sigue siendo esencial en 2026.' },
   { href:'/e/blog/2026-06-14-what-is-git.html', cats:'Programming, Tools, Workflow', title:'What Is Git? Version Control Explained for Beginners (2026)', dek:'Git is a distributed version-control system that tracks every change to your code so you can branch, merge, collaborate and undo. Core concepts (commit, branch, merge, remote), the daily workflow, and how it differs from GitHub.', date:'Jun 14, 2026', read:'7 min read', img:'https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80&auto=format&fit=crop', imgAlt:'Lines of source code on a dark screen',
     title_fr:'Qu’est-ce que Git ? Le contrôle de version expliqué (2026)', dek_fr:'Git est un système de contrôle de version distribué qui suit chaque changement de ton code pour brancher, fusionner, collaborer et annuler. Les concepts clés (commit, branche, merge, remote), le workflow quotidien, et sa différence avec GitHub.',
     title_es:'¿Qué es Git? El control de versiones explicado (2026)', dek_es:'Git es un sistema de control de versiones distribuido que registra cada cambio de tu código para ramificar, fusionar, colaborar y deshacer. Los conceptos clave (commit, rama, merge, remote), el flujo diario, y su diferencia con GitHub.' },
@@ -55,6 +58,7 @@ export const categories = [
   { slug:'web',         label:'Web',            label_fr:'Web',               label_es:'Web',               match:'web' },
   { slug:'data',        label:'Data',           label_fr:'Données',           label_es:'Datos',             match:'data' },
   { slug:'tools',       label:'Tools',          label_fr:'Outils',            label_es:'Herramientas',      match:'tools' },
+  { slug:'databases',   label:'Databases',      label_fr:'Bases de données',  label_es:'Bases de datos',    match:'database' },
   { slug:'haskell',     label:'Haskell',        label_fr:'Haskell',           label_es:'Haskell',           match:'haskell' },
   { slug:'concepts',    label:'Concepts',       label_fr:'Concepts',          label_es:'Conceptos',         match:'concept' },
   { slug:'cabal',       label:'Cabal & builds', label_fr:'Cabal & builds',    label_es:'Cabal y builds',    match:'cabal' },
