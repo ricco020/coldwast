@@ -4,6 +4,8 @@ import Base from '../layouts/Base.astro';
 const guides = [
   {
     href: '/e/blog/2013-08-20-Cabal-sandbox.html',
+    img: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1100&q=70&auto=format&fit=crop',
+    alt: 'Source code on a dark editor screen',
     cat: 'Haskell · Build',
     title: 'Cabal Sandboxes — and what replaced them',
     dek: 'The per-project isolation idea that won so completely it became invisible. What sandboxes were, and the nix-style cabal build workflow that superseded them.',
@@ -12,6 +14,8 @@ const guides = [
   },
   {
     href: '/e/blog/2017-09-09-Cabal-2-0.html',
+    img: 'https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=900&q=70&auto=format&fit=crop',
+    alt: 'Laptop showing code in a terminal',
     cat: 'Haskell · Build',
     title: 'Cabal 2.0 — the release that reshaped Haskell builds',
     dek: 'Nix-style builds, Backpack, the caret operator — what 2.0 introduced and where each feature stands today.',
@@ -19,6 +23,8 @@ const guides = [
   },
   {
     href: '/e/blog/2011-08-22-GSoC-Final.html',
+    img: 'https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=900&q=70&auto=format&fit=crop',
+    alt: 'Close-up of colourful source code',
     cat: 'Haskell · Performance',
     title: 'Parallelising cabal-install',
     dek: 'Why a build is a dependency graph, how -j builds use your cores, and the modern job-semaphore fix for oversubscription.',
@@ -65,6 +71,7 @@ const principles = [
     <div class="cards">
       {guides.map((g) => (
         <a class:list={['card', g.feature && 'feature']} href={g.href}>
+          <img class="thumb" src={g.img} alt={g.alt} loading="lazy" width="1100" height="620" />
           <span class="cat">{g.cat}</span>
           <h3>{g.title}</h3>
           <p>{g.dek}</p>
