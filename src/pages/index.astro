@@ -69,18 +69,29 @@ function catAvatar(cats=''){
           <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">See Infomaniak cloud →</a>
           <p class="disc">Affiliate link — supports these free guides.</p>
         </div>
+        <div class="sidecard starthere">
+          <h4>New to Haskell? Start here</h4>
+          <ol class="steps">
+            <li><span class="n">1</span><a href="/e/blog/2026-06-14-what-is-haskell.html">What is Haskell?</a></li>
+            <li><span class="n">2</span><a href="/e/blog/2026-06-14-ghcup-install-haskell.html">Install the toolchain with GHCup</a></li>
+            <li><span class="n">3</span><a href="/e/blog/2026-06-14-haskell-monads.html">Understand monads</a></li>
+          </ol>
+        </div>
         <div class="sidecard">
           <h4>Popular guides</h4>
           <ul>{popular.map((p) => <li><a href={p.href} set:html={p.title} /></li>)}</ul>
         </div>
         <div class="sidecard">
           <h4>Browse by topic</h4>
-          <ul class="topiclist">
-            <li><a href="/e/c/haskell.html">Haskell</a></li>
-            <li><a href="/e/c/cabal.html">Cabal &amp; builds</a></li>
-            <li><a href="/e/c/toolchain.html">Toolchain</a></li>
-            <li><a href="/e/c/performance.html">Performance</a></li>
-          </ul>
+          <div class="chiprow">
+            <a class="chip" href="/e/c/haskell.html">Haskell</a>
+            <a class="chip" href="/e/c/concepts.html">Concepts</a>
+            <a class="chip" href="/e/c/cabal.html">Cabal &amp; builds</a>
+            <a class="chip" href="/e/c/toolchain.html">Toolchain</a>
+            <a class="chip" href="/e/c/compiler.html">Compiler</a>
+            <a class="chip" href="/e/c/performance.html">Performance</a>
+            <a class="chip" href="/e/c/editor.html">Editor &amp; HLS</a>
+          </div>
         </div>
       </aside>
     </div>
