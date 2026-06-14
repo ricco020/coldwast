@@ -77,6 +77,12 @@ const cur = path;
       nav.top a { color:#fff; text-decoration:none; font-weight:600; font-size:17px; opacity:.96; }
       nav.top a:hover { opacity:.78; }
       .search { margin-left:auto; display:flex; align-items:center; gap:9px; background:#fff; border-radius:999px; padding:9px 18px; color:var(--ink-faint); min-width:230px; font-family:'Baloo 2',sans-serif; font-size:15px; }
+      @media (max-width:760px){
+        .topbar .row { height:auto; min-height:64px; flex-wrap:wrap; gap:6px 18px; padding-top:12px; padding-bottom:12px; }
+        .search { display:none; }
+        nav.top { margin-left:0; gap:18px; }
+        .brand { font-size:20px; }
+      }
 
       /* ── Category pills ── */
       .catbar { border-bottom:1px solid var(--border); background:#fff; }
@@ -86,7 +92,7 @@ const cur = path;
 
       /* ── Layout: content + sidebar ── */
       .layout { display:grid; grid-template-columns:1fr 340px; gap:48px; padding:38px 0 20px; }
-      @media (max-width:940px){ .layout { grid-template-columns:1fr; } .side { order:-1; } }
+      @media (max-width:940px){ .layout { grid-template-columns:1fr; } }
 
       /* ── Story list item (polaroid author + serif title) ── */
       .story { display:grid; grid-template-columns:96px 1fr; gap:20px; padding:30px 0; border-bottom:1px solid var(--border); }
