@@ -346,7 +346,7 @@ const alts = [
       });
       const tocEl=document.getElementById('toc');
       if (tocEl){ const heads=document.querySelectorAll('main .reading h2');
-        if (heads.length>=3){ const l=document.createElement('p'); l.textContent='On this page'; tocEl.appendChild(l);
+        if (heads.length>=3){ const _lg=document.documentElement.lang||'en'; const _tl=({fr:'Sur cette page',es:'En esta página'})[_lg]||'On this page'; const l=document.createElement('p'); l.textContent=_tl; tocEl.appendChild(l);
           heads.forEach((h)=>{ if(!h.id) h.id=(h.textContent||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); const a=document.createElement('a'); a.href='#'+h.id; a.textContent=h.textContent; tocEl.appendChild(a); });
         } else { tocEl.remove(); } }
     </script>
