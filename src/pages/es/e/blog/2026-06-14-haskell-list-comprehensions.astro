@@ -1,0 +1,60 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/es/e/blog/2026-06-14-haskell-list-comprehensions.html';
+const title = 'Las listas por comprensión de Haskell, explicadas (2026)';
+const description = 'Una lista por comprensión construye una lista a partir de uno o más generadores con guardas opcionales — concisa, legible y cercana a la notación matemática de definición de conjuntos. La sintaxis, los generadores múltiples, las guardas y su relación con map y filter.';
+---
+<Base title={title} description={description} path={path} type="article" lang="es"
+  image="https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/es/">Inicio</a><span>/</span><a href="/es/e/">Guías</a><span>/</span>Listas por comprensión</nav>
+  <p class="kicker">Haskell · sintaxis · listas</p>
+  <h1>Las listas por comprensión de Haskell, explicadas</h1>
+  <div class="artmeta"><span>Por Coldwast</span><span>Actualizado el 14 de junio de 2026</span><span>6 min de lectura</span><span class="tag">#haskell</span><span class="tag">#lists</span><span class="tag">#syntax</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=1200&q=80&auto=format&fit=crop" alt="Código fuente en un editor de terminal" width="1200" height="420" loading="eager" />
+    <figcaption>Las listas por comprensión construyen una nueva lista a partir de listas existentes, en una única expresión legible.</figcaption>
+  </figure>
+
+  <p>Una de las primeras cosas que hacen que Haskell se sienta elegante es la <strong>lista por comprensión</strong>: una forma concisa de construir una nueva lista a partir de otras existentes, que refleja la notación matemática de definición de conjuntos que quizá recuerdes del colegio. Esta guía explica la sintaxis, los generadores múltiples, las guardas y cómo se relacionan las comprensiones con <code>map</code> y <code>filter</code>.</p>
+
+  <h2>La sintaxis básica</h2>
+  <p>Una lista por comprensión tiene la forma <code>[ output | generator, condition ]</code>. Lee la barra como "tal que":</p>
+  <pre><code>-- the squares of 1 to 10
+squares = [x*x | x &lt;- [1..10]]
+-- [1,4,9,16,25,36,49,64,81,100]</code></pre>
+  <p>Aquí <code>x &lt;- [1..10]</code> es un <strong>generador</strong>: extrae cada <code>x</code> de la lista <code>[1..10]</code>, y la parte anterior a la barra, <code>x*x</code>, es la <strong>expresión de salida</strong> aplicada a cada elemento.</p>
+
+  <h2>Añadir guardas (filtrado)</h2>
+  <figure><img src="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80&auto=format&fit=crop" alt="Líneas de código fuente en una pantalla oscura" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Líneas de código en una pantalla — una guarda conserva solo los elementos que cumplen una condición.</figcaption></figure>
+  <p>Una <strong>guarda</strong> es una condición booleana que conserva solo los elementos que la satisfacen:</p>
+  <pre><code>-- even numbers from 1 to 20, doubled
+result = [x*2 | x &lt;- [1..20], even x]
+-- [4,8,12,16,20,24,28,32,36,40]</code></pre>
+  <p>Puedes combinar varias guardas, separadas por comas; todas deben cumplirse para que se incluya un elemento.</p>
+
+  <h2>Generadores múltiples</h2>
+  <p>Con más de un generador, la comprensión itera sobre todas las combinaciones (como bucles anidados), en orden:</p>
+  <pre><code>-- all pairs from two small lists
+pairs = [(x, y) | x &lt;- [1,2,3], y &lt;- [&#39;a&#39;,&#39;b&#39;]]
+-- [(1,'a'),(1,'b'),(2,'a'),(2,'b'),(3,'a'),(3,'b')]</code></pre>
+  <p>El generador situado más a la derecha varía más rápido. También puedes hacer que un generador posterior dependa de uno anterior — por ejemplo, extrayendo <code>y</code> de <code>[x..10]</code>.</p>
+
+  <h2>Cómo se relacionan con map y filter</h2>
+  <p>Una comprensión es esencialmente <code>map</code> y <code>filter</code> en una sola forma legible. Estas son equivalentes:</p>
+  <pre><code>[x*2 | x &lt;- xs, even x]
+map (*2) (filter even xs)</code></pre>
+  <p>Usa la que se lea mejor en cada caso. Las comprensiones brillan cuando tienes varios generadores o varias guardas; <code>map</code>/<code>filter</code> se componen bien en canalizaciones libres de puntos. Como Haskell es <a href="/es/e/blog/2026-06-14-lazy-evaluation-haskell.html">perezoso</a>, una comprensión sobre una lista infinita como <code>[1..]</code> solo calcula los elementos que realmente consumes.</p>
+
+  <h2>Preguntas frecuentes</h2>
+  <p><strong>¿Qué es un generador en una lista por comprensión?</strong> La parte <code>x &lt;- xs</code>: extrae cada valor de <code>x</code> de la lista <code>xs</code> para alimentar la expresión de salida.</p>
+  <p><strong>¿Qué es una guarda?</strong> Una condición booleana (como <code>even x</code>) colocada después de una coma; solo se conservan los elementos para los que es verdadera.</p>
+  <p><strong>¿Puedo usar varios generadores?</strong> Sí — la comprensión produce todas las combinaciones, con el generador situado más a la derecha variando más rápido, como bucles anidados.</p>
+  <p><strong>¿Son las comprensiones solo map y filter?</strong> Conceptualmente sí para los casos simples; las comprensiones suelen ser más legibles con varios generadores o guardas, mientras que map/filter se componen bien en canalizaciones.</p>
+
+  <p>Para conocer el lenguaje que hay detrás de la sintaxis, consulta <a href="/es/e/blog/2026-06-14-what-is-haskell.html">qué es Haskell</a>; las comprensiones son una de las características que lo hacen conciso y expresivo.</p>
+
+  <div class="note">Guía independiente y mantenida por la comunidad. <strong>coldwa.st</strong> es un sitio de recursos de programación; este artículo es texto explicativo nuevo y original sobre las listas por comprensión de Haskell, no afiliado a los mantenedores del lenguaje. El código refleja el comportamiento estándar de Haskell/GHC — verifícalo con la documentación actual de GHC.</div>
+  </div>
+</Base>

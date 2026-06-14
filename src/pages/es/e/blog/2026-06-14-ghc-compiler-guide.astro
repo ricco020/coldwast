@@ -1,0 +1,62 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/es/e/blog/2026-06-14-ghc-compiler-guide.html';
+const title = 'GHC, el Glasgow Haskell Compiler: una guía práctica de 2026';
+const description = 'GHC es el compilador estándar de Haskell. Qué es, cómo instalarlo con GHCup, usar GHCi, los flags que importan (-O2, -Wall, -threaded, -j) y cómo encaja con Cabal y Stack en 2026.';
+---
+<Base title={title} description={description} path={path} type="article" lang="es"
+  image="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/es/">Inicio</a><span>/</span><a href="/es/e/">Guías</a><span>/</span>Compilador GHC</nav>
+  <p class="kicker">Haskell · compilador · toolchain</p>
+  <h1>GHC, el Glasgow Haskell Compiler: una guía práctica de 2026</h1>
+  <div class="artmeta"><span>Por Coldwast</span><span>Actualizado el 14 de junio de 2026</span><span>7 min de lectura</span><span class="tag">#haskell</span><span class="tag">#ghc</span><span class="tag">#compiler</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&q=80&auto=format&fit=crop" alt="Código fuente en una pantalla" width="1200" height="420" loading="eager" />
+    <figcaption>GHC convierte tu código fuente Haskell en binarios nativos rápidos — y da vida a GHCi y al resto del toolchain.</figcaption>
+  </figure>
+
+  <p><strong>GHC</strong> — el Glasgow Haskell Compiler — es el compilador estándar de Haskell y, en la práctica, el motor que hay debajo de todo lo demás en el ecosistema: Cabal, Stack y el Haskell Language Server lo dirigen. Esta guía explica qué es GHC, cómo instalarlo de forma limpia en 2026, cómo usar GHCi, los flags del compilador que realmente importan y cómo encaja con las herramientas de compilación.</p>
+
+  <h2>Qué es GHC</h2>
+  <p>GHC compila código fuente Haskell en ejecutables nativos optimizados y proporciona <strong>GHCi</strong>, un REPL interactivo para explorar el código. Es un compilador maduro y muy optimizador, con un rico sistema de tipos, y trae las bibliotecas (<code>base</code> y compañía) sobre las que se construyen tus programas. Casi todo lo demás en las herramientas de Haskell es, a algún nivel, un envoltorio que invoca a GHC con los argumentos adecuados.</p>
+
+  <h2>Instalar GHC (usa GHCup)</h2>
+  <p>No instales GHC a mano. El camino limpio y soportado es <strong>GHCup</strong>, que gestiona múltiples versiones de GHC y te deja cambiar por proyecto — consulta nuestra <a href="/es/e/blog/2026-06-14-ghcup-install-haskell.html">guía de instalación con GHCup</a>. En resumen:</p>
+  <pre><code>ghcup install ghc recommended
+ghcup set ghc 9.10.1
+ghc --version</code></pre>
+  <p>La razón por la que importa la gestión de versiones: los proyectos reales fijan versiones específicas de GHC, y GHCup hace que tener varias instaladas sea indoloro.</p>
+
+  <h2>GHCi: el REPL interactivo</h2>
+  <figure><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80&auto=format&fit=crop" alt="Un portátil abierto que muestra código sobre un escritorio" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Un portátil abierto que muestra código — GHCi te permite cargar módulos y probar funciones de forma interactiva.</figcaption></figure>
+  <pre><code>ghci                 # start the REPL
+:load Main.hs        # load a module (:l)
+:type foldr          # show a type (:t)
+:reload              # reload after edits (:r)
+:quit                # exit (:q)</code></pre>
+  <p>GHCi es donde realmente ocurre la mayor parte del desarrollo en Haskell — cargas un módulo, pruebas funciones, inspeccionas tipos, iteras.</p>
+
+  <h2>Los flags que importan</h2>
+  <ul>
+    <li><strong><code>-O2</code></strong> — optimización completa para builds de lanzamiento (compila más lento, ejecuta más rápido). El valor por defecto es <code>-O0</code>.</li>
+    <li><strong><code>-Wall</code></strong> — activa el amplio conjunto de advertencias; combínalo con <code>-Werror</code> en CI para fallar ante las advertencias.</li>
+    <li><strong><code>-threaded</code></strong> — enlaza el runtime con hilos, necesario para concurrencia/paralelismo reales.</li>
+    <li><strong><code>-j</code></strong> — compila módulos en paralelo (consulta <a href="/es/e/blog/2011-08-22-GSoC-Final.html">cómo las builds de Haskell usan tus núcleos</a>).</li>
+    <li><strong><code>-rtsopts +RTS -N</code></strong> — deja que el programa use varios núcleos en tiempo de ejecución.</li>
+  </ul>
+  <p>Compila directamente con <code>ghc -O2 Main.hs</code>, pero para cualquier cosa más allá de un solo archivo dirigirás GHC a través de una herramienta de compilación.</p>
+
+  <h2>Cómo encaja GHC con Cabal y Stack</h2>
+  <p>Rara vez llamas a <code>ghc</code> a mano en un proyecto. <strong>Cabal</strong> y <strong>Stack</strong> resuelven las dependencias e invocan a GHC con los flags y la base de datos de paquetes correctos por ti — consulta el trasfondo del modelo de compilación en <a href="/es/e/blog/2017-09-09-Cabal-2-0.html">Cabal 2.0</a> y el historial de aislamiento en <a href="/es/e/blog/2013-08-20-Cabal-sandbox.html">sandboxes de Cabal</a>. El Haskell Language Server también ejecuta GHC entre bastidores para dar a tu editor tipos y diagnósticos — consulta nuestra <a href="/es/e/blog/2026-06-14-haskell-language-server.html">guía de HLS</a>.</p>
+
+  <h2>Preguntas frecuentes</h2>
+  <p><strong>¿Es GHC el único compilador de Haskell?</strong> Es, con diferencia, el dominante y estándar en 2026; existen otros compiladores, pero GHC es a lo que apuntan prácticamente todas las herramientas y bibliotecas.</p>
+  <p><strong>¿Cómo instalo GHC?</strong> Mediante GHCup — gestiona las versiones y es el instalador recomendado en haskell.org.</p>
+  <p><strong>¿Qué hace -O2?</strong> Activa la optimización completa: mayor tiempo de compilación, ejecución más rápida. Úsalo para los lanzamientos; el valor por defecto -O0 está bien para iterar rápido.</p>
+  <p><strong>¿Necesito llamar a GHC directamente?</strong> Rara vez — Cabal o Stack lo invocan por ti en proyectos reales. Llamar a <code>ghc</code> directamente es útil para scripts de un solo archivo.</p>
+
+  <div class="note">Guía independiente y mantenida por la comunidad. <strong>coldwa.st</strong> es un sitio de recursos de programación; este artículo es texto nuevo y original sobre GHC y el toolchain actual de Haskell, no afiliado a los mantenedores del proyecto ni escrito por ellos. Los comandos reflejan el comportamiento documentado de GHC/GHCup — consulta la documentación oficial para conocer los números de versión más recientes.</div>
+  </div>
+</Base>

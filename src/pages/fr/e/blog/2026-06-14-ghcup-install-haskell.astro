@@ -1,0 +1,85 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/fr/e/blog/2026-06-14-ghcup-install-haskell.html';
+const title = 'Installer Haskell avec GHCup : le guide de la chaîne d’outils 2026 (GHC, Cabal, Stack, HLS)';
+const description = 'GHCup est la manière recommandée d’installer et de gérer la chaîne d’outils Haskell en 2026. Comment installer GHC, cabal-install, Stack et le Haskell Language Server, changer de versions et corriger les pièges courants — sous Linux, macOS et Windows.';
+---
+<Base title={title} description={description} path={path} type="article" lang="fr"
+  image="https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/fr/">Accueil</a><span>/</span><a href="/fr/e/">Guides</a><span>/</span>Installer Haskell avec GHCup</nav>
+  <p class="kicker">Haskell · chaîne d’outils · installation</p>
+  <h1>Installer Haskell avec GHCup : le guide de la chaîne d’outils 2026</h1>
+  <div class="artmeta"><span>Par Coldwast</span><span>Mis à jour le 14 juin 2026</span><span>7 min de lecture</span><span class="tag">#haskell</span><span class="tag">#ghcup</span><span class="tag">#cabal</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.unsplash.com/photo-1610986603166-f78428624e76?w=1200&q=80&auto=format&fit=crop" alt="Du code source coloré syntaxiquement sur un écran sombre" width="1200" height="420" loading="eager" />
+    <figcaption>Du code source coloré syntaxiquement à l’écran.</figcaption>
+  </figure>
+
+  <p>Si vous débutez avec Haskell en 2026, la question « comment l’installer ? » a une réponse claire : <strong>GHCup</strong>. C’est l’installeur officiel et multiplateforme et le gestionnaire de versions de toute la chaîne d’outils — le compilateur (<code>GHC</code>), l’outil de build (<code>cabal-install</code>), <code>Stack</code>, et le backend éditeur (<code>HLS</code>, le Haskell Language Server). Ce guide parcourt une installation propre, le changement de versions et les pièges que les gens rencontrent le plus souvent.</p>
+
+  <h2>Ce que GHCup gère réellement</h2>
+  <p>GHCup est un outil unique qui installe et bascule entre plusieurs versions de chaque composant, pour que vous ne soyez jamais bloqué sur un seul compilateur :</p>
+  <ul>
+    <li><strong>GHC</strong> — le Glasgow Haskell Compiler.</li>
+    <li><strong>cabal-install</strong> — l’outil de build <code>cabal</code> et son solveur de dépendances.</li>
+    <li><strong>Stack</strong> — un outil de build alternatif avec des snapshots curés.</li>
+    <li><strong>HLS</strong> — le Haskell Language Server, qui alimente l’autocomplétion, les infos de types et les refactors dans VS Code, Neovim et d’autres éditeurs.</li>
+  </ul>
+  <p>Il a remplacé l’ancien bundle « Haskell Platform » précisément parce que les vrais projets ont besoin de versions <em>différentes</em> de GHC, et GHCup rend le changement trivial.</p>
+
+  <h2>Installer GHCup</h2>
+  <p>Sous Linux et macOS, la ligne de commande officielle récupère un installeur interactif :</p>
+  <pre><code>curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh</code></pre>
+  <p>Comme pour tout script d’installation, lisez d’abord ce qu’il fait — la source est sur GitHub (<code>haskell/ghcup-hs</code>). Sous Windows, exécutez l’installeur PowerShell documenté sur le site de GHCup ; il met en place la même chaîne d’outils plus l’environnement MSYS2 requis.</p>
+  <p>L’installeur propose d’ajouter GHCup à votre profil shell pour que <code>ghc</code>, <code>cabal</code> et consorts soient dans votre <code>PATH</code>. Acceptez, puis redémarrez votre shell.</p>
+
+  <h2>La voie interactive : ghcup tui</h2>
+  <figure><img src="https://images.unsplash.com/photo-1587620962725-abab7fe55159?w=1200&q=80&auto=format&fit=crop" alt="Un ordinateur portable sur un bureau affichant du code source dans un éditeur" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Un ordinateur portable affichant du code source dans un éditeur.</figcaption></figure>
+  <p>La façon la plus rapide de gérer les versions est l’interface en terminal :</p>
+  <pre><code>ghcup tui</code></pre>
+  <p>Elle liste chaque version disponible de GHC, Cabal, Stack et HLS avec leur statut (installée, active, recommandée). Vous sélectionnez ce qu’il faut installer ou activer au clavier — pas besoin de mémoriser des commandes.</p>
+
+  <h2>Les équivalents en ligne de commande</h2>
+  <p>Si vous préférez les scripts ou la CI, les mêmes actions sont de simples commandes :</p>
+  <pre><code># install the recommended versions
+ghcup install ghc recommended
+ghcup install cabal recommended
+ghcup install hls recommended
+
+# make a specific GHC the active one
+ghcup set ghc 9.10.1
+
+# see what is installed
+ghcup list</code></pre>
+  <p>Utilisez les numéros de version que GHCup marque comme <em>recommended</em> sauf si un projet épingle quelque chose de spécifique dans son <code>cabal.project</code> ou <code>stack.yaml</code>.</p>
+
+  <h2>Premier build, pour confirmer que ça marche</h2>
+  <pre><code>cabal update          # refresh the package index
+mkdir hello &amp;&amp; cd hello
+cabal init --simple --non-interactive
+cabal run</code></pre>
+  <p>Si cela affiche une sortie, votre chaîne d’outils est saine. À partir de là, le build lui-même est parallèle par défaut — voyez notre guide sur <a href="/fr/e/blog/2011-08-22-GSoC-Final.html">comment Cabal exploite vos cœurs</a>, et les changements plus profonds arrivés dans <a href="/fr/e/blog/2017-09-09-Cabal-2-0.html">Cabal 2.0 et le modèle new-build</a>.</p>
+
+  <h2>Pièges courants</h2>
+  <ul>
+    <li><strong>PATH non mis à jour.</strong> Si <code>ghc</code> renvoie « command not found » après l’installation, vous avez sauté l’étape du profil — relancez l’installeur ou sourcez <code>~/.ghcup/env</code>.</li>
+    <li><strong>Incompatibilité de version HLS.</strong> Le Haskell Language Server doit prendre en charge votre GHC actif. Si le HLS de votre éditeur ne se charge pas, installez la build HLS correspondant à votre GHC via <code>ghcup tui</code>.</li>
+    <li><strong>GHC système masquant GHCup.</strong> Un GHC installé via le gestionnaire de paquets de votre OS peut prendre le dessus dans le <code>PATH</code>. Privilégiez celui géré par GHCup et supprimez ou déprioritisez le paquet système.</li>
+    <li><strong>Index de paquets périmé.</strong> Les erreurs de résolution après une longue interruption n’ont généralement besoin que de <code>cabal update</code>.</li>
+  </ul>
+  <p>Pour le vocabulaire employé dans ces guides — plans d’installation, snapshots, sandboxes — l’ancien <a href="/fr/e/blog/2013-08-20-Cabal-sandbox.html">guide des sandboxes Cabal</a> couvre comment l’isolation a évolué vers les builds par projet d’aujourd’hui.</p>
+
+  <h2>Stack ou Cabal après GHCup ?</h2>
+  <p>GHCup installe les deux, donc le choix vous revient. Cabal, avec son modèle de build moderne par projet, est le défaut par lequel la plupart des débutants devraient commencer ; Stack ajoute des snapshots de paquets curés que certaines équipes préfèrent pour la reproductibilité. Les deux fonctionnent avec le GHC que GHCup gère, et vous pouvez basculer plus tard sans réinstaller le compilateur.</p>
+
+  <h2>FAQ</h2>
+  <p><strong>GHCup est-il la manière officielle d’installer Haskell ?</strong> Oui — c’est l’installeur recommandé sur haskell.org et le point d’entrée standard de la chaîne d’outils en 2026.</p>
+  <p><strong>GHCup fonctionne-t-il sous Windows ?</strong> Oui, via son installeur PowerShell, qui met aussi en place l’environnement MSYS2 dont GHC a besoin sous Windows.</p>
+  <p><strong>Puis-je avoir plusieurs versions de GHC à la fois ?</strong> Oui — c’est tout l’intérêt. Installez-en plusieurs, changez la version active avec <code>ghcup set ghc &lt;version&gt;</code>.</p>
+  <p><strong>Ai-je encore besoin de la Haskell Platform ?</strong> Non. GHCup l’a remplacée ; installez individuellement les composants dont vous avez besoin.</p>
+
+  <div class="note">Guide indépendant, maintenu par la communauté. <strong>coldwa.st</strong> est un site de ressources de programmation ; cet article est un écrit neuf et original sur GHCup et la chaîne d’outils Haskell actuelle, sans affiliation avec les mainteneurs d’aucun outil ni rédigé par eux. Les commandes reflètent le comportement documenté de GHCup — vérifiez toujours la documentation officielle pour les derniers numéros de version.</div>
+  </div>
+</Base>
