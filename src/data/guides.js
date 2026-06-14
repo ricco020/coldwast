@@ -4,6 +4,9 @@
 import { localized } from '../i18n/ui.js';
 
 export const guides = [
+  { href:'/e/blog/2026-06-14-what-is-json.html', cats:'Programming, Web, Data', title:'What Is JSON? The Data Format Behind Modern Apps (2026)', dek:'JSON is a lightweight, human-readable text format for structured data — the language most web APIs and config files speak. Its syntax, why it is everywhere, how it compares to XML, and its honest limits.', date:'Jun 14, 2026', read:'6 min read', img:'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=1200&q=80&auto=format&fit=crop', imgAlt:'Colorful source code on a monitor',
+    title_fr:'Qu’est-ce que le JSON ? Le format de données des apps modernes (2026)', dek_fr:'Le JSON est un format texte léger et lisible pour les données structurées — la langue que parlent la plupart des API web et fichiers de config. Sa syntaxe, pourquoi il est partout, sa comparaison avec XML, et ses limites honnêtes.',
+    title_es:'¿Qué es JSON? El formato de datos de las apps modernas (2026)', dek_es:'JSON es un formato de texto ligero y legible para datos estructurados — el idioma que hablan la mayoría de las API web y archivos de configuración. Su sintaxis, por qué está en todas partes, su comparación con XML y sus límites honestos.' },
   { href:'/e/blog/2026-06-14-what-is-an-api.html', cats:'Programming, Web, Concepts', title:'What Is an API? A Clear Introduction for Developers (2026)', dek:'An API is a contract that lets one piece of software talk to another. The main kinds (web/REST, library, OS), how a web request and response work, and why APIs are everywhere in modern software.', date:'Jun 14, 2026', read:'7 min read', img:'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&q=80&auto=format&fit=crop', imgAlt:'Racks of servers in a data center',
     title_fr:'Qu’est-ce qu’une API ? Une introduction claire (2026)', dek_fr:'Une API est un contrat qui permet à un logiciel de communiquer avec un autre. Les grands types (web/REST, bibliothèque, OS), le fonctionnement d’une requête et d’une réponse web, et pourquoi les API sont partout.',
     title_es:'¿Qué es una API? Una introducción clara (2026)', dek_es:'Una API es un contrato que permite a un software comunicarse con otro. Los tipos principales (web/REST, biblioteca, SO), cómo funcionan una petición y una respuesta web, y por qué las API están en todas partes.' },
@@ -44,6 +47,7 @@ export const guides = [
 export const categories = [
   { slug:'programming', label:'Programming',    label_fr:'Programmation',     label_es:'Programación',      match:'programming' },
   { slug:'web',         label:'Web',            label_fr:'Web',               label_es:'Web',               match:'web' },
+  { slug:'data',        label:'Data',           label_fr:'Données',           label_es:'Datos',             match:'data' },
   { slug:'haskell',     label:'Haskell',        label_fr:'Haskell',           label_es:'Haskell',           match:'haskell' },
   { slug:'concepts',    label:'Concepts',       label_fr:'Concepts',          label_es:'Conceptos',         match:'concept' },
   { slug:'cabal',       label:'Cabal & builds', label_fr:'Cabal & builds',    label_es:'Cabal y builds',    match:'cabal' },

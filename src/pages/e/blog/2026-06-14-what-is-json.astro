@@ -1,0 +1,62 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-06-14-what-is-json.html';
+const title = 'What Is JSON? The Data Format Behind Modern Apps (2026)';
+const description = 'JSON is a lightweight, human-readable text format for structured data — the language most web APIs and config files speak. What JSON is, its syntax, why it is everywhere, how it compares to XML, and its honest limits.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e/">Guides</a><span>/</span>What is JSON</nav>
+  <p class="kicker">Programming · data · web</p>
+  <h1>What is JSON?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Jun 14, 2026</span><span>6 min read</span><span class="tag">#json</span><span class="tag">#data</span><span class="tag">#web</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=1200&q=80&auto=format&fit=crop" alt="Colorful source code on a monitor" width="1200" height="420" loading="eager" />
+    <figcaption>Colorful source code on a monitor — JSON is a plain-text format you read and write much like code.</figcaption>
+  </figure>
+
+  <p>Open almost any web <a href="/e/blog/2026-06-14-what-is-an-api.html">API</a> response, a JavaScript config file, or a modern app&#39;s saved settings, and you will see <strong>JSON</strong>. It is the format that quietly carries most of the structured data moving around the internet. This guide explains what JSON is, its small syntax, why it took over, how it compares to XML, and where it falls short.</p>
+
+  <h2>The short definition</h2>
+  <p><strong>JSON (JavaScript Object Notation) is a lightweight, text-based format for representing structured data.</strong> It is easy for humans to read and easy for machines to parse, and despite the name it is <em>language-independent</em> — practically every programming language can read and write it.</p>
+
+  <h2>The syntax, in one example</h2>
+  <p>JSON is built from a handful of value types: objects, arrays, strings, numbers, booleans and <code>null</code>. An object is a set of key–value pairs in braces; an array is an ordered list in brackets:</p>
+  <pre><code>&#123;
+  &quot;name&quot;: &quot;Ada&quot;,
+  &quot;age&quot;: 36,
+  &quot;active&quot;: true,
+  &quot;roles&quot;: [&quot;admin&quot;, &quot;author&quot;],
+  &quot;address&quot;: &#123; &quot;city&quot;: &quot;London&quot;, &quot;zip&quot;: &quot;EC1&quot; &#125;
+&#125;</code></pre>
+  <p>That is essentially the whole format. Keys are always strings in double quotes; values can themselves be objects or arrays, so JSON nests to any depth. There are no functions, no variables and no logic — it describes <em>data</em>, nothing more.</p>
+
+  <figure><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=crop" alt="A laptop showing a data dashboard with charts" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>A laptop showing a data dashboard — services constantly exchange structured data as JSON behind interfaces like this.</figcaption></figure>
+
+  <h2>Why JSON is everywhere</h2>
+  <ul>
+    <li><strong>APIs speak it.</strong> When an app asks a server for data, the reply is almost always JSON. It maps cleanly onto the objects and arrays every language already has.</li>
+    <li><strong>It is human-readable.</strong> You can open a JSON response and understand it without tools, which makes debugging far easier than binary formats.</li>
+    <li><strong>It is tiny and universal.</strong> The spec is small, every language ships a JSON parser, and the format adds little overhead.</li>
+    <li><strong>Config files use it.</strong> From <code>package.json</code> to countless tool settings, JSON is a common way to store configuration.</li>
+  </ul>
+
+  <h2>JSON vs XML</h2>
+  <p>Before JSON, <strong>XML</strong> was the common data-exchange format. XML is more verbose — every value is wrapped in opening and closing tags — and supports features like attributes, namespaces and schemas that JSON does not. JSON won for web APIs because it is lighter, less noisy, and maps directly onto JavaScript objects in the browser. XML still has its place where its richer document features matter; for most data exchange, JSON is the default.</p>
+
+  <h2>The honest limits</h2>
+  <p>JSON&#39;s simplicity has trade-offs. It has <strong>no comments</strong>, so you cannot annotate a config file inline. It has <strong>no date type</strong> — dates are passed as strings by convention. It has no schema built in (though tools like JSON Schema add one separately), and large JSON documents are less efficient than purpose-built binary formats. For most web data, none of this matters; for very large or strongly-typed data, it is worth knowing.</p>
+
+  <h2>FAQ</h2>
+  <p><strong>Is JSON only for JavaScript?</strong> No. The name comes from JavaScript syntax, but JSON is language-independent — Python, Go, Rust, Java and the rest all read and write it natively.</p>
+  <p><strong>What is the difference between JSON and a JavaScript object?</strong> They look similar, but JSON is a text format (a string); a JavaScript object is a live in-memory value. You <em>parse</em> JSON text into an object, and <em>stringify</em> an object back into JSON.</p>
+  <p><strong>Can JSON store comments?</strong> No. The format deliberately omits comments. Some tools accept &quot;JSON with comments&quot; variants, but standard JSON does not.</p>
+  <p><strong>How are dates handled in JSON?</strong> As strings, by convention — usually ISO 8601 like &quot;2026-06-14&quot;. JSON itself has no dedicated date type.</p>
+
+  <p>JSON is the data half of most web communication; the request-and-response machinery around it is the <a href="/e/blog/2026-06-14-what-is-an-api.html">API</a>. Browse more clear explainers in our <a href="/e/">guides index</a>.</p>
+
+  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about JSON. Examples reflect the standard JSON format — verify against the specification (json.org / ECMA-404) for edge cases.</div>
+  </div>
+</Base>
