@@ -120,7 +120,7 @@ const alts = [
       .brand { color:#fff; text-decoration:none; font-weight:800; font-size:22px; letter-spacing:-.3px; display:flex; align-items:center; gap:9px; }
       .brand .logo { width:38px; height:38px; border-radius:9px; background:#fff; color:var(--bar-d); display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:800; }
       nav.top { display:flex; align-items:center; gap:22px; margin-left:8px; }
-      nav.top a { color:#fff; text-decoration:none; font-weight:600; font-size:17px; opacity:.96; }
+      nav.top a { color:#fff; text-decoration:none; font-weight:600; font-size:18.5px; opacity:.96; }
       nav.top a:hover { opacity:.78; }
       .langsw { display:flex; align-items:center; gap:2px; margin-left:auto; font-family:'Baloo 2',sans-serif; font-size:14px; font-weight:700; }
       .langsw a { color:#fff; text-decoration:none; opacity:.7; padding:4px 8px; border-radius:7px; }
@@ -205,11 +205,11 @@ const alts = [
 
       /* ── Category pills ── */
       .catbar { border-bottom:1px solid #efe7d8; background:rgba(255,253,249,.85); backdrop-filter:saturate(1.2) blur(4px); }
-      .catbar .row { display:flex; gap:10px; padding:13px 0; justify-content:center; flex-wrap:wrap; }
-      .cat { flex:0 0 auto; font-size:14px; font-weight:700; color:var(--brand-ink); background:var(--pill); padding:7px 16px; border-radius:999px; text-decoration:none; border:1px solid #f2ddbf; transition:transform .12s ease, background .15s, box-shadow .15s; }
+      .catbar .row { display:flex; gap:10px; padding:13px 0; justify-content:safe center; flex-wrap:nowrap; overflow-x:auto; scrollbar-width:thin; }
+      .catbar .row::-webkit-scrollbar { height:6px; } .catbar .row::-webkit-scrollbar-thumb { background:#e6d3b5; border-radius:3px; }
+      .cat { flex:0 0 auto; white-space:nowrap; font-size:16px; font-weight:700; color:var(--brand-ink); background:var(--pill); padding:8px 18px; border-radius:999px; text-decoration:none; border:1px solid #f2ddbf; transition:transform .12s ease, background .15s, box-shadow .15s; }
       .cat:hover { background:#f7e3c6; transform:translateY(-1px); box-shadow:0 3px 10px rgba(224,135,26,.18); }
       .cat.on { background:var(--pill-on); color:#fff; border-color:var(--bar-d); box-shadow:0 3px 12px rgba(224,135,26,.4); }
-      @media (max-width:760px){ .catbar .row { justify-content:flex-start; flex-wrap:nowrap; overflow-x:auto; } }
 
       /* ── Layout: content + sidebar ── */
       .layout { display:grid; grid-template-columns:1fr 340px; gap:48px; padding:38px 0 20px; }
