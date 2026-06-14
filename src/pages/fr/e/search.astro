@@ -1,0 +1,60 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { guides, guideTitle, guideDek, guideHref } from '../../../data/guides.js';
+import { ui, localized } from '../../../i18n/ui.js';
+const lang = 'fr';
+const t = ui[lang];
+const gwAll = t.guides_word[1];
+---
+<Base title="Rechercher dans les guides — Coldwast" description="Recherchez parmi tous les guides de programmation et Haskell de Coldwast." path="/fr/e/search.html" lang={lang}>
+  <div class="wrap">
+    <div class="cathead">
+      <p class="k">{t.nav_guides}</p>
+      <h1>{t.search_h1}</h1>
+      <form class="searchpage" role="search" onsubmit="return false">
+        <input id="q" type="search" placeholder={t.search_ph2} aria-label={t.search_h1} autocomplete="off" autofocus />
+      </form>
+      <p class="count"><b id="cn">{guides.length}</b> <span class="lbl" id="cl">{gwAll}</span></p>
+    </div>
+    <div class="layout" style="grid-template-columns:1fr">
+      <div class="main" id="results">
+        {guides.map((s) => (
+          <article class="story" data-search={`${guideTitle(s, lang)} ${guideDek(s, lang)} ${s.cats}`.toLowerCase()}>
+            <span class="ava cat-ava" style="background:#e0871a" aria-hidden="true"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5l5 14M14 5c-2 4-2 6 0 14M5 12h7"/></svg></span>
+            <div>
+              <p class="by"><a href={localized('/about.html', lang)}>Coldwast</a> <em>{t.wrote}</em></p>
+              <h3><a href={guideHref(s, lang)} set:html={guideTitle(s, lang)} /></h3>
+              <p class="ex"><span class="date">{s.date}</span> {t.in_word} {s.cats} — {guideDek(s, lang)}</p>
+              <a class="more" href={guideHref(s, lang)}>{t.read_more}</a>
+            </div>
+          </article>
+        ))}
+        <p id="noresult" class="ex" style="display:none">{t.no_result} <a href={localized('/e/', lang)}>{t.browse_all}</a></p>
+      </div>
+    </div>
+  </div>
+  <script is:inline define:vars={{ singular: t.guides_word[0], plural: t.guides_word[1] }}>
+    (function(){
+      var q = document.getElementById('q');
+      var items = Array.prototype.slice.call(document.querySelectorAll('#results .story'));
+      var cn = document.getElementById('cn'), cl = document.getElementById('cl');
+      var none = document.getElementById('noresult');
+      function apply(term){
+        term = (term||'').trim().toLowerCase();
+        var n = 0;
+        items.forEach(function(el){
+          var hit = !term || el.getAttribute('data-search').indexOf(term) !== -1;
+          el.style.display = hit ? '' : 'none';
+          if (hit) n++;
+        });
+        cn.textContent = String(n);
+        cl.textContent = (n === 1 ? singular : plural);
+        none.style.display = n ? 'none' : '';
+      }
+      var params = new URLSearchParams(location.search);
+      var initial = params.get('q') || '';
+      if (initial) { q.value = initial; apply(initial); }
+      q.addEventListener('input', function(){ apply(q.value); });
+    })();
+  </script>
+</Base>

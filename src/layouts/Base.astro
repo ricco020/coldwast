@@ -1,35 +1,54 @@
 ---
 export interface Props {
   title: string; description: string; path: string;
-  image?: string; datePublished?: string; dateModified?: string; type?: string;
+  image?: string; datePublished?: string; dateModified?: string; type?: string; lang?: string;
 }
 const {
   title, description, path,
   image = 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&q=80&auto=format&fit=crop',
-  datePublished, dateModified, type = 'website',
+  datePublished, dateModified, type = 'website', lang = 'en',
 } = Astro.props;
-import { guides } from '../data/guides.js';
+import { guides, categories } from '../data/guides.js';
+import { ui, localized, LOCALES } from '../i18n/ui.js';
+const t = ui[lang] || ui.en;
 const SITE = 'https://coldwa.st';
 const canonical = SITE + path;
 const year = 2026;
 // On article pages, surface related guides + an affiliate CTA for retention.
 const isArticle = path.includes('/e/blog/');
 const related = isArticle ? guides.filter((g) => g.href !== path).slice(0, 4) : [];
+// Catbar: "All guides" + each category. SLUGS identical across locales; only
+// the LABEL and the locale prefix change.
 const cats = [
-  { l: 'All guides', h: '/e/' },
-  { l: 'Haskell', h: '/e/c/haskell.html' }, { l: 'Concepts', h: '/e/c/concepts.html' }, { l: 'Cabal & builds', h: '/e/c/cabal.html' },
-  { l: 'Toolchain', h: '/e/c/toolchain.html' }, { l: 'Compiler', h: '/e/c/compiler.html' }, { l: 'Performance', h: '/e/c/performance.html' }, { l: 'Editor & HLS', h: '/e/c/editor.html' },
+  { l: t.all_guides, h: '/e/' },
+  ...categories.map((c) => ({
+    l: (lang === 'fr' && c.label_fr) || (lang === 'es' && c.label_es) || c.label,
+    h: `/e/c/${c.slug}.html`,
+  })),
 ];
 const cur = path;
+// Root-relative path stripped of any /fr or /es prefix → used for the language
+// switcher and hreflang alternates.
+const rootPath = path.replace(/^\/(fr|es)(?=\/|$)/, '') || '/';
+const switcher = LOCALES.map((l) => ({
+  code: l, label: l.toUpperCase(), href: localized(rootPath, l), on: l === lang,
+}));
+const alts = [
+  { hl: 'en', href: SITE + localized(rootPath, 'en') },
+  { hl: 'fr', href: SITE + localized(rootPath, 'fr') },
+  { hl: 'es', href: SITE + localized(rootPath, 'es') },
+  { hl: 'x-default', href: SITE + localized(rootPath, 'en') },
+];
 ---
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {alts.map((a) => <link rel="alternate" hreflang={a.hl} href={a.href} />)}
     <meta property="og:type" content={type} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -62,6 +81,18 @@ const cur = path;
         publisher: { '@type':'Organization', name:'Coldwast', url:SITE },
       })} />
     )}
+    {!(type === 'article' && datePublished) && (
+      <script type="application/ld+json" set:html={JSON.stringify({
+        '@context':'https://schema.org','@type':'WebSite', name:'Coldwast', url:SITE,
+        description:'Independent, community-maintained programming guides on Haskell and the modern Haskell developer toolchain.',
+        publisher: { '@type':'Organization', name:'Coldwast', url:SITE },
+        potentialAction: {
+          '@type':'SearchAction',
+          target: { '@type':'EntryPoint', urlTemplate: SITE + '/e/search.html?q={search_term_string}' },
+          'query-input':'required name=search_term_string',
+        },
+      })} />
+    )}
     <style is:global>
       :root {
         --bar:#e0871a; --bar-d:#c46a12; --brand:#b5710f; --brand-ink:#9a5a08;
@@ -88,6 +119,11 @@ const cur = path;
       nav.top { display:flex; align-items:center; gap:22px; margin-left:8px; }
       nav.top a { color:#fff; text-decoration:none; font-weight:600; font-size:17px; opacity:.96; }
       nav.top a:hover { opacity:.78; }
+      .langsw { display:flex; align-items:center; gap:2px; margin-left:auto; font-family:'Baloo 2',sans-serif; font-size:14px; font-weight:700; }
+      .langsw a { color:#fff; text-decoration:none; opacity:.7; padding:4px 8px; border-radius:7px; }
+      .langsw a:hover { opacity:1; }
+      .langsw a.on { opacity:1; background:rgba(255,255,255,.22); }
+      .langsw + .search { margin-left:14px; }
       .search { margin-left:auto; display:flex; align-items:center; gap:9px; background:#fff; border-radius:999px; padding:9px 18px; color:var(--ink-faint); min-width:230px; font-family:'Baloo 2',sans-serif; font-size:15px; }
       .search input { border:0; outline:0; background:none; font:inherit; color:var(--ink); width:100%; }
       .search input::placeholder { color:var(--ink-faint); }
@@ -243,39 +279,42 @@ const cur = path;
   <body>
     <header class="topbar">
       <div class="wrap row">
-        <a class="brand" href="/"><span class="logo">λ</span>coldwa.st</a>
+        <a class="brand" href={localized('/', lang)}><span class="logo">λ</span>coldwa.st</a>
         <nav class="top">
-          <a href="/e/">Guides</a>
-          <a href="/about.html">About</a>
-          <a href="/e/rss.xml">RSS</a>
+          <a href={localized('/e/', lang)}>{t.nav_guides}</a>
+          <a href={localized('/about.html', lang)}>{t.nav_about}</a>
+          <a href="/e/rss.xml">{t.nav_rss}</a>
         </nav>
-        <form class="search" role="search" action="/e/search.html" method="get">
+        <nav class="langsw" aria-label="Language">
+          {switcher.map((s) => <a class:list={[s.on && 'on']} href={s.href} hreflang={s.code} aria-current={s.on ? 'true' : undefined}>{s.label}</a>)}
+        </nav>
+        <form class="search" role="search" action={localized('/e/search.html', lang)} method="get">
           <span aria-hidden="true">🔍</span>
-          <input type="search" name="q" placeholder="Search guides…" aria-label="Search guides" />
+          <input type="search" name="q" placeholder={t.search_ph} aria-label={t.search_ph} />
         </form>
       </div>
     </header>
     <div class="catbar">
       <div class="wrap row">
-        {cats.map((c) => <a class:list={['cat', cur === c.h && 'on']} href={c.h}>{c.l}</a>)}
+        {cats.map((c) => <a class:list={['cat', cur === localized(c.h, lang) && 'on']} href={localized(c.h, lang)}>{c.l}</a>)}
       </div>
     </div>
     <main><slot /></main>
     {isArticle && (
       <div class="wrap">
         <section class="artcta">
-          <span class="tag">Recommended</span>
+          <span class="tag">{t.reco}</span>
           <div>
-            <h3>Need a box to build and run Haskell?</h3>
-            <p>Compiling GHC and running your app is smoother on a real Linux server. Infomaniak (Swiss, privacy-respecting) offers VPS and cloud servers for it.</p>
+            <h3>{t.art_aff_h}</h3>
+            <p>{t.art_aff_p}</p>
           </div>
-          <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">See Infomaniak cloud →</a>
+          <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">{t.aff_cta}</a>
         </section>
         <section class="related">
-          <h3>Keep reading</h3>
+          <h3>{t.keep_reading}</h3>
           <ul>
             {related.map((g) => (
-              <li><a href={g.href}><span class="rt" set:html={g.title} /><span class="rm">{g.read}</span></a></li>
+              <li><a href={localized(g.href, lang)}><span class="rt" set:html={g.title} /><span class="rm">{g.read}</span></a></li>
             ))}
           </ul>
         </section>
@@ -283,9 +322,9 @@ const cur = path;
     )}
     <footer class="site">
       <div class="wrap">
-        <p style="color:var(--ink);font-weight:700;font-size:17px;margin:0;font-family:'Baloo 2',sans-serif">Coldwast — Programming &amp; Dev Guides</p>
-        <p style="margin:8px 0 0;max-width:640px">Independent, community-maintained programming references. The Haskell/Cabal guides are modern, updated rewrites of topics this domain was historically known for — original content, not authored by or affiliated with the domain's previous owner.</p>
-        <p style="margin:16px 0 0">© {year} coldwa.st · <a href="/about.html">About &amp; editorial policy</a> · <a href="/e/rss.xml">RSS</a></p>
+        <p style="color:var(--ink);font-weight:700;font-size:17px;margin:0;font-family:'Baloo 2',sans-serif">{t.footer_tag}</p>
+        <p style="margin:8px 0 0;max-width:640px">{t.footer_about}</p>
+        <p style="margin:16px 0 0">© {year} coldwa.st · <a href={localized('/about.html', lang)}>{t.footer_policy}</a> · <a href="/e/rss.xml">{t.nav_rss}</a></p>
       </div>
     </footer>
     <script>
@@ -304,10 +343,10 @@ const cur = path;
         } else { tocEl.remove(); } }
     </script>
     <div class="cookiebar" id="cookiebar" hidden>
-      <p>We use a privacy-friendly analytics cookie (anonymised IP) only if you accept. See our <a href="/about.html">policy</a>.</p>
+      <p>{t.cookie} <a href={localized('/about.html', lang)}>{t.cookie_policy}</a>.</p>
       <div class="btns">
-        <button type="button" id="ck-decline">Decline</button>
-        <button type="button" class="acc" id="ck-accept">Accept</button>
+        <button type="button" id="ck-decline">{t.cookie_decline}</button>
+        <button type="button" class="acc" id="ck-accept">{t.cookie_accept}</button>
       </div>
     </div>
     <script is:inline>

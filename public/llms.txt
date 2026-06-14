@@ -1,0 +1,36 @@
+# coldwa.st
+
+> Independent, community-maintained programming resources. Original, regularly
+> updated guides on Haskell and the modern Haskell developer toolchain — the
+> language itself, GHC, GHCup, Cabal, Stack and the Haskell Language Server.
+> Written to be clear and practical for people learning or working in Haskell.
+
+## Guides
+
+- [What Is Haskell? A Clear Introduction (2026)](https://coldwa.st/e/blog/2026-06-14-what-is-haskell.html): What a purely functional, statically typed, lazy language is — purity, immutability, laziness, strong types — and how to start.
+- [Haskell List Comprehensions, Explained (2026)](https://coldwa.st/e/blog/2026-06-14-haskell-list-comprehensions.html): Syntax, multiple generators, guards, and how they relate to map and filter.
+- [Lazy Evaluation in Haskell, Explained (2026)](https://coldwa.st/e/blog/2026-06-14-lazy-evaluation-haskell.html): Thunks, infinite data structures, the space-leak trap, and forcing strictness with seq and BangPatterns.
+- [Monads in Haskell, Explained Without the Jargon (2026)](https://coldwa.st/e/blog/2026-06-14-haskell-monads.html): What a monad really is, bind (>>=) and return, and do-notation, plainly.
+- [GHC, the Glasgow Haskell Compiler: a Practical 2026 Guide](https://coldwa.st/e/blog/2026-06-14-ghc-compiler-guide.html): Installing GHC with GHCup, using GHCi, the flags that matter, and how it fits with Cabal and Stack.
+- [Haskell Language Server (HLS): Setup and Common Fixes (2026)](https://coldwa.st/e/blog/2026-06-14-haskell-language-server.html): Installing HLS with GHCup, wiring it into VS Code and Neovim, and fixing the usual errors.
+- [Install Haskell with GHCup: the 2026 Toolchain Guide](https://coldwa.st/e/blog/2026-06-14-ghcup-install-haskell.html): Installing GHC, Cabal, Stack and HLS with GHCup — clean install, version switching, and common pitfalls.
+- [Stack vs Cabal: Choosing a Haskell Build Tool (2026)](https://coldwa.st/e/blog/2026-06-14-stack-vs-cabal-haskell.html): How Cabal and Stack differ (Hackage vs Stackage, reproducibility, GHC management) and how to choose.
+- [Cabal Sandboxes: What They Were, and What Replaced Them](https://coldwa.st/e/blog/2013-08-20-Cabal-sandbox.html): Per-project dependency isolation, and the nix-style cabal build workflow that superseded it.
+- [Cabal 2.0: the Release that Reshaped Haskell Builds](https://coldwa.st/e/blog/2017-09-09-Cabal-2-0.html): Nix-style local builds, Backpack, the caret operator and a better solver — and where each stands in 2026.
+- [Parallelising cabal-install: How Haskell Builds Use Your Cores](https://coldwa.st/e/blog/2011-08-22-GSoC-Final.html): Why a build is a dependency graph, how -j builds use your cores, and the modern job-semaphore fix.
+
+## Browse by topic
+
+- [All guides](https://coldwa.st/e/)
+- [Haskell](https://coldwa.st/e/c/haskell.html)
+- [Concepts](https://coldwa.st/e/c/concepts.html)
+- [Cabal & builds](https://coldwa.st/e/c/cabal.html)
+- [Toolchain](https://coldwa.st/e/c/toolchain.html)
+- [Compiler](https://coldwa.st/e/c/compiler.html)
+- [Performance](https://coldwa.st/e/c/performance.html)
+- [Editor & HLS](https://coldwa.st/e/c/editor.html)
+
+## More
+
+- [About coldwa.st](https://coldwa.st/about.html)
+- [RSS feed](https://coldwa.st/e/rss.xml)
