@@ -4,36 +4,35 @@ import Base from '../layouts/Base.astro';
 const guides = [
   {
     href: '/e/blog/2013-08-20-Cabal-sandbox.html',
-    img: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1100&q=70&auto=format&fit=crop',
+    img: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1100&q=72&auto=format&fit=crop',
     alt: 'Source code on a dark editor screen',
-    cat: 'Haskell · Build',
+    tag: 'Haskell · Build',
     title: 'Cabal Sandboxes — and what replaced them',
     dek: 'The per-project isolation idea that won so completely it became invisible. What sandboxes were, and the nix-style cabal build workflow that superseded them.',
-    meta: 'Updated 2026 · 9 min',
+    date: 'Jun 13, 2026', read: '9 min',
     feature: true,
   },
   {
     href: '/e/blog/2017-09-09-Cabal-2-0.html',
-    img: 'https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=900&q=70&auto=format&fit=crop',
+    img: 'https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=800&q=72&auto=format&fit=crop',
     alt: 'Laptop showing code in a terminal',
-    cat: 'Haskell · Build',
+    tag: 'Haskell · Build',
     title: 'Cabal 2.0 — the release that reshaped Haskell builds',
     dek: 'Nix-style builds, Backpack, the caret operator — what 2.0 introduced and where each feature stands today.',
-    meta: 'Updated 2026 · 7 min',
+    date: 'Jun 13, 2026', read: '7 min',
   },
   {
     href: '/e/blog/2011-08-22-GSoC-Final.html',
-    img: 'https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=900&q=70&auto=format&fit=crop',
+    img: 'https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=800&q=72&auto=format&fit=crop',
     alt: 'Close-up of colourful source code',
-    cat: 'Haskell · Performance',
+    tag: 'Haskell · Performance',
     title: 'Parallelising cabal-install',
     dek: 'Why a build is a dependency graph, how -j builds use your cores, and the modern job-semaphore fix for oversubscription.',
-    meta: 'Updated 2026 · 6 min',
+    date: 'Jun 13, 2026', read: '6 min',
   },
 ];
 
 const stacks = ['Haskell', 'Cabal', 'Build tooling', 'Deployment', 'Performance'];
-
 const principles = [
   { h: 'Original & honest', p: 'Every guide is written from scratch and states what it does not cover. No reposted docs, no marketing.' },
   { h: 'Revised as toolchains move', p: 'Build tools change fast. Guides carry an explicit "updated" date and are rewritten, not left to rot.' },
@@ -41,57 +40,56 @@ const principles = [
 ];
 ---
 <Base title="Coldwast — Programming &amp; Dev Guides" description="Independent, original and regularly-updated programming guides. Haskell, Cabal, build tooling and the modern developer toolchain." path="/">
-  <section class="hero">
-    <p class="eyebrow">Programming · Dev guides</p>
-    <h1>Build guides that <span class="hl">stay current</span>.</h1>
-    <p class="lede">Coldwast is an independent collection of <strong>original programming references</strong> — clear, technically honest, and revised as toolchains move. It starts where this domain has deep roots, the <strong>Haskell / Cabal</strong> build toolchain, and expands into the wider developer stack: build performance, deployment, and the tools real projects ship on.</p>
-    <div class="btnrow">
-      <a class="btn btn-primary" href="/e/">Browse all guides <span aria-hidden="true">→</span></a>
-      <a class="btn btn-ghost" href="/about.html">Editorial policy</a>
-    </div>
-    <ul class="metarow">
-      <li>Original content</li>
-      <li>Updated for 2026</li>
-      <li>No fluff, no reposts</li>
-    </ul>
-  </section>
+  <div class="container">
+    <section class="hero">
+      <p class="eyebrow">Programming · Dev guides</p>
+      <h1>Build guides that stay current.</h1>
+      <p class="lede">Original, technically honest programming references — revised as toolchains move. Rooted in the Haskell / Cabal build toolchain, expanding into the wider developer stack: build performance, deployment, and the tools real projects ship on.</p>
+      <div class="btnrow">
+        <a class="btn btn-primary" href="/e/">Browse all guides <span aria-hidden="true">→</span></a>
+        <a class="btn btn-ghost" href="/about.html">Editorial policy</a>
+      </div>
+    </section>
 
-  <nav class="block" aria-label="Topics">
-    <p class="eyebrow">Stacks covered</p>
-    <ul class="chips">
-      {stacks.map((s) => <li><a class="chip" href="/e/">{s}</a></li>)}
-    </ul>
-  </nav>
+    <nav class="sec" aria-label="Topics" style="margin-top:40px">
+      <ul class="chips">
+        {stacks.map((s) => <li><a class="chip" href="/e/">{s}</a></li>)}
+      </ul>
+    </nav>
 
-  <section class="block">
-    <div class="sechead">
-      <h2>Featured guides</h2>
-      <a href="/e/">All guides →</a>
-    </div>
-    <div class="cards">
-      {guides.map((g) => (
-        <a class:list={['card', g.feature && 'feature']} href={g.href}>
-          <img class="thumb" src={g.img} alt={g.alt} loading="lazy" width="1100" height="620" />
-          <span class="cat">{g.cat}</span>
-          <h3>{g.title}</h3>
-          <p>{g.dek}</p>
-          <span class="cmeta">{g.meta}</span>
-        </a>
-      ))}
-    </div>
-  </section>
+    <section class="sec">
+      <div class="sec-head">
+        <h2>Featured guides</h2>
+        <a href="/e/">All guides →</a>
+      </div>
+      <div class="feed">
+        {guides.map((g) => (
+          <a class:list={['pcard', g.feature && 'feature']} href={g.href}>
+            <div class="media"><img src={g.img} alt={g.alt} loading="lazy" width="1100" height="620" /></div>
+            <div class="body">
+              <p class="tag">{g.tag}</p>
+              <h3>{g.title}</h3>
+              <p class="excerpt">{g.dek}</p>
+              <div class="foot">
+                <span class="avatar" aria-hidden="true">C</span>
+                <div class="meta-row"><span class="by">Coldwast</span><span class="dot">·</span><span>{g.date}</span><span class="dot">·</span><span>{g.read} read</span></div>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
 
-  <section class="block">
-    <p class="eyebrow">How these guides are written</p>
-    <div class="cols">
-      {principles.map((c) => (
-        <div class="colitem">
-          <h4>{c.h}</h4>
-          <p>{c.p}</p>
-        </div>
-      ))}
-    </div>
-  </section>
-
-  <div class="note">coldwa.st is now an independent programming-resources site. Its Haskell/Cabal guides are original, community-maintained rewrites updated for the current toolchain — not authored by or affiliated with the domain's previous owner. See the <a href="/about.html">editorial policy</a>.</div>
+    <section class="sec">
+      <div class="sec-head"><h2>How these guides are written</h2></div>
+      <div class="cols">
+        {principles.map((c) => (
+          <div class="colitem">
+            <h4>{c.h}</h4>
+            <p>{c.p}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  </div>
 </Base>
