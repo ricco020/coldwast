@@ -16,7 +16,10 @@ const canonical = SITE + path;
 const year = 2026;
 // On article pages, surface related guides + an affiliate CTA for retention.
 const isArticle = path.includes('/e/blog/');
-const related = isArticle ? guides.filter((g) => g.href !== path).slice(0, 4) : [];
+// Canonical (locale-stripped) path so the current article is excluded from
+// "Keep reading" on FR/ES pages too (g.href is the EN canonical href).
+const canonPath = path.replace(/^\/(fr|es)(?=\/|$)/, '');
+const related = isArticle ? guides.filter((g) => g.href !== canonPath).slice(0, 4) : [];
 // Catbar: "All guides" + each category. SLUGS identical across locales; only
 // the LABEL and the locale prefix change.
 const cats = [
