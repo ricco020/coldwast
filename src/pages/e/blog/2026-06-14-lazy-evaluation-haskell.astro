@@ -1,0 +1,65 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-06-14-lazy-evaluation-haskell.html';
+const title = 'Lazy Evaluation in Haskell, Explained (2026)';
+const description = 'Lazy evaluation means Haskell computes a value only when it is actually needed — not when it is defined. What lazy evaluation is, thunks, why it enables infinite data structures, the space-leak trap, and how to force strictness with seq and BangPatterns.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e/">Guides</a><span>/</span>Lazy evaluation</nav>
+  <p class="kicker">Haskell · concepts · evaluation</p>
+  <h1>Lazy evaluation in Haskell, explained</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Jun 14, 2026</span><span>8 min read</span><span class="tag">#haskell</span><span class="tag">#laziness</span><span class="tag">#concepts</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&q=80&auto=format&fit=crop" alt="Source code on a screen" width="1200" height="420" loading="eager" />
+    <figcaption>Lazy evaluation: Haskell computes a value only at the moment something actually needs it.</figcaption>
+  </figure>
+
+  <p>Most languages are <strong>strict</strong>: an expression is evaluated as soon as it's bound to a name. Haskell is different — it is <strong>lazy</strong> (more precisely, <em>non-strict</em>) by default: an expression is not evaluated until its result is genuinely needed. This one design choice is behind some of Haskell's most distinctive powers <em>and</em> its most notorious trap. This guide explains what lazy evaluation is, how thunks work, what it buys you, and how to turn it off when you need to.</p>
+
+  <h2>The idea in one sentence</h2>
+  <p>Under lazy evaluation, binding a value doesn't compute it — Haskell stores a deferred computation (a <strong>thunk</strong>) and only forces it when another computation demands the result. If the result is never demanded, the work is never done.</p>
+
+  <h2>Thunks: deferred computation</h2>
+  <p>When you write <code>let x = expensive 42</code>, Haskell does <em>not</em> run <code>expensive</code>. It creates a thunk — an unevaluated promise of <code>expensive 42</code>. The thunk is forced only when something needs <code>x</code>'s actual value (for example, printing it or pattern-matching on it). Force it once, and the result is cached so it isn't recomputed.</p>
+  <pre><code>let x = expensive 42   -- nothing runs yet; x is a thunk
+let y = x + 1          -- still nothing; y is a thunk too
+print y                -- NOW x and y are forced and evaluated</code></pre>
+
+  <h2>What laziness buys you</h2>
+  <figure><img src="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80&auto=format&fit=crop" alt="Lines of code on a dark screen" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Lines of code on a screen — laziness lets you define infinite structures and only ever evaluate the part you consume.</figcaption></figure>
+  <ul>
+    <li><strong>Infinite data structures.</strong> <code>[1..]</code> is the infinite list of integers. <code>take 5 [1..]</code> returns <code>[1,2,3,4,5]</code> because only the first five are ever demanded.</li>
+    <li><strong>Composition without waste.</strong> You can chain <code>filter</code> and <code>map</code> over a huge list and Haskell fuses the work, producing only what the consumer pulls — no intermediate full lists if they're never fully demanded.</li>
+    <li><strong>Short-circuiting for free.</strong> <code>False &amp;&amp; undefined</code> returns <code>False</code> without ever touching <code>undefined</code>, because the second argument is never forced.</li>
+    <li><strong>Self-reference.</strong> Classic one-liners like <code>fibs = 0 : 1 : zipWith (+) fibs (tail fibs)</code> define the infinite Fibonacci stream — only possible because the structure is built lazily.</li>
+  </ul>
+
+  <h2>The trap: space leaks</h2>
+  <p>Laziness has a cost. Unevaluated thunks accumulate in memory, and a long chain of deferred computations can quietly balloon heap usage — a <strong>space leak</strong>. The textbook case is a lazy left fold that builds a giant tower of <code>(((0 + 1) + 2) + 3) ...</code> thunks instead of adding as it goes:</p>
+  <pre><code>foldl (+) 0 [1..1000000]    -- builds a million thunks, may blow the stack
+foldl' (+) 0 [1..1000000]   -- strict fold: adds as it goes, constant space</code></pre>
+  <p>The fix is to <strong>force evaluation</strong> where it matters. Reach for the strict left fold <code>foldl'</code> (from <code>Data.List</code>) for accumulations.</p>
+
+  <h2>Forcing strictness: seq, $! and BangPatterns</h2>
+  <p>Haskell gives you precise tools to demand evaluation:</p>
+  <ul>
+    <li><strong><code>seq a b</code></strong> — forces <code>a</code> to weak head normal form before returning <code>b</code>.</li>
+    <li><strong><code>($!)</code></strong> — strict application: <code>f $! x</code> forces <code>x</code> before applying <code>f</code>.</li>
+    <li><strong><code>BangPatterns</code></strong> — the <code>&#123;-# LANGUAGE BangPatterns #-&#125;</code> extension lets you write <code>let !x = ...</code> to force a binding.</li>
+  </ul>
+  <p>A subtlety worth knowing: forcing typically reaches <em>weak head normal form</em> (the outermost constructor), not full evaluation. To force deeply, use <code>force</code> / <code>deepseq</code> from the <code>deepseq</code> package.</p>
+
+  <h2>FAQ</h2>
+  <p><strong>Is Haskell lazy or non-strict?</strong> Technically non-strict (a semantic guarantee); GHC implements it via lazy evaluation with thunks and sharing. In practice people say "lazy".</p>
+  <p><strong>Why does my Haskell program use so much memory?</strong> Often a space leak from accumulated thunks — commonly a lazy <code>foldl</code>. Switch to <code>foldl'</code> or add strictness with <code>seq</code>/BangPatterns.</p>
+  <p><strong>What is a thunk?</strong> An unevaluated, deferred computation stored in place of a value, forced only when the value is demanded and then cached.</p>
+  <p><strong>Does laziness make Haskell slow?</strong> Not inherently — it can avoid needless work and enable fusion. But careless laziness causes space leaks; knowing when to force is part of writing good Haskell.</p>
+
+  <p>Laziness is the same machinery that makes Haskell's other abstractions compose cleanly — see how sequencing works in our guide to <a href="/e/blog/2026-06-14-haskell-monads.html">monads in Haskell</a>, and set up the toolchain to try these examples in GHCi with the <a href="/e/blog/2026-06-14-ghc-compiler-guide.html">GHC compiler guide</a>.</p>
+
+  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about lazy evaluation in Haskell, not affiliated with or authored by any project. Code reflects standard Haskell/GHC behaviour — verify against current GHC docs.</div>
+  </div>
+</Base>
