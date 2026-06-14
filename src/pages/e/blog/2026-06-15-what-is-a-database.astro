@@ -1,0 +1,64 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-06-15-what-is-a-database.html';
+const title = 'What Is a Database? A Clear Introduction (2026)';
+const description = 'A database is an organised collection of data, managed by software that lets you store, query and update it reliably. What a database is, relational vs NoSQL, key concepts (tables, schema, ACID), real examples, and how it relates to SQL.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-15" dateModified="2026-06-15">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e/">Guides</a><span>/</span>What is a database</nav>
+  <p class="kicker">Programming · data · databases</p>
+  <h1>What is a database?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Jun 15, 2026</span><span>7 min read</span><span class="tag">#database</span><span class="tag">#data</span><span class="tag">#concepts</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&q=80&auto=format&fit=crop" alt="Racks of servers in a data center" width="1200" height="420" loading="eager" />
+    <figcaption>Racks of servers in a data center — databases run on servers like these, storing the data behind apps and websites.</figcaption>
+  </figure>
+
+  <p>Every app you use — your bank, a shop, a social feed — keeps its information somewhere it can be found, changed and trusted. That somewhere is a <strong>database</strong>. It is one of the foundational ideas in software. This guide explains what a database is, the main types, the concepts that matter, real examples, and how it connects to <a href="/e/blog/2026-06-14-what-is-sql.html">SQL</a>.</p>
+
+  <h2>The short definition</h2>
+  <p><strong>A database is an organised collection of data, managed by software (a database management system, or DBMS) that lets you store, retrieve, update and protect that data reliably.</strong> A spreadsheet can hold data too, but a database adds structure, fast querying at scale, multi-user access, and guarantees that the data stays consistent even when many things change at once.</p>
+
+  <h2>Database vs DBMS</h2>
+  <p>Two words get used interchangeably but mean different things. The <strong>database</strong> is the data itself and how it's organised. The <strong>DBMS</strong> — PostgreSQL, MySQL, SQLite, MongoDB — is the software that stores it, runs your queries, enforces rules and handles concurrent access. When people say &quot;which database should I use?&quot; they usually mean which DBMS.</p>
+
+  <h2>The two big families</h2>
+  <ul>
+    <li><strong>Relational (SQL) databases</strong> organise data into <em>tables</em> of rows and columns, with defined relationships between them, and you query them with <a href="/e/blog/2026-06-14-what-is-sql.html">SQL</a>. They excel at structured data and guaranteed consistency. Examples: PostgreSQL, MySQL, SQLite, SQL Server.</li>
+    <li><strong>NoSQL databases</strong> relax the rigid table structure for flexibility and scale. They come in flavours: document stores (MongoDB), key-value stores (Redis), wide-column (Cassandra) and graph databases (Neo4j). Useful for huge volumes, fast caching, or data whose shape changes often.</li>
+  </ul>
+  <p>Most real systems use more than one — for example a relational database for core records and a key-value store for caching.</p>
+
+  <figure><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=crop" alt="A laptop showing a data dashboard with charts" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>A data dashboard — the numbers and charts in an app are read from a database underneath, usually with a query.</figcaption></figure>
+
+  <h2>The key concepts</h2>
+  <ul>
+    <li><strong>Schema</strong> — the defined structure: which tables exist, their columns and types, and the rules. Relational databases are schema-first; many NoSQL ones are flexible.</li>
+    <li><strong>Query</strong> — a request for specific data (&quot;all orders from last week&quot;). In relational databases you write these in SQL.</li>
+    <li><strong>Index</strong> — a lookup structure that makes queries fast by avoiding a scan of every row, like the index at the back of a book.</li>
+    <li><strong>Transaction</strong> — a group of changes that must all succeed or all fail together (moving money between two accounts). Relational databases guarantee this with <strong>ACID</strong> properties.</li>
+  </ul>
+
+  <h2>What ACID means</h2>
+  <p>ACID describes the guarantees a reliable database gives a transaction: <strong>Atomicity</strong> (all-or-nothing), <strong>Consistency</strong> (the data obeys its rules before and after), <strong>Isolation</strong> (concurrent transactions don't corrupt each other) and <strong>Durability</strong> (once committed, the change survives a crash). These guarantees are why you trust a database with money and records rather than a plain file.</p>
+
+  <h2>Why databases matter</h2>
+  <p>They let software store data once and use it everywhere, safely, at scale, with many users at the same time — and find any slice of it in milliseconds. Almost every non-trivial program eventually needs one. The skill of choosing the right type and querying it well is among the most durable in software.</p>
+
+  <h2>The honest trade-offs</h2>
+  <p>There's no universally &quot;best&quot; database. Relational databases give strong consistency and powerful queries but need a defined schema; NoSQL gives flexibility and horizontal scale but often trades away some consistency guarantees. The right choice depends on your data's shape, your scale, and how much you value strict consistency versus flexibility. Many teams combine both.</p>
+
+  <h2>FAQ</h2>
+  <p><strong>Is a database the same as SQL?</strong> No. A database stores data; <a href="/e/blog/2026-06-14-what-is-sql.html">SQL</a> is the language used to query relational databases. NoSQL databases use other query methods.</p>
+  <p><strong>Is a spreadsheet a database?</strong> Loosely, but not really. A spreadsheet holds data, but a database adds enforced structure, fast querying at scale, multi-user safety and transactional guarantees that a spreadsheet lacks.</p>
+  <p><strong>What is the difference between SQL and NoSQL?</strong> SQL/relational databases use structured tables and strong consistency; NoSQL databases relax structure for flexibility and scale. Neither replaces the other — they suit different jobs.</p>
+  <p><strong>Which database should a beginner learn first?</strong> A relational one — SQLite or PostgreSQL — because the relational model and SQL transfer everywhere and teach the core ideas clearly.</p>
+
+  <p>To query a relational database, you'll use <a href="/e/blog/2026-06-14-what-is-sql.html">SQL</a>; the data a database returns to an app often travels as <a href="/e/blog/2026-06-14-what-is-json.html">JSON</a>. Browse more clear explainers in our <a href="/e/">guides index</a>.</p>
+
+  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about databases. Examples reflect widely-used systems; verify specifics against each system's documentation.</div>
+  </div>
+</Base>
