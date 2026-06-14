@@ -4,6 +4,9 @@
 import { localized } from '../i18n/ui.js';
 
 export const guides = [
+  { href:'/e/blog/2026-06-14-what-is-an-api.html', cats:'Programming, Web, Concepts', title:'What Is an API? A Clear Introduction for Developers (2026)', dek:'An API is a contract that lets one piece of software talk to another. The main kinds (web/REST, library, OS), how a web request and response work, and why APIs are everywhere in modern software.', date:'Jun 14, 2026', read:'7 min read', img:'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&q=80&auto=format&fit=crop', imgAlt:'Racks of servers in a data center',
+    title_fr:'Qu’est-ce qu’une API ? Une introduction claire (2026)', dek_fr:'Une API est un contrat qui permet à un logiciel de communiquer avec un autre. Les grands types (web/REST, bibliothèque, OS), le fonctionnement d’une requête et d’une réponse web, et pourquoi les API sont partout.',
+    title_es:'¿Qué es una API? Una introducción clara (2026)', dek_es:'Una API es un contrato que permite a un software comunicarse con otro. Los tipos principales (web/REST, biblioteca, SO), cómo funcionan una petición y una respuesta web, y por qué las API están en todas partes.' },
   { href:'/e/blog/2026-06-14-what-is-haskell.html', cats:'Haskell, Concepts', title:'What Is Haskell? A Clear Introduction (2026)', dek:'Haskell is a purely functional, statically typed, lazy language with powerful type inference. The ideas that define it — purity, immutability, laziness, strong types — what it is used for, and how to start.', date:'Jun 14, 2026', read:'7 min read', img:'https://images.unsplash.com/photo-1610986603166-f78428624e76?w=1200&q=80&auto=format&fit=crop', imgAlt:'Syntax-highlighted source code on a screen',
     title_fr:'Qu’est-ce que Haskell ? Une introduction claire (2026)', dek_fr:'Haskell est un langage purement fonctionnel, à typage statique et paresseux, doté d’une puissante inférence de types. Les idées qui le définissent — pureté, immutabilité, paresse, types forts — à quoi il sert, et comment débuter.',
     title_es:'¿Qué es Haskell? Una introducción clara (2026)', dek_es:'Haskell es un lenguaje puramente funcional, de tipado estático y perezoso, con potente inferencia de tipos. Las ideas que lo definen — pureza, inmutabilidad, pereza, tipos fuertes — para qué sirve y cómo empezar.' },
@@ -39,6 +42,8 @@ export const guides = [
 // Category pages shown in the catbar and the "browse by topic" lists.
 // SLUGS are identical across locales (URLs differ only by the /fr or /es prefix).
 export const categories = [
+  { slug:'programming', label:'Programming',    label_fr:'Programmation',     label_es:'Programación',      match:'programming' },
+  { slug:'web',         label:'Web',            label_fr:'Web',               label_es:'Web',               match:'web' },
   { slug:'haskell',     label:'Haskell',        label_fr:'Haskell',           label_es:'Haskell',           match:'haskell' },
   { slug:'concepts',    label:'Concepts',       label_fr:'Concepts',          label_es:'Conceptos',         match:'concept' },
   { slug:'cabal',       label:'Cabal & builds', label_fr:'Cabal & builds',    label_es:'Cabal y builds',    match:'cabal' },
