@@ -99,6 +99,9 @@ const cur = path;
       .story:first-child { padding-top:6px; }
       .ava { width:84px; height:84px; border-radius:8px; object-fit:cover; transform:rotate(-5deg); box-shadow:5px 6px 0 0 var(--bar); border:3px solid #fff; }
       .ava.mono-ava { display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,var(--bar),var(--bar-d)); color:#fff; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:34px; }
+      .ava.cat-ava { display:flex; align-items:center; justify-content:center; }
+      .story:nth-child(2n) .ava { transform:rotate(4deg); }
+      .story:nth-child(3n) .ava { transform:rotate(-2.5deg); }
       .story .by { font-family:'Baloo 2',sans-serif; }
       .story .by a { color:var(--brand); font-weight:700; text-decoration:none; } .story .by em { color:var(--ink-faint); font-style:italic; font-family:'Source Serif 4',serif; }
       .story h3 { font-size:28px; line-height:1.18; font-weight:700; letter-spacing:-.3px; margin:6px 0 0; color:var(--ink); }

@@ -12,6 +12,27 @@ const blocks = [
   { c:'b2', k:'Build', h:'Understand cabal builds', p:'Sandboxes, nix-style v2-builds and what actually changed.', a:'Read the guide →', href:'/e/blog/2013-08-20-Cabal-sandbox.html' },
   { c:'b3', k:'Performance', h:'Faster Haskell builds', p:'Use every core safely with -j and build semaphores.', a:'Read the guide →', href:'/e/blog/2011-08-22-GSoC-Final.html' },
 ];
+const AV = {
+  perf:    { color:'#d6453a', svg:'<path d="M5 19a8 8 0 1 1 14 0"/><line x1="12" y1="13" x2="16" y2="9"/>' },
+  build:   { color:'#c46a12', svg:'<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/>' },
+  tool:    { color:'#2d7d46', svg:'<circle cx="12" cy="12" r="3.2"/><path d="M12 3v2.5M12 18.5V21M4.2 7l2.1 1.2M17.7 15.8l2.1 1.2M4.2 17l2.1-1.2M17.7 8.2l2.1-1.2"/>' },
+  compiler:{ color:'#1d6fe0', svg:'<rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3"/>' },
+  concept: { color:'#6d4ad6', svg:'<path d="M6 5l5 14M14 5c-2 4-2 6 0 14M5 12h7"/>' },
+  editor:  { color:'#0e9e90', svg:'<polyline points="8 8 4 12 8 16"/><polyline points="16 8 20 12 16 16"/><line x1="13" y1="6" x2="11" y2="18"/>' },
+  deploy:  { color:'#db2777', svg:'<path d="M12 3c3 1.5 5 5 5 9l-5 4-5-4c0-4 2-7.5 5-9z"/><circle cx="12" cy="10" r="1.6"/>' },
+  lambda:  { color:'#e0871a', svg:'<path d="M6 5l5 14M14 5c-2 4-2 6 0 14M5 12h7"/>' },
+};
+function catAvatar(cats=''){
+  const c = cats.toLowerCase();
+  if (c.includes('performance')) return AV.perf;
+  if (c.includes('build')) return AV.build;
+  if (c.includes('toolchain') || c.includes('tooling')) return AV.tool;
+  if (c.includes('compiler')) return AV.compiler;
+  if (c.includes('editor')) return AV.editor;
+  if (c.includes('deployment')) return AV.deploy;
+  if (c.includes('concept')) return AV.concept;
+  return AV.lambda;
+}
 ---
 <Base title="Coldwast — Programming &amp; Dev Guides" description="Independent, original and regularly-updated programming guides. Haskell, Cabal, build tooling and the modern developer toolchain." path="/">
   <div class="wrap">
@@ -19,7 +40,7 @@ const blocks = [
       <div class="main">
         {stories.map((s) => (
           <article class="story">
-            <span class="ava mono-ava" aria-hidden="true">C</span>
+            <span class="ava cat-ava" style={`background:${catAvatar(s.cats).color}`} aria-hidden="true"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={catAvatar(s.cats).svg} /></span>
             <div>
               <p class="by"><a href="/about.html">Coldwast</a> <em>wrote</em></p>
               <h3><a href={s.href} set:html={s.title} /></h3>
