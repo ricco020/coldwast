@@ -142,6 +142,7 @@ const alts = [
       .searchpage input { width:100%; max-width:520px; border:2px solid var(--border); border-radius:12px; padding:13px 18px; font-family:'Source Serif 4',serif; font-size:17px; }
       .searchpage input:focus { outline:0; border-color:var(--bar); }
       .cookiebar { position:fixed; left:16px; right:16px; bottom:16px; z-index:90; max-width:760px; margin:0 auto; background:#fff; border:1px solid var(--border); border-radius:14px; box-shadow:0 10px 40px rgba(0,0,0,.16); padding:16px 20px; display:flex; gap:14px; align-items:center; flex-wrap:wrap; font-size:14.5px; color:var(--ink-dim); }
+      .cookiebar[hidden] { display:none; }
       .cookiebar p { margin:0; flex:1; min-width:220px; }
       .cookiebar a { color:var(--brand); }
       .cookiebar .btns { display:flex; gap:8px; }
@@ -162,6 +163,37 @@ const alts = [
       .related a:hover { border-color:var(--bar); background:var(--soft); }
       .related .rm { color:var(--ink-faint); font-size:13px; white-space:nowrap; }
       @media (max-width:700px){ .related ul{grid-template-columns:1fr} }
+      /* ── Article 2-column layout (reading left + dynamic right rail) ── */
+      .artgrid { max-width:1160px; margin:0 auto; padding:0 22px; display:grid; grid-template-columns:minmax(0,1fr) 308px; gap:54px; align-items:start; }
+      .artgrid .artmain .reading { max-width:none; margin:0; padding:0; }
+      .artside .sticky { position:sticky; top:88px; display:grid; gap:20px; }
+      .artside h4 { font-family:'Baloo 2',sans-serif; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--ink-faint); margin:0 0 12px; }
+      .toc2 { background:var(--soft); border:1px solid var(--border); border-radius:14px; padding:18px 20px; }
+      .toc2:empty { display:none; }
+      .toc2 .lbl { display:block; font-family:'Baloo 2',sans-serif; font-size:12px; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:var(--ink-faint); margin:0 0 10px; }
+      .toc2 a { display:block; color:var(--ink-dim); text-decoration:none; font-size:14.5px; padding:5px 0; border-left:2px solid transparent; padding-left:12px; margin-left:-2px; font-family:'Baloo 2',sans-serif; font-weight:600; transition:all .12s; }
+      .toc2 a:hover { color:var(--brand); border-left-color:var(--bar); }
+      .affmini { background:linear-gradient(180deg,#fff7ee,#fdeed9); border:1px solid #f1ddc2; border-radius:14px; padding:20px 20px; }
+      .affmini .tag { display:inline-block; background:var(--bar); color:#fff; font-weight:800; font-family:'Baloo 2',sans-serif; font-size:11px; letter-spacing:.5px; text-transform:uppercase; padding:5px 11px; border-radius:999px; margin-bottom:10px; }
+      .affmini .amh { font-size:17px; color:var(--ink); margin:0 0 7px; font-family:'Baloo 2',sans-serif; text-transform:none; letter-spacing:0; font-weight:700; }
+      .affmini p { font-size:13.5px; color:var(--ink-dim); margin:0 0 13px; line-height:1.55; }
+      .affmini .go { display:inline-block; background:var(--bar); color:#fff; border-radius:9px; padding:9px 16px; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:14px; text-decoration:none; }
+      .affmini .go:hover { background:var(--bar-d); }
+      .affmini .disc { font-size:11.5px; color:var(--ink-faint); margin:11px 0 0; }
+      .sidebox { background:#fff; border:1px solid var(--border); border-radius:14px; padding:20px 20px; }
+      .relmini ul { list-style:none; padding:0; margin:0; }
+      .relmini li { border-top:1px solid var(--border); }
+      .relmini li:first-child { border-top:0; }
+      .relmini a { display:block; padding:9px 0; color:var(--ink); text-decoration:none; font-family:'Baloo 2',sans-serif; font-weight:600; font-size:14.5px; line-height:1.35; transition:color .12s; }
+      .relmini a:hover { color:var(--brand); }
+      .chiprow { display:flex; flex-wrap:wrap; gap:7px; }
+      .chip { font-family:'Baloo 2',sans-serif; font-weight:700; font-size:12.5px; color:var(--brand-ink); background:var(--pill); border:1px solid #f2ddbf; padding:5px 12px; border-radius:999px; text-decoration:none; transition:all .12s; }
+      .chip:hover { background:#f7e3c6; }
+      @media (max-width:940px){
+        .artgrid { grid-template-columns:1fr; gap:30px; }
+        .artside .sticky { position:static; }
+        .toc2 { display:none; }
+      }
       @media (max-width:760px){
         .topbar .row { height:auto; min-height:64px; flex-wrap:wrap; gap:6px 18px; padding-top:12px; padding-bottom:12px; }
         .search { display:none; }
@@ -307,26 +339,38 @@ const alts = [
         {cats.map((c) => <a class:list={['cat', cur === localized(c.h, lang) && 'on']} href={localized(c.h, lang)}>{c.l}</a>)}
       </div>
     </div>
-    <main><slot /></main>
-    {isArticle && (
-      <div class="wrap">
-        <section class="artcta">
-          <span class="tag">{t.reco}</span>
-          <div>
-            <h3>{t.art_aff_h}</h3>
-            <p>{t.art_aff_p}</p>
+    {isArticle ? (
+      <div class="artgrid">
+        <main class="artmain"><slot /></main>
+        <aside class="artside">
+          <div class="sticky">
+            <nav class="toc2" id="toc2" aria-label="On this page"></nav>
+            <div class="affmini">
+              <span class="tag">{t.reco}</span>
+              <h4 class="amh">{t.art_aff_h}</h4>
+              <p>{t.art_aff_p}</p>
+              <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">{t.aff_cta}</a>
+              <p class="disc">{t.aff_disc}</p>
+            </div>
+            <div class="sidebox relmini">
+              <h4>{t.keep_reading}</h4>
+              <ul>
+                {related.map((g) => (
+                  <li><a href={localized(g.href, lang)}><span class="rt" set:html={(lang==='fr'&&g.title_fr)||(lang==='es'&&g.title_es)||g.title} /></a></li>
+                ))}
+              </ul>
+            </div>
+            <div class="sidebox topicmini">
+              <h4>{t.browse_topic}</h4>
+              <div class="chiprow">
+                {categories.map((c) => <a class="chip" href={localized(`/e/c/${c.slug}.html`, lang)}>{(lang==='fr'&&c.label_fr)||(lang==='es'&&c.label_es)||c.label}</a>)}
+              </div>
+            </div>
           </div>
-          <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">{t.aff_cta}</a>
-        </section>
-        <section class="related">
-          <h3>{t.keep_reading}</h3>
-          <ul>
-            {related.map((g) => (
-              <li><a href={localized(g.href, lang)}><span class="rt" set:html={g.title} /><span class="rm">{g.read}</span></a></li>
-            ))}
-          </ul>
-        </section>
+        </aside>
       </div>
+    ) : (
+      <main><slot /></main>
     )}
     <footer class="site">
       <div class="wrap">
@@ -344,11 +388,11 @@ const alts = [
         btn.addEventListener('click', async()=>{ try{ await navigator.clipboard.writeText(pre.innerText); btn.textContent='Copied'; btn.classList.add('ok'); setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('ok');},1600);}catch{} });
         wrap.appendChild(btn);
       });
-      const tocEl=document.getElementById('toc');
+      const tocEl=document.getElementById('toc2');
       if (tocEl){ const heads=document.querySelectorAll('main .reading h2');
-        if (heads.length>=3){ const _lg=document.documentElement.lang||'en'; const _tl=({fr:'Sur cette page',es:'En esta página'})[_lg]||'On this page'; const l=document.createElement('p'); l.textContent=_tl; tocEl.appendChild(l);
+        if (heads.length>=3){ const _lg=document.documentElement.lang||'en'; const _tl=({fr:'Sur cette page',es:'En esta página'})[_lg]||'On this page'; const l=document.createElement('span'); l.className='lbl'; l.textContent=_tl; tocEl.appendChild(l);
           heads.forEach((h)=>{ if(!h.id) h.id=(h.textContent||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); const a=document.createElement('a'); a.href='#'+h.id; a.textContent=h.textContent; tocEl.appendChild(a); });
-        } else { tocEl.remove(); } }
+        } }
     </script>
     <div class="cookiebar" id="cookiebar" hidden>
       <p>{t.cookie} <a href={localized('/about.html', lang)}>{t.cookie_policy}</a>.</p>
