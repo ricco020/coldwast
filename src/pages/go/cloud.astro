@@ -1,0 +1,21 @@
+---
+// Affiliate redirect (cloak). Destination lives here in one place.
+// TODO: append the real referral id once the Hetzner Cloud affiliate account is
+// approved, e.g. https://hetzner.cloud/?ref=XXXXXXXX — until then it points to
+// the genuine product page (honest recommendation, no commission yet).
+const DEST = 'https://www.hetzner.com/cloud';
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="robots" content="noindex,nofollow" />
+  <meta http-equiv="refresh" content={`0; url=${DEST}`} />
+  <link rel="canonical" href={DEST} />
+  <title>Redirecting…</title>
+</head>
+<body>
+  <p>Redirecting to our recommended cloud host… <a href={DEST} rel="sponsored nofollow noopener">Continue →</a></p>
+  <script is:inline define:vars={{ DEST }}>location.replace(DEST);</script>
+</body>
+</html>

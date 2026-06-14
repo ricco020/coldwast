@@ -62,16 +62,25 @@ function catAvatar(cats=''){
         ))}
       </div>
       <aside class="side">
-        <div class="nlbox">
-          <div class="mascot">λ</div>
-          <span class="tag">Dev guides feed</span>
-          <h3>New Haskell &amp; dev guides, once they land.</h3>
-          <p>Original, regularly-updated references. No spam, no account.</p>
-          <div class="field"><input type="email" placeholder="Your email" aria-label="Email" /><a class="go" href="/e/rss.xml">Follow</a></div>
+        <div class="affbox">
+          <span class="tag">Recommended</span>
+          <h3>Deploy your Haskell project</h3>
+          <p>You need a real Linux box to build GHC and run your app. Hetzner Cloud gives developers fast NVMe servers from a few euros a month.</p>
+          <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Get cloud credit →</a>
+          <p class="disc">Affiliate link — supports these free guides.</p>
         </div>
         <div class="sidecard">
           <h4>Popular guides</h4>
           <ul>{popular.map((p) => <li><a href={p.href} set:html={p.title} /></li>)}</ul>
+        </div>
+        <div class="sidecard">
+          <h4>Browse by topic</h4>
+          <ul class="topiclist">
+            <li><a href="/e/c/haskell.html">Haskell</a></li>
+            <li><a href="/e/c/cabal.html">Cabal &amp; builds</a></li>
+            <li><a href="/e/c/toolchain.html">Toolchain</a></li>
+            <li><a href="/e/c/performance.html">Performance</a></li>
+          </ul>
         </div>
       </aside>
     </div>

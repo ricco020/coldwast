@@ -12,8 +12,9 @@ const SITE = 'https://coldwa.st';
 const canonical = SITE + path;
 const year = 2026;
 const cats = [
-  { l: 'Haskell', h: '/e/' }, { l: 'Cabal', h: '/e/' }, { l: 'Build tooling', h: '/e/' },
-  { l: 'Performance', h: '/e/' }, { l: 'Deployment', h: '/e/' }, { l: 'Tooling', h: '/e/' }, { l: 'Toolchain', h: '/e/' },
+  { l: 'All guides', h: '/e/' },
+  { l: 'Haskell', h: '/e/c/haskell.html' }, { l: 'Concepts', h: '/e/c/concepts.html' }, { l: 'Cabal & builds', h: '/e/c/cabal.html' },
+  { l: 'Toolchain', h: '/e/c/toolchain.html' }, { l: 'Compiler', h: '/e/c/compiler.html' }, { l: 'Performance', h: '/e/c/performance.html' }, { l: 'Editor & HLS', h: '/e/c/editor.html' },
 ];
 const cur = path;
 ---
@@ -37,11 +38,18 @@ const cur = path;
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
     <meta name="google-site-verification" content="zbK5oTBD3pvfP5FGnXGRdeSEI_DmxGgFYiq4AanaTfQ" />
-    <script async is:inline src="https://www.googletagmanager.com/gtag/js?id=G-4SQJ15V82L"></script>
     <script is:inline>
+      // Analytics is loaded only after explicit consent (see cookie banner).
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date()); gtag('config', 'G-4SQJ15V82L');
+      window.loadAnalytics = function(){
+        if (window.__ga_loaded) return; window.__ga_loaded = true;
+        var s = document.createElement('script'); s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-4SQJ15V82L';
+        document.head.appendChild(s);
+        gtag('js', new Date()); gtag('config', 'G-4SQJ15V82L', { anonymize_ip: true });
+      };
+      if (localStorage.getItem('cw-consent') === 'yes') window.loadAnalytics();
     </script>
     {type === 'article' && datePublished && (
       <script type="application/ld+json" set:html={JSON.stringify({
@@ -77,6 +85,25 @@ const cur = path;
       nav.top a { color:#fff; text-decoration:none; font-weight:600; font-size:17px; opacity:.96; }
       nav.top a:hover { opacity:.78; }
       .search { margin-left:auto; display:flex; align-items:center; gap:9px; background:#fff; border-radius:999px; padding:9px 18px; color:var(--ink-faint); min-width:230px; font-family:'Baloo 2',sans-serif; font-size:15px; }
+      .search input { border:0; outline:0; background:none; font:inherit; color:var(--ink); width:100%; }
+      .search input::placeholder { color:var(--ink-faint); }
+      .affbox { background:#fff7ee; border:1px solid #f1ddc2; border-radius:14px; padding:22px 22px; }
+      .affbox .tag { display:inline-block; background:var(--bar); color:#fff; font-weight:800; font-family:'Baloo 2',sans-serif; font-size:12px; letter-spacing:.5px; text-transform:uppercase; padding:5px 12px; border-radius:999px; margin-bottom:12px; }
+      .affbox h3 { font-size:20px; line-height:1.2; margin:0 0 8px; color:var(--ink); font-family:'Baloo 2',sans-serif; }
+      .affbox p { font-size:14.5px; color:var(--ink-dim); margin:0 0 14px; }
+      .affbox .go { display:inline-block; background:var(--bar); color:#fff; border-radius:9px; padding:10px 18px; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:15px; text-decoration:none; }
+      .affbox .go:hover { background:var(--bar-d); }
+      .affbox .disc { font-size:12px; color:var(--ink-faint); margin:12px 0 0; }
+      .topiclist a { font-family:'Baloo 2',sans-serif; }
+      .searchpage { margin:8px 0 4px; }
+      .searchpage input { width:100%; max-width:520px; border:2px solid var(--border); border-radius:12px; padding:13px 18px; font-family:'Source Serif 4',serif; font-size:17px; }
+      .searchpage input:focus { outline:0; border-color:var(--bar); }
+      .cookiebar { position:fixed; left:16px; right:16px; bottom:16px; z-index:90; max-width:760px; margin:0 auto; background:#fff; border:1px solid var(--border); border-radius:14px; box-shadow:0 10px 40px rgba(0,0,0,.16); padding:16px 20px; display:flex; gap:14px; align-items:center; flex-wrap:wrap; font-size:14.5px; color:var(--ink-dim); }
+      .cookiebar p { margin:0; flex:1; min-width:220px; }
+      .cookiebar a { color:var(--brand); }
+      .cookiebar .btns { display:flex; gap:8px; }
+      .cookiebar button { font-family:'Baloo 2',sans-serif; font-weight:700; font-size:14px; border-radius:9px; padding:9px 16px; cursor:pointer; border:1px solid var(--border); background:#fff; color:var(--ink-dim); }
+      .cookiebar button.acc { background:var(--bar); color:#fff; border-color:var(--bar); }
       @media (max-width:760px){
         .topbar .row { height:auto; min-height:64px; flex-wrap:wrap; gap:6px 18px; padding-top:12px; padding-bottom:12px; }
         .search { display:none; }
@@ -203,7 +230,10 @@ const cur = path;
           <a href="/about.html">About</a>
           <a href="/e/rss.xml">RSS</a>
         </nav>
-        <span class="search">🔍 Search guides…</span>
+        <form class="search" role="search" action="/e/search.html" method="get">
+          <span aria-hidden="true">🔍</span>
+          <input type="search" name="q" placeholder="Search guides…" aria-label="Search guides" />
+        </form>
       </div>
     </header>
     <div class="catbar">
@@ -233,6 +263,25 @@ const cur = path;
         if (heads.length>=3){ const l=document.createElement('p'); l.textContent='On this page'; tocEl.appendChild(l);
           heads.forEach((h)=>{ if(!h.id) h.id=(h.textContent||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); const a=document.createElement('a'); a.href='#'+h.id; a.textContent=h.textContent; tocEl.appendChild(a); });
         } else { tocEl.remove(); } }
+    </script>
+    <div class="cookiebar" id="cookiebar" hidden>
+      <p>We use a privacy-friendly analytics cookie (anonymised IP) only if you accept. See our <a href="/about.html">policy</a>.</p>
+      <div class="btns">
+        <button type="button" id="ck-decline">Decline</button>
+        <button type="button" class="acc" id="ck-accept">Accept</button>
+      </div>
+    </div>
+    <script is:inline>
+      (function(){
+        var bar = document.getElementById('cookiebar');
+        if (!localStorage.getItem('cw-consent')) { bar.hidden = false; }
+        document.getElementById('ck-accept').addEventListener('click', function(){
+          localStorage.setItem('cw-consent','yes'); bar.hidden = true; if (window.loadAnalytics) window.loadAnalytics();
+        });
+        document.getElementById('ck-decline').addEventListener('click', function(){
+          localStorage.setItem('cw-consent','no'); bar.hidden = true;
+        });
+      })();
     </script>
   </body>
 </html>

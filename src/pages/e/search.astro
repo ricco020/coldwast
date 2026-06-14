@@ -1,0 +1,56 @@
+---
+import Base from '../../layouts/Base.astro';
+import { guides } from '../../data/guides.js';
+---
+<Base title="Search guides — Coldwast" description="Search all Coldwast programming and Haskell guides." path="/e/search.html">
+  <div class="wrap">
+    <div class="cathead">
+      <p class="k">Search</p>
+      <h1>Search the guides</h1>
+      <form class="searchpage" role="search" onsubmit="return false">
+        <input id="q" type="search" placeholder="Search Haskell, Cabal, GHC…" aria-label="Search guides" autocomplete="off" autofocus />
+      </form>
+      <p class="count"><b id="cn">{guides.length}</b> <span class="lbl" id="cl">guides</span></p>
+    </div>
+    <div class="layout" style="grid-template-columns:1fr">
+      <div class="main" id="results">
+        {guides.map((s) => (
+          <article class="story" data-search={`${s.title} ${s.dek} ${s.cats}`.toLowerCase()}>
+            <span class="ava cat-ava" style="background:#e0871a" aria-hidden="true"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5l5 14M14 5c-2 4-2 6 0 14M5 12h7"/></svg></span>
+            <div>
+              <p class="by"><a href="/about.html">Coldwast</a> <em>wrote</em></p>
+              <h3><a href={s.href} set:html={s.title} /></h3>
+              <p class="ex"><span class="date">{s.date}</span> in {s.cats} — {s.dek}</p>
+              <a class="more" href={s.href}>Read more…</a>
+            </div>
+          </article>
+        ))}
+        <p id="noresult" class="ex" style="display:none">No guide matches your search. <a href="/e/">Browse all guides →</a></p>
+      </div>
+    </div>
+  </div>
+  <script is:inline>
+    (function(){
+      var q = document.getElementById('q');
+      var items = Array.prototype.slice.call(document.querySelectorAll('#results .story'));
+      var cn = document.getElementById('cn'), cl = document.getElementById('cl');
+      var none = document.getElementById('noresult');
+      function apply(term){
+        term = (term||'').trim().toLowerCase();
+        var n = 0;
+        items.forEach(function(el){
+          var hit = !term || el.getAttribute('data-search').indexOf(term) !== -1;
+          el.style.display = hit ? '' : 'none';
+          if (hit) n++;
+        });
+        cn.textContent = String(n);
+        cl.textContent = (n === 1 ? 'guide' : 'guides');
+        none.style.display = n ? 'none' : '';
+      }
+      var params = new URLSearchParams(location.search);
+      var initial = params.get('q') || '';
+      if (initial) { q.value = initial; apply(initial); }
+      q.addEventListener('input', function(){ apply(q.value); });
+    })();
+  </script>
+</Base>

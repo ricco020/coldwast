@@ -13,7 +13,10 @@ const stories = [
   { href:'/e/blog/2017-09-09-Cabal-2-0.html', cats:'Haskell, Build', title:'Cabal 2.0: the Release that Reshaped Haskell Builds', dek:'Nix-style local builds, Backpack mixins, the caret operator and a better solver — and where each stands in 2026.', date:'Jun 13, 2026', read:'7 min read' },
   { href:'/e/blog/2011-08-22-GSoC-Final.html', cats:'Haskell, Performance', title:'Parallelising cabal-install: How Haskell Builds Use Your Cores', dek:'Dependency-graph parallelism, -j builds and GHC job semaphores — the topic a 2011 GSoC project put on the map.', date:'Jun 13, 2026', read:'6 min read' },
 ];
-const related = ['Haskell','Cabal','GHCup','Build tooling','Performance','Deployment','HLS'];
+const related = [
+  { l:'Haskell', h:'/e/c/haskell.html' }, { l:'Concepts', h:'/e/c/concepts.html' }, { l:'Cabal & builds', h:'/e/c/cabal.html' },
+  { l:'Toolchain', h:'/e/c/toolchain.html' }, { l:'Compiler', h:'/e/c/compiler.html' }, { l:'Performance', h:'/e/c/performance.html' }, { l:'Editor & HLS', h:'/e/c/editor.html' },
+];
 const AV = {
   perf:    { color:'#d6453a', svg:'<path d="M5 19a8 8 0 1 1 14 0"/><line x1="12" y1="13" x2="16" y2="9"/>' },
   build:   { color:'#c46a12', svg:'<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/>' },
@@ -42,7 +45,7 @@ function catAvatar(cats=''){
       <p class="k">Category</p>
       <h1>Guides</h1>
       <div class="relrow"><span class="lbl">Also related to</span>
-        {related.map((r) => <a class="reltag" href="/e/">{r}</a>)}
+        {related.map((r) => <a class="reltag" href={r.h}>{r.l}</a>)}
       </div>
       <p class="count"><b>{stories.length}</b> <span class="lbl">guides</span></p>
     </div>
