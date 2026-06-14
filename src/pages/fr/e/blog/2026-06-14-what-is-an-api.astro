@@ -1,0 +1,69 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/fr/e/blog/2026-06-14-what-is-an-api.html';
+const title = 'Qu’est-ce qu’une API ? Une introduction claire pour les développeurs (2026)';
+const description = 'Une API est un contrat qui permet à un logiciel de communiquer avec un autre. Ce qu’est une API, les principaux types (web/REST, bibliothèque, OS), comment fonctionnent une requête et une réponse web, et pourquoi les API sont partout dans le logiciel moderne.';
+---
+<Base title={title} description={description} path={path} type="article" lang="fr"
+  image="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/fr/">Accueil</a><span>/</span><a href="/fr/e/">Guides</a><span>/</span>Qu’est-ce qu’une API</nav>
+  <p class="kicker">Programmation · concepts · web</p>
+  <h1>Qu’est-ce qu’une API ?</h1>
+  <div class="artmeta"><span>Par Coldwast</span><span>Mis à jour le 14 juin 2026</span><span>7 min de lecture</span><span class="tag">#api</span><span class="tag">#web</span><span class="tag">#concepts</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&q=80&auto=format&fit=crop" alt="Des baies de serveurs dans un centre de données" width="1200" height="420" loading="eager" />
+    <figcaption>Des baies de serveurs dans un centre de données — beaucoup d’API tournent sur des serveurs comme ceux-ci, répondant aux requêtes d’autres logiciels.</figcaption>
+  </figure>
+
+  <p>Vous l’entendez sans cesse : « appeler l’API », « l’API publique », « une clé d’API ». Une <strong>API</strong> (Application Programming Interface) est l’une des idées les plus utiles du logiciel — et l’une des plus sur-jargonnées. Ce guide explique, simplement, ce qu’est une API, les principaux types que vous rencontrerez, comment fonctionne une requête d’API web typique, et pourquoi les API sont partout.</p>
+
+  <h2>La définition courte</h2>
+  <p>Une <strong>API est un contrat qui permet à un logiciel de communiquer avec un autre</strong>. Elle définit quelles requêtes vous pouvez faire, quelles données vous devez envoyer, et ce que vous récupérez en retour — sans que vous ayez besoin de savoir comment l’autre côté est construit en interne.</p>
+  <p>L’analogie classique est le restaurant. Vous (un programme) lisez un <em>menu</em> (l’API) et passez commande auprès du <em>serveur</em>. Vous n’entrez pas dans la cuisine et n’avez pas besoin de savoir comment le plat est préparé. Le menu est l’interface convenue ; la cuisine est l’implémentation, cachée derrière. Une API, c’est ce menu pour les logiciels.</p>
+
+  <h2>Les principaux types d’API</h2>
+  <ul>
+    <li><strong>API web (les plus discutées)</strong> — un programme parle à un autre <em>par le réseau</em>, généralement via HTTP. Quand une app météo affiche les prévisions, elle appelle l’API web d’un service météo. La plupart des API web modernes suivent le style <strong>REST</strong> et échangent des données en JSON.</li>
+    <li><strong>API de bibliothèque / framework</strong> — l’ensemble des fonctions et types qu’une bibliothèque de code expose pour que vous les appeliez. Quand vous utilisez une bibliothèque de dates, les fonctions qu’elle vous offre <em>sont</em> son API.</li>
+    <li><strong>API du système d’exploitation</strong> — la façon dont un programme demande à l’OS d’ouvrir un fichier, de dessiner une fenêtre ou d’utiliser le réseau. POSIX en est une.</li>
+  </ul>
+  <p>Le fil conducteur : une API est la <strong>surface publiée</strong> de quelque chose, la partie que vous avez le droit d’utiliser, séparée des rouages internes dont vous n’êtes pas censé dépendre.</p>
+
+  <figure><img src="https://images.unsplash.com/photo-1556656793-08538906a9f8?w=1200&q=80&auto=format&fit=crop" alt="Une personne tenant un smartphone à deux mains" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Un smartphone en usage — les applis qu’il contient appellent en permanence des API web en arrière-plan pour récupérer messages, cartes, prix et plus encore.</figcaption></figure>
+
+  <h2>Comment fonctionne une requête d’API web</h2>
+  <p>Un appel d’API web est une <strong>requête</strong> et une <strong>réponse</strong>. Le client envoie une requête HTTP à une URL (un <em>endpoint</em>) en utilisant une méthode qui signale son intention, et le serveur renvoie un code de statut et généralement des données. Les méthodes courantes :</p>
+  <ul>
+    <li><strong>GET</strong> — lire des données (« donne-moi l’utilisateur 42 »).</li>
+    <li><strong>POST</strong> — créer quelque chose de nouveau.</li>
+    <li><strong>PUT</strong> / <strong>PATCH</strong> — mettre à jour quelque chose.</li>
+    <li><strong>DELETE</strong> — supprimer quelque chose.</li>
+  </ul>
+  <p>Une simple requête pour lire un utilisateur pourrait ressembler à ceci, le serveur répondant en JSON :</p>
+  <pre><code>GET /users/42  HTTP/1.1
+Host: api.example.com
+
+-- response --
+200 OK
+&#123; &quot;id&quot;: 42, &quot;name&quot;: &quot;Ada&quot;, &quot;active&quot;: true &#125;</code></pre>
+  <p>Le <code>200</code> est un <strong>code de statut</strong> qui signifie succès ; <code>404</code> signifie non trouvé, <code>401</code> non authentifié, <code>500</code> une erreur serveur. Le corps est du <strong>JSON</strong> — le format léger et lisible par l’humain que la plupart des API web utilisent pour échanger des données structurées.</p>
+
+  <h2>Authentification et clés</h2>
+  <p>Beaucoup d’API exigent que vous vous identifiiez avec une <strong>clé d’API</strong> ou un jeton, envoyé dans un en-tête de requête. Cela permet au fournisseur de contrôler qui utilise le service, d’appliquer des limites de débit et de facturer l’usage. Gardez les clés secrètes — une clé divulguée, c’est comme un mot de passe divulgué.</p>
+
+  <h2>Pourquoi les API comptent</h2>
+  <p>Les API sont ce qui permet de <strong>composer</strong> le logiciel plutôt que de le reconstruire. Une boutique peut encaisser des paiements sans écrire une banque ; une app peut afficher une carte sans dessiner le monde ; les services d’une même entreprise se parlent via des API internes. Elles transforment les capacités des autres en briques que vous appelez en quelques lignes — ce qui est l’essentiel de la façon dont le logiciel moderne se construit.</p>
+
+  <h2>Les limites honnêtes</h2>
+  <p>Une API est une <em>dépendance</em>. Si le fournisseur la modifie, vous limite en débit, augmente ses prix ou ferme, votre logiciel est affecté — c’est pourquoi les bonnes API sont <strong>versionnées</strong> et documentées, et pourquoi vous gérez erreurs et délais d’attente plutôt que de supposer que chaque appel réussit. Une API cache la complexité ; elle ne la supprime pas.</p>
+
+  <h2>En résumé</h2>
+  <p>Une API est un contrat qui permet à un programme d’utiliser les capacités d’un autre via un ensemble défini de requêtes et de réponses, sans toucher à ses rouages internes. Les API web/REST sur HTTP avec JSON sont le type que vous rencontrerez le plus, mais l’idée — une interface publiée, séparée de l’implémentation qui la sous-tend — traverse les bibliothèques, les systèmes d’exploitation et tout programme bien structuré. Apprenez à lire la documentation d’une API et vous pourrez brancher presque n’importe quoi sur n’importe quoi.</p>
+
+  <p>Nouveau à un langage pour construire ou appeler des API ? Parcourez notre <a href="/fr/e/">index des guides</a> pour des explications de programmation claires et originales.</p>
+
+  <div class="note">Guide indépendant, maintenu par la communauté. <strong>coldwa.st</strong> est un site de ressources de programmation ; cet article est un écrit explicatif neuf et original sur les API. Les exemples reflètent le comportement standard HTTP/REST — vérifiez auprès de la documentation de l’API spécifique que vous utilisez.</div>
+  </div>
+</Base>

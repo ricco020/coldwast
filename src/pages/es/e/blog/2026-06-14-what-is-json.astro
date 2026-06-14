@@ -1,0 +1,62 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/es/e/blog/2026-06-14-what-is-json.html';
+const title = '¿Qué es JSON? El formato de datos detrás de las apps modernas (2026)';
+const description = 'JSON es un formato de texto ligero y legible para datos estructurados — el idioma que hablan la mayoría de las API web y archivos de configuración. Qué es JSON, su sintaxis, por qué está en todas partes, su comparación con XML, y sus límites honestos.';
+---
+<Base title={title} description={description} path={path} type="article" lang="es"
+  image="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/es/">Inicio</a><span>/</span><a href="/es/e/">Guías</a><span>/</span>Qué es JSON</nav>
+  <p class="kicker">Programación · datos · web</p>
+  <h1>¿Qué es JSON?</h1>
+  <div class="artmeta"><span>Por Coldwast</span><span>Actualizado el 14 de junio de 2026</span><span>6 min de lectura</span><span class="tag">#json</span><span class="tag">#data</span><span class="tag">#web</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=1200&q=80&auto=format&fit=crop" alt="Código fuente colorido en un monitor" width="1200" height="420" loading="eager" />
+    <figcaption>Código fuente colorido en un monitor — JSON es un formato de texto plano que lees y escribes de forma muy parecida al código.</figcaption>
+  </figure>
+
+  <p>Abre casi cualquier respuesta de una <a href="/es/e/blog/2026-06-14-what-is-an-api.html">API</a> web, un archivo de configuración de JavaScript, o los ajustes guardados de una app moderna, y verás <strong>JSON</strong>. Es el formato que transporta discretamente la mayoría de los datos estructurados que circulan por internet. Esta guía explica qué es JSON, su pequeña sintaxis, por qué se impuso, cómo se compara con XML, y dónde se queda corto.</p>
+
+  <h2>La definición corta</h2>
+  <p><strong>JSON (JavaScript Object Notation) es un formato ligero, basado en texto, para representar datos estructurados.</strong> Es fácil de leer para los humanos y fácil de analizar para las máquinas, y a pesar del nombre es <em>independiente del lenguaje</em> — prácticamente todos los lenguajes de programación saben leerlo y escribirlo.</p>
+
+  <h2>La sintaxis, en un ejemplo</h2>
+  <p>JSON se construye a partir de un puñado de tipos de valores: objetos, arrays, cadenas, números, booleanos y <code>null</code>. Un objeto es un conjunto de pares clave–valor entre llaves; un array es una lista ordenada entre corchetes:</p>
+  <pre><code>&#123;
+  &quot;name&quot;: &quot;Ada&quot;,
+  &quot;age&quot;: 36,
+  &quot;active&quot;: true,
+  &quot;roles&quot;: [&quot;admin&quot;, &quot;author&quot;],
+  &quot;address&quot;: &#123; &quot;city&quot;: &quot;London&quot;, &quot;zip&quot;: &quot;EC1&quot; &#125;
+&#125;</code></pre>
+  <p>Eso es esencialmente todo el formato. Las claves son siempre cadenas entre comillas dobles; los valores pueden ser a su vez objetos o arrays, de modo que JSON se anida a cualquier profundidad. No hay funciones, ni variables, ni lógica — describe <em>datos</em>, nada más.</p>
+
+  <figure><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=crop" alt="Un portátil mostrando un panel de datos con gráficos" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Un portátil mostrando un panel de datos — los servicios intercambian constantemente datos estructurados como JSON detrás de interfaces como esta.</figcaption></figure>
+
+  <h2>Por qué JSON está en todas partes</h2>
+  <ul>
+    <li><strong>Las API lo hablan.</strong> Cuando una app pide datos a un servidor, la respuesta es casi siempre JSON. Se proyecta limpiamente sobre los objetos y arrays que todo lenguaje ya tiene.</li>
+    <li><strong>Es legible para los humanos.</strong> Puedes abrir una respuesta JSON y entenderla sin herramientas, lo que hace la depuración mucho más fácil que con formatos binarios.</li>
+    <li><strong>Es diminuto y universal.</strong> La especificación es pequeña, cada lenguaje incluye un analizador JSON, y el formato añade poca sobrecarga.</li>
+    <li><strong>Los archivos de configuración lo usan.</strong> Desde <code>package.json</code> hasta innumerables ajustes de herramientas, JSON es una forma común de almacenar la configuración.</li>
+  </ul>
+
+  <h2>JSON vs XML</h2>
+  <p>Antes de JSON, <strong>XML</strong> era el formato común de intercambio de datos. XML es más verboso — cada valor se envuelve en etiquetas de apertura y cierre — y admite funciones como atributos, espacios de nombres y esquemas que JSON no tiene. JSON ganó para las API web porque es más ligero, menos ruidoso, y se proyecta directamente sobre los objetos de JavaScript en el navegador. XML aún tiene su sitio donde importan sus funciones documentales más ricas; para la mayoría del intercambio de datos, JSON es la opción por defecto.</p>
+
+  <h2>Los límites honestos</h2>
+  <p>La simplicidad de JSON tiene sus contrapartidas. No tiene <strong>comentarios</strong>, así que no puedes anotar un archivo de configuración en línea. No tiene <strong>tipo fecha</strong> — las fechas se pasan como cadenas por convención. No tiene un esquema integrado (aunque herramientas como JSON Schema añaden uno por separado), y los documentos JSON grandes son menos eficientes que los formatos binarios diseñados a propósito. Para la mayoría de los datos web, nada de esto importa; para datos muy grandes o fuertemente tipados, conviene saberlo.</p>
+
+  <h2>Preguntas frecuentes</h2>
+  <p><strong>¿JSON es solo para JavaScript?</strong> No. El nombre viene de la sintaxis de JavaScript, pero JSON es independiente del lenguaje — Python, Go, Rust, Java y los demás lo leen y escriben de forma nativa.</p>
+  <p><strong>¿Cuál es la diferencia entre JSON y un objeto JavaScript?</strong> Se parecen, pero JSON es un formato de texto (una cadena); un objeto JavaScript es un valor vivo en memoria. <em>Parseas</em> texto JSON a un objeto, y <em>serializas</em> (stringify) un objeto de vuelta a JSON.</p>
+  <p><strong>¿Puede JSON almacenar comentarios?</strong> No. El formato omite los comentarios deliberadamente. Algunas herramientas aceptan variantes «JSON con comentarios», pero el JSON estándar no.</p>
+  <p><strong>¿Cómo se manejan las fechas en JSON?</strong> Como cadenas, por convención — normalmente en formato ISO 8601 como «2026-06-14». JSON en sí no tiene un tipo fecha dedicado.</p>
+
+  <p>JSON es la mitad de «datos» de la mayoría de la comunicación web; la maquinaria de petición-y-respuesta a su alrededor es la <a href="/es/e/blog/2026-06-14-what-is-an-api.html">API</a>. Explora más explicaciones claras en nuestro <a href="/es/e/">índice de guías</a>.</p>
+
+  <div class="note">Guía independiente y mantenida por la comunidad. <strong>coldwa.st</strong> es un sitio de recursos de programación; este artículo es texto explicativo nuevo y original sobre JSON. Los ejemplos reflejan el formato JSON estándar — verifícalo con la especificación (json.org / ECMA-404) para casos límite.</div>
+  </div>
+</Base>
