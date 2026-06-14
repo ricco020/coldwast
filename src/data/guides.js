@@ -4,6 +4,9 @@
 import { localized } from '../i18n/ui.js';
 
 export const guides = [
+  { href:'/e/blog/2026-06-14-what-is-git.html', cats:'Programming, Tools, Workflow', title:'What Is Git? Version Control Explained for Beginners (2026)', dek:'Git is a distributed version-control system that tracks every change to your code so you can branch, merge, collaborate and undo. Core concepts (commit, branch, merge, remote), the daily workflow, and how it differs from GitHub.', date:'Jun 14, 2026', read:'7 min read', img:'https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80&auto=format&fit=crop', imgAlt:'Lines of source code on a dark screen',
+    title_fr:'Qu’est-ce que Git ? Le contrôle de version expliqué (2026)', dek_fr:'Git est un système de contrôle de version distribué qui suit chaque changement de ton code pour brancher, fusionner, collaborer et annuler. Les concepts clés (commit, branche, merge, remote), le workflow quotidien, et sa différence avec GitHub.',
+    title_es:'¿Qué es Git? El control de versiones explicado (2026)', dek_es:'Git es un sistema de control de versiones distribuido que registra cada cambio de tu código para ramificar, fusionar, colaborar y deshacer. Los conceptos clave (commit, rama, merge, remote), el flujo diario, y su diferencia con GitHub.' },
   { href:'/e/blog/2026-06-14-what-is-an-algorithm.html', cats:'Programming, Concepts', title:'What Is an Algorithm? A Clear Introduction (2026)', dek:'An algorithm is a finite, step-by-step procedure that turns input into output. Its key properties, everyday and code examples, why efficiency (Big-O) matters, and how it differs from a program.', date:'Jun 14, 2026', read:'7 min read', img:'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&q=80&auto=format&fit=crop', imgAlt:'Streams of green code on a dark screen',
     title_fr:'Qu’est-ce qu’un algorithme ? Une introduction claire (2026)', dek_fr:'Un algorithme est une procédure finie, étape par étape, qui transforme une entrée en sortie. Ses propriétés clés, des exemples du quotidien et en code, pourquoi l’efficacité (Big-O) compte, et sa différence avec un programme.',
     title_es:'¿Qué es un algoritmo? Una introducción clara (2026)', dek_es:'Un algoritmo es un procedimiento finito, paso a paso, que convierte una entrada en una salida. Sus propiedades clave, ejemplos cotidianos y en código, por qué importa la eficiencia (Big-O), y su diferencia con un programa.' },
@@ -51,6 +54,7 @@ export const categories = [
   { slug:'programming', label:'Programming',    label_fr:'Programmation',     label_es:'Programación',      match:'programming' },
   { slug:'web',         label:'Web',            label_fr:'Web',               label_es:'Web',               match:'web' },
   { slug:'data',        label:'Data',           label_fr:'Données',           label_es:'Datos',             match:'data' },
+  { slug:'tools',       label:'Tools',          label_fr:'Outils',            label_es:'Herramientas',      match:'tools' },
   { slug:'haskell',     label:'Haskell',        label_fr:'Haskell',           label_es:'Haskell',           match:'haskell' },
   { slug:'concepts',    label:'Concepts',       label_fr:'Concepts',          label_es:'Conceptos',         match:'concept' },
   { slug:'cabal',       label:'Cabal & builds', label_fr:'Cabal & builds',    label_es:'Cabal y builds',    match:'cabal' },
