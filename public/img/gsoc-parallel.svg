@@ -1,25 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" font-family="ui-monospace,Menlo,monospace">
-  <rect width="1200" height="420" fill="#0f1413"/>
-  <rect x="20" y="20" width="1160" height="380" rx="10" fill="none" stroke="#35514a" stroke-width="2"/>
-  <circle cx="48" cy="50" r="6" fill="#e06e6e"/><circle cx="70" cy="50" r="6" fill="#e8b454"/><circle cx="92" cy="50" r="6" fill="#5ee0a0"/>
-  <text x="1150" y="56" text-anchor="end" font-size="15" fill="#6b7e76">coldwa.st</text>
-  <text x="48" y="120" font-size="34" font-weight="700" fill="#e6efe9">Parallel cabal-install</text>
-  <text x="48" y="158" font-size="20" fill="#5ee0a0">building dependencies concurrently</text>
+  <rect width="1200" height="420" fill="#12100D"/>
+  <rect x="20" y="20" width="1160" height="380" rx="10" fill="none" stroke="#3A3225" stroke-width="2"/>
+  <circle cx="48" cy="50" r="6" fill="#e06e6e"/><circle cx="70" cy="50" r="6" fill="#e8b454"/><circle cx="92" cy="50" r="6" fill="#E8A33D"/>
+  <text x="1150" y="56" text-anchor="end" font-size="15" fill="#8A8270">coldwa.st</text>
+  <text x="48" y="120" font-size="34" font-weight="700" fill="#EDE6D8">Parallel cabal-install</text>
+  <text x="48" y="158" font-size="20" fill="#E8A33D">building dependencies concurrently</text>
   <!-- parallel build lanes -->
   <g>
-    <text x="600" y="206" font-size="13" fill="#6b7e76">-j4</text>
-    <rect x="640" y="196" width="180" height="22" rx="4" fill="#243330"/><rect x="640" y="196" width="180" height="22" rx="4" fill="#2f9c6a" opacity="0.55"/>
-    <rect x="640" y="228" width="240" height="22" rx="4" fill="#243330"/><rect x="640" y="228" width="240" height="22" rx="4" fill="#2f9c6a" opacity="0.55"/>
-    <rect x="640" y="260" width="140" height="22" rx="4" fill="#243330"/><rect x="640" y="260" width="140" height="22" rx="4" fill="#5ee0a0" opacity="0.7"/>
-    <rect x="640" y="292" width="300" height="22" rx="4" fill="#243330"/><rect x="640" y="292" width="300" height="22" rx="4" fill="#2f9c6a" opacity="0.55"/>
-    <text x="828" y="212" font-size="12" fill="#9fb3aa">bytestring</text>
-    <text x="888" y="244" font-size="12" fill="#9fb3aa">aeson</text>
-    <text x="788" y="276" font-size="12" fill="#9fb3aa">text</text>
-    <text x="948" y="308" font-size="12" fill="#9fb3aa">lens</text>
+    <text x="600" y="206" font-size="13" fill="#8A8270">-j4</text>
+    <rect x="640" y="196" width="180" height="22" rx="4" fill="#2E2820"/><rect x="640" y="196" width="180" height="22" rx="4" fill="#B87A28" opacity="0.55"/>
+    <rect x="640" y="228" width="240" height="22" rx="4" fill="#2E2820"/><rect x="640" y="228" width="240" height="22" rx="4" fill="#B87A28" opacity="0.55"/>
+    <rect x="640" y="260" width="140" height="22" rx="4" fill="#2E2820"/><rect x="640" y="260" width="140" height="22" rx="4" fill="#E8A33D" opacity="0.7"/>
+    <rect x="640" y="292" width="300" height="22" rx="4" fill="#2E2820"/><rect x="640" y="292" width="300" height="22" rx="4" fill="#B87A28" opacity="0.55"/>
+    <text x="828" y="212" font-size="12" fill="#B8AE9C">bytestring</text>
+    <text x="888" y="244" font-size="12" fill="#B8AE9C">aeson</text>
+    <text x="788" y="276" font-size="12" fill="#B8AE9C">text</text>
+    <text x="948" y="308" font-size="12" fill="#B8AE9C">lens</text>
   </g>
-  <text x="48" y="232" font-size="16" fill="#9fb3aa">$ cabal build -j</text>
-  <text x="48" y="262" font-size="16" fill="#6b7e76"># GSoC 2011:</text>
-  <text x="48" y="288" font-size="16" fill="#6b7e76"># parallelise the</text>
-  <text x="48" y="314" font-size="16" fill="#6b7e76"># install plan</text>
-  <text x="48" y="360" font-size="15" fill="#2f9c6a">the work behind today's -j builds</text>
+  <text x="48" y="232" font-size="16" fill="#B8AE9C">$ cabal build -j</text>
+  <text x="48" y="262" font-size="16" fill="#8A8270"># GSoC 2011:</text>
+  <text x="48" y="288" font-size="16" fill="#8A8270"># parallelise the</text>
+  <text x="48" y="314" font-size="16" fill="#8A8270"># install plan</text>
+  <text x="48" y="360" font-size="15" fill="#B87A28">the work behind today's -j builds</text>
 </svg>
