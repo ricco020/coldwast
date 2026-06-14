@@ -205,8 +205,8 @@ const alts = [
 
       /* ── Category pills ── */
       .catbar { border-bottom:1px solid #efe7d8; background:rgba(255,253,249,.85); backdrop-filter:saturate(1.2) blur(4px); }
-      .catbar .row { display:flex; gap:10px; padding:13px 0; justify-content:safe center; flex-wrap:nowrap; overflow-x:auto; scrollbar-width:thin; }
-      .catbar .row::-webkit-scrollbar { height:6px; } .catbar .row::-webkit-scrollbar-thumb { background:#e6d3b5; border-radius:3px; }
+      .catbar .row { display:flex; gap:10px; padding:13px 0; justify-content:safe center; flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none; -ms-overflow-style:none; }
+      .catbar .row::-webkit-scrollbar { display:none; }
       .cat { flex:0 0 auto; white-space:nowrap; font-size:16px; font-weight:700; color:var(--brand-ink); background:var(--pill); padding:8px 18px; border-radius:999px; text-decoration:none; border:1px solid #f2ddbf; transition:transform .12s ease, background .15s, box-shadow .15s; }
       .cat:hover { background:#f7e3c6; transform:translateY(-1px); box-shadow:0 3px 10px rgba(224,135,26,.18); }
       .cat.on { background:var(--pill-on); color:#fff; border-color:var(--bar-d); box-shadow:0 3px 12px rgba(224,135,26,.4); }
