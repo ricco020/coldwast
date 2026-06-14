@@ -5,7 +5,7 @@ const title = 'Las mónadas en Haskell, explicadas sin jerga (2026)';
 const description = 'Una mónada en Haskell es un tipo que secuencia cómputos que llevan contexto — Maybe, Either, IO, listas. Qué es realmente una mónada, bind (>>=) y return, la notación do y las mónadas más comunes, explicadas con sencillez.';
 ---
 <Base title={title} description={description} path={path} type="article" lang="es"
-  image="https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
+  image="https://images.unsplash.com/photo-1493612276216-ee3925520721?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/es/">Inicio</a><span>/</span><a href="/es/e/">Guías</a><span>/</span>Las mónadas en Haskell</nav>
   <p class="kicker">Haskell · conceptos · mónadas</p>
@@ -13,8 +13,8 @@ const description = 'Una mónada en Haskell es un tipo que secuencia cómputos q
   <div class="artmeta"><span>Por Coldwast</span><span>Actualizado el 14 de junio de 2026</span><span>8 min de lectura</span><span class="tag">#haskell</span><span class="tag">#monads</span><span class="tag">#concepts</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
-    <img class="hero" src="https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=1200&q=80&auto=format&fit=crop" alt="Código fuente abierto en un editor de código" width="1200" height="420" loading="eager" />
-    <figcaption>Las mónadas son el patrón que Haskell usa para secuenciar cómputos que llevan contexto.</figcaption>
+    <img class="hero" src="https://images.unsplash.com/photo-1493612276216-ee3925520721?w=1200&q=80&auto=format&fit=crop" alt="Líneas de código fuente de colores en una pantalla oscura" width="1200" height="420" loading="eager" />
+    <figcaption>Código fuente en una pantalla — las mónadas son un patrón que se escribe directamente en código como este.</figcaption>
   </figure>
 
   <p>"Mónada" tiene una reputación temible que no se merece. Despojada de la jerga, una <strong>mónada</strong> en Haskell no es más que un tipo que te permite <strong>secuenciar cómputos que llevan cierto contexto</strong> — un posible fallo, un efecto secundario, múltiples resultados — sin escribir el cableado a mano cada vez. Esta guía explica qué es realmente una mónada, las dos operaciones que la definen, la notación do y las mónadas de cada día que ya usas.</p>

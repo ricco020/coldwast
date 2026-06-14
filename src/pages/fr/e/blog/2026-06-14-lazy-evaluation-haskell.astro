@@ -5,7 +5,7 @@ const title = 'L’évaluation paresseuse en Haskell, expliquée (2026)';
 const description = 'L’évaluation paresseuse signifie que Haskell calcule une valeur seulement quand elle est réellement nécessaire — pas quand elle est définie. Ce qu’est l’évaluation paresseuse, les thunks, pourquoi elle permet des structures de données infinies, le piège des fuites de mémoire et comment forcer la rigueur avec seq et BangPatterns.';
 ---
 <Base title={title} description={description} path={path} type="article" lang="fr"
-  image="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
+  image="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/fr/">Accueil</a><span>/</span><a href="/fr/e/">Guides</a><span>/</span>Évaluation paresseuse</nav>
   <p class="kicker">Haskell · concepts · évaluation</p>
@@ -13,8 +13,8 @@ const description = 'L’évaluation paresseuse signifie que Haskell calcule une
   <div class="artmeta"><span>Par Coldwast</span><span>Mis à jour le 14 juin 2026</span><span>8 min de lecture</span><span class="tag">#haskell</span><span class="tag">#laziness</span><span class="tag">#concepts</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
-    <img class="hero" src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&q=80&auto=format&fit=crop" alt="Du code source à l’écran" width="1200" height="420" loading="eager" />
-    <figcaption>L’évaluation paresseuse : Haskell calcule une valeur seulement au moment où quelque chose en a réellement besoin.</figcaption>
+    <img class="hero" src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=1200&q=80&auto=format&fit=crop" alt="Un ordinateur portable affichant du code à l'écran" width="1200" height="420" loading="eager" />
+    <figcaption>Un portable exécutant du code — l'évaluation paresseuse décide quand un code comme celui-ci calcule réellement une valeur.</figcaption>
   </figure>
 
   <p>La plupart des langages sont <strong>stricts</strong> : une expression est évaluée dès qu’elle est liée à un nom. Haskell est différent — il est <strong>paresseux</strong> (plus précisément <em>non strict</em>) par défaut : une expression n’est pas évaluée tant que son résultat n’est pas véritablement nécessaire. Ce seul choix de conception est derrière certains des pouvoirs les plus distinctifs de Haskell <em>et</em> son piège le plus notoire. Ce guide explique ce qu’est l’évaluation paresseuse, comment fonctionnent les thunks, ce qu’elle vous apporte, et comment la désactiver quand il le faut.</p>

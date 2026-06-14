@@ -5,7 +5,7 @@ const title = 'Les monades en Haskell, expliquées sans le jargon (2026)';
 const description = 'Une monade en Haskell est un type qui séquence des calculs portant un contexte — Maybe, Either, IO, listes. Ce qu’est réellement une monade, bind (>>=) et return, la do-notation, et les monades courantes, expliqués simplement.';
 ---
 <Base title={title} description={description} path={path} type="article" lang="fr"
-  image="https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
+  image="https://images.unsplash.com/photo-1493612276216-ee3925520721?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/fr/">Accueil</a><span>/</span><a href="/fr/e/">Guides</a><span>/</span>Monades en Haskell</nav>
   <p class="kicker">Haskell · concepts · monades</p>
@@ -13,8 +13,8 @@ const description = 'Une monade en Haskell est un type qui séquence des calculs
   <div class="artmeta"><span>Par Coldwast</span><span>Mis à jour le 14 juin 2026</span><span>8 min de lecture</span><span class="tag">#haskell</span><span class="tag">#monads</span><span class="tag">#concepts</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
-    <img class="hero" src="https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=1200&q=80&auto=format&fit=crop" alt="Du code source ouvert dans un éditeur de code" width="1200" height="420" loading="eager" />
-    <figcaption>Les monades sont le motif que Haskell utilise pour séquencer des calculs qui portent un contexte.</figcaption>
+    <img class="hero" src="https://images.unsplash.com/photo-1493612276216-ee3925520721?w=1200&q=80&auto=format&fit=crop" alt="Des lignes de code source colorées sur un écran sombre" width="1200" height="420" loading="eager" />
+    <figcaption>Du code source sur un écran — les monades sont un motif qu'on écrit directement dans du code comme celui-ci.</figcaption>
   </figure>
 
   <p>« Monade » a une réputation effrayante qu’elle ne mérite pas. Dépouillée du jargon, une <strong>monade</strong> en Haskell est simplement un type qui vous laisse <strong>séquencer des calculs qui portent un certain contexte</strong> — un échec possible, un effet de bord, plusieurs résultats — sans écrire la tuyauterie à la main à chaque fois. Ce guide explique ce qu’est réellement une monade, les deux opérations qui la définissent, la do-notation, et les monades du quotidien que vous utilisez déjà.</p>

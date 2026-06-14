@@ -5,7 +5,7 @@ const title = 'Lazy Evaluation in Haskell, Explained (2026)';
 const description = 'Lazy evaluation means Haskell computes a value only when it is actually needed — not when it is defined. What lazy evaluation is, thunks, why it enables infinite data structures, the space-leak trap, and how to force strictness with seq and BangPatterns.';
 ---
 <Base title={title} description={description} path={path} type="article"
-  image="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
+  image="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e/">Guides</a><span>/</span>Lazy evaluation</nav>
   <p class="kicker">Haskell · concepts · evaluation</p>
@@ -13,8 +13,8 @@ const description = 'Lazy evaluation means Haskell computes a value only when it
   <div class="artmeta"><span>By Coldwast</span><span>Updated Jun 14, 2026</span><span>8 min read</span><span class="tag">#haskell</span><span class="tag">#laziness</span><span class="tag">#concepts</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
-    <img class="hero" src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&q=80&auto=format&fit=crop" alt="Source code on a screen" width="1200" height="420" loading="eager" />
-    <figcaption>Lazy evaluation: Haskell computes a value only at the moment something actually needs it.</figcaption>
+    <img class="hero" src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=1200&q=80&auto=format&fit=crop" alt="A laptop displaying code on its screen" width="1200" height="420" loading="eager" />
+    <figcaption>A laptop running code — lazy evaluation decides when code like this actually computes a value.</figcaption>
   </figure>
 
   <p>Most languages are <strong>strict</strong>: an expression is evaluated as soon as it's bound to a name. Haskell is different — it is <strong>lazy</strong> (more precisely, <em>non-strict</em>) by default: an expression is not evaluated until its result is genuinely needed. This one design choice is behind some of Haskell's most distinctive powers <em>and</em> its most notorious trap. This guide explains what lazy evaluation is, how thunks work, what it buys you, and how to turn it off when you need to.</p>
