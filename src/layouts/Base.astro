@@ -166,6 +166,7 @@ const alts = [
       /* ── Article 2-column layout (reading left + dynamic right rail) ── */
       .artgrid { max-width:1160px; margin:0 auto; padding:0 22px; display:grid; grid-template-columns:minmax(0,1fr) 308px; gap:54px; align-items:start; }
       .artgrid .artmain .reading { max-width:none; margin:0; padding:0; }
+      .artside { margin-top:96px; }
       .artside .sticky { position:sticky; top:88px; display:grid; gap:20px; }
       .artside h4 { font-family:'Baloo 2',sans-serif; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--ink-faint); margin:0 0 12px; }
       .toc2 { background:var(--soft); border:1px solid var(--border); border-radius:14px; padding:18px 20px; }
@@ -191,6 +192,7 @@ const alts = [
       .chip:hover { background:#f7e3c6; }
       @media (max-width:940px){
         .artgrid { grid-template-columns:1fr; gap:30px; }
+        .artside { margin-top:0; }
         .artside .sticky { position:static; }
         .toc2 { display:none; }
       }
