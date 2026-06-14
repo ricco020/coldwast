@@ -1,31 +1,90 @@
 ---
 import Base from '../layouts/Base.astro';
+
+const guides = [
+  {
+    href: '/e/blog/2013-08-20-Cabal-sandbox.html',
+    cat: 'Haskell · Build',
+    title: 'Cabal Sandboxes — and what replaced them',
+    dek: 'The per-project isolation idea that won so completely it became invisible. What sandboxes were, and the nix-style cabal build workflow that superseded them.',
+    meta: 'Updated 2026 · 9 min',
+    feature: true,
+  },
+  {
+    href: '/e/blog/2017-09-09-Cabal-2-0.html',
+    cat: 'Haskell · Build',
+    title: 'Cabal 2.0 — the release that reshaped Haskell builds',
+    dek: 'Nix-style builds, Backpack, the caret operator — what 2.0 introduced and where each feature stands today.',
+    meta: 'Updated 2026 · 7 min',
+  },
+  {
+    href: '/e/blog/2011-08-22-GSoC-Final.html',
+    cat: 'Haskell · Performance',
+    title: 'Parallelising cabal-install',
+    dek: 'Why a build is a dependency graph, how -j builds use your cores, and the modern job-semaphore fix for oversubscription.',
+    meta: 'Updated 2026 · 6 min',
+  },
+];
+
+const stacks = ['Haskell', 'Cabal', 'Build tooling', 'Deployment', 'Performance'];
+
+const principles = [
+  { h: 'Original & honest', p: 'Every guide is written from scratch and states what it does not cover. No reposted docs, no marketing.' },
+  { h: 'Revised as toolchains move', p: 'Build tools change fast. Guides carry an explicit "updated" date and are rewritten, not left to rot.' },
+  { h: 'What real projects ship', p: 'Workflows tested against actual project setups — the commands and trade-offs you hit in practice.' },
+];
 ---
 <Base title="Coldwast — Programming &amp; Dev Guides" description="Independent, original and regularly-updated programming guides. Haskell, Cabal, build tooling and the modern developer toolchain." path="/">
-  <p class="kicker">Coldwast</p>
-  <h1>Programming &amp; dev guides, kept up to date.</h1>
-  <p>Coldwast is an independent collection of original programming references — clear, technically honest, and revised as toolchains move. It starts where this domain has deep roots: the <strong>Haskell / Cabal</strong> build toolchain. From there it expands into the wider developer stack — build performance, deployment, and the tools real projects ship on.</p>
+  <section class="hero">
+    <p class="eyebrow">Programming · Dev guides</p>
+    <h1>Build guides that <span class="hl">stay current</span>.</h1>
+    <p class="lede">Coldwast is an independent collection of <strong>original programming references</strong> — clear, technically honest, and revised as toolchains move. It starts where this domain has deep roots, the <strong>Haskell / Cabal</strong> build toolchain, and expands into the wider developer stack: build performance, deployment, and the tools real projects ship on.</p>
+    <div class="btnrow">
+      <a class="btn btn-primary" href="/e/">Browse all guides <span aria-hidden="true">→</span></a>
+      <a class="btn btn-ghost" href="/about.html">Editorial policy</a>
+    </div>
+    <ul class="metarow">
+      <li>Original content</li>
+      <li>Updated for 2026</li>
+      <li>No fluff, no reposts</li>
+    </ul>
+  </section>
 
-  <p><a href="/e/">→ Browse all guides</a></p>
+  <nav class="block" aria-label="Topics">
+    <p class="eyebrow">Stacks covered</p>
+    <ul class="chips">
+      {stacks.map((s) => <li><a class="chip" href="/e/">{s}</a></li>)}
+    </ul>
+  </nav>
 
-  <h2>Featured guides</h2>
-  <ul class="postlist">
-    <li>
-      <a class="t" href="/e/blog/2013-08-20-Cabal-sandbox.html">Cabal Sandboxes — and what replaced them</a>
-      <div class="d">Haskell · updated 2026</div>
-      <p>The per-project isolation idea that won so completely it became invisible. What sandboxes were, and the nix-style <code>cabal build</code> workflow that superseded them.</p>
-    </li>
-    <li>
-      <a class="t" href="/e/blog/2017-09-09-Cabal-2-0.html">Cabal 2.0 — the release that reshaped Haskell builds</a>
-      <div class="d">Haskell · updated 2026</div>
-      <p>Nix-style builds, Backpack, the caret operator — what 2.0 introduced and where each feature stands today.</p>
-    </li>
-    <li>
-      <a class="t" href="/e/blog/2011-08-22-GSoC-Final.html">Parallelising cabal-install</a>
-      <div class="d">Haskell · updated 2026</div>
-      <p>Why a build is a dependency graph, how <code>-j</code> builds use your cores, and the modern job-semaphore fix for oversubscription.</p>
-    </li>
-  </ul>
+  <section class="block">
+    <div class="sechead">
+      <h2>Featured guides</h2>
+      <a href="/e/">All guides →</a>
+    </div>
+    <div class="cards">
+      {guides.map((g) => (
+        <a class:list={['card', g.feature && 'feature']} href={g.href}>
+          <span class="cat">{g.cat}</span>
+          <h3>{g.title}</h3>
+          <p>{g.dek}</p>
+          <span class="cmeta">{g.meta}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="block">
+    <p class="eyebrow">How these guides are written</p>
+    <div class="cols">
+      {principles.map((c) => (
+        <div class="colitem">
+          <h4>{c.h}</h4>
+          <p>{c.p}</p>
+        </div>
+      ))}
+    </div>
+  </section>
 
   <div class="note">coldwa.st is now an independent programming-resources site. Its Haskell/Cabal guides are original, community-maintained rewrites updated for the current toolchain — not authored by or affiliated with the domain's previous owner. See the <a href="/about.html">editorial policy</a>.</div>
 </Base>
