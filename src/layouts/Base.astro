@@ -8,9 +8,13 @@ const {
   image = 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&q=80&auto=format&fit=crop',
   datePublished, dateModified, type = 'website',
 } = Astro.props;
+import { guides } from '../data/guides.js';
 const SITE = 'https://coldwa.st';
 const canonical = SITE + path;
 const year = 2026;
+// On article pages, surface related guides + an affiliate CTA for retention.
+const isArticle = path.includes('/e/blog/');
+const related = isArticle ? guides.filter((g) => g.href !== path).slice(0, 4) : [];
 const cats = [
   { l: 'All guides', h: '/e/' },
   { l: 'Haskell', h: '/e/c/haskell.html' }, { l: 'Concepts', h: '/e/c/concepts.html' }, { l: 'Cabal & builds', h: '/e/c/cabal.html' },
@@ -104,6 +108,21 @@ const cur = path;
       .cookiebar .btns { display:flex; gap:8px; }
       .cookiebar button { font-family:'Baloo 2',sans-serif; font-weight:700; font-size:14px; border-radius:9px; padding:9px 16px; cursor:pointer; border:1px solid var(--border); background:#fff; color:var(--ink-dim); }
       .cookiebar button.acc { background:var(--bar); color:#fff; border-color:var(--bar); }
+      .artcta { max-width:760px; margin:10px auto 0; padding:0 22px; }
+      .artcta { display:flex; gap:18px; align-items:center; flex-wrap:wrap; background:#fff7ee; border:1px solid #f1ddc2; border-radius:14px; padding:22px 24px; }
+      .artcta .tag { background:var(--bar); color:#fff; font-weight:800; font-family:'Baloo 2',sans-serif; font-size:11px; letter-spacing:.5px; text-transform:uppercase; padding:5px 11px; border-radius:999px; }
+      .artcta h3 { margin:0 0 4px; font-size:19px; font-family:'Baloo 2',sans-serif; color:var(--ink); }
+      .artcta p { margin:0; font-size:14.5px; color:var(--ink-dim); }
+      .artcta > div { flex:1; min-width:240px; }
+      .artcta .go { background:var(--bar); color:#fff; border-radius:9px; padding:11px 20px; font-family:'Baloo 2',sans-serif; font-weight:700; text-decoration:none; white-space:nowrap; }
+      .artcta .go:hover { background:var(--bar-d); }
+      .related { max-width:760px; margin:34px auto 0; padding:0 22px; }
+      .related h3 { font-family:'Baloo 2',sans-serif; font-size:22px; color:var(--ink); margin:0 0 14px; }
+      .related ul { list-style:none; padding:0; margin:0; display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+      .related a { display:flex; justify-content:space-between; gap:12px; align-items:baseline; border:1px solid var(--border); border-radius:11px; padding:14px 16px; text-decoration:none; color:var(--ink); font-family:'Baloo 2',sans-serif; font-weight:600; transition:all .15s; }
+      .related a:hover { border-color:var(--bar); background:var(--soft); }
+      .related .rm { color:var(--ink-faint); font-size:13px; white-space:nowrap; }
+      @media (max-width:700px){ .related ul{grid-template-columns:1fr} }
       @media (max-width:760px){
         .topbar .row { height:auto; min-height:64px; flex-wrap:wrap; gap:6px 18px; padding-top:12px; padding-bottom:12px; }
         .search { display:none; }
@@ -242,6 +261,26 @@ const cur = path;
       </div>
     </div>
     <main><slot /></main>
+    {isArticle && (
+      <div class="wrap">
+        <section class="artcta">
+          <span class="tag">Recommended</span>
+          <div>
+            <h3>Need a box to build and run Haskell?</h3>
+            <p>Compiling GHC and running your app is smoother on a real Linux server. Hetzner Cloud offers fast NVMe instances from a few euros a month.</p>
+          </div>
+          <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Get cloud credit →</a>
+        </section>
+        <section class="related">
+          <h3>Keep reading</h3>
+          <ul>
+            {related.map((g) => (
+              <li><a href={g.href}><span class="rt" set:html={g.title} /><span class="rm">{g.read}</span></a></li>
+            ))}
+          </ul>
+        </section>
+      </div>
+    )}
     <footer class="site">
       <div class="wrap">
         <p style="color:var(--ink);font-weight:700;font-size:17px;margin:0;font-family:'Baloo 2',sans-serif">Coldwast — Programming &amp; Dev Guides</p>
