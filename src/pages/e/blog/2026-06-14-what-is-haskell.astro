@@ -1,0 +1,60 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-06-14-what-is-haskell.html';
+const title = 'What Is Haskell? A Clear Introduction (2026)';
+const description = 'Haskell is a purely functional, statically typed, lazy programming language with powerful type inference. What Haskell is, the ideas that define it — purity, immutability, laziness, strong types — what it is used for, and how to start.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e/">Guides</a><span>/</span>What is Haskell</nav>
+  <p class="kicker">Haskell · concepts · intro</p>
+  <h1>What is Haskell? A clear introduction</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Jun 14, 2026</span><span>7 min read</span><span class="tag">#haskell</span><span class="tag">#functional</span><span class="tag">#intro</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80&auto=format&fit=crop" alt="An open laptop showing code on a desk" width="1200" height="420" loading="eager" />
+    <figcaption>Haskell is a purely functional, statically typed language known for its strong type system and laziness.</figcaption>
+  </figure>
+
+  <p><strong>Haskell</strong> is a <strong>purely functional</strong>, <strong>statically typed</strong>, <strong>lazy</strong> programming language with powerful type inference. It has a reputation for being academic, but the ideas behind it — writing programs as the composition of pure functions, with a type system that catches whole classes of bugs before the code runs — increasingly show up everywhere. This guide explains what Haskell is, the ideas that define it, what it is used for, and how to start.</p>
+
+  <h2>The ideas that define Haskell</h2>
+  <ul>
+    <li><strong>Purely functional.</strong> You build programs by composing functions that, given the same input, always return the same output and have no side effects. Effects (I/O, state) are handled explicitly rather than scattered everywhere.</li>
+    <li><strong>Statically typed with inference.</strong> Every expression has a type checked at compile time, but you rarely write the types out — the compiler infers them. "If it compiles, it often works" is a real Haskell experience.</li>
+    <li><strong>Immutable by default.</strong> Values don't change in place; you produce new values. This removes a huge source of bugs around shared mutable state.</li>
+    <li><strong>Lazy evaluation.</strong> Expressions are computed only when needed, which enables infinite data structures and elegant composition — see our <a href="/e/blog/2026-06-14-lazy-evaluation-haskell.html">guide to lazy evaluation</a>.</li>
+  </ul>
+
+  <h2>A taste of the syntax</h2>
+  <figure><img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&q=80&auto=format&fit=crop" alt="Source code on a screen" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Source code on a screen — Haskell code is concise, with types inferred and functions composed.</figcaption></figure>
+  <pre><code>-- a function with an inferred type
+double x = x * 2
+
+-- a list comprehension: even squares up to 20
+evens = [x*x | x &lt;- [1..20], even x]
+
+-- pattern matching and recursion
+factorial 0 = 1
+factorial n = n * factorial (n - 1)</code></pre>
+  <p>Notice there are no type annotations above — Haskell infers them — and no loops; iteration is expressed with recursion and higher-order functions like <code>map</code> and <code>filter</code>.</p>
+
+  <h2>What Haskell is used for</h2>
+  <p>Haskell powers more real software than its academic reputation suggests: compilers and language tooling, financial and trading systems where correctness matters, blockchain and cryptocurrency platforms, data-processing pipelines, and web backends. Its strengths — correctness, maintainability, and fearless refactoring backed by the type system — fit domains where a bug is expensive. It's also a superb language for <em>learning</em> functional programming ideas that then improve how you write in any language.</p>
+
+  <h2>Why the type system matters</h2>
+  <p>Haskell's types do more than catch typos. They let you make illegal states unrepresentable, encode guarantees (a value that might be absent is a <code>Maybe</code>, an effectful computation is in <code>IO</code>), and refactor with confidence because the compiler flags everything a change breaks. Abstractions like <a href="/e/blog/2026-06-14-haskell-monads.html">monads</a> build on this to sequence effects cleanly while keeping functions pure.</p>
+
+  <h2>How to start</h2>
+  <p>The modern way to install Haskell is <strong>GHCup</strong>, which sets up the compiler (GHC), the build tools (Cabal/Stack) and the editor integration (HLS) together — see our <a href="/e/blog/2026-06-14-ghcup-install-haskell.html">GHCup install guide</a>. From there, the <a href="/e/blog/2026-06-14-ghc-compiler-guide.html">GHC compiler guide</a> shows how to compile and use GHCi, the interactive REPL where most learning happens. Try the snippets above in GHCi and build from there.</p>
+
+  <h2>FAQ</h2>
+  <p><strong>Is Haskell hard to learn?</strong> It asks you to think differently (functions and types instead of steps and mutation), which feels unfamiliar at first, but the core is small and consistent. Many find it clarifying once the model clicks.</p>
+  <p><strong>What is Haskell used for in industry?</strong> Compilers, fintech, blockchain, data pipelines and backends — domains valuing correctness and maintainability.</p>
+  <p><strong>Is Haskell still relevant in 2026?</strong> Yes — it remains actively developed, and its ideas (immutability, strong types, pure functions) have spread into mainstream languages, making it valuable to learn even if you code elsewhere.</p>
+  <p><strong>Do I need to know maths?</strong> No. Some terminology comes from maths, but you can write useful Haskell knowing functions, types and do-notation, without category theory.</p>
+
+  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original introductory writing about Haskell, not affiliated with the language's maintainers. Code reflects standard Haskell/GHC behaviour — verify against current GHC docs.</div>
+  </div>
+</Base>
