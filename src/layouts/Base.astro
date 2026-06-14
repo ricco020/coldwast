@@ -153,6 +153,27 @@ const year = 2026;
       .colitem p { color: var(--dim); font-size: 14px; line-height: 1.55; margin: 0; }
       .block { margin: 56px 0; }
       @media (max-width: 640px) { .cards, .cols { grid-template-columns: 1fr; } }
+
+      /* ── Code blocks with copy button ─────────────────────────── */
+      .codewrap { position: relative; margin: 22px 0; }
+      .codewrap > pre { margin: 0; }
+      .copybtn { position: absolute; top: 8px; right: 8px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .5px; color: var(--dim); background: rgba(18,16,13,0.85); border: 1px solid var(--edge2); border-radius: 6px; padding: 4px 9px; cursor: pointer; opacity: 0; transition: opacity .15s, color .15s, border-color .15s; }
+      .codewrap:hover .copybtn { opacity: 1; }
+      .copybtn:hover { color: var(--accent); border-color: var(--accentd); }
+      .copybtn.ok { color: var(--accent); border-color: var(--accentd); }
+      /* ── Breadcrumb ───────────────────────────────────────────── */
+      .crumb { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: var(--faint); margin: 0 0 18px; }
+      .crumb a { color: var(--dim); text-decoration: none; }
+      .crumb a:hover { color: var(--accent); }
+      .crumb span { color: var(--edge2); margin: 0 7px; }
+      /* ── Article meta row ─────────────────────────────────────── */
+      .artmeta { display: flex; flex-wrap: wrap; gap: 8px 16px; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: var(--faint); margin: 10px 0 26px; align-items: center; }
+      .artmeta .tag { color: var(--accentd); }
+      /* ── On-this-page TOC ─────────────────────────────────────── */
+      .toc { border-left: 2px solid var(--edge2); padding: 2px 0 2px 16px; margin: 26px 0; }
+      .toc p { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accentd); margin: 0 0 8px; }
+      .toc a { display: block; color: var(--dim); text-decoration: none; font-size: 14px; padding: 3px 0; }
+      .toc a:hover { color: var(--accent); }
     </style>
   </head>
   <body>
@@ -178,5 +199,44 @@ const year = 2026;
         <p>© {year} coldwa.st · <a href="/about.html">About &amp; editorial policy</a> · <a href="/e/rss.xml">RSS</a></p>
       </div>
     </footer>
+    <script>
+      // Copy buttons on every code block (dev-sector standard)
+      document.querySelectorAll('main pre').forEach((pre) => {
+        if (pre.parentElement?.classList.contains('codewrap')) return;
+        const wrap = document.createElement('div');
+        wrap.className = 'codewrap';
+        pre.parentNode.insertBefore(wrap, pre);
+        wrap.appendChild(pre);
+        const btn = document.createElement('button');
+        btn.className = 'copybtn';
+        btn.type = 'button';
+        btn.textContent = 'Copy';
+        btn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(pre.innerText);
+            btn.textContent = 'Copied'; btn.classList.add('ok');
+            setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('ok'); }, 1600);
+          } catch {}
+        });
+        wrap.appendChild(btn);
+      });
+      // Auto "on this page" TOC from h2 headings (safe DOM construction)
+      const tocEl = document.getElementById('toc');
+      if (tocEl) {
+        const heads = document.querySelectorAll('main h2');
+        if (heads.length >= 3) {
+          const label = document.createElement('p');
+          label.textContent = 'On this page';
+          tocEl.appendChild(label);
+          heads.forEach((h) => {
+            if (!h.id) h.id = (h.textContent || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+            const a = document.createElement('a');
+            a.href = '#' + h.id;
+            a.textContent = h.textContent;
+            tocEl.appendChild(a);
+          });
+        } else { tocEl.remove(); }
+      }
+    </script>
   </body>
 </html>

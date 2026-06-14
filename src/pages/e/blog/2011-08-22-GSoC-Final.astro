@@ -6,9 +6,11 @@ const description = 'A community-updated guide to parallel builds in cabal-insta
 ---
 <Base title={title} description={description} path={path} type="article"
   image="https://coldwa.st/img/gsoc-parallel.svg" datePublished="2011-08-22" dateModified="2026-06-13">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e/">Guides</a><span>/</span>Parallelising cabal-install</nav>
   <p class="kicker">Haskell · Cabal · build performance</p>
   <h1>Parallelising cabal-install: How Haskell Builds Use Your Cores</h1>
-  <p class="meta">The 2011 Google Summer of Code work on this topic was a landmark for the domain · this is an updated, original community guide for 2026 · Coldwast Programming Guides</p>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Jun 13, 2026</span><span>6 min read</span><span class="tag">#haskell</span><span class="tag">#cabal</span><span class="tag">#performance</span></div>
+  <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="/img/gsoc-parallel.svg" alt="Parallel build lanes showing independent Haskell packages compiling concurrently under cabal build -j" width="1200" height="420" />
     <figcaption>Independent packages in the install plan build concurrently — the core idea behind today's <code>-j</code> builds.</figcaption>
