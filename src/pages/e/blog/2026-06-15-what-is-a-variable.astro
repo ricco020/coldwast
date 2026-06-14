@@ -1,0 +1,59 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-06-15-what-is-a-variable.html';
+const title = 'What Is a Variable in Programming? A Clear Introduction (2026)';
+const description = 'A variable is a named container that holds a value your program can read and change. What a variable is, how you declare and assign one, types and scope, constants vs variables, and why they are the building blocks of every program.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-15" dateModified="2026-06-15">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e/">Guides</a><span>/</span>What is a variable</nav>
+  <p class="kicker">Programming · fundamentals · concepts</p>
+  <h1>What is a variable?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Jun 15, 2026</span><span>6 min read</span><span class="tag">#variables</span><span class="tag">#basics</span><span class="tag">#concepts</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80&auto=format&fit=crop" alt="Code on a computer screen" width="1200" height="420" loading="eager" />
+    <figcaption>Code on a screen — variables are the named values that code like this stores, reads and changes.</figcaption>
+  </figure>
+
+  <p>If you write a single line of code, you'll use a <strong>variable</strong>. It's the first concept every programming tutorial introduces, and one of the few that appears in every language ever made. This guide explains what a variable is, how you create and use one, types and scope, how variables differ from constants, and why they're the foundation of all programming.</p>
+
+  <h2>The short definition</h2>
+  <p><strong>A variable is a named container that holds a value your program can read and change.</strong> The classic image is a labelled box: the <em>name</em> is the label, and the <em>value</em> is whatever is inside. You put a value in, refer to it by name later, and can replace it with a new value as the program runs.</p>
+
+  <h2>Declaring and assigning</h2>
+  <p>You <strong>declare</strong> a variable (create it, give it a name) and <strong>assign</strong> a value to it. In most languages that looks roughly like this:</p>
+  <pre><code>age = 30            # name: age, value: 30
+name = "Ada"        # a piece of text
+age = 31            # reassign — the box now holds 31</code></pre>
+  <p>After <code>age = 31</code>, the old value is gone and <code>age</code> refers to <code>31</code>. That ability to <em>change</em> over time is exactly what makes it &quot;variable&quot; — as opposed to a fixed constant.</p>
+
+  <h2>Types of value</h2>
+  <p>A variable holds a value, and values have <strong>types</strong>: a number (<code>30</code>), a string of text (<code>&quot;Ada&quot;</code>), a boolean (<code>true</code> / <code>false</code>), or more complex things like lists and objects. Some languages are <em>statically typed</em> (you declare the type, and it's checked before the program runs — like Haskell or Rust); others are <em>dynamically typed</em> (the type travels with the value at run time — like Python or JavaScript).</p>
+
+  <figure><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80&auto=format&fit=crop" alt="An open laptop showing code on a desk" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>An open laptop showing code — every named value you see in a program, from a counter to a username, is a variable.</figcaption></figure>
+
+  <h2>Scope: where a variable lives</h2>
+  <p><strong>Scope</strong> is the region of code where a variable exists and can be used. A variable declared inside a function is usually <em>local</em> — it only exists while that function runs, and code elsewhere can't see it. A variable declared at the top level may be <em>global</em>, visible across the program. Keeping variables in the smallest scope that works is a core habit: it prevents accidental clashes and makes code easier to reason about.</p>
+
+  <h2>Variables vs constants</h2>
+  <p>A <strong>constant</strong> is like a variable whose value must not change after it's set — useful for things that shouldn't move, like a tax rate or the number of days in a week. Many languages have a keyword for this (<code>const</code>, <code>final</code>, <code>val</code>). Using a constant when a value won't change signals intent and lets the language catch accidental reassignments.</p>
+
+  <h2>Why variables matter</h2>
+  <p>Variables let a program <strong>remember and work with data</strong> instead of dealing only in fixed values. They hold the user's input, a running total, the current state of a game, the result of a calculation. Combine variables with logic and you have an <a href="/e/blog/2026-06-14-what-is-an-algorithm.html">algorithm</a>; combine algorithms with data and you have a program. Everything starts from this small idea: a name that stands for a value.</p>
+
+  <h2>A couple of honest pitfalls</h2>
+  <p>Two things trip up beginners. First, <strong>naming</strong>: a good variable name (<code>userAge</code>, not <code>x</code>) makes code readable; vague names are a common source of confusion. Second, <strong>mutation surprises</strong>: when a variable holds a complex value like a list, two names can point at the <em>same</em> underlying data, so changing one appears to change the other. Understanding when a variable holds a value versus a reference to shared data saves a lot of debugging.</p>
+
+  <h2>FAQ</h2>
+  <p><strong>What is a variable, simply?</strong> A named box that stores a value your program can read and change later by referring to its name.</p>
+  <p><strong>What's the difference between a variable and a constant?</strong> A variable's value can change as the program runs; a constant's value is fixed once set. Use a constant when the value shouldn't change.</p>
+  <p><strong>What is a variable's type?</strong> The kind of value it holds — number, text (string), boolean, list, object, and so on. Some languages check types before running; others track them at run time.</p>
+  <p><strong>What is variable scope?</strong> The part of the code where the variable exists and can be used — typically local (inside a function) or global (across the program). Smaller scope is usually better.</p>
+
+  <p>Variables are the data; the step-by-step logic that uses them is an <a href="/e/blog/2026-06-14-what-is-an-algorithm.html">algorithm</a>. Browse more clear explainers in our <a href="/e/">guides index</a>.</p>
+
+  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about variables. Syntax varies by language; verify specifics against your language's documentation.</div>
+  </div>
+</Base>
