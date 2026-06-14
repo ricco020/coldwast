@@ -1,0 +1,63 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-06-14-what-is-an-algorithm.html';
+const title = 'What Is an Algorithm? A Clear Introduction (2026)';
+const description = 'An algorithm is a finite, step-by-step procedure that turns input into a desired output. What an algorithm is, its key properties, everyday and code examples, why efficiency (Big-O) matters, and how it differs from a program.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e/">Guides</a><span>/</span>What is an algorithm</nav>
+  <p class="kicker">Programming · concepts · fundamentals</p>
+  <h1>What is an algorithm?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Jun 14, 2026</span><span>7 min read</span><span class="tag">#algorithm</span><span class="tag">#concepts</span><span class="tag">#cs</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&q=80&auto=format&fit=crop" alt="Streams of green code on a dark screen" width="1200" height="420" loading="eager" />
+    <figcaption>Streams of code on a screen — an algorithm is the step-by-step logic that code like this carries out.</figcaption>
+  </figure>
+
+  <p>It is one of the most-used words in tech — &quot;the algorithm decides&quot;, &quot;a faster algorithm&quot;, &quot;algorithmic feed&quot; — and one of the least precisely explained. An <strong>algorithm</strong> is a simple, fundamental idea that sits underneath all of computing. This guide explains what an algorithm is, its key properties, examples from everyday life and code, why efficiency matters, and how it differs from a program.</p>
+
+  <h2>The short definition</h2>
+  <p><strong>An algorithm is a finite, step-by-step procedure for solving a problem or producing an output from an input.</strong> Give it the same input and follow the steps exactly, and it produces the same result every time. It is a precise recipe — independent of any particular programming language.</p>
+
+  <h2>An everyday analogy</h2>
+  <p>A cooking recipe is an algorithm: a defined list of steps (&quot;chop the onions, heat the oil, add and stir for 5 minutes&quot;) that turns inputs (ingredients) into an output (a dish). So are the instructions for long division you learned at school, or the steps to assemble flat-pack furniture. The idea long predates computers — the word comes from the 9th-century mathematician al-Khwarizmi.</p>
+
+  <h2>The key properties</h2>
+  <ul>
+    <li><strong>Well-defined steps</strong> — each instruction is clear and unambiguous.</li>
+    <li><strong>Finite</strong> — it must end after a limited number of steps, not run forever.</li>
+    <li><strong>Defined input and output</strong> — it takes zero or more inputs and produces a result.</li>
+    <li><strong>Effective</strong> — each step is basic enough to actually be carried out.</li>
+  </ul>
+  <p>An algorithm is also <em>language-independent</em>: the same sorting algorithm can be written in Python, Haskell, Rust or by hand on paper. The algorithm is the <em>idea</em>; the code is one expression of it.</p>
+
+  <figure><img src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=1200&q=80&auto=format&fit=crop" alt="Colorful source code on a monitor" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Colorful source code on a monitor — code is one concrete expression of an algorithm, the underlying step-by-step idea.</figcaption></figure>
+
+  <h2>A concrete example</h2>
+  <p>To find the largest number in a list, the algorithm is:</p>
+  <pre><code>1. Assume the first number is the largest so far.
+2. Look at each remaining number in turn.
+3. If it is bigger than the largest so far, make it the new largest.
+4. After the last number, the largest so far is the answer.</code></pre>
+  <p>That is a complete algorithm — written in plain English, no code required. Translating it into a language is a separate, mechanical step.</p>
+
+  <h2>Why efficiency matters: Big-O</h2>
+  <p>Different algorithms can solve the same problem with very different amounts of work. <strong>Big-O notation</strong> describes how an algorithm&#39;s cost grows as the input gets larger. Scanning a list once to find the largest value is <code>O(n)</code> — the work grows in proportion to the number of items. A naive approach that compares every pair would be <code>O(n²)</code> — far slower for large inputs. Choosing a better algorithm often matters more than a faster computer: an <code>O(n log n)</code> sort will beat an <code>O(n²)</code> one on a big list every time.</p>
+
+  <h2>Algorithm vs program</h2>
+  <p>They are related but not the same. An <strong>algorithm</strong> is the abstract method — the steps. A <strong>program</strong> is a concrete implementation of one or more algorithms in a specific language, with all the real-world details (input handling, errors, memory) filled in. You design the algorithm first, then implement it. The same algorithm can power many programs.</p>
+
+  <h2>FAQ</h2>
+  <p><strong>Is an algorithm the same as code?</strong> No. The algorithm is the language-independent set of steps; code is one implementation of it. The same algorithm can be written in many languages.</p>
+  <p><strong>What makes an algorithm &quot;good&quot;?</strong> Correctness first (it produces the right output for every valid input), then efficiency (it uses an acceptable amount of time and memory, described by Big-O), then clarity.</p>
+  <p><strong>What is Big-O notation?</strong> A way to describe how an algorithm&#39;s running time or memory grows as the input size grows — e.g. <code>O(n)</code> linear, <code>O(n log n)</code>, <code>O(n²)</code> quadratic. It compares algorithms independently of the exact machine.</p>
+  <p><strong>Do I need maths to understand algorithms?</strong> Basic logic is enough to start. The everyday ones — search, sort, counting — are intuitive; the maths becomes useful when you analyse and compare their efficiency.</p>
+
+  <p>Algorithms are the &quot;what to do&quot;; a language like Haskell or the data carried by an <a href="/e/blog/2026-06-14-what-is-an-api.html">API</a> is the &quot;how&quot; and the &quot;with what&quot;. Browse more clear explainers in our <a href="/e/">guides index</a>.</p>
+
+  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about algorithms. Examples are illustrative; verify complexity claims against a reference text when it matters.</div>
+  </div>
+</Base>
