@@ -2,6 +2,7 @@
 import Base from '../../../../layouts/Base.astro';
 import { categories, guidesFor, guideTitle, guideDek, guideHref, catLabel } from '../../../../data/guides.js';
 import { ui, localized } from '../../../../i18n/ui.js';
+import { hasTx } from '../../../../data/i18n-articles.js';
 
 export function getStaticPaths() {
   return categories.map((c) => ({ params: { cat: c.slug }, props: { c } }));
@@ -9,7 +10,7 @@ export function getStaticPaths() {
 const lang = 'es';
 const t = ui[lang];
 const { c } = Astro.props;
-const stories = guidesFor(c.match);
+const stories = guidesFor(c.match).filter((g) => hasTx(g.href, lang));
 const related = categories.filter((x) => x.slug !== c.slug);
 const label = catLabel(c, lang);
 const path = localized(`/e/c/${c.slug}.html`, lang);

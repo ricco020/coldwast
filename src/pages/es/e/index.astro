@@ -2,10 +2,11 @@
 import Base from '../../../layouts/Base.astro';
 import { guides, categories, guideTitle, guideDek, guideHref, catLabel } from '../../../data/guides.js';
 import { ui, localized } from '../../../i18n/ui.js';
+import { hasTx } from '../../../data/i18n-articles.js';
 const lang = 'es';
 const t = ui[lang];
 const path = '/es/e/';
-const stories = guides;
+const stories = guides.filter((g) => hasTx(g.href, lang));
 const related = categories;
 const AV = {
   perf:    { color:'#d6453a', svg:'<path d="M5 19a8 8 0 1 1 14 0"/><line x1="12" y1="13" x2="16" y2="9"/>' },

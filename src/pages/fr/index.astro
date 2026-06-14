@@ -2,9 +2,10 @@
 import Base from '../../layouts/Base.astro';
 import { guides, categories, guideTitle, guideDek, guideHref, catLabel } from '../../data/guides.js';
 import { ui, localized } from '../../i18n/ui.js';
+import { hasTx } from '../../data/i18n-articles.js';
 const lang = 'fr';
 const t = ui[lang];
-const stories = guides;
+const stories = guides.filter((g) => hasTx(g.href, lang));
 const popular = stories.slice(0, 4);
 const blocks = [
   { c:'b1', k:'Démarrer', h:'Installer la chaîne d’outils', p:'GHC, Cabal, Stack et HLS en une installation propre avec GHCup.', a:'Lire le guide →', g:guides.find((x)=>x.href.includes('ghcup-install')) },

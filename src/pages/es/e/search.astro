@@ -2,9 +2,11 @@
 import Base from '../../../layouts/Base.astro';
 import { guides, guideTitle, guideDek, guideHref } from '../../../data/guides.js';
 import { ui, localized } from '../../../i18n/ui.js';
+import { hasTx } from '../../../data/i18n-articles.js';
 const lang = 'es';
 const t = ui[lang];
 const gwAll = t.guides_word[1];
+const txGuides = guides.filter((g) => hasTx(g.href, lang));
 ---
 <Base title="Buscar en las guías — Coldwast" description="Busca en todas las guías de programación y Haskell de Coldwast." path="/es/e/search.html" lang={lang}>
   <div class="wrap">
@@ -14,11 +16,11 @@ const gwAll = t.guides_word[1];
       <form class="searchpage" role="search" onsubmit="return false">
         <input id="q" type="search" placeholder={t.search_ph2} aria-label={t.search_h1} autocomplete="off" autofocus />
       </form>
-      <p class="count"><b id="cn">{guides.length}</b> <span class="lbl" id="cl">{gwAll}</span></p>
+      <p class="count"><b id="cn">{txGuides.length}</b> <span class="lbl" id="cl">{gwAll}</span></p>
     </div>
     <div class="layout" style="grid-template-columns:1fr">
       <div class="main" id="results">
-        {guides.map((s) => (
+        {txGuides.map((s) => (
           <article class="story" data-search={`${guideTitle(s, lang)} ${guideDek(s, lang)} ${s.cats}`.toLowerCase()}>
             <span class="ava cat-ava" style="background:#e0871a" aria-hidden="true"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5l5 14M14 5c-2 4-2 6 0 14M5 12h7"/></svg></span>
             <div>
