@@ -92,3 +92,22 @@ export function guideHref(g, lang) {
 export function catLabel(c, lang) {
   return (lang === 'fr' && c.label_fr) || (lang === 'es' && c.label_es) || c.label;
 }
+
+// Temps de lecture localisé : g.read = "6 min read" → "6 min de lecture" / "6 min de lectura".
+const READ_UNIT = { en: 'min read', fr: 'min de lecture', es: 'min de lectura' };
+export function guideRead(g, lang) {
+  const n = (String(g.read).match(/\d+/) || ['1'])[0];
+  return `${n} ${READ_UNIT[lang] || READ_UNIT.en}`;
+}
+
+// Noms de catégories des cartes (g.cats = "Programming, Concepts") traduits par mot.
+// catAvatar() doit continuer à recevoir g.cats EN (matching) — n'utiliser guideCats que pour l'AFFICHAGE.
+const CAT_TR = {
+  fr: { Programming: 'Programmation', Concepts: 'Concepts', Data: 'Données', Databases: 'Bases de données', Tools: 'Outils', Workflow: 'Workflow', Web: 'Web', Haskell: 'Haskell', Build: 'Build', Syntax: 'Syntaxe', Compiler: 'Compilateur', Editor: 'Éditeur', Toolchain: 'Chaîne d’outils', Performance: 'Performance', Cabal: 'Cabal' },
+  es: { Programming: 'Programación', Concepts: 'Conceptos', Data: 'Datos', Databases: 'Bases de datos', Tools: 'Herramientas', Workflow: 'Flujo de trabajo', Web: 'Web', Haskell: 'Haskell', Build: 'Compilación', Syntax: 'Sintaxis', Compiler: 'Compilador', Editor: 'Editor', Toolchain: 'Cadena de herramientas', Performance: 'Rendimiento', Cabal: 'Cabal' },
+};
+export function guideCats(g, lang) {
+  const map = CAT_TR[lang];
+  if (!map) return g.cats;
+  return String(g.cats).split(',').map((c) => { const k = c.trim(); return map[k] || k; }).join(', ');
+}
