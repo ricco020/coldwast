@@ -30,6 +30,7 @@
 - [What Is Git? Version Control Explained for Beginners (2026)](https://coldwa.st/e/blog/2026-06-14-what-is-git.html): A distributed version-control system that tracks every change so you can branch, merge and collaborate.
 - [What Is an Algorithm? A Clear Introduction (2026)](https://coldwa.st/e/blog/2026-06-14-what-is-an-algorithm.html): A finite, step-by-step procedure that turns input into a desired output — its key properties, plainly.
 - [What Is a Variable in Programming? A Clear Introduction (2026)](https://coldwa.st/e/blog/2026-06-15-what-is-a-variable.html): A named container that holds a value your program can read and change — declaration, types and scope.
+- [What Is Functional Programming? A Clear Introduction (2026)](https://coldwa.st/e/blog/2026-06-15-what-is-functional-programming.html): A style built on pure functions, immutability and functions as values — how it differs from imperative/OOP, and where Haskell fits.
 
 ## Browse by topic
 
