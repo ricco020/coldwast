@@ -64,6 +64,23 @@ Host: api.example.com
 
   <p>New to a language to build or call APIs from? Browse our <a href="/e/">guides index</a> for clear, original programming explainers.</p>
 
+  <h2>Frequently asked questions</h2>
+  <details><summary>What is an API in simple terms?</summary><p>An API (Application Programming Interface) is a contract that lets one piece of software use another&#39;s features through a defined set of requests and responses, without needing to know how it works inside. The classic analogy is a restaurant menu: you order from the menu (the API) and the kitchen (the implementation) prepares it, hidden behind the interface. Most APIs you meet are web APIs called over HTTP, usually exchanging JSON.</p></details>
+  <details><summary>What is the difference between an API and REST?</summary><p>An API is the general concept — any published interface one program exposes for another to use. REST is a popular <em>style</em> of building <em>web</em> APIs: it organises the API around resources addressed by URLs, uses HTTP methods (GET, POST, PUT, DELETE) to act on them, and typically exchanges JSON. So REST is one common way to design a web API, not a separate thing from APIs.</p></details>
+  <details><summary>What is an API key?</summary><p>An API key is a secret token you send with your requests so the provider can identify and authorise your app, enforce rate limits, and track usage. It is not the same as encryption — it identifies the caller. Treat keys like passwords: never commit them to public code, and rotate them if exposed.</p></details>
+  <details><summary>What is the difference between a web API and a library API?</summary><p>A web API runs on a remote server and is called over the network (HTTP), so it is a dependency you reach across the internet. A library API is the set of functions and types a code library exposes for you to call inside your own program, with no network involved. Both are &quot;APIs&quot; — published interfaces — but one is remote and one is local.</p></details>
+
   <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about APIs. Examples reflect standard HTTP/REST behaviour — verify against the specific API documentation you are using.</div>
   </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "What is an API in simple terms?", "acceptedAnswer": { "@type": "Answer", "text": "An API (Application Programming Interface) is a contract that lets one piece of software use another's features through a defined set of requests and responses, without needing to know how it works inside. Most APIs you meet are web APIs called over HTTP, usually exchanging JSON." } },
+      { "@type": "Question", "name": "What is the difference between an API and REST?", "acceptedAnswer": { "@type": "Answer", "text": "An API is the general concept — any published interface one program exposes. REST is a popular style of building web APIs: organised around resources addressed by URLs, using HTTP methods (GET, POST, PUT, DELETE) and usually JSON. REST is one way to design a web API, not separate from APIs." } },
+      { "@type": "Question", "name": "What is an API key?", "acceptedAnswer": { "@type": "Answer", "text": "An API key is a secret token sent with your requests so the provider can identify and authorise your app, enforce rate limits and track usage. It identifies the caller (it is not encryption). Treat keys like passwords: never commit them publicly and rotate if exposed." } },
+      { "@type": "Question", "name": "What is the difference between a web API and a library API?", "acceptedAnswer": { "@type": "Answer", "text": "A web API runs on a remote server and is called over the network (HTTP). A library API is the set of functions and types a code library exposes for you to call inside your own program, with no network involved. Both are published interfaces — one remote, one local." } }
+    ]
+  })} />
 </Base>
