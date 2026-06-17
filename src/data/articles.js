@@ -1,6 +1,16 @@
 // Auto-généré depuis src/pages/e/blog/*.astro — liste partagée home + archive (/blog). Trié date desc.
 export const articles = [
   {
+    "href": "/e/blog/2026-06-18-grpc-vs-rest.html",
+    "title": "gRPC vs REST: Which API Style, and When (2026)",
+    "dek": "REST uses HTTP + JSON (human-readable, universal); gRPC uses HTTP/2 + Protocol Buffers (fast, typed, streaming) for service-to-service calls. Performance, streaming, browser support, and when to pick each.",
+    "img": "/img/grpc-vs-rest-2026.jpg",
+    "imgAlt": "A network switch with fibre-optic and Ethernet cables plugged in",
+    "date": "Jun 18, 2026",
+    "read": "8 min read",
+    "cats": "API, gRPC, REST"
+  },
+  {
     "href": "/e/blog/2026-06-17-rest-vs-graphql.html",
     "title": "REST vs GraphQL: Which API Style, Honestly (2026)",
     "dek": "REST and GraphQL are two ways to build a web API. REST uses many endpoints with fixed responses; GraphQL uses one endpoint where the client asks for exactly the fields it needs. The real differences, over/under-fetching, caching, and when to choose each.",
