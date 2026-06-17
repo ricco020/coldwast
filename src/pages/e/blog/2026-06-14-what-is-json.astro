@@ -57,6 +57,23 @@ const description = 'JSON is a lightweight, human-readable text format for struc
 
   <p>JSON is the data half of most web communication; the request-and-response machinery around it is the <a href="/e/blog/2026-06-14-what-is-an-api.html">API</a>. Browse more clear explainers in our <a href="/e/">guides index</a>.</p>
 
+  <h2>Frequently asked questions</h2>
+  <details><summary>What is JSON in simple terms?</summary><p>JSON (JavaScript Object Notation) is a lightweight, human-readable text format for structured data. It represents data as key/value pairs and ordered lists, using a handful of types: objects, arrays, strings, numbers, booleans and null. It is the format most web APIs and configuration files use to exchange data, because it is simple for both people and machines to read and write.</p></details>
+  <details><summary>What is the difference between JSON and XML?</summary><p>Both store structured data as text, but JSON is lighter and less verbose: it has no closing tags and maps directly to the data types of most programming languages, which makes it easy to parse. XML is more verbose and supports things JSON does not, such as attributes, comments and schemas/namespaces. For most modern web APIs, JSON has become the default; XML still appears in older or document-centric systems.</p></details>
+  <details><summary>Is JSON a programming language?</summary><p>No. JSON is a data format, not a programming language — it only describes data, it cannot contain logic or run code. Its syntax was derived from JavaScript object literals, but JSON is language-independent and is read and written by virtually every programming language today.</p></details>
+  <details><summary>What are JSON's main limitations?</summary><p>JSON has no native date/time type (dates are usually strings), no comments, and no support for things like binary data without encoding. It also has no built-in schema in the format itself (though JSON Schema exists separately). For configuration where comments matter, formats like YAML or TOML are sometimes preferred; for data exchange, JSON remains the standard.</p></details>
+
   <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about JSON. Examples reflect the standard JSON format — verify against the specification (json.org / ECMA-404) for edge cases.</div>
   </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "What is JSON in simple terms?", "acceptedAnswer": { "@type": "Answer", "text": "JSON (JavaScript Object Notation) is a lightweight, human-readable text format for structured data. It represents data as key/value pairs and ordered lists using a few types: objects, arrays, strings, numbers, booleans and null. It is the format most web APIs and config files use to exchange data." } },
+      { "@type": "Question", "name": "What is the difference between JSON and XML?", "acceptedAnswer": { "@type": "Answer", "text": "Both store structured data as text, but JSON is lighter and less verbose, with no closing tags, and maps directly to most languages' data types, making it easy to parse. XML is more verbose and supports attributes, comments and schemas. Most modern web APIs default to JSON; XML still appears in older or document-centric systems." } },
+      { "@type": "Question", "name": "Is JSON a programming language?", "acceptedAnswer": { "@type": "Answer", "text": "No. JSON is a data format, not a programming language — it only describes data and cannot contain logic or run code. Its syntax came from JavaScript object literals, but JSON is language-independent and read/written by virtually every language." } },
+      { "@type": "Question", "name": "What are JSON's main limitations?", "acceptedAnswer": { "@type": "Answer", "text": "JSON has no native date/time type (dates are usually strings), no comments, and no binary data without encoding. The format has no built-in schema (JSON Schema exists separately). For commented configuration, YAML or TOML are sometimes preferred; for data exchange, JSON remains the standard." } }
+    ]
+  })} />
 </Base>

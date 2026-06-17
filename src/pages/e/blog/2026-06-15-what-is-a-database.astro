@@ -59,6 +59,23 @@ const description = 'A database is an organised collection of data, managed by s
 
   <p>To query a relational database, you'll use <a href="/e/blog/2026-06-14-what-is-sql.html">SQL</a>; the data a database returns to an app often travels as <a href="/e/blog/2026-06-14-what-is-json.html">JSON</a>. Browse more clear explainers in our <a href="/e/">guides index</a>.</p>
 
+  <h2>Frequently asked questions</h2>
+  <details><summary>What is a database in simple terms?</summary><p>A database is an organised collection of data, managed by software (a database management system, or DBMS) that lets you store, query, update and protect that data reliably. Instead of scattered files, a database gives you a structured, searchable, concurrent-safe place for information — from a single app's records to a large company's systems.</p></details>
+  <details><summary>What is the difference between SQL and NoSQL databases?</summary><p>SQL (relational) databases store data in tables of rows and columns with a fixed schema and use SQL to query it; they excel at structured, related data and strong consistency (ACID). NoSQL databases cover several models (document, key-value, wide-column, graph) with flexible schemas, designed to scale horizontally for large or rapidly-changing data. Neither is universally better — relational fits most apps; NoSQL fits specific scale or flexibility needs.</p></details>
+  <details><summary>What does ACID mean?</summary><p>ACID describes guarantees that keep database transactions reliable: Atomicity (a transaction fully completes or not at all), Consistency (it leaves the data in a valid state), Isolation (concurrent transactions don't corrupt each other) and Durability (committed data survives crashes). Relational databases are known for strong ACID guarantees; many NoSQL systems trade some of them for scale.</p></details>
+  <details><summary>What is the difference between a database and a spreadsheet?</summary><p>A spreadsheet is great for small, mostly-manual data and ad-hoc calculations by one person. A database scales to large volumes, enforces structure and relationships, supports many concurrent users safely, and is queried programmatically. When data grows, needs integrity rules, or is accessed by an application, a database is the right tool.</p></details>
+
   <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about databases. Examples reflect widely-used systems; verify specifics against each system's documentation.</div>
   </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "What is a database in simple terms?", "acceptedAnswer": { "@type": "Answer", "text": "A database is an organised collection of data, managed by software (a DBMS) that lets you store, query, update and protect that data reliably. Instead of scattered files, it gives you a structured, searchable, concurrent-safe place for information." } },
+      { "@type": "Question", "name": "What is the difference between SQL and NoSQL databases?", "acceptedAnswer": { "@type": "Answer", "text": "SQL (relational) databases store data in tables with a fixed schema and use SQL; they excel at structured, related data and strong consistency (ACID). NoSQL covers document, key-value, wide-column and graph models with flexible schemas, built to scale horizontally. Relational fits most apps; NoSQL fits specific scale or flexibility needs." } },
+      { "@type": "Question", "name": "What does ACID mean?", "acceptedAnswer": { "@type": "Answer", "text": "ACID describes guarantees for reliable transactions: Atomicity (all-or-nothing), Consistency (leaves data valid), Isolation (concurrent transactions don't corrupt each other) and Durability (committed data survives crashes). Relational databases are known for strong ACID; many NoSQL systems trade some for scale." } },
+      { "@type": "Question", "name": "What is the difference between a database and a spreadsheet?", "acceptedAnswer": { "@type": "Answer", "text": "A spreadsheet suits small, mostly-manual data for one person. A database scales to large volumes, enforces structure and relationships, supports many concurrent users safely, and is queried programmatically. When data grows, needs integrity rules, or is accessed by an app, a database is the right tool." } }
+    ]
+  })} />
 </Base>
