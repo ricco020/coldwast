@@ -1,0 +1,17 @@
+---
+import Base from '../../layouts/Base.astro';
+import HomeFeed from '../../components/HomeFeed.astro';
+import { articles } from '../../data/articles.js';
+const PAGE_SIZE = 12;
+export async function getStaticPaths() {
+  const PAGE_SIZE = 12;
+  const totalPages = Math.max(1, Math.ceil(articles.length / PAGE_SIZE));
+  const paths = [];
+  for (let n = 2; n <= totalPages; n++) paths.push({ params: { page: String(n) }, props: { page: n } });
+  return paths;
+}
+const { page } = Astro.props;
+---
+<Base title={`Coldwast — Programming &amp; Dev Guides (page ${page})`} description="Independent, original and regularly-updated programming guides — APIs, web, data formats, languages and the modern developer toolchain." path={`/page/${page}.html`}>
+  <HomeFeed page={page} pageSize={PAGE_SIZE} />
+</Base>
