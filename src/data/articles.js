@@ -1,6 +1,16 @@
 // Auto-généré depuis src/pages/e/blog/*.astro — liste partagée home + archive (/blog). Trié date desc.
 export const articles = [
   {
+    "href": "/e/blog/2026-06-17-what-is-a-webhook.html",
+    "title": "What Is a Webhook? How They Work, with Examples (2026)",
+    "dek": "A webhook is an automated HTTP request a service sends you when an event happens — the \"reverse\" of an API call you make. What webhooks are, how they differ from polling an API, how to receive one safely, and real examples (Stripe, GitHub, Slack).",
+    "img": "/img/what-is-a-webhook-2026.jpg",
+    "imgAlt": "A server and a network switch connected by an orange Ethernet cable",
+    "date": "Jun 17, 2026",
+    "read": "7 min read",
+    "cats": "Webhook, API, Web"
+  },
+  {
     "href": "/e/blog/2026-06-16-what-is-recursion.html",
     "title": "What Is Recursion? A Clear Introduction with Examples (2026)",
     "dek": "Recursion is when a function calls itself to solve a problem by reducing it to smaller subproblems. What it is, the base case and recursive case, real code examples in Python and Haskell, recursion vs iteration, tail recursion, common pitfalls, and how it fits functional programming.",
