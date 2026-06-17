@@ -108,6 +108,23 @@ def fib(n):
 
   <p>Recursion is one of the fundamental ways to express computation — it's a close cousin of how we describe any <a href="/e/blog/2026-06-14-what-is-an-algorithm.html">algorithm</a> as smaller, repeatable steps, and it depends on understanding how a <a href="/e/blog/2026-06-15-what-is-a-variable.html">variable</a> like an accumulator carries state between calls. Browse more clear explainers in our <a href="/e/">guides index</a>.</p>
 
+  <h2>Frequently asked questions</h2>
+  <details><summary>What is recursion in simple terms?</summary><p>Recursion is when a function calls itself to solve a problem by breaking it into smaller versions of the same problem. Each call handles a slightly smaller case until it reaches a <strong>base case</strong> that stops the chain. A classic example is factorial: <code>factorial(n) = n × factorial(n-1)</code>, with <code>factorial(0) = 1</code> as the base case.</p></details>
+  <details><summary>What is a base case in recursion?</summary><p>The base case is the condition that stops the recursion — the smallest problem the function can answer directly without calling itself again. Without a correct base case, a recursive function calls itself forever and crashes with a stack overflow. Every recursive function needs at least one base case plus a recursive case that moves toward it.</p></details>
+  <details><summary>What is the difference between recursion and iteration?</summary><p>Both repeat work, but iteration uses loops (for/while) and explicit state, while recursion repeats by calling itself and uses the call stack to hold state. Recursion is often clearer for naturally recursive structures (trees, nested data, divide-and-conquer); iteration is usually more memory-efficient because it avoids stack frames. Many recursive solutions can be rewritten as loops and vice versa.</p></details>
+  <details><summary>What is a stack overflow in recursion?</summary><p>Each recursive call adds a frame to the call stack. If the recursion is too deep — or the base case is missing or never reached — the stack runs out of space and the program crashes with a stack overflow. Fixes include ensuring the base case is correct, reducing depth, or converting to iteration; some languages also optimise tail-recursive calls to avoid growing the stack.</p></details>
+
   <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about recursion. Stack limits, tail-call optimisation and syntax vary by language; verify against your language's documentation.</div>
   </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "What is recursion in simple terms?", "acceptedAnswer": { "@type": "Answer", "text": "Recursion is when a function calls itself to solve a problem by breaking it into smaller versions of the same problem. Each call handles a smaller case until it reaches a base case that stops the chain. Example: factorial(n) = n × factorial(n-1), with factorial(0) = 1 as the base case." } },
+      { "@type": "Question", "name": "What is a base case in recursion?", "acceptedAnswer": { "@type": "Answer", "text": "The base case is the condition that stops the recursion — the smallest problem the function answers directly without calling itself. Without a correct base case, the function recurses forever and crashes with a stack overflow. Every recursive function needs a base case plus a recursive case moving toward it." } },
+      { "@type": "Question", "name": "What is the difference between recursion and iteration?", "acceptedAnswer": { "@type": "Answer", "text": "Both repeat work: iteration uses loops and explicit state, recursion repeats by calling itself and uses the call stack for state. Recursion is clearer for trees, nested data and divide-and-conquer; iteration is usually more memory-efficient. Many solutions convert between the two." } },
+      { "@type": "Question", "name": "What is a stack overflow in recursion?", "acceptedAnswer": { "@type": "Answer", "text": "Each recursive call adds a stack frame. If recursion is too deep, or the base case is missing or never reached, the stack runs out of space and the program crashes with a stack overflow. Fix the base case, reduce depth, or convert to iteration; some languages optimise tail calls." } }
+    ]
+  })} />
 </Base>
