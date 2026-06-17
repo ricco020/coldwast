@@ -1,18 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
-const stories = [
-  { href:'/e/blog/2026-06-15-what-is-a-variable.html', cats:'Programming, Concepts', title:'What Is a Variable in Programming? A Clear Introduction (2026)', dek:'A variable is a named container that holds a value your program can read and change. How you declare and assign one, types and scope, constants vs variables, and why they are the building blocks of every program.', date:'Jun 15, 2026', read:'6 min read', img:'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80&auto=format&fit=crop', imgAlt:'Code on a computer screen' },
-  { href:'/e/blog/2026-06-15-what-is-a-database.html', cats:'Programming, Data, Databases', title:'What Is a Database? A Clear Introduction (2026)', dek:'A database is an organised collection of data, managed by software that lets you store, query and update it reliably. Relational vs NoSQL, key concepts (tables, schema, ACID), real examples, and how it relates to SQL.', date:'Jun 15, 2026', read:'7 min read', img:'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&q=80&auto=format&fit=crop', imgAlt:'Racks of servers in a data center' },
-  { href:'/e/blog/2026-06-14-what-is-sql.html', cats:'Programming, Data, Databases', title:'What Is SQL? The Language of Databases, Explained (2026)', dek:'SQL is the standard language for storing, querying and changing data in relational databases. Core commands (SELECT, INSERT, UPDATE, DELETE), how a query works, SQL vs NoSQL, and why it is still essential in 2026.', date:'Jun 14, 2026', read:'7 min read', img:'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=1200&q=80&auto=format&fit=crop', imgAlt:'Colorful source code on a monitor' },
-  { href:'/e/blog/2026-06-14-what-is-git.html', cats:'Programming, Tools, Workflow', title:'What Is Git? Version Control Explained for Beginners (2026)', dek:'Git is a distributed version-control system that tracks every change to your code so you can branch, merge, collaborate and undo. Core concepts (commit, branch, merge, remote), the daily workflow, and how it differs from GitHub.', date:'Jun 14, 2026', read:'7 min read', img:'https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80&auto=format&fit=crop', imgAlt:'Lines of source code on a dark screen' },
-  { href:'/e/blog/2026-06-14-what-is-an-algorithm.html', cats:'Programming, Concepts', title:'What Is an Algorithm? A Clear Introduction (2026)', dek:'An algorithm is a finite, step-by-step procedure that turns input into output. Its key properties, everyday and code examples, why efficiency (Big-O) matters, and how it differs from a program.', date:'Jun 14, 2026', read:'7 min read', img:'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&q=80&auto=format&fit=crop', imgAlt:'Streams of green code on a dark screen' },
-  { href:'/e/blog/2026-06-14-what-is-json.html', cats:'Programming, Web, Data', title:'What Is JSON? The Data Format Behind Modern Apps (2026)', dek:'JSON is a lightweight, human-readable text format for structured data — the language most web APIs and config files speak. Its syntax, why it is everywhere, how it compares to XML, and its honest limits.', date:'Jun 14, 2026', read:'6 min read', img:'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=1200&q=80&auto=format&fit=crop', imgAlt:'Colorful source code on a monitor' },
-  { href:'/e/blog/2026-06-14-what-is-an-api.html', cats:'Programming, Web, Concepts', title:'What Is an API? A Clear Introduction for Developers (2026)', dek:'An API is a contract that lets one piece of software talk to another. The main kinds (web/REST, library, OS), how a web request and response work, and why APIs are everywhere in modern software.', date:'Jun 14, 2026', read:'7 min read', img:'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&q=80&auto=format&fit=crop', imgAlt:'Racks of servers in a data center' },
-  { href:'/e/blog/2013-08-20-Cabal-sandbox.html', cats:'Haskell, Cabal, Build tooling', title:'Cabal Sandboxes: What They Were, and What Replaced Them', dek:'The per-project isolation idea that won so completely it became invisible. What sandboxes were, and the nix-style cabal build workflow that superseded them.', date:'Jun 13, 2026', read:'9 min read', img:'https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=1200&q=80&auto=format&fit=crop', imgAlt:'A Linux terminal prompt' },
-  { href:'/e/blog/2026-06-14-ghcup-install-haskell.html', cats:'Haskell, Toolchain', title:'Install Haskell with GHCup: the 2026 Toolchain Guide', dek:'GHCup is the recommended way to install GHC, Cabal, Stack and HLS in 2026 — clean install, version switching, and the common pitfalls that trip newcomers.', date:'Jun 14, 2026', read:'8 min read' },
-  { href:'/e/blog/2017-09-09-Cabal-2-0.html', cats:'Haskell, Build tooling', title:'Cabal 2.0: the Release that Reshaped Haskell Builds', dek:'Nix-style builds, Backpack, the caret operator and a better solver — what 2.0 introduced and where each feature stands in the 2026 toolchain.', date:'Jun 13, 2026', read:'7 min read' },
-  { href:'/e/blog/2011-08-22-GSoC-Final.html', cats:'Haskell, Performance', title:'Parallelising cabal-install: How Haskell Builds Use Your Cores', dek:'Why a build is a dependency graph, how -j builds use your cores, and the modern job-semaphore fix for oversubscription on wide dependency trees.', date:'Jun 13, 2026', read:'6 min read' },
-];
+import { articles } from '../data/articles.js';
+const stories = articles.slice(0, 12);
+const totalArticles = articles.length;
 const popular = stories.slice(0, 4);
 const blocks = [
   { c:'b1', k:'Get started', h:'Install the toolchain', p:'GHC, Cabal, Stack and HLS in one clean setup with GHCup.', a:'Read the guide →', href:'/e/blog/2026-06-14-ghcup-install-haskell.html' },
@@ -67,6 +57,11 @@ function catAvatar(cats=''){
             </div>
           </article>
         ))}
+        {totalArticles > 12 && (
+          <p class="view-all-wrap" style="text-align:center;margin:26px 0 8px;">
+            <a class="more" href="/blog/" style="display:inline-block;padding:10px 22px;border:1px solid currentColor;border-radius:8px;font-weight:700;">View all articles ({totalArticles}) &rarr;</a>
+          </p>
+        )}
       </div>
       <aside class="side">
         <div class="affbox">
