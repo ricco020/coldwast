@@ -1,6 +1,16 @@
 // Auto-généré depuis src/pages/e/blog/*.astro — liste partagée home + archive (/blog). Trié date desc.
 export const articles = [
   {
+    "href": "/e/blog/2026-06-18-sql-vs-nosql.html",
+    "title": "SQL vs NoSQL: which database, and when (2026)",
+    "dek": "SQL databases store structured data in related tables with a fixed schema and strong consistency; NoSQL trades some of that for flexible schemas and horizontal scale. Consistency, scaling, querying, and when to choose each.",
+    "img": "/img/sql-vs-nosql-2026.jpg",
+    "imgAlt": "Rows of equipment racks in a data centre",
+    "date": "Jun 18, 2026",
+    "read": "8 min read",
+    "cats": "Databases, SQL, NoSQL"
+  },
+  {
     "href": "/e/blog/2026-06-18-grpc-vs-rest.html",
     "title": "gRPC vs REST: Which API Style, and When (2026)",
     "dek": "REST uses HTTP + JSON (human-readable, universal); gRPC uses HTTP/2 + Protocol Buffers (fast, typed, streaming) for service-to-service calls. Performance, streaming, browser support, and when to pick each.",
