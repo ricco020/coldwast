@@ -1,6 +1,16 @@
 // Auto-généré depuis src/pages/e/blog/*.astro — liste partagée home + archive (/blog). Trié date desc.
 export const articles = [
   {
+    "href": "/e/blog/2026-06-17-rest-vs-graphql.html",
+    "title": "REST vs GraphQL: Which API Style, Honestly (2026)",
+    "dek": "REST and GraphQL are two ways to build a web API. REST uses many endpoints with fixed responses; GraphQL uses one endpoint where the client asks for exactly the fields it needs. The real differences, over/under-fetching, caching, and when to choose each.",
+    "img": "/img/rest-vs-graphql-2026.jpg",
+    "imgAlt": "A laptop showing stylesheet code in a dark-themed editor",
+    "date": "Jun 17, 2026",
+    "read": "8 min read",
+    "cats": "API, REST, GraphQL"
+  },
+  {
     "href": "/e/blog/2026-06-17-what-is-a-webhook.html",
     "title": "What Is a Webhook? How They Work, with Examples (2026)",
     "dek": "A webhook is an automated HTTP request a service sends you when an event happens — the \"reverse\" of an API call you make. What webhooks are, how they differ from polling an API, how to receive one safely, and real examples (Stripe, GitHub, Slack).",
