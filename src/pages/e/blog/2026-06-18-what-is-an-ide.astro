@@ -1,0 +1,77 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-06-18-what-is-an-ide.html';
+const title = 'What Is an IDE? Integrated Development Environments (2026)';
+const description = 'An IDE (Integrated Development Environment) bundles a code editor, build tools, a debugger and more into one app — so you write, run and fix code in one place. What an IDE is, what it includes, IDE vs editor, and how to pick one.';
+const hero = '/img/what-is-an-ide-2026.jpg';
+const faq = [
+  { q: 'What is an IDE in simple terms?', a: 'An IDE (Integrated Development Environment) is a single application that brings together everything you need to write software: a code editor, a way to build/compile and run your program, a debugger to step through it, and usually autocompletion, error highlighting and version-control integration. Instead of juggling separate tools, you get one workspace. Popular examples include Visual Studio Code, IntelliJ IDEA, PyCharm, Visual Studio and Xcode.' },
+  { q: 'What is the difference between an IDE and a code editor?', a: 'A code editor (like Notepad++ or, in its basic form, a plain text editor) mainly edits text with syntax highlighting. An IDE adds the surrounding machinery: build/run, an integrated debugger, project-wide navigation, refactoring and tooling. The line has blurred — VS Code is technically an editor that, with extensions, behaves like a full IDE. In short: every IDE includes an editor, but not every editor is an IDE.' },
+  { q: 'Which IDE should a beginner use?', a: 'For most beginners, Visual Studio Code is the popular default: free, lightweight, cross-platform, and extendable to almost any language. If you focus on one language, a language-specific IDE can be smoother — PyCharm for Python, IntelliJ IDEA for Java, Xcode for Apple platforms. Start with whatever has the best support for the language you are learning, and don’t over-invest in configuration early on.' },
+  { q: 'Are IDEs free?', a: 'Many of the best are free. Visual Studio Code, the VS Code-based editors, NetBeans and Eclipse are free and open-source or free to use; PyCharm and IntelliJ IDEA have free Community editions. Paid tiers (IntelliJ Ultimate, etc.) add advanced framework and database tooling for professionals. You can absolutely learn and ship real software without paying for an IDE.' },
+];
+---
+<Base title={title} description={description} path={path} type="article" lang="en"
+  image={hero} datePublished="2026-06-18" dateModified="2026-06-18">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e/">Guides</a><span>/</span>What is an IDE?</nav>
+  <p class="kicker">Programming · tools · basics</p>
+  <h1>What is an IDE?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated 18 Jun 2026</span><span>7 min read</span><span class="tag">#ide</span><span class="tag">#tools</span><span class="tag">#beginners</span></div>
+
+  <figure>
+    <img class="hero" src={hero} alt="A code editor open on a laptop, showing syntax-highlighted code" width="1200" height="420" loading="eager" />
+    <figcaption>An IDE bundles the editor, build tools and debugger into one workspace, so you write, run and fix code without leaving the app.</figcaption>
+  </figure>
+
+  <p>If you've started learning to code, you've heard the term <strong>IDE</strong> — and probably wondered how it differs from a "code editor." In short: an <strong>IDE (Integrated Development Environment)</strong> is one app that bundles everything you need to build software. This guide explains what an IDE actually includes, how it differs from a plain editor, and how to choose one. (New to the field? Start with <a href="/e/blog/2026-06-14-what-is-an-algorithm.html">what is an algorithm</a>.)</p>
+
+  <h2>What an IDE actually includes</h2>
+  <p>The "integrated" part is the point: an IDE combines tools that you'd otherwise run separately. Most include:</p>
+  <ul>
+    <li><strong>A code editor</strong> with syntax highlighting and autocompletion.</li>
+    <li><strong>Build / run</strong> — compile or execute your program without leaving the app.</li>
+    <li><strong>A debugger</strong> — pause execution, inspect variables, step line by line.</li>
+    <li><strong>Project navigation & refactoring</strong> — jump to definitions, rename safely across files.</li>
+    <li><strong>Version control</strong> — <a href="/e/blog/2026-06-14-what-is-git.html">Git</a> integration built in.</li>
+  </ul>
+  <p>Bundling these means less context-switching and faster feedback when something breaks.</p>
+
+  <h2>IDE vs code editor</h2>
+  <p>A plain <strong>code editor</strong> edits text well; an <strong>IDE</strong> adds the surrounding machinery (build, debug, deep tooling). The distinction has softened: <strong>Visual Studio Code</strong> is technically an editor, but with extensions it behaves like a full IDE. The practical rule still holds — every IDE contains an editor, but not every editor is an IDE.</p>
+
+  <figure><img src="/img/what-is-an-ide-2026-editor.jpg" alt="Close-up of syntax-highlighted code with line numbers on a dark screen" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Syntax highlighting and line numbers are part of what an IDE layers on top of plain text editing.</figcaption></figure>
+
+  <h2>Popular IDEs in 2026</h2>
+  <ul>
+    <li><strong>Visual Studio Code</strong> — free, cross-platform, extension-driven; the common default for many languages.</li>
+    <li><strong>IntelliJ IDEA / PyCharm / WebStorm</strong> (JetBrains) — deep language-specific tooling.</li>
+    <li><strong>Visual Studio</strong> — full-featured for .NET and C++ on Windows.</li>
+    <li><strong>Xcode</strong> — Apple's IDE for iOS and macOS development.</li>
+    <li><strong>Neovim / Emacs</strong> — editors that power users configure into IDE-like setups.</li>
+  </ul>
+
+  <h2>How to choose one</h2>
+  <p>Pick based on your language and platform: the IDE with the best support for what you're building will save the most time. Beginners are well served by VS Code; single-language work is often smoother in a dedicated IDE. Don't over-configure early — a default setup is enough to learn on.</p>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Recommended</span>
+    <h3>Somewhere to run what you build</h3>
+    <p>An IDE writes and tests your code locally — but a web app, API or bot needs a server to run on. A VPS or cloud server gives you full control of the runtime. Infomaniak — a Swiss, privacy-respecting provider — offers VPS and cloud servers to deploy what you build.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">See Infomaniak Cloud →</a>
+    <p class="disc">Affiliate link — it supports these free guides.</p>
+  </div>
+
+  <h2>Frequently asked questions</h2>
+  {faq.map((f) => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}
+
+  <h2>Bottom line</h2>
+  <p>An IDE is the workshop where software gets built: editor, build tools, debugger and integrations in one place, so you write, run and fix code without switching apps. Start with a free, well-supported option like VS Code, lean on the debugger and version control early, and pick a language-specific IDE later if it speeds you up. Next, see <a href="/e/blog/2026-06-14-what-is-git.html">what is Git</a> and <a href="/e/blog/2026-06-14-what-is-an-api.html">what is an API</a>.</p>
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faq.map((f) => ({ "@type": "Question", "name": f.q, "acceptedAnswer": { "@type": "Answer", "text": f.a } }))
+  })} />
+</Base>

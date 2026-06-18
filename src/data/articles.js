@@ -1,6 +1,16 @@
 // Auto-généré depuis src/pages/e/blog/*.astro — liste partagée home + archive (/blog). Trié date desc.
 export const articles = [
   {
+    "href": "/e/blog/2026-06-18-what-is-an-ide.html",
+    "title": "What Is an IDE? Integrated Development Environments (2026)",
+    "dek": "An IDE bundles a code editor, build tools, a debugger and version control into one app — so you write, run and fix code in one place. What an IDE includes, IDE vs editor, and how to pick one.",
+    "img": "/img/what-is-an-ide-2026.jpg",
+    "imgAlt": "A code editor open on a laptop, showing syntax-highlighted code",
+    "date": "Jun 18, 2026",
+    "read": "7 min read",
+    "cats": "Tools, IDE, Beginners"
+  },
+  {
     "href": "/e/blog/2026-06-18-sql-vs-nosql.html",
     "title": "SQL vs NoSQL: which database, and when (2026)",
     "dek": "SQL databases store structured data in related tables with a fixed schema and strong consistency; NoSQL trades some of that for flexible schemas and horizontal scale. Consistency, scaling, querying, and when to choose each.",

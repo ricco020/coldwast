@@ -1,0 +1,77 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/fr/e/blog/2026-06-18-what-is-an-ide.html';
+const title = 'Qu’est-ce qu’un IDE ? Environnements de développement (2026)';
+const description = 'Un IDE (environnement de développement intégré) réunit un éditeur de code, des outils de build, un débogueur et plus dans une seule appli — vous écrivez, exécutez et corrigez au même endroit. Ce qu’est un IDE, ce qu’il contient, IDE vs éditeur, et comment choisir.';
+const hero = '/img/what-is-an-ide-2026.jpg';
+const faq = [
+  { q: 'Qu’est-ce qu’un IDE en termes simples ?', a: 'Un IDE (Integrated Development Environment, environnement de développement intégré) est une seule application qui réunit tout le nécessaire pour écrire du logiciel : un éditeur de code, de quoi compiler/exécuter, un débogueur pour avancer pas à pas, et généralement l’autocomplétion, le surlignage d’erreurs et l’intégration du contrôle de version. Au lieu de jongler entre outils, vous avez un seul espace de travail. Exemples populaires : Visual Studio Code, IntelliJ IDEA, PyCharm, Visual Studio, Xcode.' },
+  { q: 'Quelle différence entre un IDE et un éditeur de code ?', a: 'Un éditeur de code (comme Notepad++ ou, en version basique, un éditeur de texte) édite surtout du texte avec coloration syntaxique. Un IDE ajoute la machinerie autour : build/exécution, débogueur intégré, navigation dans tout le projet, refactoring et outillage. La frontière s’est estompée — VS Code est techniquement un éditeur qui, avec des extensions, se comporte comme un IDE complet. En bref : tout IDE contient un éditeur, mais tout éditeur n’est pas un IDE.' },
+  { q: 'Quel IDE pour un débutant ?', a: 'Pour la plupart des débutants, Visual Studio Code est le défaut populaire : gratuit, léger, multiplateforme, extensible à presque tous les langages. Si vous vous concentrez sur un langage, un IDE dédié peut être plus fluide — PyCharm pour Python, IntelliJ IDEA pour Java, Xcode pour les plateformes Apple. Commencez par ce qui supporte le mieux le langage que vous apprenez, sans trop investir dans la configuration au début.' },
+  { q: 'Les IDE sont-ils gratuits ?', a: 'Beaucoup des meilleurs le sont. Visual Studio Code, les éditeurs basés sur VS Code, NetBeans et Eclipse sont gratuits et open-source ou libres d’usage ; PyCharm et IntelliJ IDEA ont des éditions Community gratuites. Les offres payantes (IntelliJ Ultimate, etc.) ajoutent de l’outillage avancé framework/base de données pour les pros. On peut tout à fait apprendre et livrer du vrai logiciel sans payer d’IDE.' },
+];
+---
+<Base title={title} description={description} path={path} type="article" lang="fr"
+  image={hero} datePublished="2026-06-18" dateModified="2026-06-18">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/fr/">Accueil</a><span>/</span><a href="/fr/e/">Guides</a><span>/</span>Qu’est-ce qu’un IDE ?</nav>
+  <p class="kicker">Programmation · outils · bases</p>
+  <h1>Qu’est-ce qu’un IDE ?</h1>
+  <div class="artmeta"><span>Par Coldwast</span><span>Mis à jour le 18 juin 2026</span><span>7 min de lecture</span><span class="tag">#ide</span><span class="tag">#outils</span><span class="tag">#debutants</span></div>
+
+  <figure>
+    <img class="hero" src={hero} alt="Un éditeur de code ouvert sur un portable, affichant du code coloré" width="1200" height="420" loading="eager" />
+    <figcaption>Un IDE réunit l’éditeur, les outils de build et le débogueur dans un seul espace, pour écrire, exécuter et corriger sans quitter l’appli.</figcaption>
+  </figure>
+
+  <p>Si vous avez commencé à coder, vous avez entendu le terme <strong>IDE</strong> — et vous vous êtes sans doute demandé en quoi il diffère d’un « éditeur de code ». En bref : un <strong>IDE (environnement de développement intégré)</strong> est une appli qui réunit tout le nécessaire pour construire du logiciel. Ce guide explique ce qu’un IDE contient vraiment, en quoi il diffère d’un simple éditeur, et comment en choisir un. (Nouveau dans le domaine ? Commencez par <a href="/fr/e/blog/2026-06-14-what-is-an-algorithm.html">qu’est-ce qu’un algorithme</a>.)</p>
+
+  <h2>Ce qu’un IDE contient réellement</h2>
+  <p>Le mot « intégré » est l’essentiel : un IDE combine des outils que vous lanceriez sinon séparément. La plupart incluent :</p>
+  <ul>
+    <li><strong>Un éditeur de code</strong> avec coloration syntaxique et autocomplétion.</li>
+    <li><strong>Build / exécution</strong> — compiler ou exécuter votre programme sans quitter l’appli.</li>
+    <li><strong>Un débogueur</strong> — mettre en pause, inspecter les variables, avancer ligne par ligne.</li>
+    <li><strong>Navigation projet & refactoring</strong> — sauter aux définitions, renommer sûrement sur tous les fichiers.</li>
+    <li><strong>Contrôle de version</strong> — intégration de <a href="/fr/e/blog/2026-06-14-what-is-git.html">Git</a>.</li>
+  </ul>
+  <p>Tout réunir réduit les changements de contexte et accélère le retour quand quelque chose casse.</p>
+
+  <h2>IDE vs éditeur de code</h2>
+  <p>Un simple <strong>éditeur de code</strong> édite bien le texte ; un <strong>IDE</strong> ajoute la machinerie autour (build, débogage, outillage poussé). La distinction s’est adoucie : <strong>Visual Studio Code</strong> est techniquement un éditeur, mais avec des extensions il se comporte comme un IDE complet. La règle pratique tient toujours — tout IDE contient un éditeur, mais tout éditeur n’est pas un IDE.</p>
+
+  <figure><img src="/img/what-is-an-ide-2026-editor.jpg" alt="Gros plan de code coloré avec numéros de ligne sur un écran sombre" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Coloration syntaxique et numéros de ligne font partie de ce qu’un IDE ajoute par-dessus l’édition de texte brute.</figcaption></figure>
+
+  <h2>IDE populaires en 2026</h2>
+  <ul>
+    <li><strong>Visual Studio Code</strong> — gratuit, multiplateforme, piloté par extensions ; le défaut courant pour de nombreux langages.</li>
+    <li><strong>IntelliJ IDEA / PyCharm / WebStorm</strong> (JetBrains) — outillage spécifique au langage très poussé.</li>
+    <li><strong>Visual Studio</strong> — complet pour .NET et C++ sur Windows.</li>
+    <li><strong>Xcode</strong> — l’IDE d’Apple pour le développement iOS et macOS.</li>
+    <li><strong>Neovim / Emacs</strong> — des éditeurs que les power users configurent en setups façon IDE.</li>
+  </ul>
+
+  <h2>Comment en choisir un</h2>
+  <p>Choisissez selon votre langage et votre plateforme : l’IDE qui supporte le mieux ce que vous construisez fera gagner le plus de temps. Les débutants sont bien servis par VS Code ; le travail mono-langage est souvent plus fluide dans un IDE dédié. Ne sur-configurez pas trop tôt — un setup par défaut suffit pour apprendre.</p>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Recommandé</span>
+    <h3>Un endroit pour faire tourner ce que vous construisez</h3>
+    <p>Un IDE écrit et teste votre code en local — mais une appli web, une API ou un bot a besoin d’un serveur pour tourner. Un VPS ou serveur cloud vous donne le contrôle total du runtime. Infomaniak — un hébergeur suisse, respectueux de la vie privée — propose des VPS et serveurs cloud pour déployer ce que vous construisez.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Voir le cloud Infomaniak →</a>
+    <p class="disc">Lien d’affiliation — il soutient ces guides gratuits.</p>
+  </div>
+
+  <h2>Questions fréquentes</h2>
+  {faq.map((f) => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}
+
+  <h2>En résumé</h2>
+  <p>Un IDE est l’atelier où se construit le logiciel : éditeur, outils de build, débogueur et intégrations au même endroit, pour écrire, exécuter et corriger sans changer d’appli. Commencez par une option gratuite et bien supportée comme VS Code, appuyez-vous tôt sur le débogueur et le contrôle de version, et passez plus tard à un IDE spécifique au langage s’il vous accélère. Ensuite, voir <a href="/fr/e/blog/2026-06-14-what-is-git.html">qu’est-ce que Git</a> et <a href="/fr/e/blog/2026-06-14-what-is-an-api.html">qu’est-ce qu’une API</a>.</p>
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faq.map((f) => ({ "@type": "Question", "name": f.q, "acceptedAnswer": { "@type": "Answer", "text": f.a } }))
+  })} />
+</Base>
