@@ -1,0 +1,76 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-06-19-what-is-a-vps.html';
+const title = 'What Is a VPS? Virtual Private Servers Explained (2026)';
+const description = 'A VPS (virtual private server) is your own isolated slice of a physical server, with dedicated resources and full root access. What a VPS is, how virtualization works, VPS vs shared/dedicated/cloud, managed vs unmanaged, and what you actually use one for.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="/img/what-is-a-vps-2026.jpg" datePublished="2026-06-19" dateModified="2026-06-19">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e/">Guides</a><span>/</span>What is a VPS</nav>
+  <p class="kicker">Programming · Hosting · infrastructure</p>
+  <h1>What is a VPS?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Jun 19, 2026</span><span>8 min read</span><span class="tag">#vps</span><span class="tag">#hosting</span><span class="tag">#servers</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/what-is-a-vps-2026.jpg" alt="A close-up of a green printed circuit board with electronic components" width="1200" height="420" loading="eager" />
+    <figcaption>A printed circuit board — a VPS is a virtual slice of real server hardware like this, carved out and rented to you with its own dedicated resources.</figcaption>
+  </figure>
+
+  <p>Once you've built something — a website, an <a href="/e/blog/2026-06-14-what-is-an-api.html">API</a>, a bot, or a <a href="/e/blog/2026-06-19-what-is-docker.html">containerised</a> app — it needs somewhere to run that you control. For most developers, the answer is a <strong>VPS</strong>. This guide explains what a VPS is, how it works, how it compares to other hosting, and when it's the right choice.</p>
+
+  <h2>The short definition</h2>
+  <p><strong>A VPS — virtual private server — is your own isolated portion of a physical server, with dedicated CPU, memory and storage, and full administrator (root) access.</strong> One physical machine is split into several virtual servers, each behaving like an independent computer with its own operating system. You get the control of a dedicated server at a fraction of the cost, because you share the underlying hardware without sharing your slice of it.</p>
+
+  <h2>How it works: virtualization</h2>
+  <p>A VPS is created through <strong>virtualization</strong>. Software called a hypervisor runs on the physical server and divides it into multiple isolated virtual machines, each allocated a guaranteed share of the hardware. Your VPS can't be slowed down by another customer hogging resources (unlike basic shared hosting), and you can install whatever operating system and software you like, because you have root access. It's the same virtual-machine idea that underpins cloud computing.</p>
+
+  <figure><img src="/img/what-is-a-vps-2026-dev.jpg" alt="Source code displayed in a code editor on a dark screen" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>Code in an editor — with a VPS you connect over SSH and deploy your own apps, with the same control you'd have on a local machine.</figcaption></figure>
+
+  <h2>VPS vs the alternatives</h2>
+  <ul>
+    <li><strong>Shared hosting</strong> — many sites share one server and its resources, with no root access. Cheapest and simplest, but limited and easily affected by neighbours. Fine for a basic site, not for running your own stack.</li>
+    <li><strong>VPS</strong> — a guaranteed slice with root access and isolation. The sweet spot of control versus cost for most developer projects.</li>
+    <li><strong>Dedicated server</strong> — a whole physical machine to yourself. Maximum power and isolation, at a much higher price; overkill until you genuinely need it.</li>
+    <li><strong>Cloud servers</strong> — VPS-like instances you can spin up, scale and pay for by the hour, often with extra managed services. More elastic, sometimes pricier for steady workloads.</li>
+  </ul>
+
+  <h2>What you use a VPS for</h2>
+  <p>A VPS is the general-purpose home for things you build: hosting websites and web apps, running an <a href="/e/blog/2026-06-14-what-is-an-api.html">API</a> or backend, deploying <a href="/e/blog/2026-06-19-what-is-docker.html">Docker</a> containers (or even a small <a href="/e/blog/2026-06-19-what-is-kubernetes.html">Kubernetes</a> node), running bots, cron jobs, a Git server, or a personal VPN. Anything that needs to be online 24/7 and that you want full control over is a good fit.</p>
+
+  <h2>Managed vs unmanaged</h2>
+  <p>This is the choice that trips people up. An <strong>unmanaged</strong> VPS gives you a bare server — you handle the operating system, updates, security and backups yourself. It's cheaper and more flexible, but you are the system administrator. A <strong>managed</strong> VPS costs more but the provider handles maintenance, patching and support, which is worth it if you'd rather not run a server. Pick based on how much sysadmin work you want to own.</p>
+
+  <h2>The honest trade-offs</h2>
+  <p>A VPS gives real control, but with responsibility. On an unmanaged box, security is on you: unpatched software and weak SSH settings are how servers get compromised. Resources are guaranteed but finite — you size the plan to your workload and scale up when needed. And there's a learning curve to the command line and Linux administration. For most developers, though, that control is exactly the point, and the skills transfer everywhere.</p>
+
+  <h2>Frequently asked questions</h2>
+  <details><summary>What is a VPS in simple terms?</summary><p>A VPS is your own private slice of a physical server. One real machine is divided by software into several isolated virtual servers, and you rent one — with guaranteed CPU, memory and storage, your own operating system, and full administrator access — so it behaves like a dedicated computer at a much lower cost.</p></details>
+  <details><summary>What is the difference between a VPS and shared hosting?</summary><p>Shared hosting puts many websites on one server with pooled resources and no root access, so you're limited and can be affected by other users. A VPS gives you a guaranteed, isolated share of resources plus full root access, so you can install your own software and run your own stack without interference.</p></details>
+  <details><summary>What is the difference between a VPS and a dedicated server?</summary><p>A VPS is a virtual slice of a shared physical machine; a dedicated server is an entire physical machine reserved for you. A dedicated server offers more raw power and isolation but costs much more. A VPS gives most of the control at a fraction of the price, which is enough for the large majority of projects.</p></details>
+  <details><summary>Do I need to be a sysadmin to use a VPS?</summary><p>For an unmanaged VPS, you handle the OS, updates and security yourself, so basic Linux and command-line skills help. If you'd rather not, a managed VPS hands maintenance and support to the provider for a higher price. Either way, the core skills are very learnable and widely useful.</p></details>
+
+  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about virtual private servers. Examples reflect widely-used hosting models; verify specifics and current pricing with the provider you choose.</div>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Recommended</span>
+    <h3>A VPS to run your projects</h3>
+    <p>A VPS or cloud server gives you full root control to host sites, APIs, containers or a personal VPN. Infomaniak — a Swiss, privacy-respecting provider — offers VPS and cloud servers to deploy what you build.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">See Infomaniak Cloud →</a>
+    <p class="disc">Affiliate link — it supports these free guides.</p>
+  </div>
+
+  <p>Browse more clear explainers in our <a href="/e/">guides index</a>.</p>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "What is a VPS in simple terms?", "acceptedAnswer": { "@type": "Answer", "text": "A VPS is your own private slice of a physical server. One real machine is divided by software into several isolated virtual servers, and you rent one — with guaranteed CPU, memory and storage, your own operating system, and full administrator access — so it behaves like a dedicated computer at a much lower cost." } },
+      { "@type": "Question", "name": "What is the difference between a VPS and shared hosting?", "acceptedAnswer": { "@type": "Answer", "text": "Shared hosting puts many websites on one server with pooled resources and no root access. A VPS gives you a guaranteed, isolated share of resources plus full root access, so you can install your own software and run your own stack without interference." } },
+      { "@type": "Question", "name": "What is the difference between a VPS and a dedicated server?", "acceptedAnswer": { "@type": "Answer", "text": "A VPS is a virtual slice of a shared physical machine; a dedicated server is an entire physical machine reserved for you. A dedicated server offers more power and isolation but costs much more. A VPS gives most of the control at a fraction of the price." } },
+      { "@type": "Question", "name": "Do I need to be a sysadmin to use a VPS?", "acceptedAnswer": { "@type": "Answer", "text": "For an unmanaged VPS you handle the OS, updates and security yourself, so basic Linux and command-line skills help. A managed VPS hands maintenance and support to the provider for a higher price. The core skills are very learnable and widely useful." } }
+    ]
+  })} />
+  </div>
+</Base>
