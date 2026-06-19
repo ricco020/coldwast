@@ -1,0 +1,79 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/es/e/blog/2026-06-19-what-is-docker.html';
+const title = '¿Qué es Docker? Los contenedores explicados con claridad (2026)';
+const description = 'Docker es una plataforma que empaqueta una aplicación y todo lo que necesita en un contenedor que se ejecuta igual en cualquier máquina. Qué es Docker, contenedores vs máquinas virtuales, los conceptos clave (imagen, contenedor, Dockerfile, registro), por qué importa, y Docker vs Kubernetes.';
+---
+<Base title={title} description={description} path={path} type="article" lang="es"
+  image="/img/what-is-docker-2026.jpg" datePublished="2026-06-19" dateModified="2026-06-19">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/es/">Inicio</a><span>/</span><a href="/es/e/">Guías</a><span>/</span>Qué es Docker</nav>
+  <p class="kicker">Programación · DevOps · contenedores</p>
+  <h1>¿Qué es Docker?</h1>
+  <div class="artmeta"><span>Por Coldwast</span><span>Actualizado el 19 de junio de 2026</span><span>8 min de lectura</span><span class="tag">#docker</span><span class="tag">#containers</span><span class="tag">#devops</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/what-is-docker-2026.jpg" alt="Un buque portacontenedores cargado de contenedores apilados en un puerto, de noche" width="1200" height="420" loading="eager" />
+    <figcaption>Un buque portacontenedores cargado de contenedores apilados en un puerto, de noche — Docker toma prestada la idea del contenedor marítimo: empaquetas una app una vez y se ejecuta igual en todas partes.</figcaption>
+  </figure>
+
+  <p>«Funciona en mi máquina» es uno de los chistes más viejos del software — y el problema que <strong>Docker</strong> se diseñó para eliminar. Docker empaqueta una aplicación junto con todo lo que necesita para ejecutarse, de modo que se comporta igual en un portátil, en la máquina de un compañero y en un servidor de producción. Esta guía explica qué es Docker, en qué se diferencian los contenedores de las máquinas virtuales, los conceptos que importan, y dónde encaja Docker junto a herramientas como Kubernetes.</p>
+
+  <h2>La definición corta</h2>
+  <p><strong>Docker es una plataforma para construir, compartir y ejecutar aplicaciones dentro de contenedores.</strong> Un contenedor agrupa tu código con sus dependencias — bibliotecas, runtime, configuración — en una unidad aislada y portátil. Como el contenedor lleva su propio entorno, se ejecuta igual allá donde Docker esté instalado, eliminando la clase de errores de «funciona aquí pero no allá».</p>
+
+  <h2>Contenedores vs máquinas virtuales</h2>
+  <p>Ambos aíslan software, pero a niveles distintos. Una <strong>máquina virtual</strong> emula un ordenador completo, incluido su propio sistema operativo entero, sobre un hipervisor — potente, pero pesada: cada VM ocupa gigabytes y arranca despacio. Un <strong>contenedor</strong> comparte el núcleo del sistema operativo de la máquina anfitriona y solo empaqueta la app y sus dependencias. El resultado es mucho más ligero: los contenedores suelen ocupar megabytes, arrancan en segundos, y puedes ejecutar muchos más en el mismo hardware.</p>
+  <p>La contrapartida es el aislamiento. Las VM ofrecen una separación más fuerte porque cada una tiene su propio SO; los contenedores son más eficientes pero comparten el núcleo, así que el aislamiento es bueno más que absoluto. Muchos sistemas reales usan ambos — contenedores ejecutándose dentro de VM en la nube.</p>
+
+  <figure><img src="/img/what-is-docker-2026-dev.jpg" alt="Un desarrollador con auriculares trabajando frente a un monitor lleno de código en una sala oscura iluminada de azul" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>Un desarrollador frente a un monitor lleno de código — Docker permite que la misma app en contenedor pase de este portátil a un servidor sin sorpresas.</figcaption></figure>
+
+  <h2>Los conceptos clave</h2>
+  <ul>
+    <li><strong>Imagen</strong> — una plantilla de solo lectura que define qué hay dentro de un contenedor: las capas de SO, tu app y sus dependencias. Construyes una imagen una vez y lanzas muchos contenedores a partir de ella.</li>
+    <li><strong>Contenedor</strong> — una instancia en ejecución de una imagen. Es el proceso vivo y aislado; puedes iniciarlo, detenerlo y eliminarlo sin afectar a la imagen.</li>
+    <li><strong>Dockerfile</strong> — una receta en texto plano que enumera los pasos para construir una imagen (partir de una base, copiar tu código, instalar dependencias, fijar el comando de arranque). Hace los builds reproducibles.</li>
+    <li><strong>Registro</strong> — un almacén de imágenes. Docker Hub es el registro público más conocido; los equipos también gestionan privados. Haces <em>push</em> de las imágenes para compartirlas y <em>pull</em> para ejecutarlas.</li>
+    <li><strong>Volumen</strong> — almacenamiento que vive fuera del ciclo de vida del contenedor, para que los datos sobrevivan cuando se reemplaza un contenedor. Los contenedores son desechables; los volúmenes conservan lo que debe persistir.</li>
+  </ul>
+
+  <h2>Cómo es un flujo de trabajo típico</h2>
+  <p>Escribes un <code>Dockerfile</code>, lo construyes en una imagen, y ejecutas esa imagen como contenedor. En local quizá ejecutes un solo contenedor; en producción subes la imagen a un registro y la ejecutas en servidores. Como la imagen es el mismo artefacto en todas partes, la app que ejecutan tus compañeros y tus servidores es, byte a byte, la que probaste — que es justo el objetivo.</p>
+
+  <h2>Por qué importa Docker</h2>
+  <p>Hizo fáciles los entornos coherentes, y eso desbloqueó mucho: despliegues <a href="/es/e/blog/2026-06-18-grpc-vs-rest.html">de servicio a servicio</a> fiables, incorporación rápida (un comando en vez de una página de pasos de configuración), y la base de los pipelines <strong>CI/CD</strong> y los <strong>microservicios</strong>. Los contenedores son hoy la unidad de despliegue por defecto en la infraestructura moderna, por lo que todo el ecosistema — registros, orquestación, runtimes en la nube — habla «contenedor».</p>
+
+  <h2>Docker vs Kubernetes</h2>
+  <p>Se mencionan juntos a menudo pero resuelven problemas distintos. <strong>Docker</strong> construye y ejecuta contenedores individuales. <strong>Kubernetes</strong> es un orquestador: ejecuta y coordina muchos contenedores en muchas máquinas — los planifica, reinicia los que fallan, escala hacia arriba y hacia abajo, y los conecta en red. En resumen, Docker empaqueta y ejecuta un contenedor; Kubernetes gestiona una flota. Puedes usar Docker sin Kubernetes; Kubernetes ejecuta contenedores construidos según el mismo estándar que Docker popularizó.</p>
+
+  <h2>Las contrapartidas honestas</h2>
+  <p>Docker no carece de coste. Los contenedores comparten el núcleo anfitrión, así que no son una frontera de seguridad dura como lo es una VM — las cargas sensibles pueden seguir queriendo aislamiento de nivel VM. Las aplicaciones con estado (bases de datos, cualquier cosa con datos locales importantes) requieren un diseño cuidadoso de volúmenes y copias de seguridad, ya que los contenedores están pensados para ser desechables. Y hay una curva de aprendizaje: imágenes, redes y volúmenes llevan tiempo de asimilar. Para la mayoría de equipos, sin embargo, la coherencia y la rapidez compensan.</p>
+
+  <h2>FAQ</h2>
+  <p><strong>¿Es Docker una máquina virtual?</strong> No. Una VM emula un ordenador entero con su propio sistema operativo; un contenedor Docker comparte el núcleo del SO anfitrión y empaqueta solo la app y sus dependencias, lo que lo hace mucho más ligero y rápido de arrancar.</p>
+  <p><strong>¿Es Docker gratis?</strong> Docker Engine, la tecnología base, es de código abierto y gratuito. Docker también ofrece planes de pago para su app Desktop y servicios en organizaciones grandes, pero puedes construir y ejecutar contenedores sin pagar.</p>
+  <p><strong>¿Necesito Docker para usar Kubernetes?</strong> Docker el producto en concreto no, pero sí necesitas contenedores. Kubernetes orquesta contenedores construidos según estándares abiertos que Docker ayudó a establecer, así que las habilidades se transfieren directamente.</p>
+  <p><strong>¿Qué es un Dockerfile?</strong> Un archivo en texto plano con los pasos para construir una imagen — de qué base partir, qué código copiar, qué dependencias instalar, y el comando a ejecutar. Hace los builds de imagen reproducibles y revisables.</p>
+
+  <p>Los contenedores son la unidad sobre la que se construyen los despliegues; las apps que contienen suelen exponer una <a href="/es/e/blog/2026-06-14-what-is-an-api.html">API</a> y se escriben en un <a href="/es/e/blog/2026-06-18-what-is-an-ide.html">IDE</a>. Explora más explicaciones claras en nuestro <a href="/es/e/">índice de guías</a>.</p>
+
+  <h2>Preguntas frecuentes</h2>
+  <details><summary>¿Qué es Docker en términos sencillos?</summary><p>Docker es una herramienta que empaqueta una aplicación junto con todo lo que necesita para ejecutarse — código, bibliotecas, runtime y configuración — en una única unidad portátil llamada contenedor. Ese contenedor se ejecuta igual en cualquier máquina con Docker instalado, de modo que el software se comporta de forma idéntica en el portátil de un desarrollador y en un servidor de producción.</p></details>
+  <details><summary>¿Cuál es la diferencia entre un contenedor y una máquina virtual?</summary><p>Una máquina virtual emula un ordenador completo, incluido un sistema operativo entero, así que es grande (gigabytes) y lenta de arrancar pero muy aislada. Un contenedor comparte el núcleo del SO anfitrión y agrupa solo la app y sus dependencias, así que es pequeño (megabytes), arranca en segundos y es más eficiente, con un aislamiento bueno pero no absoluto. Muchos sistemas ejecutan contenedores dentro de VM para combinar ambos.</p></details>
+  <details><summary>¿Cuál es la diferencia entre Docker y Kubernetes?</summary><p>Docker construye y ejecuta contenedores individuales. Kubernetes es un sistema de orquestación que ejecuta y coordina muchos contenedores en muchas máquinas — planificación, escalado, reinicio y red. Docker gestiona un contenedor; Kubernetes gestiona una flota. Son complementarios, no competidores.</p></details>
+  <details><summary>¿Se sigue usando Docker en 2026?</summary><p>Sí. Los contenedores son la unidad estándar de despliegue en el software moderno, y el ecosistema — registros, pipelines CI/CD, runtimes en la nube y orquestadores como Kubernetes — está construido en torno al modelo de contenedor que Docker popularizó. El núcleo Docker Engine sigue siendo de código abierto y de uso amplio.</p></details>
+
+  <div class="note">Guía independiente, mantenida por la comunidad. <strong>coldwa.st</strong> es un sitio de recursos de programación; este artículo es un texto explicativo nuevo y original sobre Docker y los contenedores. Los ejemplos reflejan herramientas de uso amplio; verifica los detalles en la documentación oficial de Docker.</div>
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "¿Qué es Docker en términos sencillos?", "acceptedAnswer": { "@type": "Answer", "text": "Docker es una herramienta que empaqueta una aplicación junto con todo lo que necesita para ejecutarse — código, bibliotecas, runtime y configuración — en una única unidad portátil llamada contenedor. Ese contenedor se ejecuta igual en cualquier máquina con Docker instalado, de modo que el software se comporta de forma idéntica en un portátil y en un servidor de producción." } },
+      { "@type": "Question", "name": "¿Cuál es la diferencia entre un contenedor y una máquina virtual?", "acceptedAnswer": { "@type": "Answer", "text": "Una máquina virtual emula un ordenador completo con un sistema operativo entero: grande y lenta de arrancar pero muy aislada. Un contenedor comparte el núcleo del SO anfitrión y agrupa solo la app y sus dependencias: pequeño, arranca en segundos y más eficiente, con aislamiento bueno pero no absoluto." } },
+      { "@type": "Question", "name": "¿Cuál es la diferencia entre Docker y Kubernetes?", "acceptedAnswer": { "@type": "Answer", "text": "Docker construye y ejecuta contenedores individuales. Kubernetes orquesta muchos contenedores en muchas máquinas — planificación, escalado, reinicio y red. Docker gestiona un contenedor; Kubernetes gestiona una flota. Son complementarios." } },
+      { "@type": "Question", "name": "¿Se sigue usando Docker en 2026?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Los contenedores son la unidad estándar de despliegue en el software moderno, y el ecosistema — registros, CI/CD, runtimes en la nube y orquestadores como Kubernetes — está construido en torno al modelo de contenedor que Docker popularizó. El núcleo Docker Engine sigue siendo de código abierto y de uso amplio." } }
+    ]
+  })} />
+</Base>

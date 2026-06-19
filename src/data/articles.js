@@ -1,6 +1,16 @@
 // Auto-généré depuis src/pages/e/blog/*.astro — liste partagée home + archive (/blog). Trié date desc.
 export const articles = [
   {
+    "href": "/e/blog/2026-06-19-what-is-docker.html",
+    "title": "What Is Docker? Containers Explained Clearly (2026)",
+    "dek": "Docker packages an app and everything it needs into a container that runs the same on any machine. What Docker is, containers vs virtual machines, the key concepts (image, container, Dockerfile, registry), and Docker vs Kubernetes.",
+    "img": "/img/what-is-docker-2026.jpg",
+    "imgAlt": "A container ship loaded with stacked shipping containers at a port at night",
+    "date": "Jun 19, 2026",
+    "read": "8 min read",
+    "cats": "DevOps, Docker, Containers"
+  },
+  {
     "href": "/e/blog/2026-06-18-what-is-an-ide.html",
     "title": "What Is an IDE? Integrated Development Environments (2026)",
     "dek": "An IDE bundles a code editor, build tools, a debugger and version control into one app — so you write, run and fix code in one place. What an IDE includes, IDE vs editor, and how to pick one.",
