@@ -5,10 +5,12 @@
 import { guides, categories, guideTitle, guideDek, guideHref, catLabel, guideRead, guideCats } from '../data/guides.js';
 import { ui, localized } from '../i18n/ui.js';
 import { hasTx } from '../data/i18n-articles.js';
+import { ctaAngle } from '../data/cta-angle.js';
 
 interface Props { lang: 'fr' | 'es'; page?: number; pageSize?: number; }
 const { lang, page = 1, pageSize = 12 } = Astro.props as Props;
 const t = ui[lang];
+const homeCta = ctaAngle(lang, 'default'); // home = angle généraliste (pas Haskell)
 
 const stories = guides.filter((g) => hasTx(g.href, lang));
 const totalPages = Math.max(1, Math.ceil(stories.length / pageSize));
@@ -114,8 +116,8 @@ function catAvatar(cats=''){
     <aside class="side">
       <div class="affbox">
         <span class="tag">{t.reco}</span>
-        <h3>{t.aff_h}</h3>
-        <p>{t.aff_p}</p>
+        <h3>{homeCta.h}</h3>
+        <p>{homeCta.p}</p>
         <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">{t.aff_cta}</a>
         <p class="disc">{t.aff_disc}</p>
       </div>

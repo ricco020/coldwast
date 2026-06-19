@@ -10,6 +10,7 @@ const {
 } = Astro.props;
 import { guides, categories } from '../data/guides.js';
 import { ui, localized, LOCALES } from '../i18n/ui.js';
+import { ctaAngle } from '../data/cta-angle.js';
 const t = ui[lang] || ui.en;
 const SITE = 'https://coldwa.st';
 const canonical = SITE + path;
@@ -20,6 +21,8 @@ const isArticle = path.includes('/e/blog/');
 // "Keep reading" on FR/ES pages too (g.href is the EN canonical href).
 const canonPath = path.replace(/^\/(fr|es)(?=\/|$)/, '');
 const related = isArticle ? guides.filter((g) => g.href !== canonPath).slice(0, 4) : [];
+// CTA perso par contenu : angle déduit du sujet de la page (offre fixe Infomaniak).
+const cta = ctaAngle(lang, canonPath + ' ' + title);
 // Catbar: "All guides" + each category. SLUGS identical across locales; only
 // the LABEL and the locale prefix change.
 const cats = [
@@ -362,8 +365,8 @@ const alts = [
             <nav class="toc2" id="toc2" aria-label="On this page"></nav>
             <div class="affmini">
               <span class="tag">{t.reco}</span>
-              <h4 class="amh">{t.art_aff_h}</h4>
-              <p>{t.art_aff_p}</p>
+              <h4 class="amh">{cta.h}</h4>
+              <p>{cta.p}</p>
               <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">{t.aff_cta}</a>
               <p class="disc">{t.aff_disc}</p>
             </div>
