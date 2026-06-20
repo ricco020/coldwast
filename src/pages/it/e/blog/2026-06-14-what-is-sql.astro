@@ -1,0 +1,72 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/it/e/blog/2026-06-14-what-is-sql.html';
+const title = 'Cos’è l’SQL? Il linguaggio dei database, spiegato (2026)';
+const description = 'L’SQL è il linguaggio standard per memorizzare, interrogare e modificare i dati nei database relazionali. Cos’è l’SQL, i comandi chiave (SELECT, INSERT, UPDATE, DELETE), come funziona una query, SQL vs NoSQL e perché resta essenziale nel 2026.';
+---
+<Base title={title} description={description} path={path} type="article" lang="it"
+  image="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/it/">Home</a><span>/</span><a href="/it/e/">Guide</a><span>/</span>Cos’è l’SQL</nav>
+  <p class="kicker">Programmazione · dati · database</p>
+  <h1>Cos’è l’SQL?</h1>
+  <div class="artmeta"><span>Di Coldwast</span><span>Aggiornato il 14 giugno 2026</span><span>7 min di lettura</span><span class="tag">#sql</span><span class="tag">#databases</span><span class="tag">#data</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=1200&q=80&auto=format&fit=crop" alt="Codice sorgente colorato su un monitor" width="1200" height="420" loading="eager" />
+    <figcaption>Codice sorgente colorato su un monitor — l’SQL è un linguaggio di query che scrivi per chiedere a un database esattamente i dati che vuoi.</figcaption>
+  </figure>
+
+  <p>Dietro quasi ogni app, sito web e dashboard c’è un database — e il linguaggio usato per parlargli è, il più delle volte, l’<strong>SQL</strong>. È una colonna portante del software da cinquant’anni e resta una delle competenze più preziose che uno sviluppatore o un analista possa avere. Questa guida spiega cos’è l’SQL, i suoi comandi chiave, come funziona una query, il confronto con NoSQL e perché perdura.</p>
+
+  <h2>La definizione breve</h2>
+  <p><strong>L’SQL (Structured Query Language) è il linguaggio standard per memorizzare, recuperare e modificare dati in un database relazionale.</strong> Un database relazionale organizza i dati in <em>tabelle</em> — righe e colonne, come un foglio di calcolo — e l’SQL è il modo in cui poni domande a questi dati e li modifichi. Si pronuncia „esse-cu-elle“ o „sequel“, e anima database come PostgreSQL, MySQL, SQLite, SQL Server e Oracle.</p>
+
+  <h2>Tabelle, righe e colonne</h2>
+  <p>Il modello relazionale è semplice. Una tabella <code>users</code> può avere le colonne <code>id</code>, <code>name</code> e <code>age</code>; ogni <strong>riga</strong> è un utente. Le tabelle possono mettersi in relazione tra loro — una tabella <code>orders</code> può fare riferimento a un utente tramite il suo <code>id</code> — è da qui che viene il „relazionale“, ed è qui che si rivela la potenza dell’SQL nel combinare i dati.</p>
+
+  <h2>I comandi chiave</h2>
+  <p>L’essenziale del lavoro SQL usa quattro verbi, spesso chiamati CRUD (create, read, update, delete):</p>
+  <ul>
+    <li><strong>SELECT</strong> — leggere dati („dammi gli utenti con più di 18 anni“).</li>
+    <li><strong>INSERT</strong> — aggiungere una nuova riga.</li>
+    <li><strong>UPDATE</strong> — modificare righe esistenti.</li>
+    <li><strong>DELETE</strong> — eliminare righe.</li>
+  </ul>
+  <p>Una query di base si legge quasi come l’inglese:</p>
+  <pre><code>SELECT name, age
+FROM users
+WHERE age &gt;= 18
+ORDER BY age DESC;</code></pre>
+  <p>Questo chiede il nome e l’età di ogni utente di 18 anni o più, dal più recente al più vecchio. <code>WHERE</code> filtra le righe, <code>ORDER BY</code> le ordina, e puoi fare <code>JOIN</code> tra tabelle per combinare dati correlati in un unico risultato.</p>
+
+  <figure><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=crop" alt="Un portatile che mostra una dashboard di dati con grafici" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Una dashboard di dati — i grafici e le tabelle che vedi nelle app sono di solito costruiti a partire da query SQL eseguite su un database.</figcaption></figure>
+
+  <h2>Come viene eseguita davvero una query</h2>
+  <p>Scrivi <em>cosa</em> vuoi, non <em>come</em> ottenerlo — l’SQL è <strong>dichiarativo</strong>. Il <em>pianificatore di query</em> del database trova il modo più efficiente di recuperare il risultato, usando indici (strutture di ricerca rapida) per evitare di scorrere ogni riga. Questa separazione è gran parte della longevità dell’SQL: la stessa query continua a funzionare man mano che i dati crescono, mentre il database ottimizza l’esecuzione al di sotto.</p>
+
+  <h2>SQL vs NoSQL</h2>
+  <p>Sentirai contrapporre l’SQL ai database <strong>NoSQL</strong> (MongoDB, Redis, Cassandra e altri). I database SQL/relazionali impongono uno schema strutturato ed eccellono nelle query complesse e nella coerenza garantita (transazioni ACID). I database NoSQL allentano la struttura a favore della flessibilità e della scalabilità orizzontale — utili per volumi enormi o forme di dati in rapida evoluzione. Nessuno sostituisce l’altro: molti sistemi usano entrambi. Per dati strutturati con relazioni, l’SQL resta la scelta predefinita.</p>
+
+  <h2>Perché l’SQL conta ancora nel 2026</h2>
+  <ul>
+    <li><strong>È ovunque</strong> — i database relazionali fanno girare banche, negozi, app e analisi; l’SQL è la lingua comune tra loro.</li>
+    <li><strong>È una conoscenza portabile</strong> — il nucleo è standardizzato, quindi le competenze si trasferiscono tra PostgreSQL, MySQL, SQLite e il resto.</li>
+    <li><strong>Alimenta l’analisi</strong> — gli analisti di dati e gli strumenti di BI interrogano quotidianamente i data warehouse con l’SQL.</li>
+    <li><strong>È accessibile</strong> — le basi sono leggibili e puoi diventare produttivo in fretta.</li>
+  </ul>
+
+  <h2>I limiti onesti</h2>
+  <p>I dialetti SQL differiscono nei dettagli, così una query ottimizzata per un database può richiedere aggiustamenti su un altro. Query scritte male o indici mancanti possono essere lenti su tabelle di grandi dimensioni, e costruire stringhe SQL a partire da input non affidabili provoca l’<em>SQL injection</em> — una falla di sicurezza classica, evitata usando query parametrizzate. Nulla di tutto ciò intacca i fondamentali; è l’artigianato quotidiano del buon uso dell’SQL.</p>
+
+  <h2>FAQ</h2>
+  <p><strong>L’SQL è un linguaggio di programmazione?</strong> È un linguaggio dichiarativo specifico per un dominio, per lavorare con i dati — non un linguaggio generalista come Python. Descrivi i dati che vuoi e il database trova come ottenerli.</p>
+  <p><strong>Qual è la differenza tra SQL e MySQL?</strong> L’SQL è il linguaggio; MySQL (come PostgreSQL o SQLite) è un sistema di database con cui parli in SQL. Il linguaggio è condiviso; i sistemi differiscono per funzionalità e prestazioni.</p>
+  <p><strong>Mi serve l’SQL se uso un ORM?</strong> Gli ORM generano SQL per te, ma capire l’SQL resta essenziale per le prestazioni, il debug e le query complesse che l’ORM gestisce male.</p>
+  <p><strong>Vale ancora la pena imparare l’SQL nel 2026?</strong> Sì — resta una delle competenze più richieste e durature per sviluppatori, analisti e ingegneri dei dati, e i database relazionali non scompariranno tanto presto.</p>
+
+  <p>L’SQL interroga i dati; il <a href="/it/e/blog/2026-06-14-what-is-json.html">JSON</a> che un’<a href="/it/e/blog/2026-06-14-what-is-an-api.html">API</a> restituisce è spesso quegli stessi dati in viaggio verso un’app. Sfoglia altre spiegazioni chiare nel nostro <a href="/it/e/">indice delle guide</a>.</p>
+
+  <div class="note">Guida indipendente, mantenuta dalla comunità. <strong>coldwa.st</strong> è un sito di risorse di programmazione; questo articolo è uno scritto esplicativo nuovo e originale sull’SQL. Gli esempi usano SQL standard; verifica il comportamento specifico del tuo dialetto sulla documentazione del tuo database.</div>
+  </div>
+</Base>

@@ -1,0 +1,69 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/de/e/blog/2026-06-14-what-is-git.html';
+const title = 'Was ist Git? Versionskontrolle für Einsteiger erklärt (2026)';
+const description = 'Git ist ein verteiltes Versionskontrollsystem, das jede Änderung an deinem Code verfolgt, um zu verzweigen, zusammenzuführen, zusammenzuarbeiten und Änderungen rückgängig zu machen. Was Git ist, die Schlüsselkonzepte (Commit, Branch, Merge, Remote), warum es zählt und worin es sich von GitHub unterscheidet.';
+---
+<Base title={title} description={description} path={path} type="article" lang="de"
+  image="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/de/">Startseite</a><span>/</span><a href="/de/e/">Leitfäden</a><span>/</span>Was ist Git</nav>
+  <p class="kicker">Programmierung · Werkzeuge · Versionskontrolle</p>
+  <h1>Was ist Git?</h1>
+  <div class="artmeta"><span>Von Coldwast</span><span>Aktualisiert am 14. Juni 2026</span><span>7 Min. Lesezeit</span><span class="tag">#git</span><span class="tag">#tools</span><span class="tag">#workflow</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80&auto=format&fit=crop" alt="Zeilen Quellcode auf einem dunklen Bildschirm" width="1200" height="420" loading="eager" />
+    <figcaption>Zeilen Quellcode auf dem Bildschirm — Git zeichnet die vollständige Änderungshistorie eines Codes wie diesem auf.</figcaption>
+  </figure>
+
+  <p>Wenn du Code schreibst, begegnest du <strong>Git</strong> schon am ersten Tag. Es ist das Werkzeug, das nahezu jedes Softwareprojekt zur Verfolgung von Änderungen nutzt, und das Fundament unter GitHub, GitLab und dem modernen Entwicklungs-Workflow. Dieser Leitfaden erklärt, was Git ist, die Handvoll Konzepte, die es einleuchtend machen, warum es zählt und worin es sich von GitHub unterscheidet.</p>
+
+  <h2>Die kurze Definition</h2>
+  <p><strong>Git ist ein verteiltes Versionskontrollsystem: Es zeichnet die Änderungshistorie einer Reihe von Dateien auf, damit du sie nachvollziehen, verzweigen, zusammenführen, zusammenarbeiten und zurückgehen kannst.</strong> 2005 von Linus Torvalds zur Verwaltung des Linux-Kernels entwickelt, ist es heute der De-facto-Standard. „Verteilt“ bedeutet, dass jede Kopie des Projekts ihre vollständige Historie trägt — du kannst vollständig offline arbeiten, committen und die Historie einsehen.</p>
+
+  <h2>Die grundlegenden Konzepte</h2>
+  <ul>
+    <li><strong>Repository (Repo)</strong> — der Projektordner samt seiner gesamten Historie, gespeichert in einem versteckten Verzeichnis <code>.git</code>.</li>
+    <li><strong>Commit</strong> — eine gespeicherte Momentaufnahme deiner Dateien zu einem bestimmten Zeitpunkt, mit einer Nachricht, die die Änderung beschreibt. Die Historie ist eine Kette von Commits.</li>
+    <li><strong>Branch (Zweig)</strong> — ein beweglicher Zeiger, mit dem du eine Funktion isoliert entwickeln kannst, ohne die Hauptlinie (meist <code>main</code>) zu stören.</li>
+    <li><strong>Merge (Zusammenführen)</strong> — die Änderungen eines Branches in einen anderen kombinieren.</li>
+    <li><strong>Remote (entfernt)</strong> — eine geteilte Kopie des Repositories, die anderswo gehostet wird (z. B. auf GitHub), zu der du <code>push</code>st und von der du <code>pull</code>st.</li>
+  </ul>
+
+  <figure><img src="https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=1200&q=80&auto=format&fit=crop" alt="Eine Terminal-Eingabeaufforderung auf einem Bildschirm" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Eine Terminal-Eingabeaufforderung — Git wird meist über die Kommandozeile gesteuert, auch wenn Editoren und grafische Oberflächen es ebenfalls umhüllen.</figcaption></figure>
+
+  <h2>Der tägliche Workflow</h2>
+  <p>Die Schleife, die die meisten Entwickler dutzende Male am Tag durchlaufen:</p>
+  <pre><code>git clone &lt;url&gt;      # copy a repository locally
+# ...edit files...
+git add .            # stage the changes you want to save
+git commit -m "Add login form"   # save a snapshot with a message
+git push             # send your commits to the shared remote</code></pre>
+  <p>Um an etwas Neuem zu arbeiten, ohne die Hauptlinie zu beschädigen, verzweigst du: <code>git checkout -b my-feature</code>, committest dort und führst dann mit <code>git merge</code> (oft über einen Pull Request) zurück in <code>main</code> zusammen. Um die Arbeit anderer zu holen, machst du <code>git pull</code>.</p>
+
+  <h2>Warum Git zählt</h2>
+  <ul>
+    <li><strong>Historie und Rückgängigmachen</strong> — jede Änderung wird aufgezeichnet, du siehst also, wer was wann und warum geändert hat, und kannst einen Fehler zurücknehmen.</li>
+    <li><strong>Zusammenarbeit</strong> — viele Personen können parallel auf Branches am selben Projekt arbeiten und anschließend sicher zusammenführen.</li>
+    <li><strong>Sicheres Experimentieren</strong> — verzweige, probiere etwas aus, verwirf es, wenn es scheitert — die Hauptlinie bleibt unangetastet.</li>
+    <li><strong>Es ist überall</strong> — Open Source, Unternehmen, CI/CD-Pipelines und das Deployment setzen alle Git voraus.</li>
+  </ul>
+
+  <h2>Git vs. GitHub</h2>
+  <p>Die beiden werden ständig verwechselt. <strong>Git</strong> ist das Versionskontroll-Werkzeug, das auf deinem Rechner läuft. <strong>GitHub</strong> (wie GitLab oder Bitbucket) ist ein <em>Hosting-Dienst</em>, der Git-Repositories online speichert und Funktionen für die Zusammenarbeit ergänzt — Pull Requests, Issues, Zugriffskontrolle, CI. Du kannst Git ganz ohne GitHub-Konto nutzen; GitHub ist ein beliebter Ort, um ein Git-Remote abzulegen, nicht Git selbst.</p>
+
+  <h2>Die ehrliche Lernkurve</h2>
+  <p>Git ist mächtig, und sein Befehlssatz kann anfangs verwirrend wirken — Merges können in Konflikt geraten, und ein paar Befehle können die Historie auf eine Weise umschreiben, die Einsteiger überrascht. Die gute Nachricht: 90 % der täglichen Arbeit nutzen nur <code>clone</code>, <code>add</code>, <code>commit</code>, <code>push</code>, <code>pull</code> und <code>branch</code>. Beherrsche diese und lerne den Rest (rebase, stash, reset), wenn du ihn wirklich brauchst.</p>
+
+  <h2>FAQ</h2>
+  <p><strong>Ist Git dasselbe wie GitHub?</strong> Nein. Git ist die Versionskontroll-Software auf deinem Computer; GitHub ist ein Online-Dienst, der Git-Repositories hostet und Werkzeuge für die Zusammenarbeit ergänzt. Git funktioniert ohne GitHub.</p>
+  <p><strong>Was ist ein Commit?</strong> Eine gespeicherte Momentaufnahme deines Projekts zu einem bestimmten Zeitpunkt, mit einer Nachricht, die beschreibt, was sich geändert hat. Die Historie eines Projekts ist eine Folge von Commits.</p>
+  <p><strong>Muss man die Kommandozeile benutzen?</strong> Nein — Editoren (VS Code) und grafische Clients umhüllen Git, und die meisten <a href="/de/e/blog/2026-06-18-what-is-an-ide.html">IDEs</a> integrieren es — aber die Kommandozeile ist universell und lohnt sich zu lernen, da jedes Tutorial und jedes CI-System sie spricht.</p>
+  <p><strong>Was bedeutet „verteilt“?</strong> Jeder Klon eines Git-Repositories enthält die vollständige Historie, du kannst also offline committen, verzweigen und die Historie durchsehen. Es gibt keine einzelne zentrale Kopie, von der deine Arbeit abhängt.</p>
+
+  <p>Git verfolgt den Code; <a href="/de/e/blog/2026-06-14-what-is-an-algorithm.html">Algorithmen</a> und <a href="/de/e/blog/2026-06-14-what-is-an-api.html">APIs</a> sind das, was dieser Code ausdrückt. Stöbere durch weitere klare Erklärungen in unserem <a href="/de/e/">Leitfaden-Index</a>.</p>
+
+  <div class="note">Unabhängiger, von der Community gepflegter Leitfaden. <strong>coldwa.st</strong> ist eine Website mit Programmierressourcen; dieser Artikel ist ein neuer, eigenständiger erklärender Text über Git. Die Befehle entsprechen dem Standardverhalten von Git — prüfe Details und Sonderfälle in der offiziellen Git-Dokumentation.</div>
+  </div>
+</Base>

@@ -1,0 +1,30 @@
+---
+import Base from '../../layouts/Base.astro';
+import { localized } from '../../i18n/ui.js';
+const lang = 'pt';
+---
+<Base title="Sobre & política editorial — Coldwast" description="O que é o Coldwast, como trata a história do domínio e a sua política de honestidade editorial." path="/pt/about.html" lang={lang}>
+  <div class="reading">
+  <p class="kicker" style="margin-top:30px">Coldwast</p>
+  <h1>Sobre & política editorial</h1>
+
+  <h2>O que é este site</h2>
+  <p>O Coldwast é uma coleção independente de guias de programação originais e atualizados regularmente. O foco atual é a toolchain de build do Haskell e do Cabal, que se ampliará com o tempo para todo o stack do desenvolvedor — desempenho de builds, ferramentas e deployment.</p>
+
+  <h2>Sobre a história deste domínio</h2>
+  <p>O domínio <code>coldwa.st</code> hospedava antes um blog pessoal dedicado a Haskell. Aquele site já não existe; o domínio foi adquirido após a sua expiração e é agora um projeto independente de recursos de programação, sob uma direção editorial nova e distinta.</p>
+  <p>Como o domínio esteve historicamente associado a textos de qualidade sobre Haskell/Cabal, continuamos a publicar sobre esses temas — mas os guias aqui são <strong>obras novas e originais</strong>, reescritas para a toolchain atual e mantidas pela equipe editorial do Coldwast. <strong>Não</strong> são escritos, assinados nem afiliados pelo antigo proprietário do domínio, e nenhum conteúdo anterior é reproduzido. Quando um guia atualiza um tema que o domínio cobria outrora, ele o diz com clareza.</p>
+
+  <h2>Honestidade editorial</h2>
+  <ul>
+    <li>Nenhum benchmark, avaliação, depoimento ou alegação de «usado por» inventados. As afirmações técnicas descrevem o comportamento documentado e verificável das ferramentas.</li>
+    <li>Nenhuma usurpação de identidade. A autoria é da equipe independente Coldwast, nunca uma pessoa à qual o domínio esteve outrora ligado.</li>
+    <li>Os guias são datados e trazem uma data de «última atualização»; os fatos da toolchain que mudaram desde a época original são assinalados com o seu estado atual.</li>
+  </ul>
+
+  <h2>Divulgação de afiliação</h2>
+  <p>Alguns guias futuros (hospedagem, deployment, recursos de aprendizagem, ferramentas) podem conter links de afiliados. Quando for o caso, será indicado na página, os links usarão <code>rel="sponsored"</code>, e as recomendações refletirão mérito técnico real — nunca uma colocação paga que distorça o conselho. Nenhuma relação de afiliação influencia o conteúdo técnico.</p>
+
+  <p class="meta"><a href={localized('/e/', lang)}>Todos os guias</a> · <a href="/e/rss.xml">RSS</a></p>
+  </div>
+</Base>

@@ -1,0 +1,60 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/pt/e/blog/2026-06-14-haskell-list-comprehensions.html';
+const title = 'As list comprehensions em Haskell, explicadas (2026)';
+const description = 'Uma list comprehension constrói uma lista a partir de um ou mais geradores com guardas opcionais — concisa, legível e próxima da notação matemática por compreensão. A sintaxe, os geradores múltiplos, as guardas e a sua relação com map e filter.';
+---
+<Base title={title} description={description} path={path} type="article" lang="pt"
+  image="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/pt/">Início</a><span>/</span><a href="/pt/e/">Guias</a><span>/</span>List comprehensions</nav>
+  <p class="kicker">Haskell · sintaxe · listas</p>
+  <h1>As list comprehensions em Haskell, explicadas</h1>
+  <div class="artmeta"><span>Por Coldwast</span><span>Atualizado a 14 de junho de 2026</span><span>6 min de leitura</span><span class="tag">#haskell</span><span class="tag">#lists</span><span class="tag">#syntax</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=1200&q=80&auto=format&fit=crop" alt="Código-fonte num ecrã" width="1200" height="420" loading="eager" />
+    <figcaption>Código-fonte num ecrã — as list comprehensions são uma forma concisa de construir listas em código.</figcaption>
+  </figure>
+
+  <p>Uma das primeiras coisas que tornam Haskell elegante é a <strong>list comprehension</strong>: uma forma concisa de construir uma nova lista a partir de listas existentes, espelhando a notação matemática por compreensão de que talvez se lembre da escola. Este guia explica a sintaxe, os geradores múltiplos, as guardas e a relação entre as comprehensions e <code>map</code> e <code>filter</code>.</p>
+
+  <h2>A sintaxe básica</h2>
+  <p>Uma list comprehension tem a forma <code>[ output | generator, condition ]</code>. Leia a barra como «tal que»:</p>
+  <pre><code>-- the squares of 1 to 10
+squares = [x*x | x &lt;- [1..10]]
+-- [1,4,9,16,25,36,49,64,81,100]</code></pre>
+  <p>Aqui <code>x &lt;- [1..10]</code> é um <strong>gerador</strong>: extrai cada <code>x</code> da lista <code>[1..10]</code>, e a parte antes da barra, <code>x*x</code>, é a <strong>expressão de saída</strong> aplicada a cada elemento.</p>
+
+  <h2>Adicionar guardas (filtragem)</h2>
+  <figure><img src="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80&auto=format&fit=crop" alt="Linhas de código-fonte num ecrã escuro" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Linhas de código no ecrã — uma guarda conserva apenas os elementos que satisfazem uma condição.</figcaption></figure>
+  <p>Uma <strong>guarda</strong> é uma condição booleana que conserva apenas os elementos que a satisfazem:</p>
+  <pre><code>-- even numbers from 1 to 20, doubled
+result = [x*2 | x &lt;- [1..20], even x]
+-- [4,8,12,16,20,24,28,32,36,40]</code></pre>
+  <p>Pode combinar várias guardas, separadas por vírgulas; todas têm de ser verdadeiras para que um elemento seja incluído.</p>
+
+  <h2>Geradores múltiplos</h2>
+  <p>Com mais do que um gerador, a comprehension itera sobre cada combinação (como ciclos aninhados), por ordem:</p>
+  <pre><code>-- all pairs from two small lists
+pairs = [(x, y) | x &lt;- [1,2,3], y &lt;- [&#39;a&#39;,&#39;b&#39;]]
+-- [(1,'a'),(1,'b'),(2,'a'),(2,'b'),(3,'a'),(3,'b')]</code></pre>
+  <p>O gerador mais à direita varia mais depressa. Também pode fazer um gerador posterior depender de um anterior — por exemplo, extraindo <code>y</code> de <code>[x..10]</code>.</p>
+
+  <h2>A sua relação com map e filter</h2>
+  <p>Uma comprehension é essencialmente <code>map</code> e <code>filter</code> numa única forma legível. Estes são equivalentes:</p>
+  <pre><code>[x*2 | x &lt;- xs, even x]
+map (*2) (filter even xs)</code></pre>
+  <p>Use o que se ler melhor em cada caso. As comprehensions brilham quando tem vários geradores ou várias guardas; <code>map</code>/<code>filter</code> compõem-se bem em pipelines point-free. Como Haskell é <a href="/pt/e/blog/2026-06-14-lazy-evaluation-haskell.html">preguiçoso</a>, uma comprehension sobre uma lista infinita como <code>[1..]</code> só calcula os elementos que de facto consome.</p>
+
+  <h2>FAQ</h2>
+  <p><strong>O que é um gerador numa list comprehension?</strong> A parte <code>x &lt;- xs</code>: extrai cada valor de <code>x</code> da lista <code>xs</code> para alimentar a expressão de saída.</p>
+  <p><strong>O que é uma guarda?</strong> Uma condição booleana (como <code>even x</code>) colocada depois de uma vírgula; só se conservam os elementos para os quais é verdadeira.</p>
+  <p><strong>Posso usar vários geradores?</strong> Sim — a comprehension produz cada combinação, com o gerador mais à direita a variar mais depressa, como ciclos aninhados.</p>
+  <p><strong>As comprehensions são apenas map e filter?</strong> Conceptualmente sim para os casos simples; as comprehensions são muitas vezes mais legíveis com vários geradores ou guardas, ao passo que map/filter se compõem bem em pipelines.</p>
+
+  <p>Para a linguagem por trás da sintaxe, veja <a href="/pt/e/blog/2026-06-14-what-is-haskell.html">o que é Haskell</a>; as comprehensions são uma das funcionalidades que o tornam conciso e expressivo.</p>
+
+  <div class="note">Guia independente, mantido pela comunidade. <strong>coldwa.st</strong> é um site de recursos de programação; este artigo é um texto explicativo novo e original sobre as list comprehensions em Haskell, sem afiliação com os maintainers da linguagem. O código reflete o comportamento padrão de Haskell/GHC — confirme com a documentação atual do GHC.</div>
+  </div>
+</Base>

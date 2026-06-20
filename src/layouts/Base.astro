@@ -8,7 +8,7 @@ const {
   image = 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&q=80&auto=format&fit=crop',
   datePublished, dateModified, type = 'website', lang = 'en',
 } = Astro.props;
-import { guides, categories } from '../data/guides.js';
+import { guides, categories, guideTitle, catLabel } from '../data/guides.js';
 import { ui, localized, LOCALES } from '../i18n/ui.js';
 import { ctaAngle } from '../data/cta-angle.js';
 const t = ui[lang] || ui.en;
@@ -19,7 +19,7 @@ const year = 2026;
 const isArticle = path.includes('/e/blog/');
 // Canonical (locale-stripped) path so the current article is excluded from
 // "Keep reading" on FR/ES pages too (g.href is the EN canonical href).
-const canonPath = path.replace(/^\/(fr|es)(?=\/|$)/, '');
+const canonPath = path.replace(/^\/(fr|es|de|it|pt)(?=\/|$)/, '');
 const related = isArticle ? guides.filter((g) => g.href !== canonPath).slice(0, 4) : [];
 // CTA perso par contenu : angle déduit du sujet de la page (offre fixe Infomaniak).
 const cta = ctaAngle(lang, canonPath + ' ' + title);
@@ -28,21 +28,19 @@ const cta = ctaAngle(lang, canonPath + ' ' + title);
 const cats = [
   { l: t.all_guides, h: '/e/' },
   ...categories.map((c) => ({
-    l: (lang === 'fr' && c.label_fr) || (lang === 'es' && c.label_es) || c.label,
+    l: catLabel(c, lang),
     h: `/e/c/${c.slug}.html`,
   })),
 ];
 const cur = path;
 // Root-relative path stripped of any /fr or /es prefix → used for the language
 // switcher and hreflang alternates.
-const rootPath = path.replace(/^\/(fr|es)(?=\/|$)/, '') || '/';
+const rootPath = path.replace(/^\/(fr|es|de|it|pt)(?=\/|$)/, '') || '/';
 const switcher = LOCALES.map((l) => ({
   code: l, label: l.toUpperCase(), href: localized(rootPath, l), on: l === lang,
 }));
 const alts = [
-  { hl: 'en', href: SITE + localized(rootPath, 'en') },
-  { hl: 'fr', href: SITE + localized(rootPath, 'fr') },
-  { hl: 'es', href: SITE + localized(rootPath, 'es') },
+  ...LOCALES.map((l) => ({ hl: l, href: SITE + localized(rootPath, l) })),
   { hl: 'x-default', href: SITE + localized(rootPath, 'en') },
 ];
 ---
@@ -374,14 +372,14 @@ const alts = [
               <h4>{t.keep_reading}</h4>
               <ul>
                 {related.map((g) => (
-                  <li><a href={localized(g.href, lang)}><span class="rt" set:html={(lang==='fr'&&g.title_fr)||(lang==='es'&&g.title_es)||g.title} /></a></li>
+                  <li><a href={localized(g.href, lang)}><span class="rt" set:html={guideTitle(g, lang)} /></a></li>
                 ))}
               </ul>
             </div>
             <div class="sidebox topicmini">
               <h4>{t.browse_topic}</h4>
               <div class="chiprow">
-                {categories.map((c) => <a class="chip" href={localized(`/e/c/${c.slug}.html`, lang)}>{(lang==='fr'&&c.label_fr)||(lang==='es'&&c.label_es)||c.label}</a>)}
+                {categories.map((c) => <a class="chip" href={localized(`/e/c/${c.slug}.html`, lang)}>{catLabel(c, lang)}</a>)}
               </div>
             </div>
           </div>

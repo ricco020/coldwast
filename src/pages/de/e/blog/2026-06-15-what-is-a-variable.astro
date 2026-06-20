@@ -1,0 +1,59 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/de/e/blog/2026-06-15-what-is-a-variable.html';
+const title = 'Was ist eine Variable in der Programmierung? (2026)';
+const description = 'Eine Variable ist ein benannter Behälter, der einen Wert enthält, den dein Programm lesen und ändern kann. Was eine Variable ist, wie man sie deklariert und zuweist, Typen und Gültigkeitsbereich, Konstanten vs. Variablen und warum sie die Bausteine jedes Programms sind.';
+---
+<Base title={title} description={description} path={path} type="article" lang="de"
+  image="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-15" dateModified="2026-06-15">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/de/">Startseite</a><span>/</span><a href="/de/e/">Leitfäden</a><span>/</span>Was ist eine Variable</nav>
+  <p class="kicker">Programmierung · Grundlagen · Konzepte</p>
+  <h1>Was ist eine Variable?</h1>
+  <div class="artmeta"><span>Von Coldwast</span><span>Aktualisiert am 15. Juni 2026</span><span>6 Min. Lesezeit</span><span class="tag">#variables</span><span class="tag">#basics</span><span class="tag">#concepts</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80&auto=format&fit=crop" alt="Code auf einem Computerbildschirm" width="1200" height="420" loading="eager" />
+    <figcaption>Code auf einem Bildschirm — Variablen sind die benannten Werte, die ein Code wie dieser speichert, liest und ändert.</figcaption>
+  </figure>
+
+  <p>Schreibst du auch nur eine einzige Codezeile, benutzt du eine <strong>Variable</strong>. Es ist das erste Konzept, das jedes Programmiertutorial vorstellt, und eines der wenigen, das in jeder jemals geschaffenen Sprache existiert. Dieser Leitfaden erklärt, was eine Variable ist, wie man eine erstellt und benutzt, Typen und Gültigkeitsbereich, den Unterschied zu einer Konstanten und warum sie das Fundament jeder Programmierung sind.</p>
+
+  <h2>Die kurze Definition</h2>
+  <p><strong>Eine Variable ist ein benannter Behälter, der einen Wert enthält, den dein Programm lesen und ändern kann.</strong> Das klassische Bild ist eine beschriftete Schachtel: der <em>Name</em> ist die Beschriftung und der <em>Wert</em> ist das, was drin ist. Du legst einen Wert hinein, benennst ihn später über seinen Namen und kannst ihn während der Programmausführung durch einen neuen Wert ersetzen.</p>
+
+  <h2>Deklarieren und zuweisen</h2>
+  <p>Du <strong>deklarierst</strong> eine Variable (du erstellst sie, gibst ihr einen Namen) und <strong>weist</strong> ihr einen Wert zu. In den meisten Sprachen sieht das so aus:</p>
+  <pre><code>age = 30            # Name: age, Wert: 30
+name = "Ada"        # ein Stück Text
+age = 31            # Neuzuweisung — die Schachtel enthält jetzt 31</code></pre>
+  <p>Nach <code>age = 31</code> ist der alte Wert verschwunden und <code>age</code> verweist auf <code>31</code>. Genau diese Fähigkeit, sich im Laufe der Zeit zu <em>ändern</em>, macht sie „variabel“ — im Gegensatz zu einer festen Konstanten.</p>
+
+  <h2>Die Werttypen</h2>
+  <p>Eine Variable enthält einen Wert, und Werte haben <strong>Typen</strong>: eine Zahl (<code>30</code>), eine Zeichenkette (<code>&quot;Ada&quot;</code>), einen Booleschen Wert (<code>true</code> / <code>false</code>) oder komplexere Dinge wie Listen und Objekte. Manche Sprachen sind <em>statisch typisiert</em> (du deklarierst den Typ, der vor der Ausführung geprüft wird — wie Haskell oder Rust); andere sind <em>dynamisch typisiert</em> (der Typ reist mit dem Wert zur Laufzeit — wie Python oder JavaScript).</p>
+
+  <figure><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80&auto=format&fit=crop" alt="Ein offener Laptop, der Code auf einem Schreibtisch anzeigt" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Ein Laptop, der Code anzeigt — jeder benannte Wert, den du in einem Programm siehst, von einem Zähler bis zu einem Benutzernamen, ist eine Variable.</figcaption></figure>
+
+  <h2>Der Gültigkeitsbereich: wo eine Variable lebt</h2>
+  <p>Der <strong>Gültigkeitsbereich</strong> ist der Codebereich, in dem eine Variable existiert und benutzt werden kann. Eine in einer Funktion deklarierte Variable ist meist <em>lokal</em> — sie existiert nur, solange diese Funktion läuft, und Code an anderer Stelle kann sie nicht sehen. Eine auf oberster Ebene deklarierte Variable kann <em>global</em> sein, im ganzen Programm sichtbar. Variablen im kleinstmöglichen Gültigkeitsbereich zu halten, ist eine wesentliche Gewohnheit: Sie vermeidet versehentliche Konflikte und macht den Code leichter nachvollziehbar.</p>
+
+  <h2>Variablen vs. Konstanten</h2>
+  <p>Eine <strong>Konstante</strong> ist wie eine Variable, deren Wert sich nach der Festlegung nicht mehr ändern soll — nützlich für Dinge, die unverändert bleiben müssen, wie ein Mehrwertsteuersatz oder die Anzahl der Tage in einer Woche. Viele Sprachen haben dafür ein Schlüsselwort (<code>const</code>, <code>final</code>, <code>val</code>). Eine Konstante zu verwenden, wenn sich ein Wert nicht ändern wird, signalisiert die Absicht und lässt die Sprache versehentliche Neuzuweisungen abfangen.</p>
+
+  <h2>Warum Variablen wichtig sind</h2>
+  <p>Variablen ermöglichen es einem Programm, <strong>Daten zu behalten und zu manipulieren</strong>, statt nur feste Werte zu verarbeiten. Sie enthalten die Eingabe des Nutzers, eine laufende Summe, den aktuellen Zustand eines Spiels, das Ergebnis einer Berechnung. Kombiniere Variablen mit Logik und du hast einen <a href="/de/e/blog/2026-06-14-what-is-an-algorithm.html">Algorithmus</a>; kombiniere Algorithmen mit Daten und du hast ein Programm. Alles beginnt mit dieser kleinen Idee: ein Name, der einen Wert repräsentiert.</p>
+
+  <h2>Zwei ehrliche Stolperfallen</h2>
+  <p>Zwei Dinge bringen Anfänger ins Straucheln. Erstens die <strong>Benennung</strong>: ein guter Variablenname (<code>benutzerAlter</code>, nicht <code>x</code>) macht den Code lesbar; vage Namen sind eine häufige Quelle von Verwirrung. Zweitens die <strong>Mutationsüberraschungen</strong>: wenn eine Variable einen komplexen Wert wie eine Liste enthält, können zwei Namen auf <em>dieselben</em> zugrunde liegenden Daten zeigen, sodass das Ändern des einen das andere zu ändern scheint. Zu verstehen, wann eine Variable einen Wert oder eine Referenz auf gemeinsam genutzte Daten enthält, erspart viel Fehlersuche.</p>
+
+  <h2>FAQ</h2>
+  <p><strong>Was ist eine Variable, einfach gesagt?</strong> Eine benannte Schachtel, die einen Wert speichert, den dein Programm später lesen und ändern kann, indem es ihn über seinen Namen anspricht.</p>
+  <p><strong>Was ist der Unterschied zwischen einer Variablen und einer Konstanten?</strong> Der Wert einer Variablen kann sich während der Ausführung ändern; der einer Konstanten ist nach der Festlegung fest. Verwende eine Konstante, wenn sich der Wert nicht ändern soll.</p>
+  <p><strong>Was ist der Typ einer Variablen?</strong> Die Art des Werts, den sie enthält — Zahl, Text (Zeichenkette), Boolescher Wert, Liste, Objekt usw. Manche Sprachen prüfen die Typen vor der Ausführung; andere verfolgen sie zur Laufzeit.</p>
+  <p><strong>Was ist der Gültigkeitsbereich einer Variablen?</strong> Der Teil des Codes, in dem die Variable existiert und benutzt werden kann — meist lokal (in einer Funktion) oder global (im ganzen Programm). Ein kleinerer Gültigkeitsbereich ist in der Regel vorzuziehen.</p>
+
+  <p>Variablen sind die Daten; die schrittweise Logik, die sie nutzt, ist ein <a href="/de/e/blog/2026-06-14-what-is-an-algorithm.html">Algorithmus</a>. Stöbere durch weitere klare Erklärungen in unserem <a href="/de/e/">Leitfaden-Index</a>.</p>
+
+  <div class="note">Unabhängiger, von der Community gepflegter Leitfaden. <strong>coldwa.st</strong> ist eine Website mit Programmierressourcen; dieser Artikel ist ein neuer, eigenständiger erklärender Text über Variablen. Die Syntax variiert je nach Sprache; prüfen Sie die Details in der Dokumentation Ihrer Sprache.</div>
+  </div>
+</Base>

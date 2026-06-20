@@ -1,0 +1,62 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/pt/e/blog/2026-06-14-haskell-monads.html';
+const title = 'As monades em Haskell, explicadas sem o jargão (2026)';
+const description = 'Uma monade em Haskell é um tipo que sequencia cálculos que transportam um contexto — Maybe, Either, IO, listas. O que é realmente uma monade, o bind (>>=) e o return, a do-notation e as monades mais comuns, explicadas de forma simples.';
+---
+<Base title={title} description={description} path={path} type="article" lang="pt"
+  image="https://images.unsplash.com/photo-1613068687893-5e85b4638b56?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/pt/">Início</a><span>/</span><a href="/pt/e/">Guias</a><span>/</span>Monades em Haskell</nav>
+  <p class="kicker">Haskell · conceitos · monades</p>
+  <h1>As monades em Haskell, explicadas sem o jargão</h1>
+  <div class="artmeta"><span>Por Coldwast</span><span>Atualizado a 14 de junho de 2026</span><span>8 min de leitura</span><span class="tag">#haskell</span><span class="tag">#monads</span><span class="tag">#concepts</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.unsplash.com/photo-1613068687893-5e85b4638b56?w=1200&q=80&auto=format&fit=crop" alt="Código-fonte num ecrã escuro" width="1200" height="420" loading="eager" />
+    <figcaption>Código-fonte num ecrã escuro — as monades são um padrão que se escreve diretamente em código como este.</figcaption>
+  </figure>
+
+  <p>«Monade» tem uma reputação assustadora que não merece. Despida do jargão, uma <strong>monade</strong> em Haskell é simplesmente um tipo que lhe permite <strong>sequenciar cálculos que transportam um certo contexto</strong> — uma possível falha, um efeito secundário, vários resultados — sem escrever a canalização à mão de cada vez. Este guia explica o que é realmente uma monade, as duas operações que a definem, a do-notation e as monades do dia a dia que já utiliza.</p>
+
+  <h2>A ideia numa frase</h2>
+  <p>Uma monade é um tipo dotado de uma forma de <strong>encadear passos</strong> em que cada passo depende do resultado do anterior, e em que o «contexto» (falha, efeitos, não-determinismo) é propagado automaticamente. É tudo. Os famosos tipos <code>Maybe</code>, <code>Either</code>, <code>IO</code> e lista são todos monades porque cada um define este encadeamento para o seu próprio tipo de contexto.</p>
+
+  <h2>As duas operações</h2>
+  <p>A typeclass <code>Monad</code> é definida por duas funções:</p>
+  <pre><code>return :: a -> m a          -- wrap a plain value into the monad
+(>>=)  :: m a -> (a -> m b) -> m b   -- "bind": feed the result into the next step</code></pre>
+  <p><code>&gt;&gt;=</code> (que se pronuncia «bind») é o seu cerne: recebe um valor <em>em contexto</em> e uma função que produz o valor seguinte <em>em contexto</em>, e junta-os — gerindo o contexto por si.</p>
+
+  <h2>do-notation: a mesma coisa, de forma legível</h2>
+  <figure><img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80&auto=format&fit=crop" alt="Código-fonte num ecrã de computador" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Código-fonte no ecrã — a do-notation é açúcar sintático por cima do operador bind.</figcaption></figure>
+  <p>Os blocos <code>do</code> são apenas açúcar por cima de <code>&gt;&gt;=</code>. Estes são equivalentes:</p>
+  <pre><code>-- with bind
+getLine >>= \name -> putStrLn ("Hi " ++ name)
+
+-- with do-notation
+do name <- getLine
+   putStrLn ("Hi " ++ name)</code></pre>
+  <p>A do-notation permite-lhe escrever código sequenciado que transporta contexto e que <em>se lê</em> como passos imperativos, mantendo-se puramente funcional.</p>
+
+  <h2>As monades que já utiliza</h2>
+  <ul>
+    <li><strong><code>Maybe</code></strong> — o contexto é «pode estar ausente». O bind faz curto-circuito em <code>Nothing</code>, por isso encadeia pesquisas sem verificações de null aninhadas.</li>
+    <li><strong><code>Either</code></strong> — o contexto é «pode falhar com um erro». Como <code>Maybe</code>, mas transporta a razão da falha.</li>
+    <li><strong><code>IO</code></strong> — o contexto é «executa efeitos secundários». A monade IO é a forma como Haskell sequencia efeitos mantendo-se puro; <code>main :: IO ()</code> é o ponto de entrada.</li>
+    <li><strong>Lista (<code>[]</code>)</strong> — o contexto é «vários resultados». O bind explora cada combinação (não-determinismo).</li>
+  </ul>
+  <p>Utiliza monades desde o seu primeiro <code>main</code> — IO é uma delas.</p>
+
+  <h2>Por que as monades importam</h2>
+  <p>Permitem-lhe abstrair a <em>canalização</em> do tratamento de falhas, dos efeitos e da sequenciação num padrão reutilizável, para que o mesmo código em estilo <code>do</code> funcione em contextos muito diferentes. É por isso que Haskell consegue manter <code>IO</code> separado e explícito mantendo-se ergonómico. Para executar tudo isto, precisa da toolchain — veja <a href="/pt/e/blog/2026-06-14-ghcup-install-haskell.html">instalar Haskell com o GHCup</a> e o <a href="/pt/e/blog/2026-06-14-ghc-compiler-guide.html">guia do compilador GHC</a>, e experimente os exemplos ao vivo no GHCi.</p>
+
+  <h2>FAQ</h2>
+  <p><strong>O que é uma monade em termos simples?</strong> Um tipo que lhe permite encadear cálculos que transportam um contexto (falha, efeitos, vários resultados), propagando esse contexto automaticamente através do operador bind.</p>
+  <p><strong>IO é uma monade?</strong> Sim — IO é a monade que Haskell usa para sequenciar efeitos secundários mantendo-se puro. O seu <code>main</code> é executado dentro dela.</p>
+  <p><strong>É preciso compreender a teoria das categorias?</strong> Não. Pode usar as monades de forma produtiva em Haskell conhecendo apenas <code>return</code>, <code>&gt;&gt;=</code> e a do-notation; a teoria é opcional.</p>
+  <p><strong>Qual é a diferença entre Maybe e Either?</strong> Ambas modelam uma possível falha; <code>Maybe</code> diz apenas «ausente» (<code>Nothing</code>), enquanto <code>Either</code> transporta um valor de erro que explica a falha.</p>
+
+  <div class="note">Guia independente, mantido pela comunidade. <strong>coldwa.st</strong> é um site de recursos de programação; este artigo é um texto explicativo novo e original sobre as monades em Haskell, sem afiliação com qualquer projeto nem redigido por ele. O código reflete o comportamento padrão de Haskell — confirme com a documentação atual do GHC.</div>
+  </div>
+</Base>

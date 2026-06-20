@@ -1,0 +1,65 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/de/e/blog/2026-06-14-haskell-language-server.html';
+const title = 'Haskell Language Server (HLS) im Jahr 2026: Installation, Editoren und häufige Korrekturen';
+const description = 'Ein praktischer Leitfaden 2026 zum Haskell Language Server: was HLS leistet, ihn mit GHCup installieren, in VS Code und Neovim einbinden, auf Ihre GHC-Version abstimmen und die häufigsten Fehler beheben.';
+---
+<Base title={title} description={description} path={path} type="article" lang="de"
+  image="https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/de/">Startseite</a><span>/</span><a href="/de/e/">Leitfäden</a><span>/</span>Haskell Language Server</nav>
+  <p class="kicker">Haskell · Werkzeuge · Editor</p>
+  <h1>Haskell Language Server (HLS) im Jahr 2026: Installation und häufige Korrekturen</h1>
+  <div class="artmeta"><span>Von Coldwast</span><span>Aktualisiert am 14. Juni 2026</span><span>7 Min. Lesezeit</span><span class="tag">#haskell</span><span class="tag">#hls</span><span class="tag">#editor</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=1200&q=80&auto=format&fit=crop" alt="In einem Code-Editor geöffneter Quellcode" width="1200" height="420" loading="eager" />
+    <figcaption>HLS bringt IDE-Funktionen — Typen, Vervollständigung, Refactorings — in jeden Editor, der LSP spricht.</figcaption>
+  </figure>
+
+  <p>Haskell ohne IDE-Backend zu schreiben heißt, nach jeder Kompilierung die Augen über Typfehler zusammenzukneifen. Der <strong>Haskell Language Server (HLS)</strong> behebt das: Er implementiert das Language Server Protocol (LSP) und liefert Ihnen Inline-Typen, Autovervollständigung, Gehe-zu-Definition, Hover-Dokumentation und Refactorings in VS Code, Neovim und anderen Editoren. Dieser Leitfaden behandelt, was HLS ist, wie man ihn 2026 sauber installiert, in den Editor einbindet und die Handvoll Fehler, über die Leute stolpern.</p>
+
+  <h2>Was HLS tatsächlich leistet</h2>
+  <p>HLS ist ein einzelner Server, mit dem Editoren über LSP sprechen. Er bietet:</p>
+  <ul>
+    <li><strong>Typinformationen</strong> beim Hover und inline.</li>
+    <li><strong>Autovervollständigung</strong> und Import-Vorschläge.</li>
+    <li><strong>Gehe-zu-Definition</strong>, Referenzsuche und Dokumentsymbole.</li>
+    <li><strong>Code-Aktionen</strong>: fehlenden Import hinzufügen, eine Typsignatur ausfüllen, einen Hinweis anwenden.</li>
+    <li><strong>Linting</strong> über die integrierten hlint-Vorschläge.</li>
+  </ul>
+  <p>Weil er LSP spricht, versorgt derselbe Server jeden Editor — Sie installieren HLS einmal und wählen ein Client-Plugin.</p>
+
+  <h2>HLS mit GHCup installieren</h2>
+  <p>Der saubere Weg führt über denselben Toolchain-Verwalter, den Sie für den Compiler nutzen. Wenn Sie die Toolchain noch nicht eingerichtet haben, beginnen Sie mit unserem <a href="/de/e/blog/2026-06-14-ghcup-install-haskell.html">Leitfaden zur GHCup-Installation</a> und fügen Sie dann HLS hinzu:</p>
+  <pre><code>ghcup install hls recommended
+ghcup set hls recommended</code></pre>
+  <p>Die wichtigste Regel: <strong>HLS muss Ihre aktive GHC-Version unterstützen</strong>. Installieren Sie den HLS-Build, der zu dem GHC passt, mit dem Sie kompilieren — die interaktive Oberfläche <code>ghcup tui</code> zeigt, welche HLS-Versionen welche GHCs abdecken.</p>
+
+  <h2>In den Editor einbinden</h2>
+  <figure><img src="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80&auto=format&fit=crop" alt="Zeilen Quellcode auf einem dunklen Bildschirm" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Zeilen Quellcode auf einem dunklen Bildschirm — HLS bringt Typen und Fehler beim Tippen hervor.</figcaption></figure>
+  <ul>
+    <li><strong>VS Code:</strong> installieren Sie die offizielle <em>Haskell</em>-Erweiterung; sie kann HLS für Sie verwalten oder den von GHCup installierten verwenden. Richten Sie sie auf das HLS von GHCup aus, um Versionskonflikte zu vermeiden.</li>
+    <li><strong>Neovim:</strong> konfigurieren Sie <code>haskell-tools.nvim</code> oder den integrierten LSP-Client mit <code>haskell-language-server-wrapper</code> in Ihrem PATH.</li>
+    <li><strong>Andere Editoren:</strong> jeder LSP-fähige Editor (Emacs mit lsp-mode, Helix, Zed) funktioniert — richten Sie ihn auf die Binärdatei <code>haskell-language-server-wrapper</code> aus.</li>
+  </ul>
+  <p>Die <code>-wrapper</code>-Binärdatei wählt automatisch das richtige HLS für das GHC jedes Projekts, weshalb das Ausrichten Ihres Editors darauf (statt auf eine feste Version) die meisten Inkompatibilitäten vermeidet.</p>
+
+  <h2>Häufige Fehler und Korrekturen</h2>
+  <ul>
+    <li><strong>„No HLS version for GHC X.Y“.</strong> Ihr GHC ist neuer als jedes installierte HLS. Aktualisieren Sie HLS über <code>ghcup tui</code> oder stellen Sie das Projekt auf ein GHC um, das HLS unterstützt.</li>
+    <li><strong>HLS startet ständig neu / geht der Speicher aus.</strong> Große Projekte können beim Indizieren den RAM erschöpfen; schließen Sie andere Werkzeuge und stellen Sie sicher, dass Ihre Maschine genug Speicher für die Projektgröße hat.</li>
+    <li><strong>„Cradle“-Fehler / falsche Komponenten.</strong> HLS liest Ihren Build über die Projektdateien; stellen Sie zuerst sicher, dass das Projekt mit <code>cabal build</code> baut, und fügen Sie eine <code>hie.yaml</code> nur hinzu, wenn die automatische Erkennung fehlschlägt.</li>
+    <li><strong>Veraltete Ergebnisse nach einer Abhängigkeitsänderung.</strong> Starten Sie den Language Server aus Ihrem Editor neu; HLS cacht den Build-Plan.</li>
+  </ul>
+  <p>Eine verlässliche Regel: Wenn HLS sich schlecht verhält, bestätigen Sie zuerst, dass das Projekt auf der Kommandozeile kompiliert — sehen Sie, wie parallele Builds funktionieren, in <a href="/de/e/blog/2011-08-22-GSoC-Final.html">wie Cabal Ihre Kerne nutzt</a>, und den Kontext des Build-Modells in <a href="/de/e/blog/2017-09-09-Cabal-2-0.html">Cabal 2.0</a>.</p>
+
+  <h2>FAQ</h2>
+  <p><strong>Ist HLS kostenlos und offiziell?</strong> Ja — es ist der quelloffene, von der Community standardisierte Language Server für Haskell, installierbar über GHCup.</p>
+  <p><strong>Brauche ich Cabal oder Stack für HLS?</strong> HLS liest das Build-System, das Ihr Projekt nutzt; es funktioniert sowohl mit Cabal- als auch mit Stack-Projekten.</p>
+  <p><strong>Warum muss HLS zu meinem GHC passen?</strong> HLS wird gegen eine bestimmte GHC-API kompiliert, daher unterstützt jeder HLS-Build eine Reihe von GHC-Versionen. Verwenden Sie die Wrapper-Binärdatei, um das richtige pro Projekt automatisch zu wählen.</p>
+  <p><strong>Funktioniert HLS unter Windows?</strong> Ja, über den Windows-Installer von GHCup und dieselben Editor-Erweiterungen.</p>
+
+  <div class="note">Unabhängiger, von der Community gepflegter Leitfaden. <strong>coldwa.st</strong> ist eine Ressourcen-Website rund ums Programmieren; dieser Artikel ist ein neuer, eigenständiger Text über den Haskell Language Server und die aktuelle Toolchain, ohne Verbindung zu den Maintainern des Projekts und nicht von ihnen verfasst. Die Befehle spiegeln das dokumentierte Verhalten von HLS/GHCup wider — sehen Sie für die aktuellste Versionsabdeckung in der offiziellen Dokumentation nach.</div>
+  </div>
+</Base>

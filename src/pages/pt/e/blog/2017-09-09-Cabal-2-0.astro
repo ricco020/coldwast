@@ -1,0 +1,75 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/pt/e/blog/2017-09-09-Cabal-2-0.html';
+const title = 'Cabal 2.0: a versão que redefiniu as builds Haskell (atualizado)';
+const description = 'Um guia atualizado pela comunidade sobre o Cabal 2.0 (2017) — builds locais ao estilo nix, mixins Backpack, o operador de versão caret e um melhor solver — e em que ponto está cada uma destas funcionalidades na toolchain de 2026.';
+---
+<Base title={title} description={description} path={path} type="article" lang="pt"
+  image="https://coldwa.st/img/cabal-2-0.svg" datePublished="2017-09-09" dateModified="2026-06-13">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/pt/">Início</a><span>/</span><a href="/pt/e/">Guias</a><span>/</span>Cabal 2.0</nav>
+  <p class="kicker">Haskell · Cabal · ferramentas de build</p>
+  <h1>Cabal 2.0: a versão que redefiniu as builds Haskell</h1>
+  <div class="artmeta"><span>Por Coldwast</span><span>Atualizado em 13 de junho de 2026</span><span>7 min de leitura</span><span class="tag">#haskell</span><span class="tag">#cabal</span><span class="tag">#build</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/cabal-2-0.svg" alt="Um grafo de dependências e um terminal a executar cabal new-build, ilustrando as builds ao estilo nix do Cabal 2.0" width="1200" height="420" />
+    <figcaption>O Cabal 2.0 fez do planeamento por projeto ao estilo nix o alicerce da toolchain moderna.</figcaption>
+  </figure>
+
+  <div class="note">Reescrita atualizada, mantida pela comunidade — conteúdo original, não escrito pelo anterior proprietário do domínio nem afiliado a ele. Onde factos de 2017 mudaram desde então, o estado de 2026 é assinalado explicitamente.</div>
+
+  <p>O Cabal 2.0 saiu em setembro de 2017 a par do GHC 8.2 e, em retrospetiva, é a versão que definiu a orientação das ferramentas Haskell para a década seguinte. É o momento em que três coisas se tornaram reais de uma só vez: as <strong>builds locais ao estilo nix</strong>, o <strong>Backpack</strong> e um <strong>formato <code>.cabal</code> moderno</strong> com uma sintaxe de versão mais sã. Eis o que era cada uma e em que ponto está hoje.</p>
+
+  <h2>1. Builds locais ao estilo nix (<code>new-build</code>)</h2>
+  <p>A funcionalidade de bandeira. Antes, as <a href="/pt/e/blog/2013-08-20-Cabal-sandbox.html">sandboxes</a> isolavam as dependências por projeto mas reconstruíam tudo do zero e não eram reproduzíveis. O Cabal 2.0 promoveu o <code>cabal new-build</code>: um modelo endereçado por conteúdo em que cada combinação única de <em>pacote + versão + opções + dependências</em> é construída uma só vez, armazenada sob um hash num store global partilhado, e reutilizada por qualquer projeto cujo plano de build dela precise.</p>
+  <pre><code>$ cabal new-build      # 2017 spelling
+$ cabal build          # 2026: this IS new-build — it became the default in Cabal 3.0</code></pre>
+  <p><strong>Estado em 2026:</strong> o prefixo <code>new-*</code> desapareceu. <code>cabal build</code>, <code>cabal run</code>, <code>cabal repl</code> e <code>cabal test</code> são todos ao estilo nix por predefinição. Os aliases <code>v2-</code> ainda existem para scripts; os antigos comandos <code>v1-</code> estão descontinuados. O que o Cabal 2.0 introduziu como opção é hoje simplesmente a forma como o Cabal funciona.</p>
+
+  <h2>2. Backpack — pacotes mixin e assinaturas de módulo</h2>
+  <p>O Backpack acrescentou ao Haskell uma verdadeira <em>modularidade paramétrica</em>: uma biblioteca pode declarar uma <strong>assinatura</strong> de módulo (uma interface) e ser tipada contra ela sem se comprometer com uma implementação concreta; um consumidor «mistura» depois a implementação que quiser. O exemplo clássico é uma biblioteca escrita contra uma assinatura abstrata <code>Str</code> que pode ser instanciada com <code>String</code>, <code>Text</code> strict ou <code>ByteString</code> sem duplicação de código.</p>
+  <pre><code>-- in a .cabal file
+library
+    signatures:   Str
+    exposed-modules: Generic.Algorithm
+
+library impl-text
+    mixins: indef-lib (Generic.Algorithm as Text.Algorithm)
+                      requires (Str as Data.Text)</code></pre>
+  <p><strong>Estado em 2026:</strong> o Backpack funciona e continua a ser suportado, mas manteve-se uma ferramenta de especialistas em vez de um padrão generalizado — as classes de tipos e a parametrização comum cobrem a maioria das necessidades, e o suporte de ferramentas/IDE às assinaturas permaneceu limitado. Recorra a ele quando precisar mesmo de compilar o mesmo código contra vários tipos concretos; caso contrário, raramente o encontrará.</p>
+
+  <h2>3. Um formato <code>.cabal</code> moderno</h2>
+  <p>Definir <code>cabal-version: 2.0</code> desbloqueou melhorias de formato que são hoje o quotidiano do Haskell:</p>
+  <ul>
+    <li><strong>O operador caret <code>^>=</code></strong>. <code>build-depends: aeson ^>= 2.1</code> significa «<code>&gt;= 2.1 &amp;&amp; &lt; 2.2</code>» — uma forma compacta e reveladora de intenção de respeitar o limite superior do PVP. Encontra-se por toda a parte nos pacotes modernos.</li>
+    <li><strong><code>autogen-modules</code></strong>, para que módulos gerados como <code>Paths_yourpkg</code> sejam declarados corretamente e entregues no sdist.</li>
+    <li><strong>Bibliotecas externas</strong> (a stanza <code>foreign-library</code>), permitindo construir código Haskell como objeto partilhado para ser consumido por outras linguagens.</li>
+    <li><strong><code>build-depends</code> por componente</strong>, para que a biblioteca, os testes e os benchmarks de um pacote tenham cada um o seu conjunto preciso de dependências.</li>
+  </ul>
+  <p><strong>Estado em 2026:</strong> tudo é padrão. A recomendação hoje é definir <code>cabal-version: 3.0</code> ou mais recente (implica tudo o que o 2.0 trazia, mais as stanzas comuns do 2.2, o curinga <code>**</code> para ficheiros de dados, e mais). Use <code>2.0</code> apenas se tiver de suportar uma toolchain muito antiga.</p>
+
+  <h2>4. O solver de dependências melhorou</h2>
+  <figure><img src="https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=1200&q=80&auto=format&fit=crop" alt="Código-fonte aberto num editor de código" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Código-fonte aberto num editor de código</figcaption></figure>
+  <p>O Cabal 2.0 trouxe melhorias ao solver que o tornaram simultaneamente mais rápido e mais propenso a encontrar um plano de instalação válido num grafo de dependências profundo, com explicações mais claras quando nenhum plano existe. O solver continuou a melhorar desde então, mas foi com o 2.0 que «o solver geralmente funciona sozinho» começou a ser verdade para projetos não triviais.</p>
+
+  <h2>Por que isso foi importante</h2>
+  <p>Antes do 2.0, a história das builds Haskell era «instala globalmente e reza», remendada pelas sandboxes. Depois do 2.0, tornou-se «declara o que queres, obténs uma build reproduzível, partilhada e isolada» — o mesmo modelo mental do Nix, do Cargo ou dos gestores de pacotes modernos noutros lugares. Cada <code>cabal build</code> que executar em 2026 é o descendente direto daquilo que o 2.0 tornou o caminho predefinido.</p>
+
+  <h2>Se atualizar um projeto antigo</h2>
+  <pre><code># Bump the format and modernise bounds:
+cabal-version: 3.0          # was 1.x or 2.0
+
+# Replace hand-written ranges with caret bounds where it fits:
+build-depends:  base ^>= 4.18
+              , text ^>= 2.0
+
+# Drop any v1-/sandbox era commands from CI; use:
+cabal build --enable-tests
+cabal test
+cabal freeze                # commit cabal.project.freeze for reproducibility</code></pre>
+
+  <hr />
+  <p class="meta">Leia também: <a href="/pt/e/blog/2013-08-20-Cabal-sandbox.html">As sandboxes Cabal e o que as substituiu</a> · <a href="/pt/e/blog/2011-08-22-GSoC-Final.html">Paralelizar o cabal-install</a> · <a href="/pt/e/">todos os guias</a></p>
+  </div>
+</Base>

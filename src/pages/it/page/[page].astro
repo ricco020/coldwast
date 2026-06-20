@@ -1,0 +1,20 @@
+---
+import Base from '../../../layouts/Base.astro';
+import GuideFeed from '../../../components/GuideFeed.astro';
+import { guides } from '../../../data/guides.js';
+import { hasTx } from '../../../data/i18n-articles.js';
+const lang = 'it';
+const PAGE_SIZE = 12;
+export async function getStaticPaths() {
+  const PAGE_SIZE = 12;
+  const n = guides.filter((g) => hasTx(g.href, 'it')).length;
+  const totalPages = Math.max(1, Math.ceil(n / PAGE_SIZE));
+  const paths = [];
+  for (let p = 2; p <= totalPages; p++) paths.push({ params: { page: String(p) }, props: { page: p } });
+  return paths;
+}
+const { page } = Astro.props;
+---
+<Base title={`Coldwast — Guide di programmazione & sviluppo (pagina ${page})`} description="Guide di programmazione indipendenti, originali e aggiornate regolarmente. Haskell, Cabal, strumenti di build e il moderno toolkit dello sviluppatore." path={`/it/page/${page}.html`} lang={lang}>
+  <GuideFeed lang={lang} page={page} pageSize={PAGE_SIZE} />
+</Base>

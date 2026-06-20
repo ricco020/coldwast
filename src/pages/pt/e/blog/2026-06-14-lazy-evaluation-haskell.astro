@@ -1,0 +1,65 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/pt/e/blog/2026-06-14-lazy-evaluation-haskell.html';
+const title = 'A avaliação lazy em Haskell, explicada (2026)';
+const description = 'A avaliação lazy significa que o Haskell calcula um valor apenas quando ele é realmente necessário — não quando é definido. O que é a avaliação lazy, os thunks, porque é que permite estruturas de dados infinitas, a armadilha das fugas de memória e como forçar a strictness com seq e BangPatterns.';
+---
+<Base title={title} description={description} path={path} type="article" lang="pt"
+  image="https://images.pexels.com/photos/2004161/pexels-photo-2004161.jpeg?auto=compress&cs=tinysrgb&w=1200" datePublished="2026-06-14" dateModified="2026-06-14">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/pt/">Início</a><span>/</span><a href="/pt/e/">Guias</a><span>/</span>Avaliação lazy</nav>
+  <p class="kicker">Haskell · conceitos · avaliação</p>
+  <h1>A avaliação lazy em Haskell, explicada</h1>
+  <div class="artmeta"><span>Por Coldwast</span><span>Atualizado a 14 de junho de 2026</span><span>8 min de leitura</span><span class="tag">#haskell</span><span class="tag">#laziness</span><span class="tag">#concepts</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.pexels.com/photos/2004161/pexels-photo-2004161.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Código-fonte colorido no ecrã" width="1200" height="420" loading="eager" />
+    <figcaption>Código-fonte colorido no ecrã — a avaliação lazy decide quando código como este calcula realmente um valor.</figcaption>
+  </figure>
+
+  <p>A maioria das linguagens é <strong>strict</strong>: uma expressão é avaliada assim que é ligada a um nome. O Haskell é diferente — é <strong>lazy</strong> (mais precisamente <em>não strict</em>) por defeito: uma expressão não é avaliada enquanto o seu resultado não for verdadeiramente necessário. Esta única decisão de design está por trás de alguns dos poderes mais distintivos do Haskell <em>e</em> da sua armadilha mais notória. Este guia explica o que é a avaliação lazy, como funcionam os thunks, o que ela lhe dá e como a desativar quando preciso.</p>
+
+  <h2>A ideia numa frase</h2>
+  <p>Sob a avaliação lazy, ligar um valor não o calcula — o Haskell guarda um cálculo diferido (um <strong>thunk</strong>) e só o força quando outro cálculo exige o resultado. Se o resultado nunca for exigido, o trabalho nunca é feito.</p>
+
+  <h2>Thunks: o cálculo diferido</h2>
+  <p>Quando escreve <code>let x = expensive 42</code>, o Haskell <em>não</em> executa <code>expensive</code>. Cria um thunk — uma promessa não avaliada de <code>expensive 42</code>. O thunk só é forçado quando algo precisa do valor real de <code>x</code> (por exemplo, imprimi-lo ou fazer pattern matching sobre ele). Force-o uma vez, e o resultado é colocado em cache para não ser recalculado.</p>
+  <pre><code>let x = expensive 42   -- nothing runs yet; x is a thunk
+let y = x + 1          -- still nothing; y is a thunk too
+print y                -- NOW x and y are forced and evaluated</code></pre>
+
+  <h2>O que a lazyness lhe dá</h2>
+  <figure><img src="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80&auto=format&fit=crop" alt="Linhas de código num ecrã escuro" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Linhas de código no ecrã — a lazyness deixa-o definir estruturas infinitas e avaliar sempre apenas a parte que consome.</figcaption></figure>
+  <ul>
+    <li><strong>Estruturas de dados infinitas.</strong> <code>[1..]</code> é a lista infinita dos inteiros. <code>take 5 [1..]</code> devolve <code>[1,2,3,4,5]</code> porque apenas os primeiros cinco são alguma vez exigidos.</li>
+    <li><strong>Composição sem desperdício.</strong> Pode encadear <code>filter</code> e <code>map</code> sobre uma lista enorme e o Haskell funde o trabalho, produzindo apenas o que o consumidor puxa — sem listas intermédias completas se nunca forem inteiramente exigidas.</li>
+    <li><strong>Curto-circuito grátis.</strong> <code>False &amp;&amp; undefined</code> devolve <code>False</code> sem nunca tocar em <code>undefined</code>, porque o segundo argumento nunca é forçado.</li>
+    <li><strong>Auto-referência.</strong> One-liners clássicos como <code>fibs = 0 : 1 : zipWith (+) fibs (tail fibs)</code> definem o fluxo infinito de Fibonacci — possível apenas porque a estrutura é construída de forma lazy.</li>
+  </ul>
+
+  <h2>A armadilha: as fugas de memória</h2>
+  <p>A lazyness tem um custo. Os thunks não avaliados acumulam-se em memória, e uma longa cadeia de cálculos diferidos pode inflar silenciosamente o uso da heap — uma <strong>fuga de memória</strong> (space leak). O caso de manual é uma fold à esquerda lazy que constrói uma torre gigante de thunks <code>(((0 + 1) + 2) + 3) ...</code> em vez de somar à medida que avança:</p>
+  <pre><code>foldl (+) 0 [1..1000000]    -- builds a million thunks, may blow the stack
+foldl' (+) 0 [1..1000000]   -- strict fold: adds as it goes, constant space</code></pre>
+  <p>A solução é <strong>forçar a avaliação</strong> onde importa. Recorra à fold à esquerda strict <code>foldl'</code> (de <code>Data.List</code>) para as acumulações.</p>
+
+  <h2>Forçar a strictness: seq, $! e BangPatterns</h2>
+  <p>O Haskell dá-lhe ferramentas precisas para exigir a avaliação:</p>
+  <ul>
+    <li><strong><code>seq a b</code></strong> — força <code>a</code> para a forma normal fraca de cabeça antes de devolver <code>b</code>.</li>
+    <li><strong><code>($!)</code></strong> — aplicação strict: <code>f $! x</code> força <code>x</code> antes de aplicar <code>f</code>.</li>
+    <li><strong><code>BangPatterns</code></strong> — a extensão <code>&#123;-# LANGUAGE BangPatterns #-&#125;</code> deixa-o escrever <code>let !x = ...</code> para forçar uma ligação.</li>
+  </ul>
+  <p>Uma subtileza a conhecer: forçar atinge tipicamente a <em>forma normal fraca de cabeça</em> (o construtor mais externo), não a avaliação completa. Para forçar em profundidade, use <code>force</code> / <code>deepseq</code> do pacote <code>deepseq</code>.</p>
+
+  <h2>FAQ</h2>
+  <p><strong>O Haskell é lazy ou não strict?</strong> Tecnicamente não strict (uma garantia semântica); o GHC implementa-o através da avaliação lazy com thunks e partilha. Na prática diz-se « lazy ».</p>
+  <p><strong>Porque é que o meu programa Haskell usa tanta memória?</strong> Muitas vezes uma fuga de memória devido a thunks acumulados — habitualmente um <code>foldl</code> lazy. Mude para <code>foldl'</code> ou adicione strictness com <code>seq</code>/BangPatterns.</p>
+  <p><strong>O que é um thunk?</strong> Um cálculo não avaliado e diferido guardado no lugar de um valor, forçado apenas quando o valor é exigido, e depois colocado em cache.</p>
+  <p><strong>A lazyness torna o Haskell lento?</strong> Não intrinsecamente — pode evitar trabalho desnecessário e permitir a fusão. Mas uma lazyness descuidada causa fugas de memória; saber quando forçar faz parte de escrever bom Haskell.</p>
+
+  <p>A lazyness é o mesmo mecanismo que faz com que as outras abstrações do Haskell se componham de forma limpa — veja como funciona a sequenciação no nosso guia sobre as <a href="/pt/e/blog/2026-06-14-haskell-monads.html">monads em Haskell</a>, e configure a toolchain para experimentar estes exemplos em GHCi com o <a href="/pt/e/blog/2026-06-14-ghc-compiler-guide.html">guia do compilador GHC</a>.</p>
+
+  <div class="note">Guia independente, mantido pela comunidade. <strong>coldwa.st</strong> é um site de recursos de programação; este artigo é um texto explicativo novo e original sobre a avaliação lazy em Haskell, sem afiliação com qualquer projeto nem redigido por ele. O código reflete o comportamento padrão de Haskell/GHC — confirme com a documentação atual do GHC.</div>
+  </div>
+</Base>

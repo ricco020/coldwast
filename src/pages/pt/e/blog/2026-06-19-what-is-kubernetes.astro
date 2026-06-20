@@ -1,0 +1,80 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/pt/e/blog/2026-06-19-what-is-kubernetes.html';
+const title = 'O que é o Kubernetes? A orquestração de contentores explicada (2026)';
+const description = 'O Kubernetes é um sistema open source que executa e coordena contentores em muitas máquinas – planeia-os, escala-os, repara-os e liga-os em rede automaticamente. O que é o Kubernetes, os conceitos-chave (pod, nó, cluster, deployment, service), a sua ligação ao Docker e quando precisa realmente dele.';
+---
+<Base title={title} description={description} path={path} type="article" lang="pt"
+  image="/img/what-is-kubernetes-2026.jpg" datePublished="2026-06-19" dateModified="2026-06-19">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/pt/">Início</a><span>/</span><a href="/pt/e/">Guias</a><span>/</span>O que é o Kubernetes</nav>
+  <p class="kicker">Programação · DevOps · orquestração</p>
+  <h1>O que é o Kubernetes?</h1>
+  <div class="artmeta"><span>Por Coldwast</span><span>Atualizado a 19 de junho de 2026</span><span>8 min de leitura</span><span class="tag">#kubernetes</span><span class="tag">#containers</span><span class="tag">#devops</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/what-is-kubernetes-2026.jpg" alt="Uma velha roda do leme de um navio em madeira, o leme" width="1200" height="420" loading="eager" />
+    <figcaption>Uma roda do leme de um navio – o leme. «Kubernetes» significa «timoneiro» em grego, e o logótipo do projeto é uma roda de navio: o sistema que pilota uma frota de contentores.</figcaption>
+  </figure>
+
+  <p>Uma vez empacotada uma app num <a href="/pt/e/blog/2026-06-19-what-is-docker.html">contentor</a>, surge um novo problema: quem o arranca, o reinicia quando ele falha, lança mais cópias sob carga, e os liga a todos – em dezenas de máquinas? É a <strong>orquestração</strong>, e o <strong>Kubernetes</strong> é o sistema que a maioria das equipas usa para isso. Este guia explica o que é o Kubernetes, os conceitos que importam, a sua ligação ao Docker e quando precisa realmente dele.</p>
+
+  <h2>A definição curta</h2>
+  <p><strong>O Kubernetes é uma plataforma open source para executar e coordenar contentores num grupo de máquinas.</strong> Descreve o estado desejado – «arranca cinco cópias desta app, mantém-nas saudáveis, expõe-nas neste endereço» – e o Kubernetes trabalha continuamente para que a realidade corresponda: coloca os contentores nas máquinas, reinicia os que falham, ajusta a escala e encaminha o tráfego para eles. Abrevia-se muitas vezes para <strong>K8s</strong> (K, oito letras, s).</p>
+
+  <h2>O problema que resolve</h2>
+  <p>Arrancar um contentor à mão é simples. Arrancar centenas, de forma fiável, não é. As máquinas caem, o tráfego explode, é preciso implementar novas versões sem interrupção, e os contentores têm de se encontrar e falar entre si. Fazer tudo manualmente é fonte de erros e nunca dorme. O Kubernetes torna-o num sistema declarativo: descreve o que quer, e o ciclo de controlo da plataforma aplica-o sem cessar – substituindo um contentor que falhou ou replaneando o trabalho para fora de uma máquina morta, sem acordar um engenheiro às 3 da manhã.</p>
+
+  <figure><img src="/img/what-is-kubernetes-2026-dev.jpg" alt="Filas de racks de servidores iluminados num centro de dados" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>Filas de servidores num centro de dados – o Kubernetes trata um grupo de máquinas como um único pool e planeia nele os contentores.</figcaption></figure>
+
+  <h2>Os conceitos-chave</h2>
+  <ul>
+    <li><strong>Cluster</strong> – o sistema inteiro: um grupo de máquinas que o Kubernetes gere como um todo. Tem um <em>plano de controlo</em> (o cérebro que decide) e <em>nós de trabalho</em> (onde os seus contentores correm de facto).</li>
+    <li><strong>Nó</strong> – uma única máquina (física ou virtual) do cluster que executa contentores.</li>
+    <li><strong>Pod</strong> – a mais pequena unidade que o Kubernetes executa: um ou mais contentores estreitamente ligados que partilham um armazenamento e um endereço de rede. Executam-se em geral muitos pods idênticos de uma app.</li>
+    <li><strong>Deployment</strong> – uma declaração do estado desejado para os seus pods: que imagem, quantas réplicas, e como implementar as atualizações. O Kubernetes alinha o estado real com ele.</li>
+    <li><strong>Service</strong> – um endereço de rede estável e um balanceador de carga para um conjunto de pods, para que as outras partes do sistema os alcancem mesmo quando os pods individuais vão e vêm.</li>
+  </ul>
+
+  <h2>Como funciona, em resumo</h2>
+  <p>Submete uma descrição do que quer – muitas vezes um ficheiro YAML que define um deployment e um service. O plano de controlo regista esse estado desejado e planeia os pods em nós que tenham espaço. Um ciclo de controlo compara depois continuamente o estado desejado e o estado real: se um pod morre ou um nó falha, o Kubernetes repara e recria noutro lado os pods em falta. A escala segue a mesma ideia – passe de «5 réplicas» para «20» e o escalonador colmata a diferença. Este modelo <em>declarativo e auto-reparador</em> está no cerne da confiança depositada no Kubernetes em produção.</p>
+
+  <h2>Kubernetes vs Docker</h2>
+  <p>São complementares, não rivais. O <a href="/pt/e/blog/2026-06-19-what-is-docker.html">Docker</a> constrói e executa um contentor individual numa máquina. O Kubernetes orquestra muitos contentores em muitas máquinas – planeia-os, escala-os, repara-os e liga-os em rede. O Docker empacota e executa um contentor; o Kubernetes gere uma frota. O Kubernetes executa contentores construídos segundo os padrões abertos que o Docker popularizou: ambos ocupam camadas diferentes da mesma pilha em vez de concorrerem.</p>
+
+  <h2>Precisa realmente dele?</h2>
+  <p>Honestamente, muitas vezes não – pelo menos ainda não. O Kubernetes brilha quando executa muitos serviços, precisa de alta disponibilidade e dispõe da equipa para o operar. Para uma única app ou um pequeno projeto, é geralmente excessivo: um servidor único, um serviço de contentores gerido ou uma platform-as-a-service será mais simples e mais barato. O custo do Kubernetes é uma verdadeira complexidade – rede, armazenamento, segurança e atualizações exigem competência. Adote-o quando a escala justificar o sobrecusto, não por moda.</p>
+
+  <h2>Gerido vs auto-alojado</h2>
+  <p>Pode executar o Kubernetes você mesmo, mas a maioria das equipas usa um serviço <strong>gerido</strong> em que um fornecedor cloud opera o plano de controlo por si, de modo que só gere as suas cargas de trabalho. Isto retira grande parte do fardo operacional e constitui a escolha por defeito razoável para a maioria dos projetos que precisam realmente de orquestração.</p>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Recomendado</span>
+    <h3>Um lugar onde executar os seus contentores</h3>
+    <p>O Kubernetes (e o Docker) precisam de máquinas para correr. Um VPS ou um servidor cloud dá-lhe o controlo total do runtime para implementar contentores, um cluster ou uma simples app. A Infomaniak – um fornecedor suíço respeitador da privacidade – oferece VPS e servidores cloud para exatamente isso.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Ver Infomaniak Cloud →</a>
+    <p class="disc">Link de afiliado – ajuda a suportar estes guias gratuitos.</p>
+  </div>
+
+  <p>Os contentores expõem em geral uma <a href="/pt/e/blog/2026-06-14-what-is-an-api.html">API</a> e falam entre si por protocolos como <a href="/pt/e/blog/2026-06-18-grpc-vs-rest.html">gRPC ou REST</a>. Explore outras explicações claras no nosso <a href="/pt/e/">índice de guias</a>.</p>
+
+  <h2>Perguntas frequentes</h2>
+  <details><summary>O que é o Kubernetes em termos simples?</summary><p>O Kubernetes é um software que executa e gere contentores num grupo de máquinas por si. Descreve o estado desejado – quantas cópias de uma app executar e como alcançá-las – e o Kubernetes mantém a realidade conforme, reiniciando os contentores que falham, escalando-os e encaminhando o tráfego automaticamente.</p></details>
+  <details><summary>Qual é a diferença entre Docker e Kubernetes?</summary><p>O Docker constrói e executa um contentor individual numa máquina. O Kubernetes orquestra muitos contentores em muitas máquinas – planeamento, escala, reinício e ligação em rede. O Docker gere um único contentor; o Kubernetes gere uma frota. São complementares: o Kubernetes executa contentores construídos segundo os padrões que o Docker popularizou.</p></details>
+  <details><summary>O que é um pod no Kubernetes?</summary><p>Um pod é a mais pequena unidade que o Kubernetes executa: um ou mais contentores estreitamente ligados que partilham um armazenamento e um endereço de rede. As aplicações executam-se em geral sob a forma de muitos pods idênticos, que o Kubernetes pode escalar e substituir automaticamente se um falhar.</p></details>
+  <details><summary>Preciso de Kubernetes para um pequeno projeto?</summary><p>Geralmente não. O Kubernetes foi concebido para executar muitos serviços em grande escala com alta disponibilidade, e acrescenta uma verdadeira complexidade operacional. Para uma única app ou um pequeno projeto, um servidor único, um serviço de contentores gerido ou uma platform-as-a-service é mais simples e mais barato.</p></details>
+
+  <div class="note">Guia independente, mantido pela comunidade. <strong>coldwa.st</strong> é um site de recursos de programação; este artigo é um texto explicativo novo e original sobre o Kubernetes e a orquestração de contentores. Os exemplos refletem ferramentas amplamente usadas; verifique os detalhes na documentação oficial do Kubernetes.</div>
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "O que é o Kubernetes em termos simples?", "acceptedAnswer": { "@type": "Answer", "text": "O Kubernetes é um software que executa e gere contentores num grupo de máquinas por si. Descreve o estado desejado – quantas cópias de uma app executar e como alcançá-las – e o Kubernetes mantém a realidade conforme, reiniciando os contentores que falham, escalando-os e encaminhando o tráfego automaticamente." } },
+      { "@type": "Question", "name": "Qual é a diferença entre Docker e Kubernetes?", "acceptedAnswer": { "@type": "Answer", "text": "O Docker constrói e executa um contentor individual numa máquina. O Kubernetes orquestra muitos contentores em muitas máquinas – planeamento, escala, reinício e ligação em rede. O Docker gere um único contentor; o Kubernetes gere uma frota. São complementares." } },
+      { "@type": "Question", "name": "O que é um pod no Kubernetes?", "acceptedAnswer": { "@type": "Answer", "text": "Um pod é a mais pequena unidade que o Kubernetes executa: um ou mais contentores estreitamente ligados que partilham um armazenamento e um endereço de rede. As aplicações executam-se em geral sob a forma de muitos pods idênticos, que o Kubernetes pode escalar e substituir automaticamente se um falhar." } },
+      { "@type": "Question", "name": "Preciso de Kubernetes para um pequeno projeto?", "acceptedAnswer": { "@type": "Answer", "text": "Geralmente não. O Kubernetes foi concebido para executar muitos serviços em grande escala com alta disponibilidade e acrescenta uma verdadeira complexidade operacional. Para uma única app ou um pequeno projeto, um servidor único, um serviço de contentores gerido ou uma platform-as-a-service é mais simples e mais barato." } }
+    ]
+  })} />
+</Base>

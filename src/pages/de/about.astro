@@ -1,0 +1,30 @@
+---
+import Base from '../../layouts/Base.astro';
+import { localized } from '../../i18n/ui.js';
+const lang = 'de';
+---
+<Base title="Über uns & redaktionelle Grundsätze — Coldwast" description="Was Coldwast ist, wie wir mit der Geschichte der Domain umgehen und welche Grundsätze für redaktionelle Ehrlichkeit gelten." path="/de/about.html" lang={lang}>
+  <div class="reading">
+  <p class="kicker" style="margin-top:30px">Coldwast</p>
+  <h1>Über uns & redaktionelle Grundsätze</h1>
+
+  <h2>Was diese Website ist</h2>
+  <p>Coldwast ist eine unabhängige Sammlung origineller und regelmäßig aktualisierter Programmier-Guides. Der aktuelle Schwerpunkt liegt auf dem Build-Werkzeugkasten von Haskell und Cabal und wird sich mit der Zeit auf den gesamten Entwickler-Stack ausweiten — Build-Performance, Werkzeuge und Deployment.</p>
+
+  <h2>Zur Geschichte dieser Domain</h2>
+  <p>Die Domain <code>coldwa.st</code> beherbergte früher ein persönliches Blog über Haskell. Jene Website existiert nicht mehr; die Domain wurde nach ihrem Ablauf erworben und ist nun ein unabhängiges Projekt mit Programmier-Ressourcen unter einer neuen, eigenständigen redaktionellen Leitung.</p>
+  <p>Weil die Domain historisch mit hochwertigen Texten über Haskell/Cabal verbunden war, veröffentlichen wir weiterhin zu diesen Themen — die Guides hier sind jedoch <strong>neue, originale Werke</strong>, für den aktuellen Werkzeugkasten neu geschrieben und vom Redaktionsteam von Coldwast gepflegt. Sie sind <strong>weder</strong> vom früheren Inhaber der Domain verfasst, signiert noch mit ihm verbunden, und es wird kein früherer Inhalt reproduziert. Wenn ein Guide ein Thema aktualisiert, das die Domain einst behandelte, wird dies klar gesagt.</p>
+
+  <h2>Redaktionelle Ehrlichkeit</h2>
+  <ul>
+    <li>Keine erfundenen Benchmarks, Bewertungen, Erfahrungsberichte oder „genutzt von"-Behauptungen. Technische Aussagen beschreiben dokumentiertes und überprüfbares Verhalten der Werkzeuge.</li>
+    <li>Keine Identitätsanmaßung. Als Autor zeichnet das unabhängige Coldwast-Team, niemals eine Person, mit der die Domain einst verbunden war.</li>
+    <li>Die Guides sind datiert und tragen ein Datum der „letzten Aktualisierung"; Fakten zum Werkzeugkasten, die sich seit der ursprünglichen Zeit geändert haben, werden mit ihrem aktuellen Stand gekennzeichnet.</li>
+  </ul>
+
+  <h2>Hinweis zu Affiliate-Links</h2>
+  <p>Einige künftige Guides (Hosting, Deployment, Lernressourcen, Werkzeuge) können Affiliate-Links enthalten. In diesem Fall wird es auf der Seite angegeben, die Links verwenden <code>rel="sponsored"</code>, und die Empfehlungen spiegeln echten technischen Wert wider — niemals eine bezahlte Platzierung, die den Rat verfälschen würde. Keine Affiliate-Beziehung beeinflusst den technischen Inhalt.</p>
+
+  <p class="meta"><a href={localized('/e/', lang)}>Alle Guides</a> · <a href="/e/rss.xml">RSS</a></p>
+  </div>
+</Base>

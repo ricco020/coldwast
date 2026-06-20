@@ -1,0 +1,72 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/pt/e/blog/2026-06-14-what-is-sql.html';
+const title = 'O que é o SQL? A linguagem das bases de dados, explicada (2026)';
+const description = 'O SQL é a linguagem padrão para armazenar, consultar e modificar dados em bases de dados relacionais. O que é o SQL, os comandos-chave (SELECT, INSERT, UPDATE, DELETE), como funciona uma consulta, SQL vs NoSQL e porque continua essencial em 2026.';
+---
+<Base title={title} description={description} path={path} type="article" lang="pt"
+  image="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/pt/">Início</a><span>/</span><a href="/pt/e/">Guias</a><span>/</span>O que é o SQL</nav>
+  <p class="kicker">Programação · dados · bases de dados</p>
+  <h1>O que é o SQL?</h1>
+  <div class="artmeta"><span>Por Coldwast</span><span>Atualizado a 14 de junho de 2026</span><span>7 min de leitura</span><span class="tag">#sql</span><span class="tag">#databases</span><span class="tag">#data</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=1200&q=80&auto=format&fit=crop" alt="Código-fonte colorido num monitor" width="1200" height="420" loading="eager" />
+    <figcaption>Código-fonte colorido num monitor — o SQL é uma linguagem de consulta que escreves para pedir a uma base de dados exatamente os dados que queres.</figcaption>
+  </figure>
+
+  <p>Por trás de quase todas as apps, sites e painéis há uma base de dados — e a linguagem usada para falar com ela é, na maioria das vezes, o <strong>SQL</strong>. É uma espinha dorsal do software há cinquenta anos e continua a ser uma das competências mais valiosas que um programador ou analista pode ter. Este guia explica o que é o SQL, os seus comandos-chave, como funciona uma consulta, a comparação com NoSQL e porque perdura.</p>
+
+  <h2>A definição curta</h2>
+  <p><strong>O SQL (Structured Query Language) é a linguagem padrão para armazenar, recuperar e modificar dados numa base de dados relacional.</strong> Uma base de dados relacional organiza os dados em <em>tabelas</em> — linhas e colunas, como uma folha de cálculo — e o SQL é a forma como colocas perguntas a esses dados e os modificas. Pronuncia-se „esse-cu-ele“ ou „sequel“, e dá vida a bases de dados como PostgreSQL, MySQL, SQLite, SQL Server e Oracle.</p>
+
+  <h2>Tabelas, linhas e colunas</h2>
+  <p>O modelo relacional é simples. Uma tabela <code>users</code> pode ter as colunas <code>id</code>, <code>name</code> e <code>age</code>; cada <strong>linha</strong> é um utilizador. As tabelas podem relacionar-se entre si — uma tabela <code>orders</code> pode referenciar um utilizador pelo seu <code>id</code> — é daqui que vem o „relacional“, e é aqui que se revela a potência do SQL para combinar dados.</p>
+
+  <h2>Os comandos-chave</h2>
+  <p>O essencial do trabalho em SQL usa quatro verbos, muitas vezes chamados CRUD (create, read, update, delete):</p>
+  <ul>
+    <li><strong>SELECT</strong> — ler dados („dá-me os utilizadores com mais de 18 anos“).</li>
+    <li><strong>INSERT</strong> — adicionar uma nova linha.</li>
+    <li><strong>UPDATE</strong> — modificar linhas existentes.</li>
+    <li><strong>DELETE</strong> — eliminar linhas.</li>
+  </ul>
+  <p>Uma consulta básica lê-se quase como inglês:</p>
+  <pre><code>SELECT name, age
+FROM users
+WHERE age &gt;= 18
+ORDER BY age DESC;</code></pre>
+  <p>Isto pede o nome e a idade de cada utilizador com 18 anos ou mais, do mais recente ao mais antigo. <code>WHERE</code> filtra as linhas, <code>ORDER BY</code> ordena-as, e podes fazer <code>JOIN</code> de tabelas para combinar dados relacionados num único resultado.</p>
+
+  <figure><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=crop" alt="Um portátil a mostrar um painel de dados com gráficos" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Um painel de dados — os gráficos e tabelas que vês nas apps são geralmente construídos a partir de consultas SQL executadas contra uma base de dados.</figcaption></figure>
+
+  <h2>Como uma consulta é realmente executada</h2>
+  <p>Escreves <em>o que</em> queres, não <em>como</em> obtê-lo — o SQL é <strong>declarativo</strong>. O <em>planeador de consultas</em> da base de dados encontra a forma mais eficiente de recuperar o resultado, usando índices (estruturas de pesquisa rápida) para evitar percorrer cada linha. Esta separação é grande parte da longevidade do SQL: a mesma consulta continua a funcionar à medida que os dados crescem, enquanto a base de dados otimiza a execução por baixo.</p>
+
+  <h2>SQL vs NoSQL</h2>
+  <p>Ouvirás contrapor o SQL às bases de dados <strong>NoSQL</strong> (MongoDB, Redis, Cassandra e outras). As bases de dados SQL/relacionais impõem um esquema estruturado e destacam-se nas consultas complexas e na consistência garantida (transações ACID). As bases de dados NoSQL relaxam a estrutura a favor da flexibilidade e da escalabilidade horizontal — úteis para volumes enormes ou formas de dados em rápida evolução. Nenhuma substitui a outra: muitos sistemas usam ambas. Para dados estruturados com relações, o SQL continua a ser a escolha por omissão.</p>
+
+  <h2>Porque é que o SQL ainda conta em 2026</h2>
+  <ul>
+    <li><strong>Está em todo o lado</strong> — as bases de dados relacionais fazem funcionar bancos, lojas, apps e análise; o SQL é a língua comum entre elas.</li>
+    <li><strong>É conhecimento portável</strong> — o núcleo é padronizado, por isso as competências transferem-se entre PostgreSQL, MySQL, SQLite e o resto.</li>
+    <li><strong>Alimenta a análise</strong> — os analistas de dados e as ferramentas de BI consultam diariamente armazéns de dados com SQL.</li>
+    <li><strong>É acessível</strong> — as bases são legíveis e podes tornar-te produtivo depressa.</li>
+  </ul>
+
+  <h2>Os limites honestos</h2>
+  <p>Os dialetos de SQL diferem nos detalhes, por isso uma consulta otimizada para uma base de dados pode exigir ajustes noutra. Consultas mal escritas ou índices em falta podem ser lentos em tabelas grandes, e construir strings SQL a partir de entradas não fiáveis provoca <em>injeção de SQL</em> — uma falha de segurança clássica, evitada usando consultas parametrizadas. Nada disto abala os fundamentos; é o ofício diário do bom uso do SQL.</p>
+
+  <h2>FAQ</h2>
+  <p><strong>O SQL é uma linguagem de programação?</strong> É uma linguagem declarativa específica de um domínio, para trabalhar com dados — não uma linguagem generalista como o Python. Descreves os dados que queres e a base de dados descobre como obtê-los.</p>
+  <p><strong>Qual é a diferença entre SQL e MySQL?</strong> O SQL é a linguagem; o MySQL (como o PostgreSQL ou o SQLite) é um sistema de base de dados ao qual falas em SQL. A linguagem é partilhada; os sistemas diferem nas funcionalidades e no desempenho.</p>
+  <p><strong>Preciso de SQL se usar um ORM?</strong> Os ORM geram SQL por ti, mas compreender o SQL continua a ser essencial para o desempenho, a depuração e as consultas complexas que o ORM gere mal.</p>
+  <p><strong>Ainda vale a pena aprender SQL em 2026?</strong> Sim — continua a ser uma das competências mais procuradas e duradouras para programadores, analistas e engenheiros de dados, e as bases de dados relacionais não vão desaparecer tão cedo.</p>
+
+  <p>O SQL consulta os dados; o <a href="/pt/e/blog/2026-06-14-what-is-json.html">JSON</a> que uma <a href="/pt/e/blog/2026-06-14-what-is-an-api.html">API</a> devolve é muitas vezes esses mesmos dados a caminho de uma app. Explora outras explicações claras no nosso <a href="/pt/e/">índice de guias</a>.</p>
+
+  <div class="note">Guia independente, mantido pela comunidade. <strong>coldwa.st</strong> é um site de recursos de programação; este artigo é um texto explicativo novo e original sobre o SQL. Os exemplos usam SQL padrão; verifica o comportamento específico do teu dialeto na documentação da tua base de dados.</div>
+  </div>
+</Base>

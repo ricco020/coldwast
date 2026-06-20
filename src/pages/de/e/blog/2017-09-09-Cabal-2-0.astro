@@ -1,0 +1,75 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/de/e/blog/2017-09-09-Cabal-2-0.html';
+const title = 'Cabal 2.0: die Version, die Haskell-Builds neu definierte (aktualisiert)';
+const description = 'Ein von der Community aktualisierter Leitfaden zu Cabal 2.0 (2017) — nix-artige lokale Builds, Backpack-Mixins, der Caret-Versionsoperator und ein besserer Solver — und wo jede dieser Funktionen in der Toolchain von 2026 steht.';
+---
+<Base title={title} description={description} path={path} type="article" lang="de"
+  image="https://coldwa.st/img/cabal-2-0.svg" datePublished="2017-09-09" dateModified="2026-06-13">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/de/">Startseite</a><span>/</span><a href="/de/e/">Leitfäden</a><span>/</span>Cabal 2.0</nav>
+  <p class="kicker">Haskell · Cabal · Build-Werkzeuge</p>
+  <h1>Cabal 2.0: die Version, die Haskell-Builds neu definierte</h1>
+  <div class="artmeta"><span>Von Coldwast</span><span>Aktualisiert am 13. Juni 2026</span><span>7 Min. Lesezeit</span><span class="tag">#haskell</span><span class="tag">#cabal</span><span class="tag">#build</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/cabal-2-0.svg" alt="Ein Abhängigkeitsgraph und ein Terminal, das cabal new-build ausführt und die nix-artigen Builds von Cabal 2.0 veranschaulicht" width="1200" height="420" />
+    <figcaption>Cabal 2.0 machte die nix-artige projektbezogene Planung zum Fundament der modernen Toolchain.</figcaption>
+  </figure>
+
+  <div class="note">Aktualisierte, von der Community gepflegte Neufassung — eigenständige Inhalte, weder vom früheren Domain-Inhaber verfasst noch mit ihm verbunden. Wo sich Fakten von 2017 seither geändert haben, wird der Stand von 2026 ausdrücklich gekennzeichnet.</div>
+
+  <p>Cabal 2.0 erschien im September 2017 zusammen mit GHC 8.2, und im Rückblick ist es die Version, die die Ausrichtung des Haskell-Werkzeugbaus für das folgende Jahrzehnt festlegte. Es ist der Moment, in dem drei Dinge auf einen Schlag real wurden: die <strong>nix-artigen lokalen Builds</strong>, <strong>Backpack</strong> und ein <strong>modernes <code>.cabal</code>-Format</strong> mit gesünderer Versionssyntax. Hier, was jedes davon war und wo es heute steht.</p>
+
+  <h2>1. Nix-artige lokale Builds (<code>new-build</code>)</h2>
+  <p>Die Schlüsselfunktion. Früher isolierten <a href="/de/e/blog/2013-08-20-Cabal-sandbox.html">Sandboxes</a> Abhängigkeiten pro Projekt, bauten aber alles von Grund auf neu und waren nicht reproduzierbar. Cabal 2.0 brachte <code>cabal new-build</code> nach vorn: ein inhaltsadressiertes Modell, bei dem jede einzigartige Kombination aus <em>Paket + Version + Optionen + Abhängigkeiten</em> einmal gebaut, unter einem Hash in einem global geteilten Store abgelegt und von jedem Projekt wiederverwendet wird, dessen Build-Plan sie benötigt.</p>
+  <pre><code>$ cabal new-build      # 2017 spelling
+$ cabal build          # 2026: this IS new-build — it became the default in Cabal 3.0</code></pre>
+  <p><strong>Stand 2026:</strong> Das Präfix <code>new-*</code> ist verschwunden. <code>cabal build</code>, <code>cabal run</code>, <code>cabal repl</code> und <code>cabal test</code> sind alle standardmäßig nix-artig. Die <code>v2-</code>-Aliase existieren weiterhin für Skripte; die alten <code>v1-</code>-Befehle sind veraltet. Was Cabal 2.0 als Option einführte, ist heute schlicht die Art, wie Cabal funktioniert.</p>
+
+  <h2>2. Backpack — Mixin-Pakete und Modulsignaturen</h2>
+  <p>Backpack fügte Haskell echte <em>parametrische Modularität</em> hinzu: Eine Bibliothek kann eine Modul-<strong>Signatur</strong> (eine Schnittstelle) deklarieren und dagegen getypt werden, ohne sich auf eine konkrete Implementierung festzulegen; ein Konsument „mixt“ dann die gewünschte Implementierung ein. Das klassische Beispiel ist eine Bibliothek, die gegen eine abstrakte <code>Str</code>-Signatur geschrieben ist und mit <code>String</code>, striktem <code>Text</code> oder <code>ByteString</code> instanziiert werden kann, ohne Code zu duplizieren.</p>
+  <pre><code>-- in a .cabal file
+library
+    signatures:   Str
+    exposed-modules: Generic.Algorithm
+
+library impl-text
+    mixins: indef-lib (Generic.Algorithm as Text.Algorithm)
+                      requires (Str as Data.Text)</code></pre>
+  <p><strong>Stand 2026:</strong> Backpack funktioniert und wird weiterhin unterstützt, blieb aber ein Spezialistenwerkzeug statt eines Mainstream-Musters — Typklassen und gewöhnliche Parametrisierung decken die meisten Bedürfnisse ab, und die Werkzeug-/IDE-Unterstützung für Signaturen blieb begrenzt. Greifen Sie darauf zurück, wenn Sie wirklich denselben Code gegen mehrere konkrete Typen kompilieren müssen; sonst begegnet es Ihnen selten.</p>
+
+  <h2>3. Ein modernes <code>.cabal</code>-Format</h2>
+  <p>Das Setzen von <code>cabal-version: 2.0</code> schaltete Formatverbesserungen frei, die heute zum Haskell-Alltag gehören:</p>
+  <ul>
+    <li><strong>Der Caret-Operator <code>^>=</code></strong>. <code>build-depends: aeson ^>= 2.1</code> bedeutet „<code>&gt;= 2.1 &amp;&amp; &lt; 2.2</code>“ — eine kompakte, absichtsklare Art, die obere PVP-Schranke einzuhalten. Man findet ihn überall in modernen Paketen.</li>
+    <li><strong><code>autogen-modules</code></strong>, damit generierte Module wie <code>Paths_yourpkg</code> korrekt deklariert und im sdist mitgeliefert werden.</li>
+    <li><strong>Fremdbibliotheken</strong> (die <code>foreign-library</code>-Stanza), die es erlauben, Haskell-Code als Shared Object zu bauen, um ihn von anderen Sprachen aus zu nutzen.</li>
+    <li><strong><code>build-depends</code> pro Komponente</strong>, damit Bibliothek, Tests und Benchmarks eines Pakets jeweils ihren eigenen präzisen Satz an Abhängigkeiten haben.</li>
+  </ul>
+  <p><strong>Stand 2026:</strong> Alles ist Standard. Die heutige Empfehlung lautet, <code>cabal-version: 3.0</code> oder neuer zu setzen (das impliziert alles, was 2.0 brachte, plus die Common-Stanzas von 2.2, den Platzhalter <code>**</code> für Datendateien und mehr). Verwenden Sie <code>2.0</code> nur, wenn Sie eine sehr alte Toolchain unterstützen müssen.</p>
+
+  <h2>4. Der Abhängigkeits-Solver wurde besser</h2>
+  <figure><img src="https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=1200&q=80&auto=format&fit=crop" alt="Quellcode geöffnet in einem Code-Editor" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Quellcode geöffnet in einem Code-Editor</figcaption></figure>
+  <p>Cabal 2.0 lieferte Solver-Verbesserungen, die ihn zugleich schneller machten und eher einen gültigen Installationsplan in einem tiefen Abhängigkeitsgraphen finden ließen, mit klareren Erklärungen, wenn kein Plan existiert. Der Solver hat sich seither weiter verbessert, aber mit 2.0 begann „der Solver funktioniert in der Regel von selbst“ für nicht-triviale Projekte zuzutreffen.</p>
+
+  <h2>Warum das wichtig war</h2>
+  <p>Vor 2.0 lautete die Geschichte der Haskell-Builds „global installieren und beten“, notdürftig durch Sandboxes geflickt. Nach 2.0 wurde daraus „deklariere, was du willst, erhalte einen reproduzierbaren, geteilten und isolierten Build“ — dasselbe mentale Modell wie bei Nix, Cargo oder modernen Paketmanagern anderswo. Jedes <code>cabal build</code>, das Sie 2026 ausführen, ist der direkte Nachfahre dessen, was 2.0 zum Standardweg machte.</p>
+
+  <h2>Wenn Sie ein altes Projekt aktualisieren</h2>
+  <pre><code># Bump the format and modernise bounds:
+cabal-version: 3.0          # was 1.x or 2.0
+
+# Replace hand-written ranges with caret bounds where it fits:
+build-depends:  base ^>= 4.18
+              , text ^>= 2.0
+
+# Drop any v1-/sandbox era commands from CI; use:
+cabal build --enable-tests
+cabal test
+cabal freeze                # commit cabal.project.freeze for reproducibility</code></pre>
+
+  <hr />
+  <p class="meta">Lesen Sie auch: <a href="/de/e/blog/2013-08-20-Cabal-sandbox.html">Die Cabal-Sandboxes und was sie ersetzt hat</a> · <a href="/de/e/blog/2011-08-22-GSoC-Final.html">cabal-install parallelisieren</a> · <a href="/de/e/">alle Leitfäden</a></p>
+  </div>
+</Base>

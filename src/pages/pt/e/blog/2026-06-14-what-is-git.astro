@@ -1,0 +1,69 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/pt/e/blog/2026-06-14-what-is-git.html';
+const title = 'O que é o Git? O controlo de versões explicado para principiantes (2026)';
+const description = 'O Git é um sistema de controlo de versões distribuído que regista cada alteração do teu código para ramificar, fundir, colaborar e desfazer. O que é o Git, os conceitos-chave (commit, ramo, merge, remoto), porque é importante e em que difere do GitHub.';
+---
+<Base title={title} description={description} path={path} type="article" lang="pt"
+  image="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/pt/">Início</a><span>/</span><a href="/pt/e/">Guias</a><span>/</span>O que é o Git</nav>
+  <p class="kicker">Programação · ferramentas · controlo de versões</p>
+  <h1>O que é o Git?</h1>
+  <div class="artmeta"><span>Por Coldwast</span><span>Atualizado a 14 de junho de 2026</span><span>7 min de leitura</span><span class="tag">#git</span><span class="tag">#tools</span><span class="tag">#workflow</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80&auto=format&fit=crop" alt="Linhas de código-fonte num ecrã escuro" width="1200" height="420" loading="eager" />
+    <figcaption>Linhas de código-fonte no ecrã — o Git regista o histórico completo das alterações de um código como este.</figcaption>
+  </figure>
+
+  <p>Se escreves código, vais encontrar o <strong>Git</strong> logo no primeiro dia. É a ferramenta que quase todos os projetos de software usam para acompanhar as alterações, e a base por baixo do GitHub, do GitLab e do fluxo de trabalho de desenvolvimento moderno. Este guia explica o que é o Git, o punhado de conceitos que o tornam evidente, porque é importante e em que difere do GitHub.</p>
+
+  <h2>A definição curta</h2>
+  <p><strong>O Git é um sistema de controlo de versões distribuído: regista o histórico de alterações de um conjunto de ficheiros para que possas revê-lo, ramificar, fundir, colaborar e voltar atrás.</strong> Criado por Linus Torvalds em 2005 para gerir o kernel do Linux, é hoje o padrão de facto. „Distribuído“ significa que cada cópia do projeto carrega o seu histórico completo — podes trabalhar, fazer commit e consultar o histórico totalmente offline.</p>
+
+  <h2>Os conceitos fundamentais</h2>
+  <ul>
+    <li><strong>Repositório (repo)</strong> — a pasta do projeto mais todo o seu histórico, guardados num diretório oculto <code>.git</code>.</li>
+    <li><strong>Commit</strong> — um instantâneo guardado dos teus ficheiros num dado momento, com uma mensagem que descreve a alteração. O histórico é uma cadeia de commits.</li>
+    <li><strong>Ramo (branch)</strong> — um apontador móvel que te permite desenvolver uma funcionalidade de forma isolada sem perturbar a linha principal (geralmente <code>main</code>).</li>
+    <li><strong>Merge (fusão)</strong> — combinar as alterações de um ramo noutro.</li>
+    <li><strong>Remote (remoto)</strong> — uma cópia partilhada do repositório alojada noutro lugar (por ex. no GitHub) para a qual fazes <code>push</code> e da qual fazes <code>pull</code>.</li>
+  </ul>
+
+  <figure><img src="https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=1200&q=80&auto=format&fit=crop" alt="Uma linha de comandos do terminal num ecrã" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Uma linha de comandos do terminal — o Git é pilotado sobretudo pela linha de comandos, embora os editores e as interfaces gráficas também o envolvam.</figcaption></figure>
+
+  <h2>O fluxo de trabalho do dia a dia</h2>
+  <p>O ciclo que a maioria dos programadores executa dezenas de vezes por dia:</p>
+  <pre><code>git clone &lt;url&gt;      # copy a repository locally
+# ...edit files...
+git add .            # stage the changes you want to save
+git commit -m "Add login form"   # save a snapshot with a message
+git push             # send your commits to the shared remote</code></pre>
+  <p>Para trabalhar em algo novo sem partir a linha principal, ramificas: <code>git checkout -b my-feature</code>, fazes os commits aí e depois executas um <code>git merge</code> (muitas vezes via uma pull request) de volta para <code>main</code>. Para obter o trabalho dos outros, executas <code>git pull</code>.</p>
+
+  <h2>Porque é que o Git é importante</h2>
+  <ul>
+    <li><strong>Histórico e desfazer</strong> — cada alteração é registada, por isso podes ver quem alterou o quê, quando e porquê, e voltar atrás num erro.</li>
+    <li><strong>Colaboração</strong> — muitas pessoas podem trabalhar em paralelo no mesmo projeto em ramos diferentes, e depois fundir em segurança.</li>
+    <li><strong>Experimentação segura</strong> — ramifica, experimenta algo, descarta-o se falhar — a linha principal mantém-se intacta.</li>
+    <li><strong>Está em todo o lado</strong> — o open source, as empresas, as pipelines de CI/CD e o deployment pressupõem todos o Git.</li>
+  </ul>
+
+  <h2>Git vs GitHub</h2>
+  <p>São confundidos a toda a hora. O <strong>Git</strong> é a ferramenta de controlo de versões que corre na tua máquina. O <strong>GitHub</strong> (como o GitLab ou o Bitbucket) é um <em>serviço de alojamento</em> que guarda repositórios Git online e acrescenta funcionalidades de colaboração — pull requests, issues, controlo de acessos, CI. Podes usar o Git sem qualquer conta GitHub; o GitHub é um lugar popular para colocar um remote Git, não o Git em si.</p>
+
+  <h2>A curva de aprendizagem honesta</h2>
+  <p>O Git é poderoso, e o seu conjunto de comandos pode parecer desconcertante no início — os merges podem entrar em conflito, e alguns comandos podem reescrever o histórico de formas que surpreendem os principiantes. A boa notícia: 90 % do trabalho diário usa apenas <code>clone</code>, <code>add</code>, <code>commit</code>, <code>push</code>, <code>pull</code> e <code>branch</code>. Domina estes e aprende o resto (rebase, stash, reset) quando realmente precisares.</p>
+
+  <h2>FAQ</h2>
+  <p><strong>O Git é a mesma coisa que o GitHub?</strong> Não. O Git é o software de controlo de versões no teu computador; o GitHub é um serviço online que aloja repositórios Git e acrescenta ferramentas de colaboração. O Git funciona sem o GitHub.</p>
+  <p><strong>O que é um commit?</strong> Um instantâneo guardado do teu projeto num dado momento, com uma mensagem que descreve o que mudou. O histórico de um projeto é uma sequência de commits.</p>
+  <p><strong>É preciso usar a linha de comandos?</strong> Não — os editores (VS Code) e os clientes gráficos envolvem o Git, e a maioria dos <a href="/pt/e/blog/2026-06-18-what-is-an-ide.html">IDE</a> integra-o — mas a linha de comandos é universal e vale a pena aprendê-la, já que cada tutorial e cada sistema de CI a falam.</p>
+  <p><strong>O que significa „distribuído“?</strong> Cada clone de um repositório Git contém o histórico completo, por isso podes fazer commit, ramificar e percorrer o histórico offline. Não há uma única cópia central da qual dependas para trabalhar.</p>
+
+  <p>O Git acompanha o código; os <a href="/pt/e/blog/2026-06-14-what-is-an-algorithm.html">algoritmos</a> e as <a href="/pt/e/blog/2026-06-14-what-is-an-api.html">API</a> são aquilo que esse código exprime. Explora outras explicações claras no nosso <a href="/pt/e/">índice de guias</a>.</p>
+
+  <div class="note">Guia independente, mantido pela comunidade. <strong>coldwa.st</strong> é um site de recursos de programação; este artigo é um texto explicativo novo e original sobre o Git. Os comandos refletem o comportamento padrão do Git — verifica detalhes e casos particulares na documentação oficial do Git.</div>
+  </div>
+</Base>

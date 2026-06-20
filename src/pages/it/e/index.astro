@@ -1,0 +1,59 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { guides, categories, guideTitle, guideDek, guideHref, catLabel, guideRead, guideCats } from '../../../data/guides.js';
+import { ui, localized } from '../../../i18n/ui.js';
+import { hasTx } from '../../../data/i18n-articles.js';
+const lang = 'it';
+const t = ui[lang];
+const path = '/it/e/';
+const stories = guides.filter((g) => hasTx(g.href, lang));
+const related = categories;
+const AV = {
+  perf:    { color:'#d6453a', svg:'<path d="M5 19a8 8 0 1 1 14 0"/><line x1="12" y1="13" x2="16" y2="9"/>' },
+  build:   { color:'#c46a12', svg:'<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/>' },
+  tool:    { color:'#2d7d46', svg:'<circle cx="12" cy="12" r="3.2"/><path d="M12 3v2.5M12 18.5V21M4.2 7l2.1 1.2M17.7 15.8l2.1 1.2M4.2 17l2.1-1.2M17.7 8.2l2.1-1.2"/>' },
+  compiler:{ color:'#1d6fe0', svg:'<rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3"/>' },
+  concept: { color:'#6d4ad6', svg:'<path d="M6 5l5 14M14 5c-2 4-2 6 0 14M5 12h7"/>' },
+  editor:  { color:'#0e9e90', svg:'<polyline points="8 8 4 12 8 16"/><polyline points="16 8 20 12 16 16"/><line x1="13" y1="6" x2="11" y2="18"/>' },
+  lambda:  { color:'#e0871a', svg:'<path d="M6 5l5 14M14 5c-2 4-2 6 0 14M5 12h7"/>' },
+};
+function catAvatar(cats=''){
+  const c = cats.toLowerCase();
+  if (c.includes('performance')) return AV.perf;
+  if (c.includes('build')||c.includes('cabal')) return AV.build;
+  if (c.includes('toolchain') || c.includes('tooling')) return AV.tool;
+  if (c.includes('compiler')) return AV.compiler;
+  if (c.includes('editor')) return AV.editor;
+  if (c.includes('concept')) return AV.concept;
+  return AV.lambda;
+}
+const gw = t.guides_word[stories.length === 1 ? 0 : 1];
+---
+<Base title="Guide — Coldwast programmazione & sviluppo" description="Guide di programmazione aggiornate e originali — Haskell, Cabal e il moderno toolkit. Indipendenti e curate dalla comunità." path={path} lang={lang}>
+  <div class="wrap">
+    <div class="cathead">
+      <p class="k">{t.category}</p>
+      <h1>{t.nav_guides}</h1>
+      <div class="relrow"><span class="lbl">{t.also_related}</span>
+        {related.map((r) => <a class="reltag" href={localized(`/e/c/${r.slug}.html`, lang)}>{catLabel(r, lang)}</a>)}
+      </div>
+      <p class="count"><b>{stories.length}</b> <span class="lbl">{gw}</span></p>
+    </div>
+    <div class="layout" style="grid-template-columns:1fr">
+      <div class="main">
+        {stories.map((s) => (
+          <article class="story">
+            <span class="ava cat-ava" style={`background:${catAvatar(s.cats).color}`} aria-hidden="true"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={catAvatar(s.cats).svg} /></span>
+            <div>
+              <p class="by"><a href={localized('/about.html', lang)}>Coldwast</a> <em>{t.wrote}</em></p>
+              <h3><a href={guideHref(s, lang)} set:html={guideTitle(s, lang)} /></h3>
+              <p class="ex"><span class="date">{s.date}</span> {t.in_word} {guideCats(s, lang)} — {guideDek(s, lang)}</p>
+              <a class="more" href={guideHref(s, lang)}>{t.read_more}</a>
+              <div class="metab"><span>📅 {guideRead(s, lang)}</span><span>↬ {t.updated}</span></div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+</Base>

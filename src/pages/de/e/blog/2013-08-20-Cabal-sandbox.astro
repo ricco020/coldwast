@@ -1,0 +1,98 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/de/e/blog/2013-08-20-Cabal-sandbox.html';
+const title = 'Cabal-Sandboxes: Was sie waren und was sie ersetzt hat (aktualisiert)';
+const description = 'Ein moderner, von der Community aktualisierter Leitfaden zu Cabal-Sandboxes — der projektbezogenen Abhängigkeitsisolation, die in cabal-install 1.18 eingeführt wurde — und dem nix-artigen v2-build-Workflow, der sie in der heutigen Haskell-Toolchain abgelöst hat.';
+---
+<Base title={title} description={description} path={path} type="article" lang="de"
+  image="https://coldwa.st/img/cabal-sandbox.svg" datePublished="2013-08-20" dateModified="2026-06-13">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/de/">Startseite</a><span>/</span><a href="/de/e/">Leitfäden</a><span>/</span>Cabal-Sandboxes</nav>
+  <p class="kicker">Haskell · Cabal · Build-Werkzeuge</p>
+  <h1>Cabal-Sandboxes: Was sie waren und was sie ersetzt hat</h1>
+  <div class="artmeta"><span>Von Coldwast</span><span>Aktualisiert am 13. Juni 2026</span><span>9 Min. Lesezeit</span><span class="tag">#haskell</span><span class="tag">#cabal</span><span class="tag">#build</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/cabal-sandbox.svg" alt="Drei isolierte Cabal-Sandboxes, jede mit ihrem eigenen Satz an Paketen, neben einem Terminal, das cabal sandbox init ausführt" width="1200" height="420" />
+    <figcaption>Projektbezogene Abhängigkeitsisolation — die Idee, die Sandboxes einführten, heute das Standardverhalten.</figcaption>
+  </figure>
+
+  <div class="note">Dies ist eine aktualisierte, von der Community gepflegte Neufassung zu einem Thema, für das diese Domain historisch bekannt war. Es handelt sich um eigenständige Inhalte, weder vom früheren Domain-Inhaber verfasst noch mit ihm verbunden. <code>cabal sandbox</code> selbst gehört inzwischen der Geschichte an — wenn Sie nur den modernen Workflow wollen, springen Sie direkt zu <a href="#today">was Sie heute verwenden sollten</a>.</div>
+
+  <p>Als <code>cabal sandbox</code> im August 2013 in cabal-install <strong>1.18</strong> erschien, behob es das damals Lästigste an der Haskell-Entwicklung: die globale Paketdatenbank. Vor den Sandboxes schrieb jedes <code>cabal install</code> in einen einzigen, gemeinsam genutzten <code>~/.cabal</code>-Store. Installieren Sie zwei Projekte, die unterschiedliche Versionen derselben Bibliothek benötigen, und Sie landeten in der berüchtigten „dependency hell“ — einer beschädigten globalen Datenbank, die oft mit <code>rm -rf ~/.ghc ~/.cabal</code> und einem Neuanfang endete.</p>
+
+  <p>Sandboxes machten Abhängigkeiten <strong>projektbezogen</strong>. Dieses Prinzip ist nie verschwunden — der Mechanismus aber schon. Hier das vollständige Bild, vom Funktionieren der Sandboxes bis zum nix-artigen Workflow, der sie ersetzt hat.</p>
+
+  <h2>Was eine Sandbox eigentlich war</h2>
+  <p>Eine Sandbox war eine projektlokale Paketdatenbank. Sie erstellten eine im Verzeichnis Ihres Projekts:</p>
+  <pre><code>$ cd my-project
+$ cabal sandbox init
+Writing a default package environment file to
+  /home/you/my-project/cabal.sandbox.config
+Creating a new sandbox at
+  /home/you/my-project/.cabal-sandbox</code></pre>
+  <p>Von da an verwendeten <code>cabal install</code> und <code>cabal build</code>, in diesem Verzeichnis ausgeführt, <code>.cabal-sandbox/</code> anstelle des globalen Stores. Zwei Projekte konnten von widersprüchlichen Versionen von <code>aeson</code> oder <code>text</code> abhängen, ohne sich je in die Quere zu kommen, weil jedes seine eigene isolierte Datenbank hatte.</p>
+
+  <h3>Lokale Quell-Abhängigkeiten</h3>
+  <p>Die andere wirklich nützliche Funktion war <code>add-source</code>, die es einer Sandbox erlaubte, eine Bibliothek direkt aus einem lokalen Repository einzubinden — unschätzbar, wenn man an einer Bibliothek und einer Anwendung zugleich bastelt:</p>
+  <pre><code>$ cabal sandbox add-source ../my-library
+$ cabal install --dependencies-only
+$ cabal build</code></pre>
+  <p>Ändern Sie <code>../my-library</code>, bauen Sie die Anwendung neu, und cabal erkannte die Änderung und kompilierte die Abhängigkeit neu. Das war 2013 das Nächste, was Haskell einem Monorepo-Workflow hatte.</p>
+
+  <h2>Warum Sandboxes schließlich entfernt wurden</h2>
+  <p>Sandboxes lösten die Isolation, ließen aber zwei Probleme ungelöst:</p>
+  <ul>
+    <li><strong>Keine projektübergreifende gemeinsame Nutzung.</strong> Jede Sandbox baute die Welt von Grund auf neu. Zehn Projekte, die von <code>lens</code> abhingen, bedeuteten zehn separate Builds von <code>lens</code> und seinem riesigen Abhängigkeitsbaum — langsam und plattenhungrig.</li>
+    <li><strong>Keine maschinenübergreifende Reproduzierbarkeit.</strong> Eine Sandbox erfasste, <em>wo</em> die Pakete lagen, nicht einen präzisen, reproduzierbaren Plan, <em>welche genauen Versionen</em> gewählt würden. Zwei Entwickler, die dieselben Befehle eine Woche später ausführten, konnten trotzdem unterschiedliche Builds erhalten.</li>
+  </ul>
+  <p>Die Lösung, konzeptionell von Nix entlehnt, bestand darin, Builds <strong>inhaltsadressiert und global geteilt</strong> zu machen: eine gegebene Paket-Version-Optionen-Kombination einmal bauen, sie unter einem Hash in einem unveränderlichen globalen Store ablegen, und jedes Projekt, das genau diese Kombination braucht, sie wiederverwenden lassen. Das sind die „nix-artigen lokalen Builds“, die unter dem Namen <code>new-build</code> in Cabal 2.0 erschienen.</p>
+
+  <h2 id="today">Was Sie heute verwenden sollten (2026)</h2>
+  <figure><img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80&auto=format&fit=crop" alt="Quellcode auf einem Computerbildschirm" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Quellcode auf einem Computerbildschirm</figcaption></figure>
+  <p><code>cabal sandbox</code> wurde während der Cabal-2.x-Reihe als veraltet markiert und in späteren Versionen vollständig entfernt. Der moderne Standard-Workflow des heutigen <code>cabal-install</code> erfordert <strong>keinen init-Schritt</strong> — die Isolation ist automatisch:</p>
+  <pre><code># In any project directory with a .cabal file:
+$ cabal build          # nix-style local build (v2 is the default now)
+$ cabal run
+$ cabal repl
+$ cabal test</code></pre>
+  <p>Was unter der Haube geschieht, ist genau die projektbezogene Isolation, die Sandboxes versprachen, plus die gemeinsame Nutzung, die ihnen fehlte:</p>
+  <ul>
+    <li>Die Build-Artefakte Ihres Projekts landen in einem lokalen Verzeichnis <code>dist-newstyle/</code> (der geistige Nachfolger von <code>.cabal-sandbox/</code>).</li>
+    <li>Kompilierte Abhängigkeiten landen in einem <strong>unveränderlichen globalen Store</strong> (<code>~/.cabal/store</code> oder unter <code>~/.local/state/cabal</code> in neueren Layouts), indiziert über einen Hash aus Paket, Version, Abhängigkeiten und Optionen. Bauen Sie <code>lens</code> einmal; jedes Projekt, das denselben Plan wiederverwendet, referenziert denselben Store-Eintrag.</li>
+    <li>Eine Datei <code>cabal.project</code> ersetzt <code>cabal.sandbox.config</code> für Konfiguration, Multi-Paket-Builds und Pinning.</li>
+  </ul>
+
+  <h3>Das moderne Äquivalent von <code>add-source</code></h3>
+  <p>Lokale und entfernte Quell-Abhängigkeiten leben jetzt in <code>cabal.project</code>:</p>
+  <pre><code># cabal.project
+packages: . ../my-library
+
+-- or pull a dependency straight from git:
+source-repository-package
+    type: git
+    location: https://github.com/owner/some-lib
+    tag: 0a1b2c3d</code></pre>
+  <p>Das ist strikt mächtiger als <code>add-source</code>: Es bewältigt mehrere lokale Pakete, exakte git-Pins und reproduzierbare Multi-Repository-Builds.</p>
+
+  <h3>Reproduzierbares Versions-Pinning</h3>
+  <p>Für die Reproduzierbarkeit, die Sandboxes nie boten, erzeugen Sie eine Freeze-Datei, die jede transitive Version festschreibt:</p>
+  <pre><code>$ cabal freeze        # writes cabal.project.freeze
+# commit it — every machine now resolves the identical plan</code></pre>
+
+  <h2>Und was ist mit Stack?</h2>
+  <p>Stack geht dieselben Ziele aus einem anderen Winkel an: Statt Versionen pro Projekt aufzulösen, baut es gegen kuratierte <em>Snapshots</em> (die Stackage-Resolver wie <code>lts-22.x</code>), bei denen ein ganzer Satz von Paketen nachweislich zusammen kompiliert, und teilt Builds global pro Snapshot. Beide Werkzeuge sind 2026 solide und weit verbreitet; die praktische Aufteilung lautet grob „ich will die Standard-Toolchain und feine Kontrolle“ (Cabal) gegen „ich will ein kuratiertes, verlässliches Set schlüsselfertig“ (Stack). Keines von beiden verwendet Sandboxes — das Konzept ist auf beiden Seiten vollständig überholt.</p>
+
+  <h2>Migrations-Spickzettel</h2>
+  <pre><code>cabal sandbox init                 →  (nothing — just `cabal build`)
+cabal sandbox add-source ../lib    →  packages: . ../lib   (in cabal.project)
+cabal install --dependencies-only  →  cabal build --only-dependencies
+.cabal-sandbox/                    →  dist-newstyle/ (local) + ~/.cabal/store (shared)
+cabal.sandbox.config               →  cabal.project (+ cabal.project.freeze)</code></pre>
+
+  <p>Die Lektion, die Sandboxes lehrten — niemals globalen veränderlichen Zustand verschmutzen, pro Projekt isolieren — setzte sich so vollständig durch, dass sie unsichtbar wurde: Es ist einfach die Art, wie sich <code>cabal build</code> verhält. Wenn Sie dies lesen, weil ein alter Link oder ein Tutorial Sie auf <code>cabal sandbox init</code> verwiesen hat, können Sie diesen Befehl bedenkenlos vergessen. Führen Sie einfach <code>cabal build</code> aus.</p>
+
+  <hr />
+  <p class="meta">Lesen Sie auch: <a href="/de/e/blog/2017-09-09-Cabal-2-0.html">Cabal 2.0 und die nix-artigen Builds</a> · <a href="/de/e/blog/2011-08-22-GSoC-Final.html">cabal-install parallelisieren</a> · <a href="/de/e/">alle Leitfäden</a></p>
+  </div>
+</Base>

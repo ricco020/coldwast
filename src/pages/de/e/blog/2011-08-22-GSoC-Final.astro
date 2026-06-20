@@ -1,0 +1,75 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/de/e/blog/2011-08-22-GSoC-Final.html';
+const title = 'cabal-install parallelisieren: Wie Haskell-Builds Ihre Kerne ausnutzen (aktualisiert)';
+const description = 'Ein von der Community aktualisierter Leitfaden zu parallelen Builds in cabal-install — die Parallelisierung des Abhängigkeitsgraphen, deren Grundlagen 2011 in einem Google-Summer-of-Code-Projekt gelegt wurden — und wie -j-Builds und GHC-Semaphore in der Toolchain von 2026 funktionieren.';
+---
+<Base title={title} description={description} path={path} type="article" lang="de"
+  image="https://coldwa.st/img/gsoc-parallel.svg" datePublished="2011-08-22" dateModified="2026-06-13">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/de/">Startseite</a><span>/</span><a href="/de/e/">Leitfäden</a><span>/</span>cabal-install parallelisieren</nav>
+  <p class="kicker">Haskell · Cabal · Build-Performance</p>
+  <h1>cabal-install parallelisieren: Wie Haskell-Builds Ihre Kerne ausnutzen</h1>
+  <div class="artmeta"><span>Von Coldwast</span><span>Aktualisiert am 13. Juni 2026</span><span>6 Min. Lesezeit</span><span class="tag">#haskell</span><span class="tag">#cabal</span><span class="tag">#performance</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/gsoc-parallel.svg" alt="Parallele Build-Spuren, die unabhängige Haskell-Pakete zeigen, die gleichzeitig mit cabal build -j kompiliert werden" width="1200" height="420" />
+    <figcaption>Unabhängige Pakete im Installationsplan werden parallel gebaut — die Kernidee hinter den heutigen <code>-j</code>-Builds.</figcaption>
+  </figure>
+
+  <div class="note">Aktualisierte, von der Community gepflegte Neufassung. Das ursprüngliche Google-Summer-of-Code-Projekt von 2011 „Parallelising cabal-install“ wurde vom früheren Domain-Inhaber durchgeführt; dieser Leitfaden ist ein <em>neuer, eigenständiger Text</em> zum Thema und gibt diese Arbeit weder wieder noch beansprucht er deren Urheberschaft. Er erklärt die Idee und bringt sie für die Toolchain von 2026 auf den neuesten Stand.</div>
+
+  <p>2011 war das Bauen eines Haskell-Projekts mit einem großen Abhängigkeitsbaum eine sequenzielle Plackerei: <code>cabal install</code> kompilierte ein Paket, dann das nächste, dann das übernächste — und ließ den Großteil einer Mehrkernmaschine ungenutzt. Ein Google-Summer-of-Code-Projekt in jenem Jahr griff genau das auf: <code>cabal-install</code> beizubringen, unabhängige Pakete <strong>parallel</strong> zu bauen. Diese Idee steckt heute in jedem Haskell-Build. So funktioniert sie, und so holen Sie heute das Beste heraus.</p>
+
+  <h2>Die Kernidee: Ein Build ist ein DAG</h2>
+  <p>Ein Installationsplan ist ein <strong>gerichteter azyklischer Graph</strong> von Paketen. Wenn <code>aeson</code> und <code>vector</code> beide nur von <code>base</code> abhängen, hängen sie nicht <em>voneinander</em> ab — es gibt also keinen Grund, sie nacheinander zu bauen. Sie können jedes Paket, dessen Abhängigkeiten bereits gebaut sind, gleichzeitig kompilieren, begrenzt nur durch die Anzahl der Kerne, die Sie nutzen möchten.</p>
+  <p>Konkret tut der Builder Folgendes:</p>
+  <ol>
+    <li>Er sortiert den Abhängigkeitsgraphen topologisch.</li>
+    <li>Er verwaltet eine „bereit“-Menge von Paketen, deren sämtliche Abhängigkeiten gebaut sind.</li>
+    <li>Er startet bis zu <em>N</em> Builds aus dieser Menge gleichzeitig; sobald einer fertig ist, tritt jedes neu freigeschaltete Paket der bereit-Menge bei.</li>
+  </ol>
+  <p>Bei einem breiten Abhängigkeitsgraphen und einer Maschine mit 8 oder 16 Kernen verwandelt das einen mehrminütigen Kaltstart-Build in etwas deutlich Kürzeres.</p>
+
+  <h2>So nutzen Sie es heute (2026)</h2>
+  <figure><img src="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80&auto=format&fit=crop" alt="Quellcodezeilen auf einem dunklen Bildschirm" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Quellcodezeilen auf einem dunklen Bildschirm</figcaption></figure>
+  <p>Parallelität auf Paketebene ist standardmäßig aktiviert und über <code>-j</code> einstellbar:</p>
+  <pre><code>$ cabal build -j         # use all available cores
+$ cabal build -j4        # cap at 4 concurrent package builds</code></pre>
+  <p>Oder stellen Sie es dauerhaft in <code>cabal.project</code> (oder <code>~/.cabal/config</code>) ein:</p>
+  <pre><code># cabal.project
+jobs: 4</code></pre>
+  <p>Das ist heute auf eine Weise sicher, wie es das ursprünglich nicht war, dank der nix-artigen lokalen Builds (siehe <a href="/de/e/blog/2017-09-09-Cabal-2-0.html">Cabal 2.0</a>): Jede Kombination aus Paket, Version und Optionen wird in einem <strong>global inhaltsadressierten Store</strong> gebaut, sodass zwei parallele Builds einander niemals überschreiben können. Die Isolation macht aggressive Parallelität risikofrei.</p>
+
+  <h2>Zwei Ebenen der Parallelität</h2>
+  <p>Es gibt tatsächlich <em>zwei</em> unabhängige Achsen, und beide zu verstehen ist der Schlüssel, um Ihre CPU nicht zu überlasten:</p>
+  <ul>
+    <li><strong>Paketebene</strong> (<code>cabal build -j</code>): mehrere unabhängige <em>Pakete</em> gleichzeitig bauen. Das ist der Nachfahre der Arbeit von 2011.</li>
+    <li><strong>Modulebene</strong> (GHCs eigenes <code>-j</code>): Innerhalb eines einzelnen Pakets kann GHC unabhängige <em>Module</em> parallel kompilieren. Sie aktivieren das über GHC-Optionen, z. B. <code>ghc-options: -j</code>.</li>
+  </ul>
+  <p>Die Falle ist, sie zu multiplizieren: 8 Pakete parallel × je 8 Module parallel = bis zu 64 gleichzeitige GHC-Threads auf einer 8-Kern-Maschine, was bremst statt zu helfen.</p>
+
+  <h3>Die moderne Lösung: ein Build-Semaphor</h3>
+  <p>Aktuelle Versionen von GHC und Cabal lösen das Überlastungsproblem mit einem gemeinsam genutzten <strong>Job-Semaphor</strong>. Statt dass jedes Paket unabhängig <em>N</em> Modul-Jobs startet, übergibt Cabal an GHC ein einziges Semaphor, sodass die Gesamtnebenläufigkeit — über <em>alle</em> Pakete und <em>alle</em> Module hinweg — durch eine einzige Zahl begrenzt bleibt:</p>
+  <pre><code># cabal.project
+jobs: 8
+package *
+  ghc-options: -jsem    # coordinate module + package parallelism
+                        # via a shared semaphore</code></pre>
+  <p>Mit einem Semaphor bedeutet „8 Jobs“ höchstens 8 gleichzeitig laufende GHC-Kompilieraufgaben insgesamt, ob sie nun aus den Modulen eines großen Pakets oder aus acht kleinen Paketen stammen — genau das richtige Verhalten auf einer 8-Kern-Maschine.</p>
+
+  <h2>Praktisches Tuning</h2>
+  <ul>
+    <li><strong>Kalte CI-Builds:</strong> <code>cabal build -j</code> (alle Kerne) gewinnt fast immer — der Abhängigkeitsgraph ist breit und die CI-Maschinen sonst ungenutzt.</li>
+    <li><strong>Interaktive Entwicklung:</strong> Erwägen Sie, ein bis zwei Kerne frei zu lassen (<code>-j$(($(nproc)-2))</code>), damit Ihr Editor/LSP während einer Neukompilierung reaktionsschnell bleibt.</li>
+    <li><strong>Oft ist der Speicher die Grenze, nicht die Kerne.</strong> GHC kann pro Kompilierung viel RAM verbrauchen; wenn ein paralleler Build ins Swappen gerät, senken Sie <code>-j</code>. Kerne sind billig, es ist der RAM-Druck, der große Haskell-Builds tatsächlich ausbremst.</li>
+    <li><strong>Einmal messen:</strong> Stoppen Sie die Zeit eines sauberen Builds bei <code>-j2</code>, <code>-j4</code>, <code>-j</code> auf Ihrer eigenen Hardware und Ihrem Abhängigkeitsset — das Optimum hängt von beidem ab.</li>
+  </ul>
+
+  <h2>Fazit</h2>
+  <p>Die GSoC-Arbeit von 2011 beantwortete eine Frage, die noch immer zählt: Ein Build ist ein Abhängigkeitsgraph, und unabhängige Knoten sollten gleichzeitig kompiliert werden. Fünfzehn Jahre später ist diese Idee das Standardverhalten, sicher gemacht durch inhaltsadressierten Speicher und verfeinert durch Build-Semaphore. Wenn sich Ihre Haskell-Builds noch sequenziell anfühlen, lassen Sie mit ziemlicher Sicherheit Kerne ungenutzt — beginnen Sie mit <code>cabal build -j</code>.</p>
+
+  <hr />
+  <p class="meta">Lesen Sie auch: <a href="/de/e/blog/2017-09-09-Cabal-2-0.html">Cabal 2.0 und die nix-artigen Builds</a> · <a href="/de/e/blog/2013-08-20-Cabal-sandbox.html">Die Cabal-Sandboxes und was sie ersetzt hat</a> · <a href="/de/e/">alle Leitfäden</a></p>
+  </div>
+</Base>

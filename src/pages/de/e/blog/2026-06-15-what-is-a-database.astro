@@ -1,0 +1,64 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/de/e/blog/2026-06-15-what-is-a-database.html';
+const title = 'Was ist eine Datenbank? Eine klare Einführung (2026)';
+const description = 'Eine Datenbank ist eine organisierte Sammlung von Daten, verwaltet von einer Software, die das zuverlässige Speichern, Abfragen und Aktualisieren ermöglicht. Was eine Datenbank ist, relational vs. NoSQL, die zentralen Konzepte (Tabellen, Schema, ACID), reale Beispiele und der Bezug zu SQL.';
+---
+<Base title={title} description={description} path={path} type="article" lang="de"
+  image="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-15" dateModified="2026-06-15">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/de/">Startseite</a><span>/</span><a href="/de/e/">Leitfäden</a><span>/</span>Was ist eine Datenbank</nav>
+  <p class="kicker">Programmierung · Daten · Datenbanken</p>
+  <h1>Was ist eine Datenbank?</h1>
+  <div class="artmeta"><span>Von Coldwast</span><span>Aktualisiert am 15. Juni 2026</span><span>7 Min. Lesezeit</span><span class="tag">#database</span><span class="tag">#data</span><span class="tag">#concepts</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&q=80&auto=format&fit=crop" alt="Serverschränke in einem Rechenzentrum" width="1200" height="420" loading="eager" />
+    <figcaption>Serverschränke in einem Rechenzentrum — Datenbanken laufen auf Servern wie diesen und speichern die Daten hinter Apps und Websites.</figcaption>
+  </figure>
+
+  <p>Jede App, die du nutzt — deine Bank, ein Onlineshop, ein Social-Feed — bewahrt ihre Informationen irgendwo auf, wo sie wiedergefunden, geändert und als vertrauenswürdig betrachtet werden können. Dieses „Irgendwo“ ist eine <strong>Datenbank</strong>. Es ist eine der grundlegendsten Ideen der Software. Dieser Leitfaden erklärt, was eine Datenbank ist, die großen Typen, die wichtigen Konzepte, reale Beispiele und den Bezug zu <a href="/de/e/blog/2026-06-14-what-is-sql.html">SQL</a>.</p>
+
+  <h2>Die kurze Definition</h2>
+  <p><strong>Eine Datenbank ist eine organisierte Sammlung von Daten, verwaltet von einer Software (einem Datenbankmanagementsystem, kurz DBMS), die das zuverlässige Speichern, Abrufen, Aktualisieren und Schützen dieser Daten ermöglicht.</strong> Auch eine Tabellenkalkulation kann Daten enthalten, doch eine Datenbank fügt Struktur hinzu, schnelle Abfragen in großem Maßstab, Mehrbenutzerzugriff und die Garantie, dass die Daten konsistent bleiben, selbst wenn vieles gleichzeitig geändert wird.</p>
+
+  <h2>Datenbank vs. DBMS</h2>
+  <p>Zwei Wörter, die oft synonym verwendet werden, aber unterschiedliche Dinge bezeichnen. Die <strong>Datenbank</strong> sind die Daten selbst und ihre Organisation. Das <strong>DBMS</strong> — PostgreSQL, MySQL, SQLite, MongoDB — ist die Software, die sie speichert, deine Abfragen ausführt, Regeln durchsetzt und gleichzeitige Zugriffe verwaltet. Wenn man fragt „welche Datenbank soll ich nehmen?“, meint man meist das DBMS.</p>
+
+  <h2>Die zwei großen Familien</h2>
+  <ul>
+    <li><strong>Relationale Datenbanken (SQL)</strong>: organisieren Daten in <em>Tabellen</em> aus Zeilen und Spalten, mit definierten Beziehungen dazwischen, und man fragt sie mit <a href="/de/e/blog/2026-06-14-what-is-sql.html">SQL</a> ab. Sie glänzen bei strukturierten Daten und garantierter Konsistenz. Beispiele: PostgreSQL, MySQL, SQLite, SQL Server.</li>
+    <li><strong>NoSQL-Datenbanken</strong>: lockern die starre Tabellenstruktur zugunsten von Flexibilität und Skalierbarkeit. Es gibt sie in mehreren Ausprägungen: dokumentenorientiert (MongoDB), Schlüssel-Wert (Redis), Wide-Column (Cassandra) und Graph (Neo4j). Nützlich für große Datenmengen, schnelles Caching oder Daten, deren Form sich häufig ändert.</li>
+  </ul>
+  <p>Die meisten realen Systeme nutzen mehrere — etwa eine relationale Datenbank für die Kernsätze und einen Schlüssel-Wert-Speicher für den Cache.</p>
+
+  <figure><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=crop" alt="Ein Laptop, der ein Daten-Dashboard mit Diagrammen anzeigt" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Ein Daten-Dashboard — die Zahlen und Diagramme einer App werden aus einer darunterliegenden Datenbank gelesen, meist über eine Abfrage.</figcaption></figure>
+
+  <h2>Die zentralen Konzepte</h2>
+  <ul>
+    <li><strong>Schema</strong> — die definierte Struktur: welche Tabellen existieren, ihre Spalten und Typen sowie die Regeln. Relationale Datenbanken sind schema-first; viele NoSQL-Datenbanken sind flexibel.</li>
+    <li><strong>Abfrage</strong> — eine Anforderung bestimmter Daten („alle Bestellungen der letzten Woche“). In relationalen Datenbanken schreibt man sie in SQL.</li>
+    <li><strong>Index</strong> — eine Suchstruktur, die Abfragen schnell macht, indem nicht jede Zeile durchlaufen werden muss, wie das Stichwortverzeichnis am Ende eines Buchs.</li>
+    <li><strong>Transaktion</strong> — eine Gruppe von Änderungen, die entweder alle gemeinsam gelingen oder alle gemeinsam scheitern müssen (Geld zwischen zwei Konten überweisen). Relationale Datenbanken garantieren dies über die <strong>ACID</strong>-Eigenschaften.</li>
+  </ul>
+
+  <h2>Was ACID bedeutet</h2>
+  <p>ACID beschreibt die Garantien, die eine zuverlässige Datenbank einer Transaktion bietet: <strong>Atomarität</strong> (alles oder nichts), <strong>Konsistenz</strong> (die Daten erfüllen ihre Regeln vorher und nachher), <strong>Isolation</strong> (gleichzeitige Transaktionen beschädigen sich nicht gegenseitig) und <strong>Dauerhaftigkeit</strong> (einmal bestätigt, übersteht die Änderung einen Absturz). Genau diese Garantien sind der Grund, warum man Geld und Datensätze einer Datenbank anvertraut und nicht einer einfachen Datei.</p>
+
+  <h2>Warum Datenbanken wichtig sind</h2>
+  <p>Sie ermöglichen es Software, Daten einmal zu speichern und sie überall zu nutzen — sicher, in großem Maßstab, mit vielen Nutzern gleichzeitig — und jeden beliebigen Ausschnitt in Millisekunden wiederzufinden. Fast jedes nicht-triviale Programm braucht irgendwann eine. Den richtigen Typ wählen und ihn gut abfragen zu können, ist eine der beständigsten Fähigkeiten in der Informatik.</p>
+
+  <h2>Die ehrlichen Kompromisse</h2>
+  <p>Es gibt keine allgemein „beste“ Datenbank. Relationale Datenbanken bieten starke Konsistenz und mächtige Abfragen, verlangen aber ein definiertes Schema; NoSQL bietet Flexibilität und horizontale Skalierung, opfert dafür aber oft bestimmte Konsistenzgarantien. Die richtige Wahl hängt von der Form deiner Daten ab, von deinem Maßstab und davon, wie wichtig dir strikte Konsistenz gegenüber Flexibilität ist. Viele Teams kombinieren beides.</p>
+
+  <h2>FAQ</h2>
+  <p><strong>Ist eine Datenbank dasselbe wie SQL?</strong> Nein. Eine Datenbank speichert die Daten; <a href="/de/e/blog/2026-06-14-what-is-sql.html">SQL</a> ist die Sprache, mit der man relationale Datenbanken abfragt. NoSQL-Datenbanken nutzen andere Abfragemethoden.</p>
+  <p><strong>Ist eine Tabellenkalkulation eine Datenbank?</strong> Im weiten Sinne ja, aber nicht wirklich. Eine Tabellenkalkulation enthält Daten, doch eine Datenbank fügt erzwungene Struktur, schnelle Abfragen in großem Maßstab, Mehrbenutzer-Sicherheit und Transaktionsgarantien hinzu, die eine Tabellenkalkulation nicht hat.</p>
+  <p><strong>Was ist der Unterschied zwischen SQL und NoSQL?</strong> SQL-/relationale Datenbanken nutzen strukturierte Tabellen und starke Konsistenz; NoSQL-Datenbanken lockern die Struktur zugunsten von Flexibilität und Skalierung. Keine ersetzt die andere — sie passen zu unterschiedlichen Einsatzzwecken. Einen ausführlichen Vergleich findest du unter <a href="/de/e/blog/2026-06-18-sql-vs-nosql.html">SQL vs. NoSQL: welche Datenbank, und wann</a>.</p>
+  <p><strong>Welche Datenbank sollte man zuerst lernen?</strong> Eine relationale — SQLite oder PostgreSQL — denn das relationale Modell und SQL lassen sich überallhin übertragen und vermitteln die Grundideen klar.</p>
+
+  <p>Um eine relationale Datenbank abzufragen, nutzt du <a href="/de/e/blog/2026-06-14-what-is-sql.html">SQL</a>; die Daten, die eine Datenbank an eine App zurückgibt, reisen oft als <a href="/de/e/blog/2026-06-14-what-is-json.html">JSON</a>. Stöbere durch weitere klare Erklärungen in unserem <a href="/de/e/">Leitfaden-Index</a>.</p>
+
+  <div class="note">Unabhängiger, von der Community gepflegter Leitfaden. <strong>coldwa.st</strong> ist eine Website mit Programmierressourcen; dieser Artikel ist ein neuer, eigenständiger erklärender Text über Datenbanken. Die Beispiele spiegeln weit verbreitete Systeme wider; prüfen Sie die systemspezifischen Details in der jeweiligen Dokumentation.</div>
+  </div>
+</Base>

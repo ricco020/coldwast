@@ -1,0 +1,74 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/pt/e/blog/2026-06-18-grpc-vs-rest.html';
+const title = 'gRPC vs REST: que estilo de API e quando (2026)';
+const description = 'gRPC vs REST em 2026: o REST usa HTTP + JSON, legível e universal; o gRPC usa HTTP/2 + Protocol Buffers para chamadas entre serviços rápidas, tipadas e em streaming. As verdadeiras diferenças, desempenho, streaming, suporte de navegador e qual escolher.';
+const hero = '/img/grpc-vs-rest-2026.jpg';
+const faq = [
+  { q: 'Qual é a diferença entre gRPC e REST?', a: 'O REST é um estilo de arquitetura para APIs web assente em HTTP, que troca normalmente JSON legível através de URL de recursos. O gRPC é uma framework RPC de alto desempenho que corre sobre HTTP/2 e troca Protocol Buffers binários, definidos por um contrato .proto rigoroso. Em resumo: o REST é orientado a recursos, textual e universal; o gRPC é orientado à ação (ao método), binário, tipado e rápido. Ambos resolvem o mesmo problema – programas que comunicam numa rede – com compromissos diferentes.' },
+  { q: 'O gRPC é mais rápido do que o REST?', a: 'Em geral, sim para o tráfego entre serviços. O gRPC envia Protocol Buffers binários compactos sobre ligações HTTP/2 multiplexadas: cargas mais pequenas, menos sobrecarga do que JSON sobre HTTP/1.1 e streaming bidirecional. A diferença conta sobretudo para microsserviços internos de alto volume; para uma API pública pouco sobrecarregada, o REST + cache HTTP é muitas vezes mais do que suficiente.' },
+  { q: 'É possível usar gRPC num navegador?', a: 'Não diretamente. Os navegadores não falam gRPC puro porque não expõem o controlo HTTP/2 de baixo nível de que o gRPC precisa. Usa-se gRPC-Web com um proxy (por ex. Envoy) como ponte, o que acrescenta complexidade e limita algumas funções (como o streaming do cliente). O REST, por seu lado, funciona nativamente a partir de qualquer navegador via fetch. Se a sua API é consumida sobretudo por front-ends web, o REST (ou GraphQL) é mais simples.' },
+  { q: 'Quando usar gRPC em vez de REST?', a: 'Escolha gRPC para a comunicação interna entre serviços onde contam o desempenho, a baixa latência, o streaming e um contrato rigorosamente tipado – microsserviços, dados em tempo real, back-ends poliglotas. Escolha REST para APIs públicas, clientes de navegador, CRUD simples de recursos e quando contam a legibilidade, a ubiquidade e a cache HTTP gratuita. Muitos sistemas usam ambos: REST/GraphQL na fronteira para os clientes, gRPC entre os serviços internos.' },
+];
+---
+<Base title={title} description={description} path={path} type="article" lang="pt"
+  image={hero} datePublished="2026-06-18" dateModified="2026-06-18">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/pt/">Início</a><span>/</span><a href="/pt/e/">Guias</a><span>/</span>gRPC vs REST</nav>
+  <p class="kicker">Programação · web · API</p>
+  <h1>gRPC vs REST</h1>
+  <div class="artmeta"><span>Por Coldwast</span><span>Atualizado a 18 de junho de 2026</span><span>8 min de leitura</span><span class="tag">#grpc</span><span class="tag">#rest</span><span class="tag">#api</span></div>
+
+  <figure>
+    <img class="hero" src={hero} alt="Um switch de rede com cabos de fibra e Ethernet ligados" width="1200" height="420" loading="eager" />
+    <figcaption>Duas formas de os serviços comunicarem na rede – o REST otimiza a universalidade, o gRPC a velocidade e os contratos tipados.</figcaption>
+  </figure>
+
+  <p>Quando desenha a comunicação entre dois programas numa rede, a bifurcação moderna é <strong>REST</strong> vs <strong>gRPC</strong>. Ambos expõem funcionalidades via HTTP, mas fazem apostas opostas: o REST privilegia a simplicidade <em>legível e universal</em>; o gRPC a eficiência <em>rápida, tipada, binária</em>. Este guia compara-os honestamente quanto a formato, desempenho, streaming, suporte de navegador e ferramentas – e quando escolher cada um. (Novo nas APIs? Comece por <a href="/pt/e/blog/2026-06-14-what-is-an-api.html">o que é uma API</a>.)</p>
+
+  <h2>A diferença fundamental</h2>
+  <ul>
+    <li><strong>REST</strong> – um <em>estilo</em> de arquitetura sobre HTTP: recursos em URL, verbos HTTP (GET/POST/PUT/DELETE), em geral <a href="/pt/e/blog/2026-06-14-what-is-json.html">JSON</a>. Legível, sem estado, universal.</li>
+    <li><strong>gRPC</strong> – uma <em>framework</em> de chamadas de procedimento remoto: chama métodos (como funções locais) definidos num contrato <code>.proto</code>, trocando <strong>Protocol Buffers</strong> binários sobre <strong>HTTP/2</strong>.</li>
+  </ul>
+  <p>O REST é <strong>orientado a recursos</strong> («vai buscar esta coisa»); o gRPC é <strong>orientado à ação</strong> («chama este método»). O REST é texto; o gRPC é binário e fortemente tipado.</p>
+
+  <h2>Desempenho e transporte</h2>
+  <p>Os Protocol Buffers do gRPC são binário compacto, enviado sobre ligações <strong>HTTP/2 multiplexadas</strong> – cargas mais pequenas, menos parsing, várias chamadas numa só ligação. O JSON do REST sobre HTTP/1.1 é mais pesado e verboso, ainda que muito otimizado e cacheável. Para o tráfego <strong>entre serviços</strong> de alto volume, a eficiência do gRPC é real; para uma API pública típica, o REST muitas vezes chega e aproveita a cache HTTP gratuita.</p>
+
+  <figure><img src="/img/grpc-vs-rest-2026-cable.jpg" alt="Um cabo de dados ligado a hardware de servidor" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>A escolha é um compromisso – alinhe-a com quem chama a sua API e com o volume de tráfego.</figcaption></figure>
+
+  <h2>Streaming, contratos e codegen</h2>
+  <p>O gRPC suporta nativamente o <strong>streaming bidirecional</strong> (cliente, servidor e nos dois sentidos), ideal para tempo real e alto débito. O seu ficheiro <code>.proto</code> é um <strong>contrato rigoroso</strong> a partir do qual clientes e servidores são <strong>gerados</strong> em muitas linguagens – perfeito para back-ends poliglotas e para detetar incompatibilidades em tempo de compilação. O REST não tem contrato integrado (o OpenAPI/Swagger é acrescentado) e o streaming é limitado (SSE/WebSockets acrescentados), mas essa flexibilidade é também o que torna fácil começar.</p>
+
+  <h2>Suporte de navegador e ubiquidade</h2>
+  <p>Este é o terreno do REST. Qualquer navegador chama uma API REST via <code>fetch</code>; cada linguagem e ferramenta a compreende; faz-se o debug com curl e lê-se o JSON. <strong>Os navegadores não falam gRPC puro</strong> – é preciso <strong>gRPC-Web</strong> mais um proxy (por ex. Envoy), o que acrescenta peças móveis. Se os seus front-ends web são os consumidores principais, o REST (ou <a href="/pt/e/blog/2026-06-17-rest-vs-graphql.html">GraphQL</a>) é mais simples.</p>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Recomendado</span>
+    <h3>Um lugar para alojar os seus serviços</h3>
+    <p>REST ou gRPC, a sua API e os seus microsserviços precisam de uma casa fiável com controlo total do runtime e da rede. Um VPS ou servidor cloud serve. A Infomaniak – um alojamento suíço, respeitador da privacidade – oferece VPS e servidores cloud adequados.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Ver Infomaniak Cloud →</a>
+    <p class="disc">Link de afiliado – ajuda a suportar estes guias gratuitos.</p>
+  </div>
+
+  <h2>Como escolher</h2>
+  <ul>
+    <li><strong>Escolha REST</strong> para APIs públicas, clientes de navegador, CRUD simples e quando contam a legibilidade, a ubiquidade e a cache HTTP.</li>
+    <li><strong>Escolha gRPC</strong> para chamadas internas entre serviços onde contam o desempenho, a baixa latência, o streaming e o contrato rigorosamente tipado (microsserviços, tempo real, poliglota).</li>
+    <li><strong>Ambos</strong> – REST/GraphQL na fronteira para os clientes, gRPC entre os serviços internos: uma arquitetura muito difundida.</li>
+  </ul>
+
+  <h2>Perguntas frequentes</h2>
+  {faq.map((f) => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}
+
+  <h2>Em resumo</h2>
+  <p>O REST e o gRPC não são rivais, mas ferramentas para tarefas diferentes. O <strong>REST</strong> ganha na universalidade, no suporte de navegador, na legibilidade e na cache – a escolha certa por defeito para APIs públicas e web. O <strong>gRPC</strong> ganha na velocidade, no streaming e nos contratos tipados – a escolha certa por defeito para microsserviços internos de alto desempenho. Escolha consoante os seus chamadores e o seu tráfego, e não hesite em usar ambos.</p>
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faq.map((f) => ({ "@type": "Question", "name": f.q, "acceptedAnswer": { "@type": "Answer", "text": f.a } }))
+  })} />
+</Base>

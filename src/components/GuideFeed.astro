@@ -7,7 +7,7 @@ import { ui, localized } from '../i18n/ui.js';
 import { hasTx } from '../data/i18n-articles.js';
 import { ctaAngle } from '../data/cta-angle.js';
 
-interface Props { lang: 'fr' | 'es'; page?: number; pageSize?: number; }
+interface Props { lang: 'fr' | 'es' | 'de' | 'it' | 'pt'; page?: number; pageSize?: number; }
 const { lang, page = 1, pageSize = 12 } = Astro.props as Props;
 const t = ui[lang];
 const homeCta = ctaAngle(lang, 'default'); // home = angle généraliste (pas Haskell)
@@ -38,6 +38,30 @@ const STARTHERE = {
       { href: '/e/blog/2026-06-14-haskell-monads.html', l: 'Entender las mónadas' },
     ],
   },
+  de: {
+    h: 'Neu bei Haskell? Hier beginnen',
+    steps: [
+      { href: '/e/blog/2026-06-14-what-is-haskell.html', l: 'Was ist Haskell?' },
+      { href: '/e/blog/2026-06-14-ghcup-install-haskell.html', l: 'Die Toolchain installieren (GHCup)' },
+      { href: '/e/blog/2026-06-14-haskell-monads.html', l: 'Monaden verstehen' },
+    ],
+  },
+  it: {
+    h: 'Nuovo su Haskell? Inizia qui',
+    steps: [
+      { href: '/e/blog/2026-06-14-what-is-haskell.html', l: 'Cos\'è Haskell?' },
+      { href: '/e/blog/2026-06-14-ghcup-install-haskell.html', l: 'Installare il toolchain (GHCup)' },
+      { href: '/e/blog/2026-06-14-haskell-monads.html', l: 'Capire le monadi' },
+    ],
+  },
+  pt: {
+    h: 'Novo no Haskell? Comece aqui',
+    steps: [
+      { href: '/e/blog/2026-06-14-what-is-haskell.html', l: 'O que é Haskell?' },
+      { href: '/e/blog/2026-06-14-ghcup-install-haskell.html', l: 'Instalar o toolchain (GHCup)' },
+      { href: '/e/blog/2026-06-14-haskell-monads.html', l: 'Compreender as mónadas' },
+    ],
+  },
 }[lang];
 
 const BLOCKS = {
@@ -50,6 +74,21 @@ const BLOCKS = {
     { c:'b1', k:'Empezar', h:'Instalar el toolchain', p:'GHC, Cabal, Stack y HLS en una instalación limpia con GHCup.', a:'Leer la guía →', find:'ghcup-install' },
     { c:'b2', k:'Build', h:'Entender los builds de Cabal', p:'Sandboxes, builds v2 estilo nix y qué cambió realmente.', a:'Leer la guía →', find:'Cabal-sandbox' },
     { c:'b3', k:'Rendimiento', h:'Builds de Haskell más rápidos', p:'Usa todos tus núcleos de forma segura con -j y los semáforos de build.', a:'Leer la guía →', find:'GSoC-Final' },
+  ],
+  de: [
+    { c:'b1', k:'Loslegen', h:'Die Toolchain installieren', p:'GHC, Cabal, Stack und HLS in einer sauberen Installation mit GHCup.', a:'Leitfaden lesen →', find:'ghcup-install' },
+    { c:'b2', k:'Build', h:'Cabal-Builds verstehen', p:'Sandboxes, v2-Builds im nix-Stil und was sich wirklich geändert hat.', a:'Leitfaden lesen →', find:'Cabal-sandbox' },
+    { c:'b3', k:'Performance', h:'Schnellere Haskell-Builds', p:'Nutzen Sie alle Ihre Kerne sicher mit -j und Build-Semaphoren.', a:'Leitfaden lesen →', find:'GSoC-Final' },
+  ],
+  it: [
+    { c:'b1', k:'Iniziare', h:'Installare il toolchain', p:'GHC, Cabal, Stack e HLS in un\'installazione pulita con GHCup.', a:'Leggi la guida →', find:'ghcup-install' },
+    { c:'b2', k:'Build', h:'Capire i build di Cabal', p:'Sandbox, build v2 in stile nix e cosa è cambiato davvero.', a:'Leggi la guida →', find:'Cabal-sandbox' },
+    { c:'b3', k:'Prestazioni', h:'Build di Haskell più veloci', p:'Usa tutti i tuoi core in sicurezza con -j e i semafori di build.', a:'Leggi la guida →', find:'GSoC-Final' },
+  ],
+  pt: [
+    { c:'b1', k:'Começar', h:'Instalar o toolchain', p:'GHC, Cabal, Stack e HLS numa instalação limpa com o GHCup.', a:'Ler o guia →', find:'ghcup-install' },
+    { c:'b2', k:'Build', h:'Compreender os builds do Cabal', p:'Sandboxes, builds v2 ao estilo nix e o que mudou realmente.', a:'Ler o guia →', find:'Cabal-sandbox' },
+    { c:'b3', k:'Desempenho', h:'Builds de Haskell mais rápidos', p:'Use todos os seus núcleos em segurança com -j e os semáforos de build.', a:'Ler o guia →', find:'GSoC-Final' },
   ],
 }[lang];
 const blocks = BLOCKS.map((b) => ({ ...b, g: guides.find((x) => x.href.includes(b.find)) }));
