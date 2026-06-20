@@ -406,7 +406,7 @@ const alts = [
       });
       const tocEl=document.getElementById('toc2');
       if (tocEl){ const heads=document.querySelectorAll('main .reading h2');
-        if (heads.length>=3){ const _lg=document.documentElement.lang||'en'; const _tl=({fr:'Sur cette page',es:'En esta página'})[_lg]||'On this page'; const l=document.createElement('span'); l.className='lbl'; l.textContent=_tl; tocEl.appendChild(l);
+        if (heads.length>=3){ const _lg=document.documentElement.lang||'en'; const _tl=({fr:'Sur cette page',es:'En esta página',de:'Auf dieser Seite',it:'In questa pagina',pt:'Nesta página'})[_lg]||'On this page'; const l=document.createElement('span'); l.className='lbl'; l.textContent=_tl; tocEl.appendChild(l);
           heads.forEach((h)=>{ if(!h.id) h.id=(h.textContent||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); const a=document.createElement('a'); a.href='#'+h.id; a.textContent=h.textContent; tocEl.appendChild(a); });
         } }
     </script>

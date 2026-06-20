@@ -123,9 +123,9 @@ function catAvatar(cats=''){
           <a href={guideHref(lead, lang)} class="lead-media"><img src={lead.img} alt={lead.imgAlt} width="1200" height="675" loading="eager" /></a>
           <p class="by"><a href={localized('/about.html', lang)}>Coldwast</a> <em>{t.wrote}</em></p>
           <h2><a href={guideHref(lead, lang)} set:html={guideTitle(lead, lang)} /></h2>
-          <p class="ex"><span class="date">{lead.date}</span> {t.in_word} {lead.cats} — {guideDek(lead, lang)}</p>
+          <p class="ex"><span class="date">{lead.date}</span> {t.in_word} {guideCats(lead, lang)} — {guideDek(lead, lang)}</p>
           <a class="more" href={guideHref(lead, lang)}>{t.read_more}</a>
-          <div class="metab"><span>📅 {lead.read}</span><span>↻ {t.updated}</span></div>
+          <div class="metab"><span>📅 {guideRead(lead, lang)}</span><span>↻ {t.updated}</span></div>
         </article>
       )}
       {rest.map((s) => (
