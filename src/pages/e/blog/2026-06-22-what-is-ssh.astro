@@ -5,7 +5,7 @@ const title = 'What Is SSH? Secure Shell Explained for Developers (2026)';
 const description = 'SSH (Secure Shell) is the encrypted protocol you use to log in to and run commands on a remote server safely. What SSH is, how the handshake and keys work, passwords vs SSH keys, and the everyday commands you actually need.';
 ---
 <Base title={title} description={description} path={path} type="article"
-  image="https://pixabay.com/get/g5c12e83aed3211c9b051ab598315a545303bf6fbbb10960ac036e41d7ceb6d71aa41ba5c33d707ad714842072afc9a19159dd69e7cbdee12fe20eb108fb53bd4_1280.jpg" datePublished="2026-06-22" dateModified="2026-06-22">
+  image="/img/px-3a3f8ed9e2ea.jpg" datePublished="2026-06-22" dateModified="2026-06-22">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e/">Guides</a><span>/</span>What is SSH</nav>
   <p class="kicker">Programming · Servers · security</p>
@@ -13,7 +13,7 @@ const description = 'SSH (Secure Shell) is the encrypted protocol you use to log
   <div class="artmeta"><span>By Coldwast</span><span>Updated Jun 22, 2026</span><span>8 min read</span><span class="tag">#ssh</span><span class="tag">#servers</span><span class="tag">#security</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
-    <img class="hero" src="https://pixabay.com/get/g5c12e83aed3211c9b051ab598315a545303bf6fbbb10960ac036e41d7ceb6d71aa41ba5c33d707ad714842072afc9a19159dd69e7cbdee12fe20eb108fb53bd4_1280.jpg" alt="Lines of source code and a network port shown on a dark screen" width="1200" height="420" loading="eager" />
+    <img class="hero" src="/img/px-3a3f8ed9e2ea.jpg" alt="Lines of source code and a network port shown on a dark screen" width="1200" height="420" loading="eager" />
     <figcaption>SSH is the standard way developers open a secure, encrypted session on a remote machine and work on it as if they were sitting in front of it.</figcaption>
   </figure>
 
@@ -25,7 +25,7 @@ const description = 'SSH (Secure Shell) is the encrypted protocol you use to log
   <h2>How SSH works</h2>
   <p>When you connect, your SSH client and the server run a quick handshake. They agree on encryption settings and set up a shared secret key, so the rest of the session is private. The server also proves its identity with its own key, which is why your client warns you the first time it sees a new server. After that, you authenticate — you prove who you are — and you get a shell prompt on the remote machine. Every keystroke and every reply from then on is encrypted.</p>
 
-  <figure><img src="https://pixabay.com/get/g9999bbeef7af645e593056faae13baa2cf17f05f5c77103c2050d12d73b861331a2be6538c2c4e74da6dc7109e9af91c591e311f1c43d4e15dbebb4229f78bdd_1280.jpg" alt="A server cabinet filled with network cables and patch cords" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>SSH is how you reach servers like these. You connect from your laptop and control the remote machine over an encrypted channel.</figcaption></figure>
+  <figure><img src="/img/px-cbf4af27da8a.jpg" alt="A server cabinet filled with network cables and patch cords" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>SSH is how you reach servers like these. You connect from your laptop and control the remote machine over an encrypted channel.</figcaption></figure>
 
   <h2>Passwords vs SSH keys</h2>
   <p>You can log in two ways. A <strong>password</strong> is simple but weaker: it can be guessed or brute-forced, and bots try this on public servers all day. <strong>SSH keys</strong> are the better way. You generate a pair of files: a private key that stays on your computer, and a public key you copy to the server. The server then lets you in only if your private key matches, and the private key never leaves your machine. Keys are both more secure and more convenient, since you skip typing a password each time.</p>

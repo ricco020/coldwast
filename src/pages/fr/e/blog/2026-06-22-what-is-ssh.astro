@@ -5,7 +5,7 @@ const title = 'C’est quoi SSH ? Le Secure Shell expliqué aux développeurs (2
 const description = 'SSH (Secure Shell) est le protocole chiffré qui vous sert à vous connecter et à lancer des commandes sur un serveur distant en toute sécurité. Ce qu’est SSH, comment marchent la poignée de main et les clés, mots de passe vs clés SSH, et les commandes du quotidien dont vous avez vraiment besoin.';
 ---
 <Base title={title} description={description} path={path} type="article" lang="fr"
-  image="https://pixabay.com/get/g5c12e83aed3211c9b051ab598315a545303bf6fbbb10960ac036e41d7ceb6d71aa41ba5c33d707ad714842072afc9a19159dd69e7cbdee12fe20eb108fb53bd4_1280.jpg" datePublished="2026-06-22" dateModified="2026-06-22">
+  image="/img/px-3a3f8ed9e2ea.jpg" datePublished="2026-06-22" dateModified="2026-06-22">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/fr/">Accueil</a><span>/</span><a href="/fr/e/">Guides</a><span>/</span>C’est quoi SSH</nav>
   <p class="kicker">Programmation · Serveurs · sécurité</p>
@@ -13,7 +13,7 @@ const description = 'SSH (Secure Shell) est le protocole chiffré qui vous sert 
   <div class="artmeta"><span>Par Coldwast</span><span>Mis à jour le 22 juin 2026</span><span>8 min de lecture</span><span class="tag">#ssh</span><span class="tag">#servers</span><span class="tag">#security</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
-    <img class="hero" src="https://pixabay.com/get/g5c12e83aed3211c9b051ab598315a545303bf6fbbb10960ac036e41d7ceb6d71aa41ba5c33d707ad714842072afc9a19159dd69e7cbdee12fe20eb108fb53bd4_1280.jpg" alt="Des lignes de code source et un port réseau affichés sur un écran sombre" width="1200" height="420" loading="eager" />
+    <img class="hero" src="/img/px-3a3f8ed9e2ea.jpg" alt="Des lignes de code source et un port réseau affichés sur un écran sombre" width="1200" height="420" loading="eager" />
     <figcaption>SSH est la manière standard pour les développeurs d’ouvrir une session sécurisée et chiffrée sur une machine distante et d’y travailler comme s’ils étaient assis devant.</figcaption>
   </figure>
 
@@ -25,7 +25,7 @@ const description = 'SSH (Secure Shell) est le protocole chiffré qui vous sert 
   <h2>Comment marche SSH</h2>
   <p>Quand vous vous connectez, votre client SSH et le serveur exécutent une rapide poignée de main. Ils s’accordent sur les réglages de chiffrement et établissent une clé secrète partagée, de sorte que le reste de la session est privé. Le serveur prouve aussi son identité avec sa propre clé, c’est pourquoi votre client vous prévient la première fois qu’il voit un nouveau serveur. Ensuite vous vous authentifiez — vous prouvez qui vous êtes — et vous obtenez une invite shell sur la machine distante. Chaque frappe et chaque réponse sont dès lors chiffrées.</p>
 
-  <figure><img src="https://pixabay.com/get/g9999bbeef7af645e593056faae13baa2cf17f05f5c77103c2050d12d73b861331a2be6538c2c4e74da6dc7109e9af91c591e311f1c43d4e15dbebb4229f78bdd_1280.jpg" alt="Une armoire serveur remplie de câbles réseau et de cordons de brassage" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>SSH est ce qui vous permet d’atteindre des serveurs comme ceux-ci. Vous vous connectez depuis votre ordinateur portable et pilotez la machine distante via un canal chiffré.</figcaption></figure>
+  <figure><img src="/img/px-cbf4af27da8a.jpg" alt="Une armoire serveur remplie de câbles réseau et de cordons de brassage" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>SSH est ce qui vous permet d’atteindre des serveurs comme ceux-ci. Vous vous connectez depuis votre ordinateur portable et pilotez la machine distante via un canal chiffré.</figcaption></figure>
 
   <h2>Mots de passe vs clés SSH</h2>
   <p>Vous pouvez vous connecter de deux façons. Un <strong>mot de passe</strong> est simple mais plus faible : il peut être deviné ou cassé par force brute, et des bots tentent ça sur les serveurs publics toute la journée. Les <strong>clés SSH</strong> sont la meilleure méthode. Vous générez une paire de fichiers : une clé privée qui reste sur votre ordinateur, et une clé publique que vous copiez sur le serveur. Le serveur ne vous laisse alors entrer que si votre clé privée correspond, et la clé privée ne quitte jamais votre machine. Les clés sont à la fois plus sûres et plus pratiques, puisque vous évitez de taper un mot de passe à chaque fois.</p>

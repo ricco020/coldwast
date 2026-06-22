@@ -5,7 +5,7 @@ const title = '¿Qué es SSH? Secure Shell explicado para desarrolladores (2026)
 const description = 'SSH (Secure Shell) es el protocolo cifrado que usas para iniciar sesión y ejecutar comandos en un servidor remoto de forma segura. Qué es SSH, cómo funcionan el handshake y las claves, contraseñas vs claves SSH, y los comandos de cada día que de verdad necesitas.';
 ---
 <Base title={title} description={description} path={path} type="article" lang="es"
-  image="https://pixabay.com/get/g5c12e83aed3211c9b051ab598315a545303bf6fbbb10960ac036e41d7ceb6d71aa41ba5c33d707ad714842072afc9a19159dd69e7cbdee12fe20eb108fb53bd4_1280.jpg" datePublished="2026-06-22" dateModified="2026-06-22">
+  image="/img/px-3a3f8ed9e2ea.jpg" datePublished="2026-06-22" dateModified="2026-06-22">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/es/">Inicio</a><span>/</span><a href="/es/e/">Guías</a><span>/</span>Qué es SSH</nav>
   <p class="kicker">Programación · Servidores · seguridad</p>
@@ -13,7 +13,7 @@ const description = 'SSH (Secure Shell) es el protocolo cifrado que usas para in
   <div class="artmeta"><span>Por Coldwast</span><span>Actualizado el 22 jun 2026</span><span>8 min de lectura</span><span class="tag">#ssh</span><span class="tag">#servers</span><span class="tag">#security</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
-    <img class="hero" src="https://pixabay.com/get/g5c12e83aed3211c9b051ab598315a545303bf6fbbb10960ac036e41d7ceb6d71aa41ba5c33d707ad714842072afc9a19159dd69e7cbdee12fe20eb108fb53bd4_1280.jpg" alt="Líneas de código fuente y un puerto de red mostrados en una pantalla oscura" width="1200" height="420" loading="eager" />
+    <img class="hero" src="/img/px-3a3f8ed9e2ea.jpg" alt="Líneas de código fuente y un puerto de red mostrados en una pantalla oscura" width="1200" height="420" loading="eager" />
     <figcaption>SSH es la forma estándar en que los desarrolladores abren una sesión segura y cifrada en una máquina remota y trabajan en ella como si estuvieran sentados delante.</figcaption>
   </figure>
 
@@ -25,7 +25,7 @@ const description = 'SSH (Secure Shell) es el protocolo cifrado que usas para in
   <h2>Cómo funciona SSH</h2>
   <p>Cuando te conectas, tu cliente SSH y el servidor hacen un breve handshake. Se ponen de acuerdo sobre los ajustes de cifrado y establecen una clave secreta compartida, de modo que el resto de la sesión es privada. El servidor también demuestra su identidad con su propia clave, por eso tu cliente te avisa la primera vez que ve un servidor nuevo. Después te autenticas — demuestras quién eres — y obtienes un prompt en la máquina remota. A partir de ahí, cada pulsación y cada respuesta van cifradas.</p>
 
-  <figure><img src="https://pixabay.com/get/g9999bbeef7af645e593056faae13baa2cf17f05f5c77103c2050d12d73b861331a2be6538c2c4e74da6dc7109e9af91c591e311f1c43d4e15dbebb4229f78bdd_1280.jpg" alt="Un armario de servidores lleno de cables de red y latiguillos" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>SSH es como llegas a servidores como estos. Te conectas desde tu portátil y controlas la máquina remota por un canal cifrado.</figcaption></figure>
+  <figure><img src="/img/px-cbf4af27da8a.jpg" alt="Un armario de servidores lleno de cables de red y latiguillos" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>SSH es como llegas a servidores como estos. Te conectas desde tu portátil y controlas la máquina remota por un canal cifrado.</figcaption></figure>
 
   <h2>Contraseñas vs claves SSH</h2>
   <p>Puedes iniciar sesión de dos maneras. Una <strong>contraseña</strong> es simple pero más débil: se puede adivinar o atacar por fuerza bruta, y los bots lo intentan en servidores públicos todo el día. Las <strong>claves SSH</strong> son la mejor opción. Generas un par de archivos: una clave privada que se queda en tu ordenador, y una clave pública que copias al servidor. El servidor solo te deja entrar si tu clave privada coincide, y la clave privada nunca sale de tu máquina. Las claves son a la vez más seguras y más cómodas, ya que te ahorras escribir una contraseña cada vez.</p>

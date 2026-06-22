@@ -5,7 +5,7 @@ const title = 'Was ist SSH? Secure Shell für Entwickler erklärt (2026)';
 const description = 'SSH (Secure Shell) ist das verschlüsselte Protokoll, mit dem Sie sich sicher auf einem entfernten Server anmelden und Befehle ausführen. Was SSH ist, wie Handshake und Schlüssel funktionieren, Passwörter vs. SSH-Schlüssel und die alltäglichen Befehle, die Sie wirklich brauchen.';
 ---
 <Base title={title} description={description} path={path} type="article" lang="de"
-  image="https://pixabay.com/get/g5c12e83aed3211c9b051ab598315a545303bf6fbbb10960ac036e41d7ceb6d71aa41ba5c33d707ad714842072afc9a19159dd69e7cbdee12fe20eb108fb53bd4_1280.jpg" datePublished="2026-06-22" dateModified="2026-06-22">
+  image="/img/px-3a3f8ed9e2ea.jpg" datePublished="2026-06-22" dateModified="2026-06-22">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/de/">Startseite</a><span>/</span><a href="/de/e/">Leitfäden</a><span>/</span>Was ist SSH</nav>
   <p class="kicker">Programmierung · Server · Sicherheit</p>
@@ -13,7 +13,7 @@ const description = 'SSH (Secure Shell) ist das verschlüsselte Protokoll, mit d
   <div class="artmeta"><span>Von Coldwast</span><span>Aktualisiert am 22. Juni 2026</span><span>8 Min. Lesezeit</span><span class="tag">#ssh</span><span class="tag">#servers</span><span class="tag">#security</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
-    <img class="hero" src="https://pixabay.com/get/g5c12e83aed3211c9b051ab598315a545303bf6fbbb10960ac036e41d7ceb6d71aa41ba5c33d707ad714842072afc9a19159dd69e7cbdee12fe20eb108fb53bd4_1280.jpg" alt="Zeilen Quellcode und ein Netzwerk-Port auf einem dunklen Bildschirm" width="1200" height="420" loading="eager" />
+    <img class="hero" src="/img/px-3a3f8ed9e2ea.jpg" alt="Zeilen Quellcode und ein Netzwerk-Port auf einem dunklen Bildschirm" width="1200" height="420" loading="eager" />
     <figcaption>SSH ist die übliche Art, wie Entwickler eine sichere, verschlüsselte Sitzung auf einem entfernten Rechner öffnen und daran arbeiten, als säßen sie direkt davor.</figcaption>
   </figure>
 
@@ -25,7 +25,7 @@ const description = 'SSH (Secure Shell) ist das verschlüsselte Protokoll, mit d
   <h2>Wie SSH funktioniert</h2>
   <p>Wenn Sie sich verbinden, führen Ihr SSH-Client und der Server einen kurzen Handshake durch. Sie einigen sich auf die Verschlüsselungseinstellungen und richten einen gemeinsamen geheimen Schlüssel ein, sodass der Rest der Sitzung privat bleibt. Der Server weist außerdem seine Identität mit einem eigenen Schlüssel nach – deshalb warnt Sie Ihr Client, wenn er einen Server zum ersten Mal sieht. Danach authentifizieren Sie sich – Sie beweisen, wer Sie sind – und erhalten eine Shell-Eingabeaufforderung auf der entfernten Maschine. Jeder Tastendruck und jede Antwort ist von da an verschlüsselt.</p>
 
-  <figure><img src="https://pixabay.com/get/g9999bbeef7af645e593056faae13baa2cf17f05f5c77103c2050d12d73b861331a2be6538c2c4e74da6dc7109e9af91c591e311f1c43d4e15dbebb4229f78bdd_1280.jpg" alt="Ein Serverschrank voller Netzwerkkabel und Patchkabel" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>Über SSH erreichen Sie Server wie diese. Sie verbinden sich von Ihrem Laptop und steuern die entfernte Maschine über einen verschlüsselten Kanal.</figcaption></figure>
+  <figure><img src="/img/px-cbf4af27da8a.jpg" alt="Ein Serverschrank voller Netzwerkkabel und Patchkabel" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>Über SSH erreichen Sie Server wie diese. Sie verbinden sich von Ihrem Laptop und steuern die entfernte Maschine über einen verschlüsselten Kanal.</figcaption></figure>
 
   <h2>Passwörter vs. SSH-Schlüssel</h2>
   <p>Sie können sich auf zwei Arten anmelden. Ein <strong>Passwort</strong> ist einfach, aber schwächer: Es kann erraten oder per Brute-Force geknackt werden, und Bots versuchen das auf öffentlichen Servern den ganzen Tag. <strong>SSH-Schlüssel</strong> sind die bessere Art. Sie erzeugen ein Paar aus Dateien: einen privaten Schlüssel, der auf Ihrem Computer bleibt, und einen öffentlichen Schlüssel, den Sie auf den Server kopieren. Der Server lässt Sie nur dann herein, wenn Ihr privater Schlüssel passt, und der private Schlüssel verlässt Ihre Maschine nie. Schlüssel sind sowohl sicherer als auch bequemer, weil Sie nicht jedes Mal ein Passwort eintippen müssen.</p>

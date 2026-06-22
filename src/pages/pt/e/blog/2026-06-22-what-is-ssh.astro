@@ -5,7 +5,7 @@ const title = 'O que é o SSH? O Secure Shell explicado para programadores (2026
 const description = 'O SSH (Secure Shell) é o protocolo encriptado que usa para entrar e correr comandos num servidor remoto com segurança. O que é o SSH, como funcionam o handshake e as chaves, palavras-passe vs chaves SSH e os comandos do dia a dia de que realmente precisa.';
 ---
 <Base title={title} description={description} path={path} type="article" lang="pt"
-  image="https://pixabay.com/get/g5c12e83aed3211c9b051ab598315a545303bf6fbbb10960ac036e41d7ceb6d71aa41ba5c33d707ad714842072afc9a19159dd69e7cbdee12fe20eb108fb53bd4_1280.jpg" datePublished="2026-06-22" dateModified="2026-06-22">
+  image="/img/px-3a3f8ed9e2ea.jpg" datePublished="2026-06-22" dateModified="2026-06-22">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/pt/">Início</a><span>/</span><a href="/pt/e/">Guias</a><span>/</span>O que é o SSH</nav>
   <p class="kicker">Programação · Servidores · segurança</p>
@@ -13,7 +13,7 @@ const description = 'O SSH (Secure Shell) é o protocolo encriptado que usa para
   <div class="artmeta"><span>Por Coldwast</span><span>Atualizado a 22 de junho de 2026</span><span>8 min de leitura</span><span class="tag">#ssh</span><span class="tag">#servers</span><span class="tag">#security</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
-    <img class="hero" src="https://pixabay.com/get/g5c12e83aed3211c9b051ab598315a545303bf6fbbb10960ac036e41d7ceb6d71aa41ba5c33d707ad714842072afc9a19159dd69e7cbdee12fe20eb108fb53bd4_1280.jpg" alt="Linhas de código-fonte e uma porta de rede mostradas num ecrã escuro" width="1200" height="420" loading="eager" />
+    <img class="hero" src="/img/px-3a3f8ed9e2ea.jpg" alt="Linhas de código-fonte e uma porta de rede mostradas num ecrã escuro" width="1200" height="420" loading="eager" />
     <figcaption>O SSH é a forma habitual de os programadores abrirem uma sessão segura e encriptada numa máquina remota e trabalharem nela como se estivessem sentados à sua frente.</figcaption>
   </figure>
 
@@ -25,7 +25,7 @@ const description = 'O SSH (Secure Shell) é o protocolo encriptado que usa para
   <h2>Como funciona o SSH</h2>
   <p>Quando se liga, o seu cliente SSH e o servidor fazem um handshake rápido. Acordam as definições de encriptação e criam uma chave secreta partilhada, para que o resto da sessão seja privado. O servidor também prova a sua identidade com a própria chave, e é por isso que o cliente o avisa na primeira vez que vê um servidor novo. Depois disso, autentica-se – prova quem é – e obtém uma linha de comandos na máquina remota. Cada tecla premida e cada resposta a partir daí ficam encriptadas.</p>
 
-  <figure><img src="https://pixabay.com/get/g9999bbeef7af645e593056faae13baa2cf17f05f5c77103c2050d12d73b861331a2be6538c2c4e74da6dc7109e9af91c591e311f1c43d4e15dbebb4229f78bdd_1280.jpg" alt="Um armário de servidores cheio de cabos de rede e patch cords" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>O SSH é a forma de chegar a servidores como estes. Liga-se a partir do seu portátil e controla a máquina remota através de um canal encriptado.</figcaption></figure>
+  <figure><img src="/img/px-cbf4af27da8a.jpg" alt="Um armário de servidores cheio de cabos de rede e patch cords" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>O SSH é a forma de chegar a servidores como estes. Liga-se a partir do seu portátil e controla a máquina remota através de um canal encriptado.</figcaption></figure>
 
   <h2>Palavras-passe vs chaves SSH</h2>
   <p>Pode entrar de duas formas. Uma <strong>palavra-passe</strong> é simples, mas mais fraca: pode ser adivinhada ou descoberta por força bruta, e os bots tentam isto em servidores públicos o dia todo. As <strong>chaves SSH</strong> são a melhor opção. Gera um par de ficheiros: uma chave privada que fica no seu computador e uma chave pública que copia para o servidor. O servidor só o deixa entrar se a sua chave privada corresponder, e a chave privada nunca sai da sua máquina. As chaves são mais seguras e mais práticas, já que dispensa escrever uma palavra-passe de cada vez.</p>
