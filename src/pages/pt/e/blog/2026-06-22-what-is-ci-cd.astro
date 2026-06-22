@@ -1,0 +1,80 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/pt/e/blog/2026-06-22-what-is-ci-cd.html';
+const title = 'O que é o CI/CD? Integração e entrega contínuas explicadas (2026)';
+const description = 'O CI/CD automatiza o caminho de uma alteração no código até uma aplicação testada e implementada. O que significam a integração contínua e a entrega/implementação contínua, como funciona um pipeline, as ferramentas habituais e porque é que as equipas dependem disto.';
+---
+<Base title={title} description={description} path={path} type="article" lang="pt"
+  image="/img/ci-cd-hero.jpg" datePublished="2026-06-22" dateModified="2026-06-22">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/pt/">Início</a><span>/</span><a href="/pt/e/">Guias</a><span>/</span>O que é o CI/CD</nav>
+  <p class="kicker">Programação · DevOps · automação</p>
+  <h1>O que é o CI/CD?</h1>
+  <div class="artmeta"><span>Por Coldwast</span><span>Atualizado a 22 de junho de 2026</span><span>8 min de leitura</span><span class="tag">#cicd</span><span class="tag">#devops</span><span class="tag">#automation</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/ci-cd-hero.jpg" alt="Um braço robótico industrial numa linha de produção automatizada" width="1200" height="420" loading="eager" />
+    <figcaption>O CI/CD é uma linha de montagem para software — cada alteração no código é construída, testada e enviada automaticamente, tal como uma linha robótica leva uma peça por cada etapa.</figcaption>
+  </figure>
+
+  <p>Quando uma equipa começa a lançar software com regularidade, uma pergunta decide com que rapidez e segurança avança: como é que uma alteração no código chega do portátil de um programador até produção, a funcionar ao vivo? A resposta moderna é o <strong>CI/CD</strong>. Este guia explica o que significa o CI/CD, como funciona um pipeline, as ferramentas envolvidas e porque se tornou prática comum.</p>
+
+  <h2>A definição curta</h2>
+  <p><strong>O CI/CD automatiza o percurso de uma alteração no código até uma aplicação testada e implementada.</strong> Significa <strong>integração contínua</strong> (Continuous Integration) e <strong>entrega contínua</strong> (Continuous Delivery) ou implementação contínua (Deployment). Juntas, substituem as etapas manuais lentas e propensas a erros — construir, testar, lançar — por um <em>pipeline</em> automatizado que corre sempre que o código muda. Menos trabalho manual, menos erros, lançamentos mais rápidos.</p>
+
+  <h2>CI: integração contínua</h2>
+  <p>A <strong>integração contínua</strong> é a prática de fundir alterações de código num repositório partilhado com frequência — várias vezes por dia — e construir e testar cada alteração automaticamente. No momento em que faz push, o pipeline compila o código e corre o conjunto de testes. Se algo falhar, sabe-o em minutos, não em semanas. A CI apanha conflitos e bugs cedo, enquanto são pequenos e baratos de corrigir, em vez de os deixar acumular.</p>
+
+  <figure><img src="/img/ci-cd-body.jpg" alt="Código-fonte mostrado num ecrã" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>Cada push de <a href="/pt/e/blog/2026-06-14-what-is-git.html">Git</a> dispara o pipeline: constrói o código e corre os testes automaticamente antes de algo ser enviado.</figcaption></figure>
+
+  <h2>CD: entrega e implementação contínuas</h2>
+  <p>A segunda metade é onde a alteração é de facto enviada. A <strong>entrega contínua</strong> significa que toda a alteração que passa nos testes fica automaticamente preparada para lançamento, por isso implementar é um único clique sempre que quiser. A <strong>implementação contínua</strong> vai um passo além: toda a alteração que passa é lançada em produção automaticamente, sem qualquer controlo manual. A mesma sigla "CD", uma diferença importante — se uma pessoa carrega ou não no botão.</p>
+
+  <h2>Como funciona um pipeline</h2>
+  <p>Um pipeline de CI/CD é uma série de etapas automatizadas, disparadas por uma alteração no código:</p>
+  <ul>
+    <li><strong>Origem</strong> — um push para o repositório Git inicia o pipeline.</li>
+    <li><strong>Construção</strong> — o código é compilado e empacotado, muitas vezes num <a href="/pt/e/blog/2026-06-19-what-is-docker.html">contentor</a>.</li>
+    <li><strong>Teste</strong> — os testes automatizados correm; uma falha pára o pipeline.</li>
+    <li><strong>Implementação</strong> — se tudo passar, a aplicação é lançada num servidor, muitas vezes <a href="/pt/e/blog/2026-06-22-what-is-ssh.html">por SSH</a> para um <a href="/pt/e/blog/2026-06-19-what-is-a-vps.html">VPS</a> ou servidor cloud.</li>
+  </ul>
+
+  <h2>As ferramentas habituais</h2>
+  <p>Não constrói isto de raiz. O <strong>GitHub Actions</strong> e o <strong>GitLab CI/CD</strong> são populares porque vivem ao lado do seu código; o <strong>Jenkins</strong> é uma opção self-hosted bem estabelecida; e serviços como o CircleCI e outros desempenham o mesmo papel. Todos fazem o mesmo trabalho: vigiar o repositório, correr as etapas que definir num ficheiro de configuração e dar retorno. Descreve o pipeline uma vez, num ficheiro no seu repositório, e ele corre a cada alteração.</p>
+
+  <h2>Porque é que as equipas usam</h2>
+  <p>A recompensa é rapidez <em>e</em> segurança, que costumam trocar-se uma pela outra mas aqui não. A automação remove as etapas de lançamento lentas e manuais e os erros humanos que as acompanham. Os bugs são apanhados cedo pela etapa de teste. Os lançamentos tornam-se pequenos, frequentes e rotineiros em vez de raros e arriscados. E como todo o processo está definido em código, é consistente e repetível — igual todas as vezes, para cada programador.</p>
+
+  <h2>Os compromissos honestos</h2>
+  <p>O CI/CD não é gratuito. Montar um bom pipeline dá trabalho, e só é tão bom quanto os seus testes — automatizar a implementação de código não testado só envia bugs mais depressa. Há uma curva de aprendizagem, e projetos pequenos ou a solo podem não precisar de toda a maquinaria. Mas para qualquer equipa que lança com regularidade, o tempo poupado e os bugs evitados compensam rapidamente, e é por isso que é hoje a forma padrão de construir software profissional.</p>
+
+  <h2>Perguntas frequentes</h2>
+  <details><summary>O que significa CI/CD?</summary><p>CI significa integração contínua (Continuous Integration) — fundir e testar alterações de código automaticamente e com frequência. CD significa entrega contínua (Continuous Delivery) ou implementação contínua (Continuous Deployment) — preparar ou lançar essas alterações testadas automaticamente. Juntas, CI/CD descrevem um pipeline automatizado que leva uma alteração de código do commit até uma aplicação testada e implementada.</p></details>
+  <details><summary>Qual é a diferença entre entrega contínua e implementação contínua?</summary><p>Ambas automatizam o processo de lançamento, e ambas usam "CD". Na entrega contínua, toda a alteração que passa fica pronta para ser lançada, mas é uma pessoa que decide quando a coloca ao vivo. Na implementação contínua, toda a alteração que passa é lançada em produção automaticamente, sem passo manual. A diferença é se uma pessoa carrega no botão final.</p></details>
+  <details><summary>O que é um pipeline de CI/CD?</summary><p>Um pipeline de CI/CD é uma sequência automatizada de etapas — tipicamente origem, construção, teste e implementação — que corre sempre que o código muda. Um push para o repositório dispara-o: o código é construído, os testes correm e, se tudo passar, a aplicação é implementada. Define as etapas num ficheiro de configuração guardado no seu repositório.</p></details>
+  <details><summary>Preciso de CI/CD para um projeto pequeno?</summary><p>Nem sempre. Um projeto a solo ou muito pequeno pode não precisar de um pipeline completo, e montá-lo dá trabalho. Mas mesmo uma etapa simples de CI que corra os seus testes a cada push apanha bugs cedo e costuma valer a pena. Quanto maior e mais frequentemente lançado for o projeto, mais o CI/CD se paga a si próprio.</p></details>
+
+  <div class="note">Guia independente, mantido pela comunidade. <strong>coldwa.st</strong> é um site de recursos de programação; este artigo é um texto explicativo novo e original sobre o CI/CD. Os nomes das ferramentas refletem plataformas amplamente usadas; consulte a documentação de cada ferramenta para detalhes específicos.</div>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Recomendado</span>
+    <h3>Um servidor onde implementar o seu pipeline</h3>
+    <p>Um pipeline de CI/CD precisa de algures onde implementar. Um VPS ou servidor cloud dá-lhe controlo total para correr os seus artefactos de construção, contentores ou apps como etapa final do pipeline. A Infomaniak — um fornecedor suíço respeitador da privacidade — oferece VPS e servidores cloud onde pode implementar automaticamente.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Ver Infomaniak Cloud →</a>
+    <p class="disc">Link de afiliado — ajuda a suportar estes guias gratuitos.</p>
+  </div>
+
+  <p>Explore outras explicações claras no nosso <a href="/pt/e/">índice de guias</a>.</p>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "O que significa CI/CD?", "acceptedAnswer": { "@type": "Answer", "text": "CI significa integração contínua — fundir e testar alterações de código automaticamente e com frequência. CD significa entrega contínua ou implementação contínua — preparar ou lançar essas alterações testadas automaticamente. Juntas descrevem um pipeline automatizado do commit até uma aplicação testada e implementada." } },
+      { "@type": "Question", "name": "Qual é a diferença entre entrega contínua e implementação contínua?", "acceptedAnswer": { "@type": "Answer", "text": "Na entrega contínua, toda a alteração que passa fica pronta para ser lançada, mas é uma pessoa que decide quando a coloca ao vivo. Na implementação contínua, toda a alteração que passa é lançada em produção automaticamente, sem passo manual. A diferença é se uma pessoa carrega no botão final." } },
+      { "@type": "Question", "name": "O que é um pipeline de CI/CD?", "acceptedAnswer": { "@type": "Answer", "text": "Uma sequência automatizada de etapas — origem, construção, teste e implementação — que corre sempre que o código muda. Um push dispara-o: o código é construído, os testes correm e, se tudo passar, a aplicação é implementada. As etapas são definidas num ficheiro de configuração no seu repositório." } },
+      { "@type": "Question", "name": "Preciso de CI/CD para um projeto pequeno?", "acceptedAnswer": { "@type": "Answer", "text": "Nem sempre. Um projeto a solo ou muito pequeno pode não precisar de um pipeline completo. Mas mesmo uma etapa simples de CI que corra os seus testes a cada push apanha bugs cedo e costuma valer a pena. Quanto maior e mais frequentemente lançado for o projeto, mais o CI/CD se paga a si próprio." } }
+    ]
+  })} />
+  </div>
+</Base>

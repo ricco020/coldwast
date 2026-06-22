@@ -1,0 +1,80 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-06-22-what-is-ci-cd.html';
+const title = 'What Is CI/CD? Continuous Integration & Delivery Explained (2026)';
+const description = 'CI/CD automates the path from a code change to a tested, deployed application. What continuous integration and continuous delivery/deployment mean, how a pipeline works, the common tools, and why teams rely on it.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="/img/ci-cd-hero.jpg" datePublished="2026-06-22" dateModified="2026-06-22">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e/">Guides</a><span>/</span>What is CI/CD</nav>
+  <p class="kicker">Programming · DevOps · automation</p>
+  <h1>What is CI/CD?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Jun 22, 2026</span><span>8 min read</span><span class="tag">#cicd</span><span class="tag">#devops</span><span class="tag">#automation</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/ci-cd-hero.jpg" alt="An industrial robotic arm on an automated production line" width="1200" height="420" loading="eager" />
+    <figcaption>CI/CD is an assembly line for software — every code change is automatically built, tested and shipped, the way a robotic line moves a part through each stage.</figcaption>
+  </figure>
+
+  <p>Once a team is shipping software regularly, one question decides how fast and how safely they move: how does a change in code get from a developer's laptop to live, working in production? The modern answer is <strong>CI/CD</strong>. This guide explains what CI/CD means, how a pipeline works, the tools involved, and why it has become standard practice.</p>
+
+  <h2>The short definition</h2>
+  <p><strong>CI/CD automates the journey from a code change to a tested, deployed application.</strong> It stands for <strong>Continuous Integration</strong> and <strong>Continuous Delivery</strong> (or Deployment). Together they replace slow, error-prone manual steps — building, testing, releasing — with an automated <em>pipeline</em> that runs every time the code changes. Less manual work, fewer mistakes, faster releases.</p>
+
+  <h2>CI: Continuous Integration</h2>
+  <p><strong>Continuous Integration</strong> is the practice of merging code changes into a shared repository often — many times a day — and automatically building and testing each change. The moment you push, the pipeline compiles the code and runs the test suite. If something breaks, you find out in minutes, not weeks. CI catches conflicts and bugs early, while they are small and cheap to fix, instead of letting them pile up.</p>
+
+  <figure><img src="/img/ci-cd-body.jpg" alt="Source code displayed on a screen" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>Every <a href="/e/blog/2026-06-14-what-is-git.html">Git</a> push triggers the pipeline: it builds the code and runs the tests automatically before anything ships.</figcaption></figure>
+
+  <h2>CD: Continuous Delivery and Deployment</h2>
+  <p>The second half is where the change actually ships. <strong>Continuous Delivery</strong> means every change that passes the tests is automatically prepared for release, so deploying is a single click whenever you choose. <strong>Continuous Deployment</strong> goes one step further: every change that passes is released to production automatically, with no manual gate at all. Same "CD" abbreviation, one important difference — whether a human presses the button.</p>
+
+  <h2>How a pipeline works</h2>
+  <p>A CI/CD pipeline is a series of automated stages triggered by a code change:</p>
+  <ul>
+    <li><strong>Source</strong> — a push to the Git repository starts the pipeline.</li>
+    <li><strong>Build</strong> — the code is compiled and packaged, often into a <a href="/e/blog/2026-06-19-what-is-docker.html">container</a>.</li>
+    <li><strong>Test</strong> — automated tests run; a failure stops the pipeline.</li>
+    <li><strong>Deploy</strong> — if everything passes, the app is released to a server, often <a href="/e/blog/2026-06-22-what-is-ssh.html">over SSH</a> to a <a href="/e/blog/2026-06-19-what-is-a-vps.html">VPS</a> or cloud host.</li>
+  </ul>
+
+  <h2>The common tools</h2>
+  <p>You do not build this from scratch. <strong>GitHub Actions</strong> and <strong>GitLab CI/CD</strong> are popular because they live next to your code; <strong>Jenkins</strong> is a long-established, self-hosted option; and services like CircleCI and others fill the same role. They all do the same job: watch the repository, run the stages you define in a config file, and report back. You describe the pipeline once, in a file in your repo, and it runs on every change.</p>
+
+  <h2>Why teams use it</h2>
+  <p>The payoff is speed <em>and</em> safety, which usually trade off against each other but do not here. Automation removes the slow, manual release steps and the human errors that come with them. Bugs are caught early by the test stage. Releases become small, frequent and routine instead of rare and risky. And because the whole process is defined in code, it is consistent and repeatable — the same every time, for every developer.</p>
+
+  <h2>The honest trade-offs</h2>
+  <p>CI/CD is not free. Setting up a good pipeline takes effort, and it is only as good as your tests — automating the deployment of untested code just ships bugs faster. There is a learning curve, and small or solo projects may not need the full machinery. But for any team shipping regularly, the time saved and the bugs avoided pay it back quickly, which is why it is now the default way professional software gets built.</p>
+
+  <h2>Frequently asked questions</h2>
+  <details><summary>What does CI/CD stand for?</summary><p>CI stands for Continuous Integration — merging and automatically testing code changes often. CD stands for Continuous Delivery or Continuous Deployment — automatically preparing or releasing those tested changes. Together, CI/CD describes an automated pipeline that takes a code change from commit to a tested, deployed application.</p></details>
+  <details><summary>What is the difference between continuous delivery and continuous deployment?</summary><p>Both automate the release process, and both use "CD". With continuous delivery, every passing change is made ready to release, but a human decides when to push it live. With continuous deployment, every passing change is released to production automatically, with no manual step. The difference is whether a person presses the final button.</p></details>
+  <details><summary>What is a CI/CD pipeline?</summary><p>A CI/CD pipeline is an automated sequence of stages — typically source, build, test and deploy — that runs whenever code changes. A push to the repository triggers it: the code is built, the tests run, and if everything passes, the application is deployed. You define the stages in a configuration file kept in your repository.</p></details>
+  <details><summary>Do I need CI/CD for a small project?</summary><p>Not always. A solo or very small project may not need a full pipeline, and setting one up takes effort. But even a simple CI step that runs your tests on every push catches bugs early and is usually worth it. The bigger and more frequently released the project, the more CI/CD pays for itself.</p></details>
+
+  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about CI/CD. Tool names reflect widely-used platforms; check each tool's own documentation for specifics.</div>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Recommended</span>
+    <h3>A server to deploy your pipeline to</h3>
+    <p>A CI/CD pipeline needs somewhere to deploy. A VPS or cloud server gives you full control to run your build artifacts, containers or apps as the final stage of the pipeline. Infomaniak — a Swiss, privacy-respecting provider — offers VPS and cloud servers you can deploy to automatically.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">See Infomaniak Cloud →</a>
+    <p class="disc">Affiliate link — it supports these free guides.</p>
+  </div>
+
+  <p>Browse more clear explainers in our <a href="/e/">guides index</a>.</p>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "What does CI/CD stand for?", "acceptedAnswer": { "@type": "Answer", "text": "CI stands for Continuous Integration — merging and automatically testing code changes often. CD stands for Continuous Delivery or Continuous Deployment — automatically preparing or releasing those tested changes. Together they describe an automated pipeline from commit to a tested, deployed application." } },
+      { "@type": "Question", "name": "What is the difference between continuous delivery and continuous deployment?", "acceptedAnswer": { "@type": "Answer", "text": "With continuous delivery, every passing change is made ready to release but a human decides when to push it live. With continuous deployment, every passing change is released to production automatically, with no manual step. The difference is whether a person presses the final button." } },
+      { "@type": "Question", "name": "What is a CI/CD pipeline?", "acceptedAnswer": { "@type": "Answer", "text": "An automated sequence of stages — source, build, test and deploy — that runs whenever code changes. A push triggers it: the code is built, tests run, and if everything passes the app is deployed. The stages are defined in a configuration file in your repository." } },
+      { "@type": "Question", "name": "Do I need CI/CD for a small project?", "acceptedAnswer": { "@type": "Answer", "text": "Not always. A solo or very small project may not need a full pipeline. But even a simple CI step that runs your tests on every push catches bugs early and is usually worth it. The bigger and more frequently released the project, the more CI/CD pays for itself." } }
+    ]
+  })} />
+  </div>
+</Base>
