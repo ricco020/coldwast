@@ -1,0 +1,77 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/fr/e/blog/2026-06-22-what-is-ssh.html';
+const title = 'C’est quoi SSH ? Le Secure Shell expliqué aux développeurs (2026)';
+const description = 'SSH (Secure Shell) est le protocole chiffré qui vous sert à vous connecter et à lancer des commandes sur un serveur distant en toute sécurité. Ce qu’est SSH, comment marchent la poignée de main et les clés, mots de passe vs clés SSH, et les commandes du quotidien dont vous avez vraiment besoin.';
+---
+<Base title={title} description={description} path={path} type="article" lang="fr"
+  image="https://pixabay.com/get/g5c12e83aed3211c9b051ab598315a545303bf6fbbb10960ac036e41d7ceb6d71aa41ba5c33d707ad714842072afc9a19159dd69e7cbdee12fe20eb108fb53bd4_1280.jpg" datePublished="2026-06-22" dateModified="2026-06-22">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/fr/">Accueil</a><span>/</span><a href="/fr/e/">Guides</a><span>/</span>C’est quoi SSH</nav>
+  <p class="kicker">Programmation · Serveurs · sécurité</p>
+  <h1>C’est quoi SSH ?</h1>
+  <div class="artmeta"><span>Par Coldwast</span><span>Mis à jour le 22 juin 2026</span><span>8 min de lecture</span><span class="tag">#ssh</span><span class="tag">#servers</span><span class="tag">#security</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://pixabay.com/get/g5c12e83aed3211c9b051ab598315a545303bf6fbbb10960ac036e41d7ceb6d71aa41ba5c33d707ad714842072afc9a19159dd69e7cbdee12fe20eb108fb53bd4_1280.jpg" alt="Des lignes de code source et un port réseau affichés sur un écran sombre" width="1200" height="420" loading="eager" />
+    <figcaption>SSH est la manière standard pour les développeurs d’ouvrir une session sécurisée et chiffrée sur une machine distante et d’y travailler comme s’ils étaient assis devant.</figcaption>
+  </figure>
+
+  <p>Dès que vous louez un <a href="/fr/e/blog/2026-06-19-what-is-a-vps.html">VPS</a> ou que vous déployez sur un serveur distant, vous tombez sur la même question : comment se connecter et lancer des commandes sur une machine qui vit dans un centre de données ? La réponse est presque toujours <strong>SSH</strong>. Ce guide explique ce qu’est SSH, comment il protège votre session, et les quelques commandes dont vous avez réellement besoin.</p>
+
+  <h2>La définition courte</h2>
+  <p><strong>SSH — Secure Shell — est un protocole pour se connecter à un ordinateur distant et y lancer des commandes via une connexion chiffrée.</strong> Il vous donne un terminal sur une machine ailleurs, comme si elle était juste devant vous, et il brouille tout ce qui passe entre vous et le serveur. Ce chiffrement, c’est tout l’intérêt : il a remplacé d’anciens outils comme Telnet, qui envoyaient mots de passe et commandes en clair, lisibles par quiconque sur le réseau.</p>
+
+  <h2>Comment marche SSH</h2>
+  <p>Quand vous vous connectez, votre client SSH et le serveur exécutent une rapide poignée de main. Ils s’accordent sur les réglages de chiffrement et établissent une clé secrète partagée, de sorte que le reste de la session est privé. Le serveur prouve aussi son identité avec sa propre clé, c’est pourquoi votre client vous prévient la première fois qu’il voit un nouveau serveur. Ensuite vous vous authentifiez — vous prouvez qui vous êtes — et vous obtenez une invite shell sur la machine distante. Chaque frappe et chaque réponse sont dès lors chiffrées.</p>
+
+  <figure><img src="https://pixabay.com/get/g9999bbeef7af645e593056faae13baa2cf17f05f5c77103c2050d12d73b861331a2be6538c2c4e74da6dc7109e9af91c591e311f1c43d4e15dbebb4229f78bdd_1280.jpg" alt="Une armoire serveur remplie de câbles réseau et de cordons de brassage" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>SSH est ce qui vous permet d’atteindre des serveurs comme ceux-ci. Vous vous connectez depuis votre ordinateur portable et pilotez la machine distante via un canal chiffré.</figcaption></figure>
+
+  <h2>Mots de passe vs clés SSH</h2>
+  <p>Vous pouvez vous connecter de deux façons. Un <strong>mot de passe</strong> est simple mais plus faible : il peut être deviné ou cassé par force brute, et des bots tentent ça sur les serveurs publics toute la journée. Les <strong>clés SSH</strong> sont la meilleure méthode. Vous générez une paire de fichiers : une clé privée qui reste sur votre ordinateur, et une clé publique que vous copiez sur le serveur. Le serveur ne vous laisse alors entrer que si votre clé privée correspond, et la clé privée ne quitte jamais votre machine. Les clés sont à la fois plus sûres et plus pratiques, puisque vous évitez de taper un mot de passe à chaque fois.</p>
+
+  <h2>Les commandes que vous utilisez vraiment</h2>
+  <ul>
+    <li><strong>Se connecter :</strong> <code>ssh user@server-address</code> ouvre une session sur la machine distante.</li>
+    <li><strong>Créer une paire de clés :</strong> <code>ssh-keygen</code> crée vos clés privée et publique.</li>
+    <li><strong>Copier votre clé sur un serveur :</strong> <code>ssh-copy-id user@server-address</code> met en place la connexion par clé.</li>
+    <li><strong>Copier des fichiers :</strong> <code>scp file user@server:/path</code> déplace des fichiers via le même canal sécurisé.</li>
+  </ul>
+  <p>Ces quatre-là couvrent l’essentiel du travail quotidien. Vous vous connectez, vous gérez vos <a href="/fr/e/blog/2026-06-19-what-is-docker.html">conteneurs</a> ou votre code, et vous déplacez des fichiers dans les deux sens, le tout chiffré.</p>
+
+  <h2>Où vous croisez SSH</h2>
+  <p>SSH est partout en développement. Vous vous en servez pour gérer un VPS ou un serveur cloud, pour pousser et récupérer du code avec <a href="/fr/e/blog/2026-06-14-what-is-git.html">Git</a> par SSH, pour déployer des apps, et pour établir un tunnel de connexion sécurisé. Si une tâche implique une machine distante, c’est généralement par SSH que vous l’atteignez. L’apprendre une fois paie sur chaque serveur que vous toucherez ensuite.</p>
+
+  <h2>Les compromis honnêtes</h2>
+  <p>SSH est sécurisé, mais la sécurité dépend toujours de vous. Laisser la connexion par mot de passe activée, ou exposer le port par défaut avec un mot de passe faible, c’est comme ça que des serveurs se font compromettre. La configuration sûre est bien connue : utilisez des clés SSH, désactivez la connexion par mot de passe, et gardez votre clé privée protégée. Les débutants trouvent aussi la ligne de commande intimidante au début. Mais les bases s’apprennent vite, et la compétence se transpose à chaque serveur et plateforme cloud que vous utiliserez.</p>
+
+  <h2>Questions fréquentes</h2>
+  <details><summary>C’est quoi SSH en termes simples ?</summary><p>SSH, ou Secure Shell, est une façon de se connecter à un ordinateur ailleurs et d’y lancer des commandes via une connexion chiffrée. Il vous donne un terminal sur une machine distante comme si elle était devant vous, tout en brouillant tout ce qui s’échange entre vous et le serveur pour que personne sur le réseau ne puisse le lire.</p></details>
+  <details><summary>Quelle différence entre un mot de passe SSH et une clé SSH ?</summary><p>Un mot de passe est un secret que vous tapez, et il peut être deviné ou cassé par force brute par des bots. Une clé SSH est une paire de fichiers : une clé privée gardée sur votre machine et une clé publique placée sur le serveur. On vous laisse entrer seulement si elles correspondent, et la clé privée ne quitte jamais votre ordinateur, ce qui rend les clés à la fois plus sûres et plus pratiques que les mots de passe.</p></details>
+  <details><summary>Quel port SSH utilise-t-il ?</summary><p>SSH utilise le port TCP 22 par défaut. Certains administrateurs le changent pour un autre port afin de réduire les tentatives de connexion automatisées, mais c’est un petit obstacle plutôt qu’une vraie sécurité. Les vraies protections sont d’utiliser des clés SSH et de désactiver la connexion par mot de passe, pas de cacher le port.</p></details>
+  <details><summary>SSH est-il sécurisé ?</summary><p>Oui, SSH est sécurisé lorsqu’il est bien configuré, car il chiffre toute la session. La plupart des intrusions viennent d’une configuration faible, pas de SSH lui-même — souvent la connexion par mot de passe laissée active avec un mot de passe devinable. Utiliser des clés SSH, désactiver la connexion par mot de passe et protéger votre clé privée le rend très sûr.</p></details>
+
+  <div class="note">Guide indépendant, maintenu par la communauté. <strong>coldwa.st</strong> est un site de ressources de programmation ; cet article est un écrit explicatif nouveau et original sur le protocole SSH. Les commandes montrées sont l’usage standard d’OpenSSH ; vérifiez la documentation de votre propre client et serveur pour les détails.</div>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Recommandé</span>
+    <h3>Un serveur pour s’entraîner à SSH</h3>
+    <p>La meilleure façon d’apprendre SSH est d’avoir un vrai serveur où se connecter. Un VPS ou serveur cloud vous donne un accès root par SSH pour déployer sites, API ou conteneurs. Infomaniak — un fournisseur suisse respectueux de la vie privée — propose des VPS et serveurs cloud que vous pouvez piloter entièrement par SSH.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Voir Infomaniak Cloud →</a>
+    <p class="disc">Lien affilié — il soutient ces guides gratuits.</p>
+  </div>
+
+  <p>Parcourez d’autres explications claires dans notre <a href="/fr/e/">index des guides</a>.</p>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "C’est quoi SSH en termes simples ?", "acceptedAnswer": { "@type": "Answer", "text": "SSH, ou Secure Shell, est une façon de se connecter à un ordinateur ailleurs et d’y lancer des commandes via une connexion chiffrée. Il vous donne un terminal sur une machine distante comme si elle était devant vous, tout en brouillant tout ce qui s’échange entre vous et le serveur." } },
+      { "@type": "Question", "name": "Quelle différence entre un mot de passe SSH et une clé SSH ?", "acceptedAnswer": { "@type": "Answer", "text": "Un mot de passe est un secret que vous tapez, et il peut être deviné ou cassé par force brute. Une clé SSH est une paire de fichiers : une clé privée gardée sur votre machine et une clé publique placée sur le serveur. On vous laisse entrer seulement si elles correspondent, et la clé privée ne quitte jamais votre ordinateur, ce qui rend les clés plus sûres et plus pratiques." } },
+      { "@type": "Question", "name": "Quel port SSH utilise-t-il ?", "acceptedAnswer": { "@type": "Answer", "text": "SSH utilise le port TCP 22 par défaut. Certains administrateurs le changent pour réduire les tentatives de connexion automatisées, mais c’est un petit obstacle plutôt qu’une vraie sécurité. Les vraies protections sont d’utiliser des clés SSH et de désactiver la connexion par mot de passe." } },
+      { "@type": "Question", "name": "SSH est-il sécurisé ?", "acceptedAnswer": { "@type": "Answer", "text": "Oui, SSH est sécurisé lorsqu’il est bien configuré, car il chiffre toute la session. La plupart des intrusions viennent d’une configuration faible, souvent la connexion par mot de passe laissée active avec un mot de passe devinable. Utiliser des clés SSH, désactiver la connexion par mot de passe et protéger votre clé privée le rend très sûr." } }
+    ]
+  })} />
+  </div>
+</Base>

@@ -1,0 +1,77 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/pt/e/blog/2026-06-22-what-is-ssh.html';
+const title = 'O que é o SSH? O Secure Shell explicado para programadores (2026)';
+const description = 'O SSH (Secure Shell) é o protocolo encriptado que usa para entrar e correr comandos num servidor remoto com segurança. O que é o SSH, como funcionam o handshake e as chaves, palavras-passe vs chaves SSH e os comandos do dia a dia de que realmente precisa.';
+---
+<Base title={title} description={description} path={path} type="article" lang="pt"
+  image="https://pixabay.com/get/g5c12e83aed3211c9b051ab598315a545303bf6fbbb10960ac036e41d7ceb6d71aa41ba5c33d707ad714842072afc9a19159dd69e7cbdee12fe20eb108fb53bd4_1280.jpg" datePublished="2026-06-22" dateModified="2026-06-22">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/pt/">Início</a><span>/</span><a href="/pt/e/">Guias</a><span>/</span>O que é o SSH</nav>
+  <p class="kicker">Programação · Servidores · segurança</p>
+  <h1>O que é o SSH?</h1>
+  <div class="artmeta"><span>Por Coldwast</span><span>Atualizado a 22 de junho de 2026</span><span>8 min de leitura</span><span class="tag">#ssh</span><span class="tag">#servers</span><span class="tag">#security</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://pixabay.com/get/g5c12e83aed3211c9b051ab598315a545303bf6fbbb10960ac036e41d7ceb6d71aa41ba5c33d707ad714842072afc9a19159dd69e7cbdee12fe20eb108fb53bd4_1280.jpg" alt="Linhas de código-fonte e uma porta de rede mostradas num ecrã escuro" width="1200" height="420" loading="eager" />
+    <figcaption>O SSH é a forma habitual de os programadores abrirem uma sessão segura e encriptada numa máquina remota e trabalharem nela como se estivessem sentados à sua frente.</figcaption>
+  </figure>
+
+  <p>No momento em que aluga um <a href="/pt/e/blog/2026-06-19-what-is-a-vps.html">VPS</a> ou implementa num servidor remoto, depara-se com a mesma questão: como entra e corre comandos numa máquina que vive num centro de dados? A resposta é quase sempre <strong>SSH</strong>. Este guia explica o que é o SSH, como mantém a sua sessão segura e o punhado de comandos de que realmente precisa.</p>
+
+  <h2>A definição curta</h2>
+  <p><strong>SSH – Secure Shell – é um protocolo para entrar num computador remoto e correr comandos através de uma ligação encriptada.</strong> Dá-lhe um terminal numa máquina noutro lugar, como se estivesse mesmo à sua frente, e cifra tudo o que passa entre si e o servidor. Essa encriptação é o ponto central: substituiu ferramentas mais antigas como o Telnet, que enviava palavras-passe e comandos em texto simples, ao alcance de qualquer um na rede.</p>
+
+  <h2>Como funciona o SSH</h2>
+  <p>Quando se liga, o seu cliente SSH e o servidor fazem um handshake rápido. Acordam as definições de encriptação e criam uma chave secreta partilhada, para que o resto da sessão seja privado. O servidor também prova a sua identidade com a própria chave, e é por isso que o cliente o avisa na primeira vez que vê um servidor novo. Depois disso, autentica-se – prova quem é – e obtém uma linha de comandos na máquina remota. Cada tecla premida e cada resposta a partir daí ficam encriptadas.</p>
+
+  <figure><img src="https://pixabay.com/get/g9999bbeef7af645e593056faae13baa2cf17f05f5c77103c2050d12d73b861331a2be6538c2c4e74da6dc7109e9af91c591e311f1c43d4e15dbebb4229f78bdd_1280.jpg" alt="Um armário de servidores cheio de cabos de rede e patch cords" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>O SSH é a forma de chegar a servidores como estes. Liga-se a partir do seu portátil e controla a máquina remota através de um canal encriptado.</figcaption></figure>
+
+  <h2>Palavras-passe vs chaves SSH</h2>
+  <p>Pode entrar de duas formas. Uma <strong>palavra-passe</strong> é simples, mas mais fraca: pode ser adivinhada ou descoberta por força bruta, e os bots tentam isto em servidores públicos o dia todo. As <strong>chaves SSH</strong> são a melhor opção. Gera um par de ficheiros: uma chave privada que fica no seu computador e uma chave pública que copia para o servidor. O servidor só o deixa entrar se a sua chave privada corresponder, e a chave privada nunca sai da sua máquina. As chaves são mais seguras e mais práticas, já que dispensa escrever uma palavra-passe de cada vez.</p>
+
+  <h2>Os comandos que realmente usa</h2>
+  <ul>
+    <li><strong>Ligar:</strong> <code>ssh user@server-address</code> abre uma sessão na máquina remota.</li>
+    <li><strong>Criar um par de chaves:</strong> <code>ssh-keygen</code> gera as suas chaves privada e pública.</li>
+    <li><strong>Copiar a chave para um servidor:</strong> <code>ssh-copy-id user@server-address</code> configura o início de sessão por chave.</li>
+    <li><strong>Copiar ficheiros:</strong> <code>scp file user@server:/path</code> move ficheiros pelo mesmo canal seguro.</li>
+  </ul>
+  <p>Estes quatro cobrem a maior parte do trabalho do dia a dia. Liga-se, gere os seus <a href="/pt/e/blog/2026-06-19-what-is-docker.html">contentores</a> ou código e move ficheiros de um lado para o outro, tudo encriptado.</p>
+
+  <h2>Onde se cruza com o SSH</h2>
+  <p>O SSH está em todo o lado na programação. Usa-o para gerir um VPS ou servidor cloud, para enviar e obter código com o <a href="/pt/e/blog/2026-06-14-what-is-git.html">Git</a> por SSH, para implementar apps e para criar um túnel seguro numa ligação. Se uma tarefa envolve uma máquina remota, o SSH é normalmente a forma de lá chegar. Aprendê-lo uma vez compensa em todos os servidores em que algum dia tocar.</p>
+
+  <h2>Os compromissos honestos</h2>
+  <p>O SSH é seguro, mas a segurança continua a depender de si. Deixar o início de sessão por palavra-passe ativo, ou expor a porta padrão com uma palavra-passe fraca, é a forma como os servidores são invadidos. A configuração segura é bem conhecida: use chaves SSH, desative o início de sessão por palavra-passe e mantenha a sua chave privada protegida. Os principiantes também sentem a linha de comandos como um obstáculo no início. Mas o básico aprende-se depressa, e a competência transfere-se para todos os servidores e plataformas cloud que vier a usar.</p>
+
+  <h2>Perguntas frequentes</h2>
+  <details><summary>O que é o SSH em termos simples?</summary><p>SSH, ou Secure Shell, é uma forma de entrar num computador noutro lugar e correr comandos nele através de uma ligação encriptada. Dá-lhe um terminal numa máquina remota como se estivesse à sua frente, cifrando tudo o que é enviado entre si e o servidor para que ninguém na rede o consiga ler.</p></details>
+  <details><summary>Qual é a diferença entre uma palavra-passe SSH e uma chave SSH?</summary><p>Uma palavra-passe é um segredo que escreve, e pode ser adivinhada ou descoberta por força bruta por bots. Uma chave SSH é um par de ficheiros: uma chave privada guardada na sua máquina e uma chave pública colocada no servidor. Só é deixado entrar se corresponderem, e a chave privada nunca sai do seu computador, o que torna as chaves mais seguras e mais práticas do que as palavras-passe.</p></details>
+  <details><summary>Que porta usa o SSH?</summary><p>O SSH usa por predefinição a porta TCP 22. Alguns administradores mudam-na para outra porta para reduzir as tentativas automáticas de início de sessão, mas isso é um pequeno obstáculo, não segurança a sério. As verdadeiras proteções são usar chaves SSH e desativar o início de sessão por palavra-passe, não esconder a porta.</p></details>
+  <details><summary>O SSH é seguro?</summary><p>Sim, o SSH é seguro quando bem configurado, porque encripta toda a sessão. A maioria das invasões vem de uma configuração fraca, não do próprio SSH – normalmente o início de sessão por palavra-passe deixado ativo com uma palavra-passe fácil de adivinhar. Usar chaves SSH, desativar o início de sessão por palavra-passe e proteger a sua chave privada tornam-no muito seguro.</p></details>
+
+  <div class="note">Guia independente, mantido pela comunidade. <strong>coldwa.st</strong> é um site de recursos de programação; este artigo é um texto explicativo novo e original sobre o protocolo SSH. Os comandos apresentados são uso padrão do OpenSSH; consulte a documentação do seu próprio cliente e servidor para detalhes específicos.</div>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Recomendado</span>
+    <h3>Um servidor para praticar SSH</h3>
+    <p>A melhor forma de aprender SSH é ter um servidor real onde entrar. Um VPS ou servidor cloud dá-lhe acesso root por SSH para implementar sites, APIs ou contentores. A Infomaniak – um fornecedor suíço respeitador da privacidade – oferece VPS e servidores cloud aos quais se liga e que gere inteiramente por SSH.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Ver Infomaniak Cloud →</a>
+    <p class="disc">Link de afiliado – ajuda a suportar estes guias gratuitos.</p>
+  </div>
+
+  <p>Explore outras explicações claras no nosso <a href="/pt/e/">índice de guias</a>.</p>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "O que é o SSH em termos simples?", "acceptedAnswer": { "@type": "Answer", "text": "SSH, ou Secure Shell, é uma forma de entrar num computador noutro lugar e correr comandos nele através de uma ligação encriptada. Dá-lhe um terminal numa máquina remota como se estivesse à sua frente, cifrando tudo o que é enviado entre si e o servidor." } },
+      { "@type": "Question", "name": "Qual é a diferença entre uma palavra-passe SSH e uma chave SSH?", "acceptedAnswer": { "@type": "Answer", "text": "Uma palavra-passe é um segredo que escreve, e pode ser adivinhada ou descoberta por força bruta. Uma chave SSH é um par de ficheiros: uma chave privada guardada na sua máquina e uma chave pública colocada no servidor. Só é deixado entrar se corresponderem, e a chave privada nunca sai do seu computador, o que torna as chaves mais seguras e mais práticas." } },
+      { "@type": "Question", "name": "Que porta usa o SSH?", "acceptedAnswer": { "@type": "Answer", "text": "O SSH usa por predefinição a porta TCP 22. Alguns administradores mudam-na para reduzir as tentativas automáticas de início de sessão, mas isso é um pequeno obstáculo, não segurança a sério. As verdadeiras proteções são usar chaves SSH e desativar o início de sessão por palavra-passe." } },
+      { "@type": "Question", "name": "O SSH é seguro?", "acceptedAnswer": { "@type": "Answer", "text": "Sim, o SSH é seguro quando bem configurado, porque encripta toda a sessão. A maioria das invasões vem de uma configuração fraca, normalmente o início de sessão por palavra-passe deixado ativo com uma palavra-passe fácil de adivinhar. Usar chaves SSH, desativar o início de sessão por palavra-passe e proteger a sua chave privada tornam-no muito seguro." } }
+    ]
+  })} />
+  </div>
+</Base>

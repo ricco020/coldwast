@@ -1,0 +1,77 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-06-22-what-is-ssh.html';
+const title = 'What Is SSH? Secure Shell Explained for Developers (2026)';
+const description = 'SSH (Secure Shell) is the encrypted protocol you use to log in to and run commands on a remote server safely. What SSH is, how the handshake and keys work, passwords vs SSH keys, and the everyday commands you actually need.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://pixabay.com/get/g5c12e83aed3211c9b051ab598315a545303bf6fbbb10960ac036e41d7ceb6d71aa41ba5c33d707ad714842072afc9a19159dd69e7cbdee12fe20eb108fb53bd4_1280.jpg" datePublished="2026-06-22" dateModified="2026-06-22">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e/">Guides</a><span>/</span>What is SSH</nav>
+  <p class="kicker">Programming · Servers · security</p>
+  <h1>What is SSH?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Jun 22, 2026</span><span>8 min read</span><span class="tag">#ssh</span><span class="tag">#servers</span><span class="tag">#security</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://pixabay.com/get/g5c12e83aed3211c9b051ab598315a545303bf6fbbb10960ac036e41d7ceb6d71aa41ba5c33d707ad714842072afc9a19159dd69e7cbdee12fe20eb108fb53bd4_1280.jpg" alt="Lines of source code and a network port shown on a dark screen" width="1200" height="420" loading="eager" />
+    <figcaption>SSH is the standard way developers open a secure, encrypted session on a remote machine and work on it as if they were sitting in front of it.</figcaption>
+  </figure>
+
+  <p>The moment you rent a <a href="/e/blog/2026-06-19-what-is-a-vps.html">VPS</a> or deploy to a remote server, you hit the same question: how do you actually log in and run commands on a machine that lives in a data centre? The answer is almost always <strong>SSH</strong>. This guide explains what SSH is, how it keeps your session safe, and the handful of commands you really need.</p>
+
+  <h2>The short definition</h2>
+  <p><strong>SSH — Secure Shell — is a protocol for logging in to a remote computer and running commands over an encrypted connection.</strong> It gives you a terminal on a machine somewhere else, as if it were right in front of you, and it scrambles everything that passes between you and the server. That encryption is the whole point: it replaced older tools like Telnet, which sent passwords and commands in plain text for anyone on the network to read.</p>
+
+  <h2>How SSH works</h2>
+  <p>When you connect, your SSH client and the server run a quick handshake. They agree on encryption settings and set up a shared secret key, so the rest of the session is private. The server also proves its identity with its own key, which is why your client warns you the first time it sees a new server. After that, you authenticate — you prove who you are — and you get a shell prompt on the remote machine. Every keystroke and every reply from then on is encrypted.</p>
+
+  <figure><img src="https://pixabay.com/get/g9999bbeef7af645e593056faae13baa2cf17f05f5c77103c2050d12d73b861331a2be6538c2c4e74da6dc7109e9af91c591e311f1c43d4e15dbebb4229f78bdd_1280.jpg" alt="A server cabinet filled with network cables and patch cords" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>SSH is how you reach servers like these. You connect from your laptop and control the remote machine over an encrypted channel.</figcaption></figure>
+
+  <h2>Passwords vs SSH keys</h2>
+  <p>You can log in two ways. A <strong>password</strong> is simple but weaker: it can be guessed or brute-forced, and bots try this on public servers all day. <strong>SSH keys</strong> are the better way. You generate a pair of files: a private key that stays on your computer, and a public key you copy to the server. The server then lets you in only if your private key matches, and the private key never leaves your machine. Keys are both more secure and more convenient, since you skip typing a password each time.</p>
+
+  <h2>The commands you actually use</h2>
+  <ul>
+    <li><strong>Connect:</strong> <code>ssh user@server-address</code> opens a session on the remote machine.</li>
+    <li><strong>Make a key pair:</strong> <code>ssh-keygen</code> creates your private and public keys.</li>
+    <li><strong>Copy your key to a server:</strong> <code>ssh-copy-id user@server-address</code> sets up key login.</li>
+    <li><strong>Copy files:</strong> <code>scp file user@server:/path</code> moves files over the same secure channel.</li>
+  </ul>
+  <p>Those four cover most day-to-day work. You connect, you manage your <a href="/e/blog/2026-06-19-what-is-docker.html">containers</a> or code, and you move files back and forth, all encrypted.</p>
+
+  <h2>Where you meet SSH</h2>
+  <p>SSH is everywhere in development. You use it to manage a VPS or cloud server, to push and pull code with <a href="/e/blog/2026-06-14-what-is-git.html">Git</a> over SSH, to deploy apps, and to tunnel a connection securely. If a task involves a remote machine, SSH is usually how you reach it. Learning it once pays off across every server you ever touch.</p>
+
+  <h2>The honest trade-offs</h2>
+  <p>SSH is secure, but the security still depends on you. Leaving password login on, or exposing the default port with a weak password, is how servers get broken into. The safe setup is well known: use SSH keys, turn off password login, and keep your private key protected. Beginners also find the command line a hurdle at first. But the basics are quickly learned, and the skill carries over to every server and cloud platform you'll use.</p>
+
+  <h2>Frequently asked questions</h2>
+  <details><summary>What is SSH in simple terms?</summary><p>SSH, or Secure Shell, is a way to log in to a computer somewhere else and run commands on it over an encrypted connection. It gives you a terminal on a remote machine as if it were in front of you, while scrambling everything sent between you and the server so no one on the network can read it.</p></details>
+  <details><summary>What is the difference between an SSH password and an SSH key?</summary><p>A password is a secret you type, and it can be guessed or brute-forced by bots. An SSH key is a pair of files: a private key kept on your machine and a public key placed on the server. You're let in only if they match, and the private key never leaves your computer, which makes keys both safer and more convenient than passwords.</p></details>
+  <details><summary>What port does SSH use?</summary><p>SSH uses TCP port 22 by default. Some administrators change it to a different port to cut down on automated login attempts, but that is a small obstacle rather than real security. The real protections are using SSH keys and turning off password login, not hiding the port.</p></details>
+  <details><summary>Is SSH secure?</summary><p>Yes, SSH is secure when set up properly, because it encrypts the whole session. Most break-ins come from weak configuration, not from SSH itself — usually password login left on with a guessable password. Using SSH keys, disabling password login and protecting your private key make it very safe.</p></details>
+
+  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about the SSH protocol. Commands shown are standard OpenSSH usage; check your own client and server documentation for specifics.</div>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Recommended</span>
+    <h3>A server to practise SSH on</h3>
+    <p>The best way to learn SSH is to have a real server to log in to. A VPS or cloud server gives you root access over SSH to deploy sites, APIs or containers. Infomaniak — a Swiss, privacy-respecting provider — offers VPS and cloud servers you can connect to and manage entirely over SSH.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">See Infomaniak Cloud →</a>
+    <p class="disc">Affiliate link — it supports these free guides.</p>
+  </div>
+
+  <p>Browse more clear explainers in our <a href="/e/">guides index</a>.</p>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "What is SSH in simple terms?", "acceptedAnswer": { "@type": "Answer", "text": "SSH, or Secure Shell, is a way to log in to a computer somewhere else and run commands on it over an encrypted connection. It gives you a terminal on a remote machine as if it were in front of you, while scrambling everything sent between you and the server." } },
+      { "@type": "Question", "name": "What is the difference between an SSH password and an SSH key?", "acceptedAnswer": { "@type": "Answer", "text": "A password is a secret you type, and it can be guessed or brute-forced. An SSH key is a pair of files: a private key kept on your machine and a public key placed on the server. You're let in only if they match, and the private key never leaves your computer, which makes keys safer and more convenient." } },
+      { "@type": "Question", "name": "What port does SSH use?", "acceptedAnswer": { "@type": "Answer", "text": "SSH uses TCP port 22 by default. Some administrators change it to reduce automated login attempts, but that is a small obstacle rather than real security. The real protections are using SSH keys and turning off password login." } },
+      { "@type": "Question", "name": "Is SSH secure?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, SSH is secure when set up properly, because it encrypts the whole session. Most break-ins come from weak configuration, usually password login left on with a guessable password. Using SSH keys, disabling password login and protecting your private key make it very safe." } }
+    ]
+  })} />
+  </div>
+</Base>
