@@ -1,0 +1,85 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/fr/e/blog/2026-06-23-what-is-a-compiler.html';
+const title = 'C’est quoi un compilateur ? Du code source au code machine (2026)';
+const description = 'Un compilateur transforme le code source que vous écrivez en un programme que la machine peut exécuter. Ce qu’est un compilateur, comment il fonctionne étape par étape, compilateur vs interpréteur, et où se place GHC pour Haskell.';
+---
+<Base title={title} description={description} path={path} type="article" lang="fr"
+  image="/img/px-c0mp1ler-src.jpg" datePublished="2026-06-23" dateModified="2026-06-23">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/fr/">Accueil</a><span>/</span><a href="/fr/e/">Guides</a><span>/</span>C’est quoi un compilateur</nav>
+  <p class="kicker">Programmation · Concepts · Compilateur</p>
+  <h1>C’est quoi un compilateur ?</h1>
+  <div class="artmeta"><span>Par Coldwast</span><span>Mis à jour le 23 juin 2026</span><span>8 min de lecture</span><span class="tag">#compiler</span><span class="tag">#concepts</span><span class="tag">#haskell</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/px-c0mp1ler-src.jpg" alt="Du code source C++ coloré avec des numéros de ligne dans un éditeur sombre" width="1200" height="420" loading="eager" />
+    <figcaption>Un code source comme celui-ci — variables, boucles et conditions écrites par un humain — est l’entrée que le compilateur lit pour la transformer en programme exécutable par la machine.</figcaption>
+  </figure>
+
+  <p>Vous écrivez un programme dans un langage que vous savez lire : des mots, de l’indentation, des noms qui ont du sens. Le processeur de votre machine n’y comprend rien — il exécute des instructions binaires brutes. L’outil qui fait le pont, c’est le <strong>compilateur</strong>. Ce guide explique ce qu’est un compilateur, les étapes qu’il traverse, en quoi il diffère d’un interpréteur, et où se place un compilateur comme GHC quand vous écrivez du <a href="/fr/e/blog/2026-06-14-what-is-haskell.html">Haskell</a>.</p>
+
+  <h2>La définition courte</h2>
+  <p><strong>Un compilateur est un programme qui traduit du code source écrit dans un langage vers une autre forme — le plus souvent le code machine qu’un ordinateur peut exécuter directement.</strong> Vous lui donnez les fichiers texte que vous avez écrits, et il produit un exécutable (ou un format intermédiaire) que la machine, ou un runtime, peut faire tourner. La traduction se fait une fois, en amont, et le résultat s’exécute seul, sans que le compilateur soit présent.</p>
+
+  <h2>Comment fonctionne un compilateur, étape par étape</h2>
+  <p>Un compilateur ne traduit pas d’un seul coup. Il enchaîne un pipeline d’étapes, chacune passant son résultat à la suivante :</p>
+  <ul>
+    <li><strong>Analyse lexicale (tokenisation) :</strong> le texte source est découpé en petites unités — mots-clés, noms, nombres, symboles — appelées jetons.</li>
+    <li><strong>Analyse syntaxique :</strong> les jetons sont organisés en un arbre qui reflète la structure du programme, selon la grammaire du langage.</li>
+    <li><strong>Analyse sémantique :</strong> le compilateur vérifie que le programme a du sens — noms définis, types cohérents, règles du langage respectées. C’est là que beaucoup de vos erreurs sont détectées.</li>
+    <li><strong>Optimisation :</strong> le compilateur réécrit le programme en un équivalent plus rapide ou plus petit sans changer ce qu’il fait.</li>
+    <li><strong>Génération de code :</strong> il émet enfin la sortie cible — code machine, ou une représentation intermédiaire qu’un autre outil terminera.</li>
+  </ul>
+  <p>Si une étape trouve un problème, vous obtenez une erreur de compilation et aucun programme n’est produit. C’est le marché du compilateur : il refuse de construire du code cassé, donc toute une classe d’erreurs est attrapée avant même que le programme tourne.</p>
+
+  <figure><img src="/img/px-c0mp1ler-dev.jpg" alt="Un développeur portant un casque, à un bureau avec un écran et un portable affichant du code dans une pièce bleu sombre" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>Un développeur au travail : vous écrivez et modifiez le code source, puis vous lancez le compilateur, qui lit vos fichiers et produit le programme exécutable.</figcaption></figure>
+
+  <h2>Compilateur vs interpréteur</h2>
+  <p>L’autre approche courante est l’<strong>interpréteur</strong>, qui lit votre code source et l’exécute directement, ligne par ligne, à chaque exécution — aucun exécutable séparé n’est construit en amont. Un compilateur traduit tout le programme une fois, au départ, vers une forme que la machine exécute seule.</p>
+  <p>La différence pratique : les programmes compilés démarrent et tournent en général plus vite, car la traduction et l’optimisation ont déjà eu lieu, et les erreurs apparaissent à la compilation. Les programmes interprétés sont plus rapides à tester et plus souples, mais refont le travail de traduction à chaque exécution. Beaucoup de chaînes d’outils réelles mélangent les deux — elles compilent vers une <a href="/fr/e/blog/2026-06-14-what-is-an-algorithm.html">forme</a> intermédiaire puis l’exécutent sur une machine virtuelle.</p>
+
+  <h2>Où se placent GHC et Haskell</h2>
+  <p>Quand vous écrivez du Haskell, le compilateur que vous utilisez est <strong>GHC</strong> (le Glasgow Haskell Compiler). Il lit vos fichiers source <code>.hs</code>, les vérifie de type rigoureusement, optimise le résultat, et produit un exécutable natif que vous pouvez lancer seul. Le système de types fort de Haskell fait que l’étape d’analyse sémantique de GHC travaille beaucoup pour vous : beaucoup de bugs sont signalés en erreurs de compilation au lieu de planter à l’exécution. Pour le tour complet de son usage, voyez notre <a href="/fr/e/blog/2026-06-14-ghc-compiler-guide.html">guide du compilateur GHC</a> et <a href="/fr/e/blog/2026-06-14-ghcup-install-haskell.html">comment installer Haskell avec GHCup</a>.</p>
+
+  <h2>Les commandes que vous croisez vraiment</h2>
+  <ul>
+    <li><strong>Compiler un seul fichier :</strong> un outil comme <code>ghc Main.hs</code> lit votre source et produit un exécutable.</li>
+    <li><strong>Construire un projet :</strong> des outils de build comme <a href="/fr/e/blog/2026-06-14-stack-vs-cabal-haskell.html">Cabal ou Stack</a> pilotent le compilateur sur de nombreux fichiers et dépendances pour vous.</li>
+    <li><strong>Vérifier les types sans build complet :</strong> beaucoup de compilateurs offrent un mode plus rapide qui cherche les erreurs sans produire de binaire.</li>
+  </ul>
+  <p>La plupart du temps, vous n’appelez pas le compilateur à la main — votre outil de build ou votre éditeur le fait et vous montre les erreurs. Mais savoir ce qu’il fait dessous rend ces erreurs bien plus faciles à lire.</p>
+
+  <h2>Les compromis honnêtes</h2>
+  <p>Les compilateurs ajoutent une étape : vous changez le code, vous attendez le build, puis vous exécutez. Sur un gros projet, cette attente peut se sentir, d’où l’importance des compilateurs rapides et des builds incrémentaux. Le gain est réel : erreurs attrapées tôt, sortie optimisée, et un exécutable unique livrable sans livrer votre chaîne d’outils. Pour un langage fortement typé comme Haskell, cette vérification en amont fait une grande part de l’attrait — le compilateur est un filet de sécurité, pas seulement un traducteur.</p>
+
+  <h2>Questions fréquentes</h2>
+  <details><summary>C’est quoi un compilateur, simplement ?</summary><p>Un compilateur est un programme qui traduit le code source que vous écrivez en une forme que l’ordinateur peut exécuter — le plus souvent du code machine. Vous lui donnez vos fichiers texte et il produit un exécutable qui tourne seul, sans que le compilateur soit présent. La traduction se fait une fois, en amont.</p></details>
+  <details><summary>Quelle différence entre un compilateur et un interpréteur ?</summary><p>Un compilateur traduit tout votre programme une fois, en amont, vers une forme exécutable, donc le résultat démarre et tourne vite. Un interpréteur lit et exécute votre code source directement à chaque exécution, sans étape de build séparée. Les programmes compilés sont en général plus rapides ; les interprétés sont plus rapides à tester et plus souples.</p></details>
+  <details><summary>Quelles sont les étapes d’un compilateur ?</summary><p>Un compilateur enchaîne généralement l’analyse lexicale (découpe du texte en jetons), l’analyse syntaxique (construction d’un arbre de structure), l’analyse sémantique (vérification des noms et des types), l’optimisation (rendre le programme plus rapide ou plus petit) et la génération de code (émission du code machine final ou d’une forme intermédiaire). Une erreur à n’importe quelle étape arrête le build.</p></details>
+  <details><summary>GHC est-il un compilateur ?</summary><p>Oui. GHC, le Glasgow Haskell Compiler, est le compilateur standard de Haskell. Il lit vos fichiers source .hs, les vérifie de type et les optimise, et produit un exécutable natif que vous pouvez lancer seul. Le système de types fort de Haskell fait que GHC attrape beaucoup de bugs en erreurs de compilation avant même que le programme tourne.</p></details>
+
+  <div class="note">Guide indépendant, maintenu par la communauté. <strong>coldwa.st</strong> est un site de ressources de programmation ; cet article est un texte explicatif original et inédit sur le fonctionnement des compilateurs. Les étapes décrites sont standard dans les compilateurs courants ; consultez la documentation de votre compilateur pour son comportement exact.</div>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Recommandé</span>
+    <h3>Une machine Linux pour compiler et exécuter votre code</h3>
+    <p>Compiler un vrai projet — construire GHC, vérifier les types d’une grosse base Haskell, puis lancer l’exécutable — est bien plus simple sur une vraie machine Linux que sur un portable. Un serveur cloud vous donne un accès root pour installer une chaîne de compilation et construire votre app dans un environnement propre. Infomaniak — fournisseur suisse respectueux de la vie privée — propose des serveurs cloud que vous configurez et atteignez en <a href="/fr/e/blog/2026-06-22-what-is-ssh.html">SSH</a>.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Voir Infomaniak Cloud →</a>
+    <p class="disc">Lien affilié — il soutient ces guides gratuits.</p>
+  </div>
+
+  <p>Parcourez d’autres explications claires dans notre <a href="/fr/e/">index des guides</a>.</p>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "C’est quoi un compilateur, simplement ?", "acceptedAnswer": { "@type": "Answer", "text": "Un compilateur est un programme qui traduit le code source que vous écrivez en une forme que l’ordinateur peut exécuter — le plus souvent du code machine. Vous lui donnez vos fichiers texte et il produit un exécutable qui tourne seul, sans que le compilateur soit présent. La traduction se fait une fois, en amont." } },
+      { "@type": "Question", "name": "Quelle différence entre un compilateur et un interpréteur ?", "acceptedAnswer": { "@type": "Answer", "text": "Un compilateur traduit tout votre programme une fois, en amont, vers une forme exécutable, donc le résultat démarre et tourne vite. Un interpréteur lit et exécute votre code source directement à chaque exécution, sans étape de build séparée. Les programmes compilés sont en général plus rapides ; les interprétés sont plus rapides à tester et plus souples." } },
+      { "@type": "Question", "name": "Quelles sont les étapes d’un compilateur ?", "acceptedAnswer": { "@type": "Answer", "text": "Un compilateur enchaîne généralement l’analyse lexicale (découpe du texte en jetons), l’analyse syntaxique (construction d’un arbre de structure), l’analyse sémantique (vérification des noms et des types), l’optimisation (rendre le programme plus rapide ou plus petit) et la génération de code (émission du code machine final ou d’une forme intermédiaire). Une erreur à n’importe quelle étape arrête le build." } },
+      { "@type": "Question", "name": "GHC est-il un compilateur ?", "acceptedAnswer": { "@type": "Answer", "text": "Oui. GHC, le Glasgow Haskell Compiler, est le compilateur standard de Haskell. Il lit vos fichiers source .hs, les vérifie de type et les optimise, et produit un exécutable natif que vous pouvez lancer seul. Le système de types fort de Haskell fait que GHC attrape beaucoup de bugs en erreurs de compilation avant même que le programme tourne." } }
+    ]
+  })} />
+  </div>
+</Base>

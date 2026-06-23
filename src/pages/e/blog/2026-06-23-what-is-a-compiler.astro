@@ -1,0 +1,85 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-06-23-what-is-a-compiler.html';
+const title = 'What Is a Compiler? Source Code to Machine Code Explained (2026)';
+const description = 'A compiler turns the source code you write into a program the machine can run. What a compiler is, how it works stage by stage, compiler vs interpreter, and where GHC fits for Haskell.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="/img/px-c0mp1ler-src.jpg" datePublished="2026-06-23" dateModified="2026-06-23">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e/">Guides</a><span>/</span>What is a compiler</nav>
+  <p class="kicker">Programming · Concepts · Compiler</p>
+  <h1>What is a compiler?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Jun 23, 2026</span><span>8 min read</span><span class="tag">#compiler</span><span class="tag">#concepts</span><span class="tag">#haskell</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/px-c0mp1ler-src.jpg" alt="Highlighted C++ source code with line numbers in a dark editor" width="1200" height="420" loading="eager" />
+    <figcaption>Source code like this — variables, loops and conditionals written by a person — is the input a compiler reads and turns into a program the machine can run.</figcaption>
+  </figure>
+
+  <p>You write a program in a language you can read: words, indentation, names that mean something. The processor in your machine understands none of that — it runs raw binary instructions. The tool that bridges that gap is the <strong>compiler</strong>. This guide explains what a compiler is, the stages it works through, how it differs from an interpreter, and where a compiler like GHC fits when you write <a href="/e/blog/2026-06-14-what-is-haskell.html">Haskell</a>.</p>
+
+  <h2>The short definition</h2>
+  <p><strong>A compiler is a program that translates source code written in one language into another form — usually the machine code a computer can run directly.</strong> You hand it the text files you wrote, and it produces an executable (or an intermediate format) that the machine, or a runtime, can carry out. The translation happens once, ahead of time, and the result runs on its own without the compiler being present.</p>
+
+  <h2>How a compiler works, stage by stage</h2>
+  <p>A compiler does not translate in a single leap. It works through a pipeline of stages, each handing its result to the next:</p>
+  <ul>
+    <li><strong>Lexing (tokenizing):</strong> the source text is broken into small units — keywords, names, numbers, symbols — called tokens.</li>
+    <li><strong>Parsing:</strong> the tokens are arranged into a tree that reflects the structure of the program, following the language's grammar.</li>
+    <li><strong>Semantic analysis:</strong> the compiler checks that the program makes sense — that names are defined, that types line up, that the rules of the language hold. This is where many of your errors are caught.</li>
+    <li><strong>Optimization:</strong> the compiler rewrites the program into a faster or smaller equivalent without changing what it does.</li>
+    <li><strong>Code generation:</strong> finally it emits the target output — machine code, or an intermediate representation that another tool will finish.</li>
+  </ul>
+  <p>If any stage finds a problem, you get a compile error and no program is produced. That is the trade the compiler makes: it refuses to build broken code, so a class of mistakes is caught before the program ever runs.</p>
+
+  <figure><img src="/img/px-c0mp1ler-dev.jpg" alt="A developer wearing headphones working at a desk with a monitor and laptop showing code in a dark blue room" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>A developer at work: you write and edit source code, then run the compiler, which reads your files and produces the runnable program.</figcaption></figure>
+
+  <h2>Compiler vs interpreter</h2>
+  <p>The other common approach is an <strong>interpreter</strong>, which reads your source code and carries it out directly, line by line, each time the program runs — no separate executable is built ahead of time. A compiler translates the whole program once, up front, into a form the machine runs on its own.</p>
+  <p>The practical difference: compiled programs usually start and run faster, because the translation and optimization already happened, and errors surface at compile time. Interpreted programs are quicker to try out and more flexible, but do the translation work every run. Many real toolchains mix both — they compile to an intermediate <a href="/e/blog/2026-06-14-what-is-an-algorithm.html">form</a> and then run that on a virtual machine.</p>
+
+  <h2>Where GHC and Haskell fit</h2>
+  <p>When you write Haskell, the compiler you reach for is <strong>GHC</strong> (the Glasgow Haskell Compiler). It reads your <code>.hs</code> source files, type-checks them thoroughly, optimizes the result, and produces a native executable you can run on its own. Haskell's strong type system means GHC's semantic-analysis stage is doing a lot of work for you: many bugs are reported as compile errors instead of crashing at run time. If you want the full walkthrough of using it, see our <a href="/e/blog/2026-06-14-ghc-compiler-guide.html">GHC compiler guide</a> and <a href="/e/blog/2026-06-14-ghcup-install-haskell.html">how to install Haskell with GHCup</a>.</p>
+
+  <h2>The commands you actually meet</h2>
+  <ul>
+    <li><strong>Compile a single file:</strong> a tool like <code>ghc Main.hs</code> reads your source and produces an executable.</li>
+    <li><strong>Build a project:</strong> build tools such as <a href="/e/blog/2026-06-14-stack-vs-cabal-haskell.html">Cabal or Stack</a> drive the compiler across many files and dependencies for you.</li>
+    <li><strong>Type-check without a full build:</strong> many compilers offer a faster mode that checks for errors without emitting a binary.</li>
+  </ul>
+  <p>Most of the time you don't call the compiler by hand — your build tool or editor does it for you and shows you the errors. But knowing what it is doing underneath makes those errors far easier to read.</p>
+
+  <h2>The honest trade-offs</h2>
+  <p>Compilers add a step: you change code, you wait for it to build, then you run it. On a big project that wait can be noticeable, which is why fast compilers and incremental builds matter. The payoff is real: errors caught early, optimized output, and a single executable you can ship without shipping your toolchain. For a strongly typed language like Haskell, that up-front checking is much of the appeal — the compiler is a safety net, not just a translator.</p>
+
+  <h2>Frequently asked questions</h2>
+  <details><summary>What is a compiler in simple terms?</summary><p>A compiler is a program that translates the source code you write into a form the computer can run — usually machine code. You give it your text files and it produces an executable that runs on its own, without the compiler being present. The translation happens once, ahead of time.</p></details>
+  <details><summary>What is the difference between a compiler and an interpreter?</summary><p>A compiler translates your whole program once, ahead of time, into a runnable form, so the result starts and runs quickly. An interpreter reads and carries out your source code directly each time the program runs, with no separate build step. Compiled programs are usually faster; interpreted ones are quicker to try and more flexible.</p></details>
+  <details><summary>What are the stages of a compiler?</summary><p>A compiler typically works through lexing (splitting the text into tokens), parsing (building a structure tree), semantic analysis (checking names and types), optimization (making the program faster or smaller), and code generation (emitting the final machine code or intermediate form). An error in any stage stops the build.</p></details>
+  <details><summary>Is GHC a compiler?</summary><p>Yes. GHC, the Glasgow Haskell Compiler, is the standard compiler for Haskell. It reads your .hs source files, type-checks and optimizes them, and produces a native executable you can run on its own. Haskell's strong type system means GHC catches many bugs as compile errors before the program ever runs.</p></details>
+
+  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about how compilers work. The compiler stages described are standard across mainstream compilers; consult your specific compiler's documentation for exact behaviour.</div>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Recommended</span>
+    <h3>A Linux box to build and run your code</h3>
+    <p>Compiling a real project — building GHC, type-checking a large Haskell codebase, then running the executable — is much easier on a proper Linux machine than a laptop. A cloud server gives you root access to install a compiler toolchain and build your app in a clean environment. Infomaniak — a Swiss, privacy-respecting provider — offers cloud servers you can set up and reach over <a href="/e/blog/2026-06-22-what-is-ssh.html">SSH</a>.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">See Infomaniak Cloud →</a>
+    <p class="disc">Affiliate link — it supports these free guides.</p>
+  </div>
+
+  <p>Browse more clear explainers in our <a href="/e/">guides index</a>.</p>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "What is a compiler in simple terms?", "acceptedAnswer": { "@type": "Answer", "text": "A compiler is a program that translates the source code you write into a form the computer can run — usually machine code. You give it your text files and it produces an executable that runs on its own, without the compiler being present. The translation happens once, ahead of time." } },
+      { "@type": "Question", "name": "What is the difference between a compiler and an interpreter?", "acceptedAnswer": { "@type": "Answer", "text": "A compiler translates your whole program once, ahead of time, into a runnable form, so the result starts and runs quickly. An interpreter reads and carries out your source code directly each time the program runs, with no separate build step. Compiled programs are usually faster; interpreted ones are quicker to try and more flexible." } },
+      { "@type": "Question", "name": "What are the stages of a compiler?", "acceptedAnswer": { "@type": "Answer", "text": "A compiler typically works through lexing (splitting the text into tokens), parsing (building a structure tree), semantic analysis (checking names and types), optimization (making the program faster or smaller), and code generation (emitting the final machine code or intermediate form). An error in any stage stops the build." } },
+      { "@type": "Question", "name": "Is GHC a compiler?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. GHC, the Glasgow Haskell Compiler, is the standard compiler for Haskell. It reads your .hs source files, type-checks and optimizes them, and produces a native executable you can run on its own. Haskell's strong type system means GHC catches many bugs as compile errors before the program ever runs." } }
+    ]
+  })} />
+  </div>
+</Base>
