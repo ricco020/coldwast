@@ -42,7 +42,7 @@ pairs = [(x, y) | x &lt;- [1,2,3], y &lt;- [&#39;a&#39;,&#39;b&#39;]]
   <p>El generador situado más a la derecha varía más rápido. También puedes hacer que un generador posterior dependa de uno anterior — por ejemplo, extrayendo <code>y</code> de <code>[x..10]</code>.</p>
 
   <h2>Cómo se relacionan con map y filter</h2>
-  <p>Una comprensión es esencialmente <code>map</code> y <code>filter</code> en una sola forma legible. Estas son equivalentes:</p>
+  <p>Una comprensión es esencialmente <code>map</code> y <code>filter</code> en una sola forma legible — y ambas son <a href="/es/e/blog/2026-06-24-higher-order-functions.html">funciones de orden superior</a>, ya que cada una recibe una función como argumento. Estas son equivalentes:</p>
   <pre><code>[x*2 | x &lt;- xs, even x]
 map (*2) (filter even xs)</code></pre>
   <p>Usa la que se lea mejor en cada caso. Las comprensiones brillan cuando tienes varios generadores o varias guardas; <code>map</code>/<code>filter</code> se componen bien en canalizaciones libres de puntos. Como Haskell es <a href="/es/e/blog/2026-06-14-lazy-evaluation-haskell.html">perezoso</a>, una comprensión sobre una lista infinita como <code>[1..]</code> solo calcula los elementos que realmente consumes.</p>

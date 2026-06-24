@@ -42,7 +42,7 @@ pairs = [(x, y) | x &lt;- [1,2,3], y &lt;- [&#39;a&#39;,&#39;b&#39;]]
   <p>Il generatore più a destra varia più velocemente. Puoi anche far dipendere un generatore successivo da uno precedente — per esempio estraendo <code>y</code> da <code>[x..10]</code>.</p>
 
   <h2>Il loro legame con map e filter</h2>
-  <p>Una comprehension è essenzialmente <code>map</code> e <code>filter</code> in un’unica forma leggibile. Questi sono equivalenti:</p>
+  <p>Una comprehension è essenzialmente <code>map</code> e <code>filter</code> in un’unica forma leggibile — ed entrambe sono <a href="/it/e/blog/2026-06-24-higher-order-functions.html">funzioni di ordine superiore</a>, poiché ciascuna prende una funzione come argomento. Questi sono equivalenti:</p>
   <pre><code>[x*2 | x &lt;- xs, even x]
 map (*2) (filter even xs)</code></pre>
   <p>Usa ciò che si legge meglio nel caso specifico. Le comprehension brillano quando hai più generatori o più guardie; <code>map</code>/<code>filter</code> si compongono bene in pipeline point-free. Poiché Haskell è <a href="/it/e/blog/2026-06-14-lazy-evaluation-haskell.html">lazy</a>, una comprehension su una lista infinita come <code>[1..]</code> calcola solo gli elementi che effettivamente consumi.</p>
