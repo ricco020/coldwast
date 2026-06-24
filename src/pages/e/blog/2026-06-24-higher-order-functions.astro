@@ -1,0 +1,83 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-06-24-higher-order-functions.html';
+const title = 'What Is a Higher-Order Function? Functions as Values, Explained (2026)';
+const description = 'A higher-order function takes a function as an argument or returns one as its result. What higher-order functions are, why map, filter and fold are the classic examples, how they replace loops, and how they work in Haskell.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="/img/hof-laptop-editor.jpg" datePublished="2026-06-24" dateModified="2026-06-24">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e/">Guides</a><span>/</span>Higher-order functions</nav>
+  <p class="kicker">Programming · Concepts · Haskell</p>
+  <h1>What is a higher-order function?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Jun 24, 2026</span><span>8 min read</span><span class="tag">#functional</span><span class="tag">#concepts</span><span class="tag">#haskell</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/hof-laptop-editor.jpg" alt="A laptop on a desk with a code editor open, showing syntax-highlighted source code" width="1200" height="420" loading="eager" />
+    <figcaption>A code editor open on a laptop: higher-order functions are an everyday tool you write here — functions that take other functions as arguments, like map and filter.</figcaption>
+  </figure>
+
+  <p>In most languages a function is something you call. In functional programming a function is also a <em>value</em> — you can store it in a variable, pass it into another function, and get one back as a result. A <strong>higher-order function</strong> is exactly the function that does one of those last two things. This guide explains what a higher-order function is, why <code>map</code>, <code>filter</code> and <code>fold</code> are the classic examples, how they replace loops, and how they look in <a href="/e/blog/2026-06-14-what-is-haskell.html">Haskell</a>.</p>
+
+  <h2>The short definition</h2>
+  <p><strong>A higher-order function is a function that takes one or more functions as arguments, returns a function as its result, or both.</strong> A function that does neither — it only takes and returns plain values like numbers or strings — is called a first-order function. The "higher-order" name simply means it operates on functions the way an ordinary function operates on data.</p>
+  <p>This only works in a language where functions are <strong>first-class values</strong>: things you can name, pass around and return, just like an integer. Haskell, JavaScript, Python, Swift and many others treat functions this way, which is what makes higher-order functions possible.</p>
+
+  <h2>The three classics: map, filter and fold</h2>
+  <p>Almost every functional codebase leans on three higher-order functions. Each one takes a function as an argument and applies it across a collection:</p>
+  <ul>
+    <li><strong>map</strong> applies a function to every element of a list and gives back a new list of the results. <code>map (+1) [1,2,3]</code> gives <code>[2,3,4]</code> — the function <code>(+1)</code> is the argument.</li>
+    <li><strong>filter</strong> keeps only the elements for which a function returns true. <code>filter even [1,2,3,4]</code> gives <code>[2,4]</code> — here <code>even</code> is the function you pass in.</li>
+    <li><strong>fold</strong> (also called reduce) collapses a list down to a single value by combining elements two at a time. <code>foldr (+) 0 [1,2,3]</code> adds them up to <code>6</code> — the combining step <code>(+)</code> is the function argument.</li>
+  </ul>
+  <p>In each case you supply the small piece of logic — increment, "is even", add — and the higher-order function handles the walking-over-the-list part. You describe <em>what</em> to do to each element, not the bookkeeping of <em>how</em> to step through them.</p>
+
+  <h2>How they replace loops</h2>
+  <p>In an imperative language you might write a loop with a counter, an accumulator, and an explicit index. The same intent expressed with a higher-order function disappears into a single line, because the iteration is already baked into <code>map</code> or <code>fold</code>. That is why purely functional code, which avoids mutable loop counters, leans so heavily on these functions and on <a href="/e/blog/2026-06-16-what-is-recursion.html">recursion</a> — the two cover the work that loops do elsewhere. <a href="/e/blog/2026-06-14-haskell-list-comprehensions.html">List comprehensions</a> are often a readable shorthand for the same <code>map</code>-and-<code>filter</code> combination.</p>
+
+  <figure><img src="/img/hof-closure-arg.jpg" alt="Swift source code on a dark screen where a closure block is passed as the completionHandler argument to a document open call" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>A higher-order function in another language: here a closure (the block in braces) is passed as the completionHandler argument to document.open — a function handed to another function, exactly the idea behind map and filter.</figcaption></figure>
+
+  <h2>Returning a function: where it gets powerful</h2>
+  <p>The other half of the definition — functions that <em>return</em> functions — is just as common. A function can build and hand back a new, specialised function. A classic example is a "multiplier maker": you give it a number and it returns a function that multiplies its input by that number. Call it with <code>3</code> and you get back a "times three" function you can then use like any other. The maker is higher-order because its result is itself a function.</p>
+  <p>In Haskell this is woven into the language through <strong>currying</strong>: every function of several arguments is really a chain of one-argument functions, each returning the next. That is why <code>map (+1)</code> works — <code>(+1)</code> is the addition function with one argument already supplied, returning a function that still expects the other. Partial application like this is higher-order functions at work, often without you noticing.</p>
+
+  <h2>Higher-order functions in Haskell</h2>
+  <p>Haskell makes the idea explicit in its <strong>type signatures</strong>. The type of <code>map</code> is written <code>map :: (a -> b) -> [a] -> [b]</code>. Read it left to right: the first argument <code>(a -> b)</code> is itself a function — that is the higher-order part — followed by a list of <code>a</code>, producing a list of <code>b</code>. The arrows make it visible on the page that a function is being passed in. The same pattern appears in <code>filter :: (a -> Bool) -> [a] -> [a]</code> and across the standard library.</p>
+  <p>You often pass these functions inline as <strong>lambdas</strong> — small anonymous functions written with a backslash, like <code>map (\x -> x * x) [1,2,3]</code> to square each element. Whether you pass a named function, an operator section like <code>(*2)</code>, or a lambda, it is the same mechanism: a function travelling as a value into a higher-order function.</p>
+
+  <h2>Why they matter</h2>
+  <p>Higher-order functions let you factor out the common shape of a computation — "do something to every element", "keep the ones that match", "combine them all" — and reuse it with different logic plugged in. That means less repeated boilerplate, code that reads closer to its intent, and small, testable pieces of logic you can compose. They are the building block on top of which much of <a href="/e/blog/2026-06-15-what-is-functional-programming.html">functional programming</a> is expressed, and combined with Haskell's <a href="/e/blog/2026-06-14-lazy-evaluation-haskell.html">lazy evaluation</a> they even let you map and filter over lists that are conceptually infinite.</p>
+
+  <h2>The honest trade-offs</h2>
+  <p>Higher-order functions take some getting used to: reading <code>foldr</code> or a chain of <code>map . filter</code> is a skill, and deeply nested lambdas can become hard to follow. Passing functions around can also make a stack trace less obvious when something goes wrong. The payoff — far less repetitive iteration code and logic you can recombine — is why they have spread well beyond functional languages into everyday JavaScript, Python and Swift. Used with restraint, they make code shorter and clearer; overused, they can obscure it like any other tool.</p>
+
+  <h2>Frequently asked questions</h2>
+  <details><summary>What is a higher-order function in simple terms?</summary><p>A higher-order function is a function that takes another function as an argument, returns a function as its result, or both. Instead of working only on plain data like numbers and strings, it works on functions. Classic examples are map, filter and fold, which each take a small function and apply it across a list.</p></details>
+  <details><summary>Is map a higher-order function?</summary><p>Yes. map takes a function as its first argument and applies it to every element of a list, returning a new list of the results. Because one of its arguments is itself a function, map is a textbook higher-order function — and so are filter and fold for the same reason.</p></details>
+  <details><summary>What is the difference between a higher-order and a first-order function?</summary><p>A first-order function only takes and returns ordinary values, such as numbers or strings. A higher-order function takes one or more functions as arguments, or returns a function, or both. The difference is whether the function operates on data alone or also on other functions.</p></details>
+  <details><summary>Do higher-order functions only exist in Haskell?</summary><p>No. They exist in any language that treats functions as first-class values — values you can store, pass and return. Haskell, JavaScript, Python, Swift and many others all support them. Haskell makes the idea especially visible through its type signatures and currying, but the concept is widespread.</p></details>
+
+  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about higher-order functions. The Haskell signatures and examples shown are standard library behaviour; consult the official documentation for exact types and edge cases.</div>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Recommended</span>
+    <h3>A Linux box to build and run your Haskell code</h3>
+    <p>Trying these higher-order functions for real — loading them into GHCi, building a project with map and fold, then running it — is smoother on a proper Linux machine than a laptop. A cloud server gives you full control to install GHC and a Haskell toolchain in a clean environment and reach it over <a href="/e/blog/2026-06-22-what-is-ssh.html">SSH</a>. Infomaniak — a Swiss, privacy-respecting provider — offers cloud servers for exactly that.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">See Infomaniak Cloud →</a>
+    <p class="disc">Affiliate link — it supports these free guides.</p>
+  </div>
+
+  <p>Browse more clear explainers in our <a href="/e/">guides index</a>.</p>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "What is a higher-order function in simple terms?", "acceptedAnswer": { "@type": "Answer", "text": "A higher-order function is a function that takes another function as an argument, returns a function as its result, or both. Instead of working only on plain data like numbers and strings, it works on functions. Classic examples are map, filter and fold, which each take a small function and apply it across a list." } },
+      { "@type": "Question", "name": "Is map a higher-order function?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. map takes a function as its first argument and applies it to every element of a list, returning a new list of the results. Because one of its arguments is itself a function, map is a textbook higher-order function — and so are filter and fold for the same reason." } },
+      { "@type": "Question", "name": "What is the difference between a higher-order and a first-order function?", "acceptedAnswer": { "@type": "Answer", "text": "A first-order function only takes and returns ordinary values, such as numbers or strings. A higher-order function takes one or more functions as arguments, or returns a function, or both. The difference is whether the function operates on data alone or also on other functions." } },
+      { "@type": "Question", "name": "Do higher-order functions only exist in Haskell?", "acceptedAnswer": { "@type": "Answer", "text": "No. They exist in any language that treats functions as first-class values — values you can store, pass and return. Haskell, JavaScript, Python, Swift and many others all support them. Haskell makes the idea especially visible through its type signatures and currying, but the concept is widespread." } }
+    ]
+  })} />
+  </div>
+</Base>

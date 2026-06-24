@@ -1,0 +1,83 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/de/e/blog/2026-06-24-higher-order-functions.html';
+const title = 'Was ist eine Funktion höherer Ordnung? Funktionen als Werte (2026)';
+const description = 'Eine Funktion höherer Ordnung nimmt eine Funktion als Argument oder gibt eine als Ergebnis zurück. Was eine Funktion höherer Ordnung ist, warum map, filter und fold die klassischen Beispiele sind, wie sie Schleifen ersetzen und wie sie in Haskell aussehen.';
+---
+<Base title={title} description={description} path={path} type="article" lang="de"
+  image="/img/hof-laptop-editor.jpg" datePublished="2026-06-24" dateModified="2026-06-24">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/de/">Startseite</a><span>/</span><a href="/de/e/">Leitfäden</a><span>/</span>Funktionen höherer Ordnung</nav>
+  <p class="kicker">Programmierung · Konzepte · Haskell</p>
+  <h1>Was ist eine Funktion höherer Ordnung?</h1>
+  <div class="artmeta"><span>Von Coldwast</span><span>Aktualisiert am 24. Juni 2026</span><span>8 Min. Lesezeit</span><span class="tag">#functional</span><span class="tag">#concepts</span><span class="tag">#haskell</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/hof-laptop-editor.jpg" alt="Ein Laptop auf einem Schreibtisch mit geöffnetem Code-Editor, der syntaxhervorgehobenen Quellcode zeigt" width="1200" height="420" loading="eager" />
+    <figcaption>Ein geöffneter Code-Editor auf einem Laptop: Funktionen höherer Ordnung sind ein alltägliches Werkzeug, das du hier schreibst — Funktionen, die andere Funktionen als Argument nehmen, wie map und filter.</figcaption>
+  </figure>
+
+  <p>In den meisten Sprachen ist eine Funktion etwas, das man aufruft. In der funktionalen Programmierung ist eine Funktion auch ein <em>Wert</em>: Man kann sie in einer Variablen ablegen, an eine andere Funktion übergeben und eine als Ergebnis zurückbekommen. Eine <strong>Funktion höherer Ordnung</strong> ist genau die, die eines der beiden letzten Dinge tut. Dieser Leitfaden erklärt, was eine Funktion höherer Ordnung ist, warum <code>map</code>, <code>filter</code> und <code>fold</code> die klassischen Beispiele sind, wie sie Schleifen ersetzen und wie sie in <a href="/de/e/blog/2026-06-14-what-is-haskell.html">Haskell</a> aussehen.</p>
+
+  <h2>Die kurze Definition</h2>
+  <p><strong>Eine Funktion höherer Ordnung ist eine Funktion, die eine oder mehrere Funktionen als Argument nimmt, eine Funktion als Ergebnis zurückgibt oder beides.</strong> Eine Funktion, die keines von beidem tut — die nur einfache Werte wie Zahlen oder Zeichenketten nimmt und zurückgibt — heißt Funktion erster Ordnung. Der Begriff „höhere Ordnung“ bedeutet schlicht, dass sie auf Funktionen arbeitet, so wie eine gewöhnliche Funktion auf Daten arbeitet.</p>
+  <p>Das funktioniert nur in einer Sprache, in der Funktionen <strong>Werte erster Klasse</strong> sind: Dinge, die man benennen, übergeben und zurückgeben kann, genau wie eine Ganzzahl. Haskell, JavaScript, Python, Swift und viele andere behandeln Funktionen so, und das macht Funktionen höherer Ordnung überhaupt erst möglich.</p>
+
+  <h2>Die drei Klassiker: map, filter und fold</h2>
+  <p>Fast jede funktionale Codebasis stützt sich auf drei Funktionen höherer Ordnung. Jede nimmt eine Funktion als Argument und wendet sie auf eine Sammlung an:</p>
+  <ul>
+    <li><strong>map</strong> wendet eine Funktion auf jedes Element einer Liste an und gibt eine neue Liste der Ergebnisse zurück. <code>map (+1) [1,2,3]</code> ergibt <code>[2,3,4]</code> — die Funktion <code>(+1)</code> ist das Argument.</li>
+    <li><strong>filter</strong> behält nur die Elemente, für die eine Funktion wahr zurückgibt. <code>filter even [1,2,3,4]</code> ergibt <code>[2,4]</code> — hier ist <code>even</code> die übergebene Funktion.</li>
+    <li><strong>fold</strong> (auch reduce genannt) reduziert eine Liste auf einen einzigen Wert, indem es die Elemente paarweise verknüpft. <code>foldr (+) 0 [1,2,3]</code> addiert sie zu <code>6</code> — der Verknüpfungsschritt <code>(+)</code> ist das Funktionsargument.</li>
+  </ul>
+  <p>In jedem Fall lieferst du das kleine Stück Logik — erhöhen, „ist gerade“, addieren — und die Funktion höherer Ordnung übernimmt das Durchlaufen der Liste. Du beschreibst, <em>was</em> mit jedem Element geschehen soll, nicht die Mechanik des <em>Wie</em> beim Durchlaufen.</p>
+
+  <h2>Wie sie Schleifen ersetzen</h2>
+  <p>In einer imperativen Sprache schriebe man eine Schleife mit Zähler, Akkumulator und explizitem Index. Dieselbe Absicht, mit einer Funktion höherer Ordnung ausgedrückt, passt in eine einzige Zeile, weil die Iteration bereits in <code>map</code> oder <code>fold</code> eingebaut ist. Deshalb stützt sich rein funktionaler Code, der veränderliche Schleifenzähler vermeidet, so stark auf diese Funktionen und auf <a href="/de/e/blog/2026-06-16-what-is-recursion.html">Rekursion</a> — beide zusammen decken die Arbeit ab, die anderswo Schleifen erledigen. <a href="/de/e/blog/2026-06-14-haskell-list-comprehensions.html">List-Comprehensions</a> sind oft eine lesbare Kurzform für dieselbe Kombination aus <code>map</code> und <code>filter</code>.</p>
+
+  <figure><img src="/img/hof-closure-arg.jpg" alt="Swift-Quellcode auf einem dunklen Bildschirm, bei dem ein Closure-Block als Argument completionHandler an einen Dokument-Öffnen-Aufruf übergeben wird" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>Eine Funktion höherer Ordnung in einer anderen Sprache: Hier wird ein Closure (der Block in geschweiften Klammern) als Argument completionHandler an document.open übergeben — eine Funktion, die einer anderen Funktion übergeben wird, genau die Idee hinter map und filter.</figcaption></figure>
+
+  <h2>Eine Funktion zurückgeben: hier wird es mächtig</h2>
+  <p>Die andere Hälfte der Definition — Funktionen, die Funktionen <em>zurückgeben</em> — ist genauso verbreitet. Eine Funktion kann eine neue, spezialisierte Funktion bauen und zurückgeben. Ein klassisches Beispiel ist ein „Multiplikator-Erzeuger“: Du gibst ihm eine Zahl, und er gibt eine Funktion zurück, die ihre Eingabe mit dieser Zahl multipliziert. Rufe ihn mit <code>3</code> auf, und du erhältst eine „mal drei“-Funktion, die du wie jede andere verwenden kannst. Der Erzeuger ist höherer Ordnung, weil sein Ergebnis selbst eine Funktion ist.</p>
+  <p>In Haskell ist das durch <strong>Currying</strong> in die Sprache eingewoben: Jede Funktion mit mehreren Argumenten ist in Wahrheit eine Kette von Funktionen mit je einem Argument, von denen jede die nächste zurückgibt. Deshalb funktioniert <code>map (+1)</code> — <code>(+1)</code> ist die Additionsfunktion mit einem bereits gelieferten Argument, die eine Funktion zurückgibt, die noch das andere erwartet. Diese partielle Anwendung sind Funktionen höherer Ordnung in Aktion, oft ohne dass man es bemerkt.</p>
+
+  <h2>Funktionen höherer Ordnung in Haskell</h2>
+  <p>Haskell macht die Idee in seinen <strong>Typsignaturen</strong> sichtbar. Der Typ von <code>map</code> wird als <code>map :: (a -> b) -> [a] -> [b]</code> geschrieben. Lies von links nach rechts: Das erste Argument <code>(a -> b)</code> ist selbst eine Funktion — das ist der Teil höherer Ordnung — gefolgt von einer Liste von <code>a</code>, die eine Liste von <code>b</code> erzeugt. Die Pfeile machen auf dem Papier sichtbar, dass eine Funktion übergeben wird. Dasselbe Muster erscheint in <code>filter :: (a -> Bool) -> [a] -> [a]</code> und in der gesamten Standardbibliothek.</p>
+  <p>Oft übergibst du diese Funktionen inline als <strong>Lambdas</strong>, kleine anonyme Funktionen, die mit einem Backslash geschrieben werden, etwa <code>map (\x -> x * x) [1,2,3]</code>, um jedes Element zu quadrieren. Ob du eine benannte Funktion, einen Operatorabschnitt wie <code>(*2)</code> oder ein Lambda übergibst — es ist derselbe Mechanismus: eine Funktion, die als Wert in eine Funktion höherer Ordnung reist.</p>
+
+  <h2>Warum sie wichtig sind</h2>
+  <p>Funktionen höherer Ordnung erlauben es, die gemeinsame Form einer Berechnung herauszulösen — „mit jedem Element etwas tun“, „die passenden behalten“, „alle verknüpfen“ — und sie mit unterschiedlicher, eingesteckter Logik wiederzuverwenden. Das Ergebnis: weniger wiederholter Code, Code, der näher an seiner Absicht liest, und kleine, testbare, komponierbare Logikbausteine. Sie sind der Baustein, auf dem ein Großteil der <a href="/de/e/blog/2026-06-15-what-is-functional-programming.html">funktionalen Programmierung</a> ausgedrückt wird, und kombiniert mit Haskells <a href="/de/e/blog/2026-06-14-lazy-evaluation-haskell.html">verzögerter Auswertung</a> erlauben sie sogar, über konzeptionell unendliche Listen zu mappen und zu filtern.</p>
+
+  <h2>Die ehrlichen Kompromisse</h2>
+  <p>Funktionen höherer Ordnung erfordern etwas Eingewöhnung: Ein <code>foldr</code> oder eine Kette aus <code>map . filter</code> zu lesen ist eine Fertigkeit, und tief verschachtelte Lambdas können schwer nachvollziehbar werden. Funktionen überallhin zu übergeben kann zudem einen Stack-Trace weniger eindeutig machen, wenn etwas schiefgeht. Der Gewinn — deutlich weniger sich wiederholender Iterationscode und neu kombinierbare Logik — erklärt, warum sie sich weit über funktionale Sprachen hinaus verbreitet haben, bis in das alltägliche JavaScript, Python und Swift. Mit Maß eingesetzt, machen sie Code kürzer und klarer; übertrieben eingesetzt, können sie ihn verschleiern wie jedes andere Werkzeug.</p>
+
+  <h2>Häufig gestellte Fragen</h2>
+  <details><summary>Was ist eine Funktion höherer Ordnung in einfachen Worten?</summary><p>Eine Funktion höherer Ordnung ist eine Funktion, die eine andere Funktion als Argument nimmt, eine Funktion als Ergebnis zurückgibt oder beides. Statt nur mit einfachen Daten wie Zahlen und Zeichenketten zu arbeiten, arbeitet sie mit Funktionen. Klassische Beispiele sind map, filter und fold, die jeweils eine kleine Funktion nehmen und sie auf eine Liste anwenden.</p></details>
+  <details><summary>Ist map eine Funktion höherer Ordnung?</summary><p>Ja. map nimmt eine Funktion als erstes Argument und wendet sie auf jedes Element einer Liste an, wobei eine neue Liste der Ergebnisse zurückgegeben wird. Da eines seiner Argumente selbst eine Funktion ist, ist map ein Musterbeispiel für eine Funktion höherer Ordnung — ebenso wie filter und fold aus demselben Grund.</p></details>
+  <details><summary>Was ist der Unterschied zwischen einer Funktion höherer und erster Ordnung?</summary><p>Eine Funktion erster Ordnung nimmt und gibt nur gewöhnliche Werte zurück, etwa Zahlen oder Zeichenketten. Eine Funktion höherer Ordnung nimmt eine oder mehrere Funktionen als Argument oder gibt eine Funktion zurück, oder beides. Der Unterschied liegt darin, ob die Funktion nur auf Daten oder auch auf andere Funktionen arbeitet.</p></details>
+  <details><summary>Gibt es Funktionen höherer Ordnung nur in Haskell?</summary><p>Nein. Es gibt sie in jeder Sprache, die Funktionen als Werte erster Klasse behandelt — Werte, die man ablegen, übergeben und zurückgeben kann. Haskell, JavaScript, Python, Swift und viele andere unterstützen sie. Haskell macht die Idee durch seine Typsignaturen und das Currying besonders sichtbar, aber das Konzept ist weit verbreitet.</p></details>
+
+  <div class="note">Unabhängiger, von der Community gepflegter Leitfaden. <strong>coldwa.st</strong> ist eine Website mit Programmier-Ressourcen; dieser Artikel ist ein neuer, origineller erklärender Text über Funktionen höherer Ordnung. Die gezeigten Haskell-Signaturen und -Beispiele entsprechen dem Verhalten der Standardbibliothek; konsultiere die offizielle Dokumentation für die genauen Typen und Randfälle.</div>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Empfohlen</span>
+    <h3>Eine Linux-Maschine, um deinen Haskell-Code zu bauen und auszuführen</h3>
+    <p>Diese Funktionen höherer Ordnung wirklich auszuprobieren — sie in GHCi zu laden, ein Projekt mit map und fold zu bauen und es dann auszuführen — gelingt auf einer richtigen Linux-Maschine reibungsloser als auf einem Laptop. Ein Cloud-Server gibt dir volle Kontrolle, um GHC und eine Haskell-Toolchain in einer sauberen Umgebung zu installieren und per <a href="/de/e/blog/2026-06-22-what-is-ssh.html">SSH</a> zu erreichen. Infomaniak — ein Schweizer, datenschutzfreundlicher Anbieter — bietet Cloud-Server genau dafür.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Infomaniak Cloud ansehen →</a>
+    <p class="disc">Affiliate-Link — er unterstützt diese kostenlosen Leitfäden.</p>
+  </div>
+
+  <p>Stöbere in weiteren klaren Erklärungen in unserem <a href="/de/e/">Leitfaden-Index</a>.</p>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "Was ist eine Funktion höherer Ordnung in einfachen Worten?", "acceptedAnswer": { "@type": "Answer", "text": "Eine Funktion höherer Ordnung ist eine Funktion, die eine andere Funktion als Argument nimmt, eine Funktion als Ergebnis zurückgibt oder beides. Statt nur mit einfachen Daten wie Zahlen und Zeichenketten zu arbeiten, arbeitet sie mit Funktionen. Klassische Beispiele sind map, filter und fold, die jeweils eine kleine Funktion nehmen und sie auf eine Liste anwenden." } },
+      { "@type": "Question", "name": "Ist map eine Funktion höherer Ordnung?", "acceptedAnswer": { "@type": "Answer", "text": "Ja. map nimmt eine Funktion als erstes Argument und wendet sie auf jedes Element einer Liste an, wobei eine neue Liste der Ergebnisse zurückgegeben wird. Da eines seiner Argumente selbst eine Funktion ist, ist map ein Musterbeispiel für eine Funktion höherer Ordnung — ebenso wie filter und fold aus demselben Grund." } },
+      { "@type": "Question", "name": "Was ist der Unterschied zwischen einer Funktion höherer und erster Ordnung?", "acceptedAnswer": { "@type": "Answer", "text": "Eine Funktion erster Ordnung nimmt und gibt nur gewöhnliche Werte zurück, etwa Zahlen oder Zeichenketten. Eine Funktion höherer Ordnung nimmt eine oder mehrere Funktionen als Argument oder gibt eine Funktion zurück, oder beides. Der Unterschied liegt darin, ob die Funktion nur auf Daten oder auch auf andere Funktionen arbeitet." } },
+      { "@type": "Question", "name": "Gibt es Funktionen höherer Ordnung nur in Haskell?", "acceptedAnswer": { "@type": "Answer", "text": "Nein. Es gibt sie in jeder Sprache, die Funktionen als Werte erster Klasse behandelt — Werte, die man ablegen, übergeben und zurückgeben kann. Haskell, JavaScript, Python, Swift und viele andere unterstützen sie. Haskell macht die Idee durch seine Typsignaturen und das Currying besonders sichtbar, aber das Konzept ist weit verbreitet." } }
+    ]
+  })} />
+  </div>
+</Base>
