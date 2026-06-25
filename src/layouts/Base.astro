@@ -21,7 +21,22 @@ const isArticle = path.includes('/e/blog/');
 // Canonical (locale-stripped) path so the current article is excluded from
 // "Keep reading" on FR/ES pages too (g.href is the EN canonical href).
 const canonPath = path.replace(/^\/(fr|es|de|it|pt)(?=\/|$)/, '');
-const related = isArticle ? guides.filter((g) => g.href !== canonPath).slice(0, 4) : [];
+// "Keep reading" = TOPICALLY related guides (share a category with the current
+// one), then fill up to 4 with the newest remaining guides. Beats arbitrary
+// file-order links for internal-linking relevance and crawl/GEO signal.
+const self = guides.find((g) => g.href === canonPath);
+const selfCats = self ? self.cats.toLowerCase().split(',').map((s) => s.trim()).filter(Boolean) : [];
+function relScore(g) {
+  const gc = g.cats.toLowerCase().split(',').map((s) => s.trim());
+  return gc.filter((c) => selfCats.includes(c)).length;
+}
+const related = isArticle
+  ? [...guides.filter((g) => g.href !== canonPath)]
+      .map((g) => ({ g, s: relScore(g) }))
+      .sort((a, b) => b.s - a.s)
+      .map((x) => x.g)
+      .slice(0, 4)
+  : [];
 // CTA perso par contenu : angle déduit du sujet de la page (offre fixe Infomaniak).
 const cta = ctaAngle(lang, canonPath + ' ' + title);
 // Catbar: "All guides" + each category. SLUGS identical across locales; only
@@ -83,7 +98,19 @@ const alts = [
       <script type="application/ld+json" set:html={JSON.stringify({
         '@context':'https://schema.org','@type':'TechArticle',headline:title,description,datePublished,
         dateModified: dateModified || datePublished, mainEntityOfPage: canonical,
+        ...(image ? { image } : {}),
+        author: { '@type':'Organization', name:'Coldwast Editorial', url:SITE },
         publisher: { '@type':'Organization', name:'Coldwast', url:SITE },
+      })} />
+    )}
+    {type === 'article' && datePublished && (
+      <script type="application/ld+json" set:html={JSON.stringify({
+        '@context':'https://schema.org','@type':'BreadcrumbList',
+        itemListElement: [
+          { '@type':'ListItem', position:1, name:'Coldwast', item: SITE + (lang === 'en' ? '/' : '/' + lang + '/') },
+          { '@type':'ListItem', position:2, name: t.nav_guides, item: SITE + localized('/e/', lang) },
+          { '@type':'ListItem', position:3, name: title, item: canonical },
+        ],
       })} />
     )}
     {!(type === 'article' && datePublished) && (
