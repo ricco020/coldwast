@@ -15,7 +15,10 @@ import { ctaAngle } from '../data/cta-angle.js';
 import ShareButtons from '../components/ShareButtons.astro';
 const t = ui[lang] || ui.en;
 const SITE = 'https://coldwa.st';
-const canonical = SITE + path;
+// URLs are served without a trailing slash (trailingSlash:'ignore', format:'preserve');
+// strip any trailing slash (except root) so the canonical points to the real 200 URL
+// instead of the slash variant that 308-redirects.
+const canonical = SITE + (path !== '/' ? path.replace(/\/+$/, '') : path);
 const year = 2026;
 // On article pages, surface related guides + an affiliate CTA for retention.
 const isArticle = path.includes('/e/blog/');
