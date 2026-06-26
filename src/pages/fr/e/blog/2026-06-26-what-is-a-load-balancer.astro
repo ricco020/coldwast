@@ -1,0 +1,63 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/fr/e/blog/2026-06-26-what-is-a-load-balancer.html';
+const title = 'C’est quoi un load balancer ? Répartir le trafic entre serveurs (2026)';
+const description = 'Un load balancer répartit les requêtes entrantes entre plusieurs serveurs pour qu’aucun ne soit saturé et que l’app reste en ligne si l’un tombe. Ce qu’est un load balancer, les algorithmes, L4 vs L7, les health checks, et en quoi il diffère d’un reverse proxy.';
+---
+<Base title={title} description={description} path={path} type="article" lang="fr"
+  image="/img/load-balancer-2026.jpg" datePublished="2026-06-26" dateModified="2026-06-26">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/fr/">Accueil</a><span>/</span><a href="/fr/e/">Guides</a><span>/</span>C’est quoi un load balancer</nav>
+  <p class="kicker">Programmation · Serveurs · Réseau</p>
+  <h1>C’est quoi un load balancer ?</h1>
+  <div class="artmeta"><span>Par Coldwast</span><span>Mis à jour le 26 juin 2026</span><span>8 min de lecture</span><span class="tag">#load-balancer</span><span class="tag">#scaling</span><span class="tag">#networking</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/load-balancer-2026.jpg" alt="Des serveurs montés en baie dans un centre de données" width="1200" height="420" loading="eager" />
+    <figcaption>Un load balancer se place devant plusieurs serveurs identiques et répartit entre eux les requêtes entrantes, pour qu’aucune machine ne porte seule toute la charge.</figcaption>
+  </figure>
+
+  <p>Un seul serveur a ses limites. Quand le trafic dépasse ce qu’une seule machine peut servir — ou que vous ne pouvez tout simplement pas vous permettre que le site tombe si cette machine flanche — vous en faites tourner plusieurs copies et placez un <strong>load balancer</strong> devant elles. Ce guide explique ce qu’est un load balancer, comment il décide où va chaque requête, et comment il se rattache au <a href="/fr/e/blog/2026-06-26-what-is-a-reverse-proxy.html">reverse proxy</a> que vous connaissez peut-être déjà.</p>
+
+  <h2>L’idée de base : partager le travail</h2>
+  <p>Un load balancer est un composant qui reçoit les requêtes entrantes et les distribue sur un pool de serveurs backend — généralement des copies identiques de la même appli. Pour le visiteur, il n’y a qu’une seule adresse ; derrière, le load balancer répartit discrètement le trafic pour qu’aucun serveur ne soit débordé. Il résout deux problèmes à la fois : la <strong>montée en charge</strong> (absorber plus de trafic qu’une seule machine ne le pourrait) et la <strong>disponibilité</strong> (si un serveur meurt, les autres continuent de servir).</p>
+  <p>Ce second point est celui qu’on sous-estime. Un load balancer vérifie en continu si chaque backend est en bonne santé et cesse d’envoyer du trafic à ceux qui ne répondent plus. Un seul serveur défaillant ne fait plus tomber tout le site — sa part de requêtes est simplement réacheminée vers les serveurs sains.</p>
+
+  <h2>Comment il décide : les algorithmes de répartition</h2>
+  <p>Le load balancer a besoin d’une règle pour choisir quel serveur traite la prochaine requête. Les plus courantes sont :</p>
+  <ul>
+    <li><strong>Round-robin</strong> — confier chaque nouvelle requête au serveur suivant, à tour de rôle. Simple et équitable quand les serveurs se ressemblent.</li>
+    <li><strong>Least connections</strong> (moins de connexions) — envoyer la requête au serveur qui a actuellement le moins de connexions actives. Plus pertinent quand les requêtes ont des coûts variables.</li>
+    <li><strong>IP hash</strong> — choisir le serveur en fonction de l’IP du client, pour que le même visiteur retombe toujours sur le même backend (utile pour la persistance de session).</li>
+    <li><strong>Pondéré (weighted)</strong> — donner aux serveurs plus puissants une part de trafic plus importante.</li>
+  </ul>
+
+  <figure>
+    <img src="/img/load-balancer-2026-servers.jpg" alt="Une baie de serveurs aux voyants d’état lumineux dans un centre de données" width="1000" height="667" loading="lazy" />
+    <figcaption>Les health checks permettent au load balancer de contourner automatiquement un serveur défaillant — les voyants restent allumés même quand une machine décroche.</figcaption>
+  </figure>
+
+  <h2>Layer 4 vs Layer 7</h2>
+  <p>Les load balancers travaillent à l’un de deux niveaux. Un répartiteur de <strong>Layer 4 (transport)</strong> achemine par adresse IP et port sans regarder le contenu du trafic — rapide et indépendant du protocole. Un répartiteur de <strong>Layer 7 (application)</strong> comprend HTTP : il peut router selon le chemin d’URL, le nom d’hôte ou les en-têtes, terminer le TLS et prendre des décisions plus fines. Le Layer 7 est le choix courant pour les applis web ; le Layer 4 l’emporte quand la vitesse brute compte plus qu’un routage conscient du contenu.</p>
+
+  <h2>Load balancer vs reverse proxy</h2>
+  <p>C’est la question qui embrouille tout le monde. La réponse honnête : <strong>la répartition de charge est l’une des tâches qu’un reverse proxy peut accomplir.</strong> Un reverse proxy est la notion plus large — un serveur placé devant vos backends, capable de router, mettre en cache, terminer le TLS et répartir la charge. Un « load balancer », c’est cette même porte d’entrée concentrée sur la tâche de répartition. En pratique, les outils se recoupent : <a href="/fr/e/blog/2026-06-26-what-is-a-reverse-proxy.html">Nginx, HAProxy et Caddy</a> font tous office de load balancers, et un load balancer cloud est une version managée du même rôle.</p>
+
+  <h2>Où tournent les load balancers</h2>
+  <p>On les rencontre sous quelques formes. Les load balancers <strong>logiciels</strong> — Nginx, HAProxy, Traefik — tournent sur un serveur que vous contrôlez. Les load balancers <strong>cloud</strong> (AWS, Google Cloud, Azure) sont des services managés que vous configurez plutôt que d’héberger. Et dans les plateformes de conteneurs comme <a href="/fr/e/blog/2026-06-19-what-is-kubernetes.html">Kubernetes</a>, la répartition de charge est intégrée et étale le trafic sur les pods au fil de leurs apparitions et disparitions. Quel que soit votre choix, il vous faudra plus d’un backend — typiquement quelques <a href="/fr/e/blog/2026-06-19-what-is-a-vps.html">serveurs</a> faisant tourner des copies identiques de l’appli.</p>
+
+  <h2>En résumé</h2>
+  <p>Un load balancer répartit les requêtes entrantes entre plusieurs serveurs pour que le système absorbe plus de trafic et survive à la panne d’un serveur. Il choisit un backend via un algorithme comme round-robin ou least connections, vérifie la santé de chaque serveur, et peut travailler au niveau transport (L4) ou application (L7). Voyez-le comme la tâche de répartition d’un reverse proxy — la pièce qui transforme une appli sur une seule machine en un service qui monte en charge et reste en ligne.</p>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "C’est quoi un load balancer en termes simples ?", "acceptedAnswer": { "@type": "Answer", "text": "Un load balancer est un composant placé devant plusieurs serveurs qui répartit entre eux les requêtes entrantes. Aucun serveur n’est ainsi débordé, et si l’un tombe, les autres continuent de servir : le site reste en ligne et absorbe plus de trafic qu’une seule machine ne le pourrait." } },
+      { "@type": "Question", "name": "Quelle différence entre un load balancer et un reverse proxy ?", "acceptedAnswer": { "@type": "Answer", "text": "La répartition de charge est l’une des tâches qu’un reverse proxy peut accomplir. Un reverse proxy est la notion plus large de porte d’entrée qui peut router, mettre en cache, terminer le TLS et répartir la charge. Un load balancer est cette même porte d’entrée concentrée sur la répartition du trafic entre les backends. Des outils comme Nginx et HAProxy font les deux." } },
+      { "@type": "Question", "name": "Quelle différence entre la répartition Layer 4 et Layer 7 ?", "acceptedAnswer": { "@type": "Answer", "text": "Un load balancer Layer 4 achemine par IP et port sans inspecter le trafic, ce qui est rapide et fonctionne pour n’importe quel protocole. Un load balancer Layer 7 comprend HTTP : il peut router selon l’URL, le nom d’hôte ou les en-têtes et terminer le TLS. Le Layer 7 est typique des applis web ; le Layer 4 est choisi quand la vitesse brute prime." } },
+      { "@type": "Question", "name": "Quels sont les algorithmes de répartition courants ?", "acceptedAnswer": { "@type": "Answer", "text": "Les plus courants sont round-robin (chaque serveur à tour de rôle), least connections (le serveur avec le moins de connexions actives), IP hash (le même client atteint toujours le même serveur) et pondéré (les serveurs plus puissants reçoivent plus de trafic). Le round-robin est le choix simple par défaut quand les serveurs se ressemblent." } }
+    ]
+  })} />
+  </div>
+</Base>

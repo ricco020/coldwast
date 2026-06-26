@@ -1,0 +1,63 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/es/e/blog/2026-06-26-what-is-a-load-balancer.html';
+const title = '¿Qué es un balanceador de carga? Repartir el tráfico entre servidores (2026)';
+const description = 'Un balanceador de carga reparte las peticiones entrantes entre varios servidores para que ninguno se sature y la app siga en línea si uno falla. Qué es, los algoritmos, L4 vs L7, los health checks y en qué se diferencia de un proxy inverso.';
+---
+<Base title={title} description={description} path={path} type="article" lang="es"
+  image="/img/load-balancer-2026.jpg" datePublished="2026-06-26" dateModified="2026-06-26">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/es/">Inicio</a><span>/</span><a href="/es/e/">Guías</a><span>/</span>Qué es un balanceador de carga</nav>
+  <p class="kicker">Programación · Servidores · Redes</p>
+  <h1>¿Qué es un balanceador de carga?</h1>
+  <div class="artmeta"><span>Por Coldwast</span><span>Actualizado el 26 jun 2026</span><span>8 min de lectura</span><span class="tag">#load-balancer</span><span class="tag">#scaling</span><span class="tag">#networking</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/load-balancer-2026.jpg" alt="Servidores montados en rack en un centro de datos" width="1200" height="420" loading="eager" />
+    <figcaption>Un balanceador de carga se sitúa delante de varios servidores idénticos y reparte entre ellos las peticiones entrantes, de modo que ninguna máquina cargue sola con todo el trabajo.</figcaption>
+  </figure>
+
+  <p>Un solo servidor tiene un límite. Cuando el tráfico supera lo que una sola máquina puede atender — o cuando, sencillamente, no puedes permitirte que el sitio se caiga si esa máquina falla — pones en marcha varias copias y colocas un <strong>balanceador de carga</strong> delante de ellas. Esta guía explica qué es un balanceador de carga, cómo decide adónde va cada petición y cómo se relaciona con el <a href="/es/e/blog/2026-06-26-what-is-a-reverse-proxy.html">proxy inverso</a> que quizá ya conozcas.</p>
+
+  <h2>La idea central: repartir el trabajo</h2>
+  <p>Un balanceador de carga es un componente que recibe las peticiones entrantes y las distribuye entre un pool de servidores backend — normalmente copias idénticas de la misma app. Para el visitante hay una sola dirección; detrás, el balanceador reparte el tráfico discretamente para que ningún servidor se sature. Resuelve dos problemas a la vez: <strong>escala</strong> (atender más tráfico del que podría una sola máquina) y <strong>disponibilidad</strong> (si un servidor muere, los demás siguen sirviendo).</p>
+  <p>Este segundo punto es el que se infravalora. Un balanceador de carga comprueba continuamente si cada backend está sano y deja de enviar tráfico a los que dejan de responder. Un único servidor en mal estado ya no tumba todo el sitio: su parte de peticiones se enruta sin más hacia los servidores sanos.</p>
+
+  <h2>Cómo decide: los algoritmos de balanceo</h2>
+  <p>El balanceador de carga necesita una regla para elegir qué servidor atiende la siguiente petición. Los más comunes son:</p>
+  <ul>
+    <li><strong>Round-robin</strong> — entregar cada nueva petición al siguiente servidor por turnos. Simple y equitativo cuando los servidores son parecidos.</li>
+    <li><strong>Least connections</strong> (menos conexiones) — enviar la petición al servidor que tenga ahora mismo menos conexiones activas. Mejor cuando las peticiones varían en coste.</li>
+    <li><strong>IP hash</strong> — elegir el servidor según la IP del cliente, para que el mismo visitante caiga siempre en el mismo backend (útil para la persistencia de sesión).</li>
+    <li><strong>Ponderado (weighted)</strong> — dar a los servidores más potentes una mayor parte del tráfico.</li>
+  </ul>
+
+  <figure>
+    <img src="/img/load-balancer-2026-servers.jpg" alt="Un rack de servidores con luces de estado encendidas en un centro de datos" width="1000" height="667" loading="lazy" />
+    <figcaption>Los health checks permiten al balanceador rodear automáticamente un servidor caído — las luces siguen encendidas aunque una máquina deje de responder.</figcaption>
+  </figure>
+
+  <h2>Layer 4 vs Layer 7</h2>
+  <p>Los balanceadores de carga trabajan en uno de dos niveles. Un balanceador de <strong>Layer 4 (transporte)</strong> enruta por dirección IP y puerto sin mirar dentro del tráfico — rápido e independiente del protocolo. Un balanceador de <strong>Layer 7 (aplicación)</strong> entiende HTTP, así que puede enrutar por ruta de URL, nombre de host o cabeceras, terminar TLS y tomar decisiones más inteligentes. El Layer 7 es la opción habitual para apps web; el Layer 4 gana cuando la velocidad bruta importa más que un enrutamiento consciente del contenido.</p>
+
+  <h2>Balanceador de carga vs proxy inverso</h2>
+  <p>Esta es la pregunta que confunde a la gente. La respuesta honesta: <strong>el balanceo de carga es una de las tareas que un proxy inverso puede hacer.</strong> Un proxy inverso es la idea más amplia — un servidor que se sitúa delante de tus backends y puede enrutar, cachear, terminar TLS y repartir la carga. Un «balanceador de carga» es esa misma puerta de entrada centrada en la tarea de reparto. En la práctica, las herramientas se solapan: <a href="/es/e/blog/2026-06-26-what-is-a-reverse-proxy.html">Nginx, HAProxy y Caddy</a> actúan todos como balanceadores de carga, y un balanceador de carga en la nube es una versión gestionada del mismo papel.</p>
+
+  <h2>Dónde se ejecutan los balanceadores de carga</h2>
+  <p>Te los encuentras en varias formas. Los balanceadores de carga <strong>de software</strong> — Nginx, HAProxy, Traefik — se ejecutan en un servidor que controlas tú. Los balanceadores de carga <strong>en la nube</strong> (AWS, Google Cloud, Azure) son servicios gestionados que configuras en lugar de alojar. Y en plataformas de contenedores como <a href="/es/e/blog/2026-06-19-what-is-kubernetes.html">Kubernetes</a>, el balanceo de carga viene integrado y reparte el tráfico entre los pods a medida que aparecen y desaparecen. Uses el que uses, querrás más de un backend — normalmente unos cuantos <a href="/es/e/blog/2026-06-19-what-is-a-vps.html">servidores</a> ejecutando copias idénticas de la app.</p>
+
+  <h2>En resumen</h2>
+  <p>Un balanceador de carga reparte las peticiones entrantes entre varios servidores para que el sistema pueda atender más tráfico y sobrevivir a la caída de un servidor. Elige un backend mediante un algoritmo como round-robin o least connections, comprueba la salud de cada servidor y puede trabajar en la capa de transporte (L4) o de aplicación (L7). Piénsalo como la tarea de reparto de un proxy inverso — la pieza que convierte una app en una sola máquina en un servicio que escala y se mantiene en línea.</p>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "¿Qué es un balanceador de carga en términos sencillos?", "acceptedAnswer": { "@type": "Answer", "text": "Un balanceador de carga es un componente que se sitúa delante de varios servidores y reparte entre ellos las peticiones entrantes. Así ningún servidor se satura, y si uno falla los demás siguen sirviendo, de modo que el sitio se mantiene en línea y puede atender más tráfico del que podría una sola máquina." } },
+      { "@type": "Question", "name": "¿Cuál es la diferencia entre un balanceador de carga y un proxy inverso?", "acceptedAnswer": { "@type": "Answer", "text": "El balanceo de carga es una de las tareas que un proxy inverso puede hacer. Un proxy inverso es el concepto más amplio de puerta de entrada que puede enrutar, cachear, terminar TLS y repartir la carga. Un balanceador de carga es esa misma puerta de entrada centrada en repartir el tráfico entre los backends. Herramientas como Nginx y HAProxy hacen las dos cosas." } },
+      { "@type": "Question", "name": "¿Cuál es la diferencia entre el balanceo Layer 4 y Layer 7?", "acceptedAnswer": { "@type": "Answer", "text": "Un balanceador Layer 4 enruta por IP y puerto sin inspeccionar el tráfico, lo que es rápido y funciona para cualquier protocolo. Un balanceador Layer 7 entiende HTTP, así que puede enrutar por URL, nombre de host o cabeceras y terminar TLS. El Layer 7 es típico de apps web; el Layer 4 se elige cuando la velocidad bruta es lo que más importa." } },
+      { "@type": "Question", "name": "¿Cuáles son los algoritmos de balanceo de carga más comunes?", "acceptedAnswer": { "@type": "Answer", "text": "Los más comunes son round-robin (cada servidor por turnos), least connections (el servidor con menos conexiones activas), IP hash (el mismo cliente llega siempre al mismo servidor) y ponderado (los servidores más potentes reciben más tráfico). El round-robin es la opción simple por defecto cuando los servidores son parecidos." } }
+    ]
+  })} />
+  </div>
+</Base>
