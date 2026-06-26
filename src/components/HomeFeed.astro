@@ -1,5 +1,8 @@
 ---
-import { articles } from '../data/articles.js';
+import { guides } from '../data/guides.js';
+// Source de vérité unique = data/guides.js (évite la dérive : articles.js restait périmé,
+// 7 guides récents manquaient de la home/archive → URLs non découvertes par Google).
+const articles = guides;
 interface Props { page?: number; pageSize?: number; }
 const { page = 1, pageSize = 12 } = Astro.props as Props;
 

@@ -9,6 +9,7 @@ const {
   datePublished, dateModified, type = 'website', lang = 'en',
 } = Astro.props;
 import { guides, categories, guideTitle, catLabel } from '../data/guides.js';
+import { hasTx } from '../data/i18n-articles.js';
 import { ui, localized, LOCALES } from '../i18n/ui.js';
 import { ctaAngle } from '../data/cta-angle.js';
 import ShareButtons from '../components/ShareButtons.astro';
@@ -31,7 +32,7 @@ function relScore(g) {
   return gc.filter((c) => selfCats.includes(c)).length;
 }
 const related = isArticle
-  ? [...guides.filter((g) => g.href !== canonPath)]
+  ? [...guides.filter((g) => g.href !== canonPath && hasTx(g.href, lang))]
       .map((g) => ({ g, s: relScore(g) }))
       .sort((a, b) => b.s - a.s)
       .map((x) => x.g)
@@ -52,11 +53,15 @@ const cur = path;
 // Root-relative path stripped of any /fr or /es prefix → used for the language
 // switcher and hreflang alternates.
 const rootPath = path.replace(/^\/(fr|es|de|it|pt)(?=\/|$)/, '') || '/';
-const switcher = LOCALES.map((l) => ({
+// On an article page, only offer locales that actually have a translated page
+// (hasTx) — otherwise the switcher/hreflang point at non-existent /<loc>/ URLs
+// (404). Non-article pages (home, index, categories) exist in every locale.
+const availLocales = isArticle ? LOCALES.filter((l) => hasTx(rootPath, l)) : LOCALES;
+const switcher = availLocales.map((l) => ({
   code: l, label: l.toUpperCase(), href: localized(rootPath, l), on: l === lang,
 }));
 const alts = [
-  ...LOCALES.map((l) => ({ hl: l, href: SITE + localized(rootPath, l) })),
+  ...availLocales.map((l) => ({ hl: l, href: SITE + localized(rootPath, l) })),
   { hl: 'x-default', href: SITE + localized(rootPath, 'en') },
 ];
 ---
