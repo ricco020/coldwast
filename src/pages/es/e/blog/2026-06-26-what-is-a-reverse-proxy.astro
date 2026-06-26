@@ -1,0 +1,90 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/es/e/blog/2026-06-26-what-is-a-reverse-proxy.html';
+const title = '¿Qué es un proxy inverso? Nginx, Caddy y enrutamiento explicados (2026)';
+const description = 'Un proxy inverso se sitúa delante de tus servidores, recibe cada petición entrante y la reenvía al backend correcto. Qué es un proxy inverso, en qué se diferencia de un proxy directo y de un balanceador de carga, por qué se usa (TLS, caché, enrutamiento) y las herramientas comunes.';
+---
+<Base title={title} description={description} path={path} type="article" lang="es"
+  image="/img/reverse-proxy-2026.jpg" datePublished="2026-06-26" dateModified="2026-06-26">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/es/">Inicio</a><span>/</span><a href="/es/e/">Guías</a><span>/</span>Qué es un proxy inverso</nav>
+  <p class="kicker">Programación · Servidores · Redes</p>
+  <h1>¿Qué es un proxy inverso?</h1>
+  <div class="artmeta"><span>Por Coldwast</span><span>Actualizado el 26 jun 2026</span><span>8 min de lectura</span><span class="tag">#reverse-proxy</span><span class="tag">#servers</span><span class="tag">#networking</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/reverse-proxy-2026.jpg" alt="Cables Ethernet conectados a un panel de conmutador de red en un centro de datos" width="1200" height="420" loading="eager" />
+    <figcaption>Un proxy inverso es la puerta de entrada única a tus servidores: cada petición llega al mismo sitio, que luego la reenvía al backend correcto entre bastidores.</figcaption>
+  </figure>
+
+  <p>En cuanto ejecutas más de una aplicación en un servidor —un sitio web, una <a href="/es/e/blog/2026-06-17-what-is-a-webhook.html">API</a>, quizá unos cuantos <a href="/es/e/blog/2026-06-19-what-is-docker.html">contenedores</a>— te topas con un problema práctico: los visitantes llegan todos a los puertos 80 y 443, pero cada aplicación escucha en un sitio distinto. Un <strong>proxy inverso</strong> es la respuesta estándar. Esta guía explica qué es un proxy inverso, en qué se diferencia del proxy que quizá ya conoces y por qué casi todo despliegue en producción tiene uno.</p>
+
+  <h2>La definición corta</h2>
+  <p><strong>Un proxy inverso es un servidor que se sitúa delante de uno o varios servidores backend, recibe cada petición entrante del cliente y la reenvía al backend adecuado, para luego devolver la respuesta de ese backend al cliente.</strong> Para el visitante, el proxy inverso <em>es</em> el sitio web: solo habla con él y nunca ve los servidores que hay detrás. La palabra «inverso» importa, y la siguiente sección explica por qué.</p>
+
+  <h2>Proxy inverso vs proxy directo</h2>
+  <p>Un proxy normal (directo) se sitúa delante de los <strong>clientes</strong>. Cuando tu navegador está configurado para usar uno, tus peticiones salen a través del proxy en tu nombre: actúa por quienes hacen las peticiones. Un proxy inverso es la imagen reflejada: se sitúa delante de los <strong>servidores</strong> y actúa en su nombre. Los clientes se conectan a él creyendo que es el servidor real, y él decide qué backend atiende realmente cada petición. La misma idea de intermediario, pero en el lado opuesto de la conversación.</p>
+
+  <figure><img src="/img/reverse-proxy-2026-rack.jpg" alt="Servidores en un bastidor de centro de datos iluminados con luces indicadoras azules y rojas" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>Detrás de un solo proxy inverso puede haber muchos servidores backend como estos. El proxy es la única máquina con la que habla el público; enruta cada petición al backend que debe atenderla.</figcaption></figure>
+
+  <h2>Para qué se usa de verdad un proxy inverso</h2>
+  <ul>
+    <li><strong>Enrutamiento por nombre de host o ruta:</strong> enviar <code>api.example.com</code> a tu API y <code>example.com</code> a tu sitio web, aunque ambos corran en la misma máquina.</li>
+    <li><strong>Terminación TLS:</strong> gestionar los certificados HTTPS en un solo sitio para que cada backend hable HTTP simple internamente y tú manejes los certificados una sola vez.</li>
+    <li><strong>Caché:</strong> almacenar y servir directamente las respuestas frecuentes, para no golpear el backend en cada petición.</li>
+    <li><strong>Búfer y protección:</strong> absorber clientes lentos, aplicar límites y ocultar las direcciones reales de los backends tras un único punto de entrada público.</li>
+  </ul>
+  <p>En la práctica, el enrutamiento y el TLS ya bastan para justificarlo: te permiten alojar varias aplicaciones en un solo <a href="/es/e/blog/2026-06-19-what-is-a-vps.html">VPS</a> de forma limpia, con HTTPS, tras una única dirección.</p>
+
+  <h2>Proxy inverso vs balanceador de carga</h2>
+  <p>Estos conceptos se solapan, de ahí la confusión. Un <strong>balanceador de carga</strong> tiene una función concreta: repartir el tráfico entrante entre varios backends idénticos para que ninguno se sature. Un proxy inverso es el concepto más amplio —reenvía peticiones y puede hacer muchas cosas (enrutamiento, TLS, caché), y <em>repartir la carga entre backends es una de ellas</em>. Así que un balanceador de carga es, en esencia, un proxy inverso centrado en la tarea de balanceo. La mayoría de los proxies inversos modernos también pueden balancear carga, mientras que un balanceador dedicado quizá no haga mucho más.</p>
+
+  <h2>Las herramientas comunes</h2>
+  <p>Los proxies inversos más usados son <strong>Nginx</strong>, <strong>Caddy</strong>, <strong>HAProxy</strong> y <strong>Traefik</strong>. Nginx es la referencia de toda la vida y es extremadamente rápido sirviendo y haciendo de proxy. Caddy es popular porque obtiene y renueva los certificados HTTPS automáticamente, casi sin configuración. Traefik está pensado para entornos de <a href="/es/e/blog/2026-06-19-what-is-docker.html">contenedores</a> y <a href="/es/e/blog/2026-06-19-what-is-kubernetes.html">Kubernetes</a>, donde descubre los servicios a medida que aparecen y desaparecen. HAProxy se prefiere cuando el balanceo de carga de alto volumen es la prioridad. Los proveedores de nube también ofrecen proxies inversos y balanceadores gestionados como servicio.</p>
+
+  <h2>Un ejemplo mínimo</h2>
+  <p>Una configuración de proxy inverso es sobre todo una lista corta de reglas. En Nginx, enviar las peticiones de un host a una aplicación que corre en local en el puerto 3000 se ve así:</p>
+  <pre><code>server &#123;
+    listen 80;
+    server_name example.com;
+
+    location / &#123;
+        proxy_pass http://127.0.0.1:3000;
+        proxy_set_header Host $host;
+    &#125;
+&#125;</code></pre>
+  <p>Esa es toda la idea: las peticiones para <code>example.com</code> llegan a Nginx en el puerto 80, y Nginx las reenvía a tu aplicación en el puerto 3000, pasando el host original. Añade un bloque TLS y un segundo <code>server</code> para tu API, y una sola máquina sirve varias aplicaciones por HTTPS de forma limpia.</p>
+
+  <h2>Las concesiones honestas</h2>
+  <p>Un proxy inverso añade una pieza móvil más. Se convierte en el punto único por el que pasa cada petición, así que si cae, todo lo que hay detrás queda inaccesible —por eso en producción se ejecuta de forma fiable y a veces por duplicado. También añade algo de latencia y un archivo de configuración más que entender. Para una sola aplicación pequeña que ya escucha en el puerto 443, quizá no lo necesites. Pero en cuanto alojas más de un servicio, quieres gestionar el HTTPS en un solo sitio o piensas escalar, un proxy inverso se amortiza rápido.</p>
+
+  <h2>Preguntas frecuentes</h2>
+  <details><summary>¿Qué es un proxy inverso en términos simples?</summary><p>Un proxy inverso es un servidor que se coloca delante de tus servidores reales. Cada visitante se conecta a él en lugar de hablar directamente con tus aplicaciones, y él reenvía cada petición al backend correcto y luego devuelve su respuesta. Para el visitante parece el propio sitio web, mientras que los servidores reales quedan ocultos detrás.</p></details>
+  <details><summary>¿Cuál es la diferencia entre un proxy inverso y un proxy directo?</summary><p>Un proxy directo se sitúa delante de los clientes y hace las peticiones en su nombre: representa a quienes navegan. Un proxy inverso se sitúa delante de los servidores y los representa: los clientes se conectan a él como si fuera el servidor real, y él elige qué backend atiende cada petición. La misma idea de intermediario, pero en los extremos opuestos de la conexión.</p></details>
+  <details><summary>¿Es un proxy inverso lo mismo que un balanceador de carga?</summary><p>No exactamente. Un balanceador de carga reparte el tráfico entre varios backends idénticos para compartir la carga. Un proxy inverso es el concepto más amplio que reenvía peticiones y también puede hacer enrutamiento, TLS y caché, y el balanceo de carga es una de esas cosas. Así que un balanceador de carga es básicamente un proxy inverso centrado en la tarea de balanceo.</p></details>
+  <details><summary>¿Necesito un proxy inverso?</summary><p>Lo necesitas en cuanto alojas más de una aplicación en un servidor, quieres gestionar el HTTPS en un solo sitio o piensas escalar entre varios backends. Para una sola aplicación pequeña que ya sirve HTTPS en su propio puerto, puedes prescindir de él. En cuanto hay enrutamiento, certificados o varios servicios de por medio, un proxy inverso deja todo mucho más limpio.</p></details>
+
+  <div class="note">Guía independiente y mantenida por la comunidad. <strong>coldwa.st</strong> es un sitio de recursos de programación; este artículo es un texto explicativo original e inédito sobre los proxies inversos. El fragmento de Nginx es configuración estándar mostrada a modo de ilustración; consulta la documentación de tu propio proxy y versión para los detalles.</div>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Recomendado</span>
+    <h3>Un servidor donde ejecutar tu proxy inverso</h3>
+    <p>Ejecutar Nginx o Caddy como proxy inverso delante de tus aplicaciones requiere un servidor Linux real con control total: un VPS o servidor cloud donde seas dueño de los puertos 80 y 443. Infomaniak —proveedor suizo respetuoso con la privacidad— ofrece VPS y servidores cloud donde puedes instalar un proxy inverso y enrutar el tráfico a tantos backends como quieras.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Ver Infomaniak Cloud →</a>
+    <p class="disc">Enlace de afiliado — ayuda a mantener estas guías gratuitas.</p>
+  </div>
+
+  <p>Explora más explicaciones claras en nuestro <a href="/es/e/">índice de guías</a>.</p>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "¿Qué es un proxy inverso en términos simples?", "acceptedAnswer": { "@type": "Answer", "text": "Un proxy inverso es un servidor que se coloca delante de tus servidores reales. Cada visitante se conecta a él en lugar de hablar directamente con tus aplicaciones, y él reenvía cada petición al backend correcto y luego devuelve su respuesta. Para el visitante parece el propio sitio web, mientras que los servidores reales quedan ocultos detrás." } },
+      { "@type": "Question", "name": "¿Cuál es la diferencia entre un proxy inverso y un proxy directo?", "acceptedAnswer": { "@type": "Answer", "text": "Un proxy directo se sitúa delante de los clientes y hace las peticiones en su nombre: representa a quienes navegan. Un proxy inverso se sitúa delante de los servidores y los representa: los clientes se conectan a él como si fuera el servidor real, y él elige qué backend atiende cada petición. La misma idea de intermediario, pero en los extremos opuestos de la conexión." } },
+      { "@type": "Question", "name": "¿Es un proxy inverso lo mismo que un balanceador de carga?", "acceptedAnswer": { "@type": "Answer", "text": "No exactamente. Un balanceador de carga reparte el tráfico entre varios backends idénticos para compartir la carga. Un proxy inverso es el concepto más amplio que reenvía peticiones y también puede hacer enrutamiento, TLS y caché, y el balanceo de carga es una de esas cosas. Así que un balanceador de carga es básicamente un proxy inverso centrado en la tarea de balanceo." } },
+      { "@type": "Question", "name": "¿Necesito un proxy inverso?", "acceptedAnswer": { "@type": "Answer", "text": "Lo necesitas en cuanto alojas más de una aplicación en un servidor, quieres gestionar el HTTPS en un solo sitio o piensas escalar entre varios backends. Para una sola aplicación pequeña que ya sirve HTTPS en su propio puerto, puedes prescindir de él. En cuanto hay enrutamiento, certificados o varios servicios de por medio, un proxy inverso deja todo mucho más limpio." } }
+    ]
+  })} />
+  </div>
+</Base>

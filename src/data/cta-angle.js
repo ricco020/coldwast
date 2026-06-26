@@ -67,7 +67,7 @@ const RULES = [
   ['api',        /\bapi\b|webhook|rest|graphql|endpoint/],
   ['database',   /\bsql\b|nosql|database|postgres|mysql|mongo|redis|base de don|base de dat/],
   ['devops',     /devops|ci-cd|ci\/cd|pipeline|github-actions|deployment|deploy/],
-  ['server',     /\bvps\b|server|serveur|servidor|linux|hosting|self-host/],
+  ['server',     /\bvps\b|server|serveur|servidor|linux|hosting|self-host|reverse.proxy|proxy.inver|proxy.rever/],
 ];
 
 export function ctaAngle(lang, hint = '') {

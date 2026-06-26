@@ -1,0 +1,90 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/pt/e/blog/2026-06-26-what-is-a-reverse-proxy.html';
+const title = 'O que é um proxy reverso? Nginx, Caddy e encaminhamento explicados (2026)';
+const description = 'Um proxy reverso fica à frente dos seus servidores, recebe cada pedido recebido e encaminha-o para o backend correto. O que é um proxy reverso, como difere de um proxy direto e de um balanceador de carga, para que serve (TLS, cache, encaminhamento) e as ferramentas comuns.';
+---
+<Base title={title} description={description} path={path} type="article" lang="pt"
+  image="/img/reverse-proxy-2026.jpg" datePublished="2026-06-26" dateModified="2026-06-26">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/pt/">Início</a><span>/</span><a href="/pt/e/">Guias</a><span>/</span>O que é um proxy reverso</nav>
+  <p class="kicker">Programação · Servidores · Redes</p>
+  <h1>O que é um proxy reverso?</h1>
+  <div class="artmeta"><span>Por Coldwast</span><span>Atualizado a 26 jun 2026</span><span>8 min de leitura</span><span class="tag">#reverse-proxy</span><span class="tag">#servers</span><span class="tag">#networking</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/reverse-proxy-2026.jpg" alt="Cabos Ethernet ligados a um painel de switch de rede num data center" width="1200" height="420" loading="eager" />
+    <figcaption>Um proxy reverso é a porta de entrada única para os seus servidores: cada pedido chega ao mesmo sítio, que depois o encaminha para o backend correto nos bastidores.</figcaption>
+  </figure>
+
+  <p>Assim que executa mais do que uma aplicação num servidor — um site, uma <a href="/pt/e/blog/2026-06-17-what-is-a-webhook.html">API</a>, talvez alguns <a href="/pt/e/blog/2026-06-19-what-is-docker.html">contentores</a> — depara-se com um problema prático: os visitantes chegam todos às portas 80 e 443, mas cada aplicação escuta noutro sítio. Um <strong>proxy reverso</strong> é a resposta padrão. Este guia explica o que é um proxy reverso, em que difere do proxy que talvez já conheça e porque quase todos os ambientes de produção têm um.</p>
+
+  <h2>A definição curta</h2>
+  <p><strong>Um proxy reverso é um servidor que fica à frente de um ou mais servidores backend, recebe cada pedido recebido do cliente e encaminha-o para o backend apropriado — e depois devolve a resposta desse backend ao cliente.</strong> Para o visitante, o proxy reverso <em>é</em> o site: só fala com ele e nunca vê os servidores por trás. A palavra «reverso» importa, e a secção seguinte explica porquê.</p>
+
+  <h2>Proxy reverso vs proxy direto</h2>
+  <p>Um proxy normal (direto) fica à frente dos <strong>clientes</strong>. Quando o seu navegador está configurado para usar um, os seus pedidos saem através do proxy em seu nome: ele age por quem faz os pedidos. Um proxy reverso é a imagem espelhada: fica à frente dos <strong>servidores</strong> e age em nome deles. Os clientes ligam-se a ele pensando que é o servidor real, e é ele que decide qual backend trata de facto cada pedido. A mesma ideia de intermediário, do lado oposto da conversa.</p>
+
+  <figure><img src="/img/reverse-proxy-2026-rack.jpg" alt="Servidores num rack de data center iluminados por luzes indicadoras azuis e vermelhas" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>Por trás de um único proxy reverso podem estar muitos servidores backend como estes. O proxy é a única máquina com que o público fala; encaminha cada pedido para o backend que o deve tratar.</figcaption></figure>
+
+  <h2>Para que serve mesmo um proxy reverso</h2>
+  <ul>
+    <li><strong>Encaminhamento por nome de host ou caminho:</strong> enviar <code>api.example.com</code> para a sua API e <code>example.com</code> para o seu site, mesmo que ambos corram na mesma máquina.</li>
+    <li><strong>Terminação TLS:</strong> gerir os certificados HTTPS num só sítio para que cada backend fale HTTP simples internamente e você gira os certificados apenas uma vez.</li>
+    <li><strong>Cache:</strong> guardar e servir diretamente as respostas frequentes, para não sobrecarregar o backend a cada pedido.</li>
+    <li><strong>Buffer e proteção:</strong> absorver clientes lentos, aplicar limites e ocultar os endereços reais dos backends atrás de um único ponto de entrada público.</li>
+  </ul>
+  <p>Na prática, o encaminhamento e o TLS já bastam para o justificar: permitem alojar várias aplicações de forma limpa num único <a href="/pt/e/blog/2026-06-19-what-is-a-vps.html">VPS</a>, com HTTPS, atrás de um único endereço.</p>
+
+  <h2>Proxy reverso vs balanceador de carga</h2>
+  <p>Estes conceitos sobrepõem-se, daí a confusão. Um <strong>balanceador de carga</strong> tem uma função concreta: distribuir o tráfego recebido por vários backends idênticos para que nenhum fique sobrecarregado. Um proxy reverso é o conceito mais amplo — encaminha pedidos e pode fazer muitas coisas (encaminhamento, TLS, cache), e <em>distribuir a carga pelos backends é uma delas</em>. Por isso, um balanceador de carga é, no fundo, um proxy reverso focado na tarefa de balanceamento. A maioria dos proxies reversos modernos também sabe balancear carga, enquanto um balanceador dedicado por vezes não faz muito mais.</p>
+
+  <h2>As ferramentas comuns</h2>
+  <p>Os proxies reversos mais usados são <strong>Nginx</strong>, <strong>Caddy</strong>, <strong>HAProxy</strong> e <strong>Traefik</strong>. O Nginx é a referência de longa data e é extremamente rápido a servir e a fazer de proxy. O Caddy é popular porque obtém e renova os certificados HTTPS automaticamente, quase sem configuração. O Traefik foi feito para ambientes de <a href="/pt/e/blog/2026-06-19-what-is-docker.html">contentores</a> e <a href="/pt/e/blog/2026-06-19-what-is-kubernetes.html">Kubernetes</a>, onde descobre os serviços à medida que surgem e desaparecem. O HAProxy é preferido quando o balanceamento de carga de grande volume é a prioridade. Os fornecedores de cloud também oferecem proxies reversos e balanceadores geridos como serviço.</p>
+
+  <h2>Um exemplo mínimo</h2>
+  <p>Uma configuração de proxy reverso é sobretudo uma lista curta de regras. No Nginx, enviar os pedidos de um host para uma aplicação que corre localmente na porta 3000 fica assim:</p>
+  <pre><code>server &#123;
+    listen 80;
+    server_name example.com;
+
+    location / &#123;
+        proxy_pass http://127.0.0.1:3000;
+        proxy_set_header Host $host;
+    &#125;
+&#125;</code></pre>
+  <p>É toda a ideia: os pedidos para <code>example.com</code> chegam ao Nginx na porta 80, e o Nginx encaminha-os para a sua aplicação na porta 3000, passando o host original. Acrescente um bloco TLS e um segundo <code>server</code> para a sua API, e uma só máquina serve várias aplicações por HTTPS de forma limpa.</p>
+
+  <h2>Os compromissos honestos</h2>
+  <p>Um proxy reverso acrescenta mais uma peça em movimento. Torna-se o ponto único por onde passa cada pedido, por isso se cair tudo o que está atrás fica inacessível — daí em produção ser executado de forma fiável e por vezes em duplicado. Acrescenta também alguma latência e mais um ficheiro de configuração para entender. Para uma só pequena aplicação que já escuta na porta 443, talvez não precise de um. Mas assim que aloja mais do que um serviço, quer gerir o HTTPS num só sítio ou planeia escalar, um proxy reverso compensa depressa.</p>
+
+  <h2>Perguntas frequentes</h2>
+  <details><summary>O que é um proxy reverso em termos simples?</summary><p>Um proxy reverso é um servidor que se coloca à frente dos seus servidores reais. Cada visitante liga-se a ele em vez de falar diretamente com as suas aplicações, e ele encaminha cada pedido para o backend correto e depois devolve a respetiva resposta. Para o visitante parece o próprio site, enquanto os servidores reais ficam ocultos por trás.</p></details>
+  <details><summary>Qual é a diferença entre um proxy reverso e um proxy direto?</summary><p>Um proxy direto fica à frente dos clientes e faz os pedidos em nome deles: representa quem navega. Um proxy reverso fica à frente dos servidores e representa-os: os clientes ligam-se a ele como se fosse o servidor real, e ele escolhe qual backend trata cada pedido. A mesma ideia de intermediário, mas nas extremidades opostas da ligação.</p></details>
+  <details><summary>Um proxy reverso é o mesmo que um balanceador de carga?</summary><p>Não exatamente. Um balanceador de carga distribui o tráfego por vários backends idênticos para partilhar a carga. Um proxy reverso é o conceito mais amplo que encaminha pedidos e também pode fazer encaminhamento, TLS e cache, e o balanceamento de carga é uma dessas coisas. Por isso um balanceador de carga é basicamente um proxy reverso focado na tarefa de balanceamento.</p></details>
+  <details><summary>Preciso de um proxy reverso?</summary><p>Precisa de um assim que aloja mais do que uma aplicação num servidor, quer gerir o HTTPS num só sítio ou planeia escalar por vários backends. Para uma só pequena aplicação que já serve HTTPS na sua própria porta, pode dispensá-lo. Assim que há encaminhamento, certificados ou vários serviços envolvidos, um proxy reverso deixa tudo muito mais limpo.</p></details>
+
+  <div class="note">Guia independente, mantido pela comunidade. <strong>coldwa.st</strong> é um site de recursos de programação; este artigo é um texto explicativo original e inédito sobre proxies reversos. O excerto de Nginx é uma configuração padrão mostrada a título de ilustração; consulte a documentação do seu próprio proxy e versão para os detalhes.</div>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Recomendado</span>
+    <h3>Um servidor para correr o seu proxy reverso</h3>
+    <p>Correr o Nginx ou o Caddy como proxy reverso à frente das suas aplicações exige um verdadeiro servidor Linux com controlo total — um VPS ou servidor cloud onde você é dono das portas 80 e 443. A Infomaniak — fornecedor suíço que respeita a privacidade — oferece VPS e servidores cloud onde pode instalar um proxy reverso e encaminhar o tráfego para tantos backends quantos quiser.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Ver Infomaniak Cloud →</a>
+    <p class="disc">Link de afiliado — ajuda a manter estes guias gratuitos.</p>
+  </div>
+
+  <p>Explore mais explicações claras no nosso <a href="/pt/e/">índice de guias</a>.</p>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "O que é um proxy reverso em termos simples?", "acceptedAnswer": { "@type": "Answer", "text": "Um proxy reverso é um servidor que se coloca à frente dos seus servidores reais. Cada visitante liga-se a ele em vez de falar diretamente com as suas aplicações, e ele encaminha cada pedido para o backend correto e depois devolve a respetiva resposta. Para o visitante parece o próprio site, enquanto os servidores reais ficam ocultos por trás." } },
+      { "@type": "Question", "name": "Qual é a diferença entre um proxy reverso e um proxy direto?", "acceptedAnswer": { "@type": "Answer", "text": "Um proxy direto fica à frente dos clientes e faz os pedidos em nome deles: representa quem navega. Um proxy reverso fica à frente dos servidores e representa-os: os clientes ligam-se a ele como se fosse o servidor real, e ele escolhe qual backend trata cada pedido. A mesma ideia de intermediário, mas nas extremidades opostas da ligação." } },
+      { "@type": "Question", "name": "Um proxy reverso é o mesmo que um balanceador de carga?", "acceptedAnswer": { "@type": "Answer", "text": "Não exatamente. Um balanceador de carga distribui o tráfego por vários backends idênticos para partilhar a carga. Um proxy reverso é o conceito mais amplo que encaminha pedidos e também pode fazer encaminhamento, TLS e cache, e o balanceamento de carga é uma dessas coisas. Por isso um balanceador de carga é basicamente um proxy reverso focado na tarefa de balanceamento." } },
+      { "@type": "Question", "name": "Preciso de um proxy reverso?", "acceptedAnswer": { "@type": "Answer", "text": "Precisa de um assim que aloja mais do que uma aplicação num servidor, quer gerir o HTTPS num só sítio ou planeia escalar por vários backends. Para uma só pequena aplicação que já serve HTTPS na sua própria porta, pode dispensá-lo. Assim que há encaminhamento, certificados ou vários serviços envolvidos, um proxy reverso deixa tudo muito mais limpo." } }
+    ]
+  })} />
+  </div>
+</Base>
