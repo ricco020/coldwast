@@ -1,0 +1,84 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/de/e/blog/2026-06-27-docker-vs-podman.html';
+const title = 'Docker vs Podman: Welche Container-Engine, und wann (2026)';
+const description = 'Docker führt Container über einen zentralen Daemon aus; Podman ist daemonlos und rootless by design. Beide teilen sich OCI-Images und eine nahezu identische CLI. Architektur, Rootless-Sicherheit, Pods, systemd, Compose und Docker-Desktop-Lizenz im Vergleich.';
+---
+<Base title={title} description={description} path={path} type="article" lang="de"
+  image="/img/what-is-a-webhook-2026-servers.jpg" datePublished="2026-06-27" dateModified="2026-06-27">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/de/">Startseite</a><span>/</span><a href="/de/e/">Leitfäden</a><span>/</span>Docker vs Podman</nav>
+  <p class="kicker">Programmierung · DevOps · Container</p>
+  <h1>Docker vs Podman: welche Container-Engine, und wann?</h1>
+  <div class="artmeta"><span>Von Coldwast</span><span>Aktualisiert am 27. Juni 2026</span><span>9 Min. Lesezeit</span><span class="tag">#docker</span><span class="tag">#podman</span><span class="tag">#container</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/what-is-a-webhook-2026-servers.jpg" alt="3D-Render von drei identischen schwarzen Servereinheiten nebeneinander mit grünen Statuslichtern" width="1280" height="960" loading="eager" />
+    <figcaption>Docker und Podman führen beide dieselben Container im OCI-Format aus — hier drei identische Servereinheiten. Die echten Unterschiede liegen darin, wie jedes Werkzeug diese Container startet und verwaltet, nicht in den Containern selbst.</figcaption>
+  </figure>
+
+  <p><strong>Kurze Antwort:</strong> Docker und Podman erledigen dieselbe Kernaufgabe — Container bauen und ausführen — und nutzen dasselbe Image-Format, sodass ein mit dem einen gebautes Image auf dem anderen läuft. Der Hauptunterschied ist die Architektur: <strong>Docker</strong> führt Container über einen langlebigen zentralen Daemon (<code>dockerd</code>) aus, der typischerweise als root läuft, während <strong>Podman</strong> <strong>daemonlos</strong> und <strong>rootless by design</strong> ist und jeden Container als gewöhnlichen Kindprozess startet. Ihre Befehlszeilen sind nahe genug, dass <code>alias docker=podman</code> den Großteil des Alltags abdeckt. Wähle Podman, wenn du keinen root-Daemon und eine enge systemd-Integration willst; bleib bei Docker, wenn du auf Docker Desktop, einen ausgereiften Compose-Workflow oder ein größeres Ökosystem angewiesen bist.</p>
+
+  <p>Wenn du mit einem der beiden neu bist, hilft es, zuerst zu verstehen, <a href="/de/e/blog/2026-06-19-what-is-docker.html">was Docker und Container sind</a>. Dieser Leitfaden setzt das voraus und konzentriert sich darauf, wie sich die beiden Engines unterscheiden.</p>
+
+  <h2>Architektur: mit Daemon vs daemonlos</h2>
+  <p>Docker nutzt ein Client-Server-Modell. Der <code>docker</code>-Befehl, den du eingibst, ist ein Client, der mit einem Hintergrunddienst spricht, dem Docker-Daemon (<code>dockerd</code>), der deine Container tatsächlich erstellt und ausführt. Dieser Daemon läuft dauerhaft und in der Standardkonfiguration als <code>root</code>. Das ist bequem — ein Dienst verwaltet alles — aber es ist auch ein einzelner privilegierter Prozess, dem alle Container auf dem Host gehören.</p>
+  <p>Podman geht einen anderen Weg. Es gibt keinen zentralen Daemon: Wenn du einen Container startest, forkt und exect Podman ihn direkt als Kindprozess deiner Shell, mit denselben Linux-Primitiven (Namespaces, cgroups). Jeder Container ist nur ein normaler Prozessbaum. Dieses <em>daemonlose</em> Modell bedeutet, dass es keinen ständig laufenden root-Dienst zum Kompromittieren gibt und ein Absturz in einem Container nicht durch einen gemeinsamen Daemon läuft.</p>
+
+  <h2>Rootless-Container und Sicherheit</h2>
+  <p>Dieser Architekturunterschied führt zum Sicherheitsunterschied, der den meisten am wichtigsten ist. Podman wurde dafür gebaut, <strong>rootless</strong> zu laufen — ein unprivilegierter Benutzer kann Container ohne root bauen und ausführen, indem User-Namespaces die Container-UIDs auf den Host abbilden. Docker kann ebenfalls <a href="/de/e/blog/2026-06-19-what-is-docker.html">rootless</a> laufen und unterstützt das seit Jahren, aber seine Standardinstallation dreht sich weiter um den root-Daemon, sodass Rootless ein optionaler Modus statt die Grundlage ist.</p>
+  <p>Kein root-Daemon zu haben verkleinert die Angriffsfläche: Es gibt keinen privilegierten Hintergrunddienst, den ein Container-Ausbruch ins Visier nehmen könnte, um den Host zu übernehmen. Für Mehrbenutzer-Server und CI-Runner ist diese „kein root-Daemon“-Eigenschaft ein echter, konkreter Grund, zu Podman zu wechseln. Es ist keine Magie — Container brauchen weiterhin sorgfältige Konfiguration — aber die Standardhaltung ist konservativer.</p>
+
+  <figure>
+    <img src="/img/what-is-docker-2026.jpg" alt="Ein großes Containerschiff, beladen mit gestapelten Seecontainern, nachts in einem Hafen" width="1200" height="799" loading="lazy" />
+    <figcaption>Das Wort „Container“ stammt aus der Schifffahrt: standardisierte Boxen, die sich auf jedem Schiff oder Kran gleich bewegen. Software-Container übernehmen die Idee — und sowohl Docker als auch Podman nutzen denselben OCI-Standard, sodass die Boxen austauschbar sind.</figcaption>
+  </figure>
+
+  <h2>Gleiche Images, nahezu identische CLI</h2>
+  <p>Das ist der Teil, der den Wechsel schmerzlos macht: Beide Werkzeuge folgen den <strong>OCI-Standards (Open Container Initiative)</strong> für Images und Laufzeit. Ein mit Docker gebautes Image läuft unter Podman und umgekehrt, und beide ziehen aus denselben Registries (Docker Hub, GitHub Container Registry, Quay und weitere). Es gibt kein nur-Docker- oder nur-Podman-Image-Format.</p>
+  <p>Die Befehlszeilen sind bewusst ähnlich. <code>podman run</code>, <code>podman build</code>, <code>podman ps</code> und <code>podman pull</code> spiegeln ihre Docker-Pendants mit denselben gängigen Flags. Viele setzen einfach einen Alias:</p>
+  <pre><code>alias docker=podman</code></pre>
+  <p>und behalten ihre Gewohnheiten. Dockerfiles funktionieren unter Podman ebenfalls unverändert. Die CLI ist nicht in jedem Sonderfall <em>zu 100 %</em> identisch, aber für das tägliche Bauen und Ausführen ist sie nahe genug, dass das Muskelgedächtnis übertragbar ist.</p>
+
+  <h2>Pods: Podmans Kubernetes-artige Gruppierung</h2>
+  <p>Podman ist nach dem <strong>Pod</strong> benannt — einem Konzept, das es von <a href="/de/e/blog/2026-06-19-what-is-kubernetes.html">Kubernetes</a> übernimmt. Ein Pod ist eine Gruppe von Containern, die Ressourcen wie einen Netzwerk-Namespace teilen, sodass sie über <code>localhost</code> miteinander reden können, als wären sie auf derselben Maschine. Podman kann diese Pods direkt erstellen und verwalten, was die lokale Entwicklung näher daran bringt, wie Dinge in einem Kubernetes-Cluster laufen. Docker hat kein natives „Pod“-Primitiv im selben Sinne; Multi-Container-Aufbauten werden stattdessen mit Compose-Netzwerken zusammengestellt.</p>
+
+  <h2>systemd-Integration</h2>
+  <p>Da Podman-Container gewöhnliche Kindprozesse statt Kinder eines Daemons sind, fügen sie sich natürlich in <strong>systemd</strong> ein, den Dienstmanager von Linux. Historisch konntest du <code>podman generate systemd</code> ausführen, um eine Unit-Datei pro Container zu erzeugen; der aktuelle, empfohlene Ansatz ist <strong>Quadlet</strong>, mit dem du Container in deklarativen Dateien im Unit-Stil beschreibst, die systemd direkt verwaltet — sie beim Booten starten, bei Fehlern neu starten und wie jeden anderen Dienst verfolgen. Für Server, die ohnehin alles über systemd betreiben, ist das eine saubere Möglichkeit, Container ohne zusätzlichen Daemon unter denselben Supervisor zu stellen.</p>
+
+  <h2>Compose: docker compose vs podman</h2>
+  <p>Viele Projekte verlassen sich auf Compose, um mehrere Container aus einer YAML-Datei hochzufahren. Docker liefert <code>docker compose</code> (das Compose-v2-Plugin) als erstklassiges, gut gepflegtes Werkzeug. Podman unterstützt Compose-Workflows ebenfalls: Es kann mit dem separaten Werkzeug <code>podman-compose</code> arbeiten, und Podman stellt zudem einen Socket bereit, mit dem das Standard-Compose-Tooling reden kann, sodass bestehende <code>compose.yaml</code>-Dateien oft mit wenig oder keiner Änderung laufen. In der Praxis ist Dockers Compose-Erfahrung die ausgereiftere und ausgefeiltere der beiden, was ein Grund ist, warum Teams mit intensiver Compose-Nutzung manchmal bei Docker bleiben.</p>
+
+  <h2>Docker-Desktop-Lizenz vs Podmans Open-Source-Modell</h2>
+  <p>Unter Windows und macOS wird Docker meist über <strong>Docker Desktop</strong> genutzt. Docker Desktop ist kostenlos für private Nutzung, Bildung und kleine Unternehmen, erfordert aber für größere Organisationen (über der von Docker veröffentlichten Größenschwelle) ein <strong>kostenpflichtiges Abonnement</strong>. Diese Lizenzänderung ist für größere Firmen eine echte Budget- und Compliance-Frage.</p>
+  <p>Podman ist vollständig <strong>Open Source</strong> und kostenlos, ohne Lizenz pro Arbeitsplatz. Sein Desktop-Begleiter, <strong>Podman Desktop</strong>, ist ebenfalls Open Source. Für Organisationen, die eine kommerzielle Desktop-Lizenz vermeiden wollen — oder einfach einen durchgehenden Open-Source-Stack bevorzugen — zählt dieser Unterschied genauso wie jeder technische.</p>
+
+  <h2>Welches solltest du also nutzen?</h2>
+  <table>
+    <thead><tr><th>Kriterium</th><th>Docker</th><th>Podman</th></tr></thead>
+    <tbody>
+      <tr><td>Architektur</td><td>Zentraler Daemon (<code>dockerd</code>)</td><td>Daemonlos (fork/exec pro Container)</td></tr>
+      <tr><td>Rootless</td><td>Unterstützt, optional</td><td>Rootless by design (Standard)</td></tr>
+      <tr><td>Image-Format</td><td>OCI</td><td>OCI — austauschbar mit Docker</td></tr>
+      <tr><td>CLI</td><td>Referenz-CLI</td><td>Nahezu identisch (<code>alias docker=podman</code>)</td></tr>
+      <tr><td>Pods</td><td>Kein natives Pod-Primitiv</td><td>Native Pods (Kubernetes-Stil)</td></tr>
+      <tr><td>systemd</td><td>Läuft unter dem Daemon</td><td>Native Units via Quadlet</td></tr>
+      <tr><td>Compose</td><td><code>docker compose</code> (ausgereift)</td><td><code>podman-compose</code> / Compose via Socket</td></tr>
+      <tr><td>Desktop-Lizenz</td><td>Docker Desktop kostenpflichtig für große Orgs</td><td>Open Source, kostenlos (Podman Desktop)</td></tr>
+    </tbody>
+  </table>
+
+  <p>Es gibt keinen universellen Sieger. <strong>Wähle Podman</strong>, wenn du keinen root-Daemon, rootless Container als Standard, eine native systemd/Quadlet-Verwaltung oder die Vermeidung der Docker-Desktop-Lizenz willst. <strong>Bleib bei Docker</strong>, wenn du auf Docker Desktop, einen ausgereiften Compose-Workflow oder die Breite seines Ökosystems und seiner Dokumentation angewiesen bist. Da beide OCI sprechen, kannst du sie auch mischen — mit dem einen bauen, mit dem anderen ausführen — oder Podman ausprobieren, ohne deine bestehenden Images und Dockerfiles wegzuwerfen. Und wenn du später viele Container über mehrere Maschinen orchestrieren musst, ist das eine Aufgabe für <a href="/de/e/blog/2026-06-19-what-is-kubernetes.html">Kubernetes</a>, das über beiden steht.</p>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "Ist Podman ein direkter Ersatz für Docker?", "acceptedAnswer": { "@type": "Answer", "text": "Für den meisten Alltag fast. Podman nutzt dasselbe OCI-Image-Format, führt dieselben Dockerfiles aus und bietet eine nahezu identische Befehlszeile, sodass viele einfach alias docker=podman setzen. Es ist nicht in jedem Sonderfall zu 100 % identisch, aber für das Bauen und Ausführen von Containern ist der Wechsel meist schmerzlos." } },
+      { "@type": "Question", "name": "Was ist der Hauptunterschied zwischen Docker und Podman?", "acceptedAnswer": { "@type": "Answer", "text": "Die Architektur. Docker führt Container über einen langlebigen zentralen Daemon (dockerd) aus, der standardmäßig als root läuft. Podman ist daemonlos: Es startet jeden Container direkt als Kindprozess und ist rootless by design. Dadurch hat Podman eine kleinere Angriffsfläche, da es keinen ständig laufenden root-Dienst gibt." } },
+      { "@type": "Question", "name": "Können Docker und Podman dieselben Images verwenden?", "acceptedAnswer": { "@type": "Answer", "text": "Ja. Beide folgen den OCI-Standards (Open Container Initiative), sodass ein mit Docker gebautes Image unter Podman läuft und umgekehrt, und beide ziehen aus denselben Registries wie Docker Hub und Quay. Es gibt kein nur-Docker- oder nur-Podman-Image-Format." } },
+      { "@type": "Question", "name": "Ist Podman kostenlos? Und Docker Desktop?", "acceptedAnswer": { "@type": "Answer", "text": "Podman ist vollständig Open Source und kostenlos, inklusive Podman Desktop. Docker Desktop ist kostenlos für private Nutzung, Bildung und kleine Unternehmen, erfordert aber für größere Organisationen über der von Docker veröffentlichten Größenschwelle ein kostenpflichtiges Abonnement, was manche Teams zu Podman bewegt." } }
+    ]
+  })} />
+  </div>
+</Base>
