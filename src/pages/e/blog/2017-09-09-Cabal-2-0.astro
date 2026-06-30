@@ -2,7 +2,7 @@
 import Base from '../../../layouts/Base.astro';
 const path = '/e/blog/2017-09-09-Cabal-2-0.html';
 const title = 'Cabal 2.0: the Release that Reshaped Haskell Builds (Updated)';
-const description = 'A community-updated guide to Cabal 2.0 (2017) — nix-style local builds, Backpack mixins, the caret-version operator and a better solver — and how each of those features stands in the 2026 toolchain.';
+const description = 'A community-updated guide to Cabal 2.0 (2017) - nix-style local builds, Backpack mixins, the caret-version operator and a better solver - and how each of those features stands in the 2026 toolchain.';
 ---
 <Base title={title} description={description} path={path} type="article"
   image="https://coldwa.st/img/cabal-2-0.svg" datePublished="2017-09-09" dateModified="2026-06-13">
@@ -17,17 +17,17 @@ const description = 'A community-updated guide to Cabal 2.0 (2017) — nix-style
     <figcaption>Cabal 2.0 turned nix-style, per-project planning into the foundation of the modern toolchain.</figcaption>
   </figure>
 
-  <div class="note">Community-maintained, updated rewrite — original content, not authored by or affiliated with the domain's previous owner. Where 2017 facts have since changed, the 2026 status is called out explicitly.</div>
+  <div class="note">Community-maintained, updated rewrite - original content, not authored by or affiliated with the domain's previous owner. Where 2017 facts have since changed, the 2026 status is called out explicitly.</div>
 
   <p>Cabal 2.0 shipped in September 2017 alongside GHC 8.2, and in hindsight it is the release that set the direction of Haskell tooling for the next decade. It is the moment three things became real at once: <strong>nix-style local builds</strong>, <strong>Backpack</strong>, and a <strong>modern <code>.cabal</code> format</strong> with a saner version syntax. Here is what each one was, and where it stands today.</p>
 
   <h2>1. Nix-style local builds (<code>new-build</code>)</h2>
   <p>The headline feature. Earlier, <a href="/e/blog/2013-08-20-Cabal-sandbox.html">sandboxes</a> isolated dependencies per project but rebuilt everything from scratch and weren't reproducible. Cabal 2.0 promoted <code>cabal new-build</code>: a content-addressed model where each unique combination of <em>package + version + flags + dependencies</em> is built once, stored under a hash in a shared global store, and reused by every project whose build plan needs it.</p>
   <pre><code>$ cabal new-build      # 2017 spelling
-$ cabal build          # 2026: this IS new-build — it became the default in Cabal 3.0</code></pre>
+$ cabal build          # 2026: this IS new-build - it became the default in Cabal 3.0</code></pre>
   <p><strong>2026 status:</strong> the <code>new-*</code> prefix is gone. <code>cabal build</code>, <code>cabal run</code>, <code>cabal repl</code> and <code>cabal test</code> are all nix-style by default. The <code>v2-</code> aliases still exist for scripts; the old <code>v1-</code> commands are deprecated. What Cabal 2.0 introduced as opt-in is now simply how Cabal works.</p>
 
-  <h2>2. Backpack — mixin packages and module signatures</h2>
+  <h2>2. Backpack - mixin packages and module signatures</h2>
   <p>Backpack added genuine <em>parametric modularity</em> to Haskell: a library can declare a module <strong>signature</strong> (an interface) and be type-checked against it without committing to a concrete implementation; a consumer then "mixes in" the implementation it wants. The classic example is a library written against an abstract <code>Str</code> signature that can be instantiated with <code>String</code>, strict <code>Text</code> or <code>ByteString</code> without code duplication.</p>
   <pre><code>-- in a .cabal file
 library
@@ -37,12 +37,12 @@ library
 library impl-text
     mixins: indef-lib (Generic.Algorithm as Text.Algorithm)
                       requires (Str as Data.Text)</code></pre>
-  <p><strong>2026 status:</strong> Backpack works and is still supported, but it stayed a specialist tool rather than a mainstream pattern — type classes and ordinary parameterisation cover most needs, and tooling/IDE support for signatures remained thin. Reach for it when you genuinely need to compile the same code against several concrete types; otherwise you will rarely meet it.</p>
+  <p><strong>2026 status:</strong> Backpack works and is still supported, but it stayed a specialist tool rather than a mainstream pattern - type classes and ordinary parameterisation cover most needs, and tooling/IDE support for signatures remained thin. Reach for it when you genuinely need to compile the same code against several concrete types; otherwise you will rarely meet it.</p>
 
   <h2>3. A modern <code>.cabal</code> format</h2>
   <p>Setting <code>cabal-version: 2.0</code> unlocked format improvements that are now everyday Haskell:</p>
   <ul>
-    <li><strong>The caret operator <code>^>=</code></strong>. <code>build-depends: aeson ^>= 2.1</code> means "<code>&gt;= 2.1 &amp;&amp; &lt; 2.2</code>" — a compact, intention-revealing way to follow the PVP upper bound. It is everywhere in modern packages.</li>
+    <li><strong>The caret operator <code>^>=</code></strong>. <code>build-depends: aeson ^>= 2.1</code> means "<code>&gt;= 2.1 &amp;&amp; &lt; 2.2</code>" - a compact, intention-revealing way to follow the PVP upper bound. It is everywhere in modern packages.</li>
     <li><strong><code>autogen-modules</code></strong>, so generated modules like <code>Paths_yourpkg</code> are declared properly and shipped in the sdist.</li>
     <li><strong>Foreign libraries</strong> (the <code>foreign-library</code> stanza), letting Haskell code be built as a shared object for consumption by other languages.</li>
     <li><strong>Per-component <code>build-depends</code></strong>, so a package's library, tests and benchmarks can each have their own precise dependency sets.</li>
@@ -54,7 +54,7 @@ library impl-text
   <p>Cabal 2.0 shipped solver improvements that made it both faster and more likely to find a valid install plan in a deep dependency graph, with clearer explanations when no plan exists. The solver has continued to improve since, but 2.0 is where "the solver usually just works" started to be true for non-trivial projects.</p>
 
   <h2>Why it mattered</h2>
-  <p>Before 2.0, the Haskell build story was "install globally and pray", patched by sandboxes. After 2.0, it became "declare what you want, get a reproducible, shared, isolated build" — the same mental model as Nix, Cargo or modern package managers elsewhere. Every <code>cabal build</code> you run in 2026 is the direct descendant of what 2.0 made the default path.</p>
+  <p>Before 2.0, the Haskell build story was "install globally and pray", patched by sandboxes. After 2.0, it became "declare what you want, get a reproducible, shared, isolated build" - the same mental model as Nix, Cargo or modern package managers elsewhere. Every <code>cabal build</code> you run in 2026 is the direct descendant of what 2.0 made the default path.</p>
 
   <h2>If you're upgrading an old project</h2>
   <pre><code># Bump the format and modernise bounds:

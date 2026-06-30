@@ -2,7 +2,7 @@
 import Base from '../../../layouts/Base.astro';
 const path = '/e/blog/2026-06-14-haskell-list-comprehensions.html';
 const title = 'Haskell List Comprehensions, Explained (2026)';
-const description = 'A list comprehension builds a list from one or more generators with optional guards — concise, readable, and close to mathematical set-builder notation. The syntax, multiple generators, guards, and how they relate to map and filter.';
+const description = 'A list comprehension builds a list from one or more generators with optional guards - concise, readable, and close to mathematical set-builder notation. The syntax, multiple generators, guards, and how they relate to map and filter.';
 ---
 <Base title={title} description={description} path={path} type="article"
   image="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
@@ -14,7 +14,7 @@ const description = 'A list comprehension builds a list from one or more generat
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=1200&q=80&auto=format&fit=crop" alt="Source code on a screen" width="1200" height="420" loading="eager" />
-    <figcaption>Source code on a screen — list comprehensions are a concise way to build lists in code.</figcaption>
+    <figcaption>Source code on a screen - list comprehensions are a concise way to build lists in code.</figcaption>
   </figure>
 
   <p>One of the first things that makes Haskell feel elegant is the <strong>list comprehension</strong>: a concise way to build a new list from existing ones, mirroring the mathematical set-builder notation you may remember from school. This guide explains the syntax, multiple generators, guards, and how comprehensions relate to <code>map</code> and <code>filter</code>.</p>
@@ -27,7 +27,7 @@ squares = [x*x | x &lt;- [1..10]]
   <p>Here <code>x &lt;- [1..10]</code> is a <strong>generator</strong>: it draws each <code>x</code> from the list <code>[1..10]</code>, and the part before the bar, <code>x*x</code>, is the <strong>output expression</strong> applied to every element.</p>
 
   <h2>Adding guards (filtering)</h2>
-  <figure><img src="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80&auto=format&fit=crop" alt="Lines of source code on a dark screen" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Lines of code on a screen — a guard keeps only the elements that satisfy a condition.</figcaption></figure>
+  <figure><img src="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80&auto=format&fit=crop" alt="Lines of source code on a dark screen" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Lines of code on a screen - a guard keeps only the elements that satisfy a condition.</figcaption></figure>
   <p>A <strong>guard</strong> is a boolean condition that keeps only the elements satisfying it:</p>
   <pre><code>-- even numbers from 1 to 20, doubled
 result = [x*2 | x &lt;- [1..20], even x]
@@ -39,10 +39,10 @@ result = [x*2 | x &lt;- [1..20], even x]
   <pre><code>-- all pairs from two small lists
 pairs = [(x, y) | x &lt;- [1,2,3], y &lt;- [&#39;a&#39;,&#39;b&#39;]]
 -- [(1,'a'),(1,'b'),(2,'a'),(2,'b'),(3,'a'),(3,'b')]</code></pre>
-  <p>The rightmost generator varies fastest. You can also let a later generator depend on an earlier one — for example drawing <code>y</code> from <code>[x..10]</code>.</p>
+  <p>The rightmost generator varies fastest. You can also let a later generator depend on an earlier one - for example drawing <code>y</code> from <code>[x..10]</code>.</p>
 
   <h2>How they relate to map and filter</h2>
-  <p>A comprehension is essentially <code>map</code> and <code>filter</code> in one readable form — and both are <a href="/e/blog/2026-06-24-higher-order-functions.html">higher-order functions</a>, since each takes a function as one of its arguments. These are equivalent:</p>
+  <p>A comprehension is essentially <code>map</code> and <code>filter</code> in one readable form - and both are <a href="/e/blog/2026-06-24-higher-order-functions.html">higher-order functions</a>, since each takes a function as one of its arguments. These are equivalent:</p>
   <pre><code>[x*2 | x &lt;- xs, even x]
 map (*2) (filter even xs)</code></pre>
   <p>Use whichever reads better for the case. Comprehensions shine when you have multiple generators or several guards; <code>map</code>/<code>filter</code> compose nicely in point-free pipelines. Because Haskell is <a href="/e/blog/2026-06-14-lazy-evaluation-haskell.html">lazy</a>, a comprehension over an infinite list like <code>[1..]</code> only computes the elements you actually consume.</p>
@@ -50,12 +50,12 @@ map (*2) (filter even xs)</code></pre>
   <h2>FAQ</h2>
   <p><strong>What is a generator in a list comprehension?</strong> The <code>x &lt;- xs</code> part: it draws each value of <code>x</code> from the list <code>xs</code> to feed the output expression.</p>
   <p><strong>What is a guard?</strong> A boolean condition (like <code>even x</code>) placed after a comma; only elements for which it's true are kept.</p>
-  <p><strong>Can I use multiple generators?</strong> Yes — the comprehension produces every combination, with the rightmost generator varying fastest, like nested loops.</p>
+  <p><strong>Can I use multiple generators?</strong> Yes - the comprehension produces every combination, with the rightmost generator varying fastest, like nested loops.</p>
   <p><strong>Are comprehensions just map and filter?</strong> Conceptually yes for the simple cases; comprehensions are often more readable with multiple generators or guards, while map/filter compose well in pipelines.</p>
 
   <p>For the language behind the syntax, see <a href="/e/blog/2026-06-14-what-is-haskell.html">what Haskell is</a>; comprehensions are one of the features that make it concise and expressive.</p>
 
-  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about Haskell list comprehensions, not affiliated with the language's maintainers. Code reflects standard Haskell/GHC behaviour — verify against current GHC docs.</div>
+  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about Haskell list comprehensions, not affiliated with the language's maintainers. Code reflects standard Haskell/GHC behaviour - verify against current GHC docs.</div>
   <p class="related-guides">Related guides: <a href="/e/blog/2026-06-14-haskell-monads.html">monads in Haskell</a>.</p>
   </div>
 </Base>

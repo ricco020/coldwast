@@ -14,7 +14,7 @@ const description = 'Una variabile è un contenitore con un nome che contiene un
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80&auto=format&fit=crop" alt="Codice su uno schermo di computer" width="1200" height="420" loading="eager" />
-    <figcaption>Codice su uno schermo — le variabili sono i valori con un nome che un codice come questo memorizza, legge e modifica.</figcaption>
+    <figcaption>Codice su uno schermo - le variabili sono i valori con un nome che un codice come questo memorizza, legge e modifica.</figcaption>
   </figure>
 
   <p>Se scrivi anche una sola riga di codice, userai una <strong>variabile</strong>. È il primo concetto che presenta qualsiasi tutorial di programmazione e uno dei pochi a esistere in ogni linguaggio mai creato. Questa guida spiega che cos’è una variabile, come crearne e usarne una, tipi e ambito, la differenza con una costante e perché sono il fondamento di ogni programmazione.</p>
@@ -26,19 +26,19 @@ const description = 'Una variabile è un contenitore con un nome che contiene un
   <p><strong>Dichiari</strong> una variabile (la crei, le dai un nome) e le <strong>assegni</strong> un valore. Nella maggior parte dei linguaggi assomiglia a questo:</p>
   <pre><code>age = 30            # nome: age, valore: 30
 nome = "Ada"        # un pezzo di testo
-age = 31            # riassegnazione — la scatola contiene ora 31</code></pre>
-  <p>Dopo <code>age = 31</code>, il vecchio valore è scomparso e <code>age</code> si riferisce a <code>31</code>. Proprio questa capacità di <em>cambiare</em> nel tempo è ciò che la rende «variabile» — al contrario di una costante fissa.</p>
+age = 31            # riassegnazione - la scatola contiene ora 31</code></pre>
+  <p>Dopo <code>age = 31</code>, il vecchio valore è scomparso e <code>age</code> si riferisce a <code>31</code>. Proprio questa capacità di <em>cambiare</em> nel tempo è ciò che la rende «variabile» - al contrario di una costante fissa.</p>
 
   <h2>I tipi di valore</h2>
-  <p>Una variabile contiene un valore, e i valori hanno dei <strong>tipi</strong>: un numero (<code>30</code>), una stringa di testo (<code>&quot;Ada&quot;</code>), un booleano (<code>true</code> / <code>false</code>) o cose più complesse come liste e oggetti. Alcuni linguaggi sono a <em>tipizzazione statica</em> (dichiari il tipo, verificato prima dell’esecuzione — come Haskell o Rust); altri a <em>tipizzazione dinamica</em> (il tipo viaggia con il valore a runtime — come Python o JavaScript).</p>
+  <p>Una variabile contiene un valore, e i valori hanno dei <strong>tipi</strong>: un numero (<code>30</code>), una stringa di testo (<code>&quot;Ada&quot;</code>), un booleano (<code>true</code> / <code>false</code>) o cose più complesse come liste e oggetti. Alcuni linguaggi sono a <em>tipizzazione statica</em> (dichiari il tipo, verificato prima dell’esecuzione - come Haskell o Rust); altri a <em>tipizzazione dinamica</em> (il tipo viaggia con il valore a runtime - come Python o JavaScript).</p>
 
-  <figure><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80&auto=format&fit=crop" alt="Un laptop aperto che mostra codice su una scrivania" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Un laptop che mostra codice — ogni valore con un nome che vedi in un programma, da un contatore a un nome utente, è una variabile.</figcaption></figure>
+  <figure><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80&auto=format&fit=crop" alt="Un laptop aperto che mostra codice su una scrivania" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Un laptop che mostra codice - ogni valore con un nome che vedi in un programma, da un contatore a un nome utente, è una variabile.</figcaption></figure>
 
   <h2>L’ambito: dove vive una variabile</h2>
-  <p>L’<strong>ambito</strong> è la regione di codice in cui una variabile esiste e può essere usata. Una variabile dichiarata in una funzione è di solito <em>locale</em> — esiste solo mentre quella funzione è in esecuzione, e il codice altrove non può vederla. Una variabile dichiarata al livello superiore può essere <em>globale</em>, visibile in tutto il programma. Tenere le variabili nell’ambito più piccolo possibile è un’abitudine essenziale: evita conflitti accidentali e rende il codice più facile da ragionare.</p>
+  <p>L’<strong>ambito</strong> è la regione di codice in cui una variabile esiste e può essere usata. Una variabile dichiarata in una funzione è di solito <em>locale</em> - esiste solo mentre quella funzione è in esecuzione, e il codice altrove non può vederla. Una variabile dichiarata al livello superiore può essere <em>globale</em>, visibile in tutto il programma. Tenere le variabili nell’ambito più piccolo possibile è un’abitudine essenziale: evita conflitti accidentali e rende il codice più facile da ragionare.</p>
 
   <h2>Variabili vs costanti</h2>
-  <p>Una <strong>costante</strong> è come una variabile il cui valore non deve cambiare dopo essere stato fissato — utile per ciò che non deve muoversi, come un’aliquota IVA o il numero di giorni in una settimana. Molti linguaggi hanno una parola chiave per questo (<code>const</code>, <code>final</code>, <code>val</code>). Usare una costante quando un valore non cambierà segnala l’intento e lascia che il linguaggio intercetti le riassegnazioni accidentali.</p>
+  <p>Una <strong>costante</strong> è come una variabile il cui valore non deve cambiare dopo essere stato fissato - utile per ciò che non deve muoversi, come un’aliquota IVA o il numero di giorni in una settimana. Molti linguaggi hanno una parola chiave per questo (<code>const</code>, <code>final</code>, <code>val</code>). Usare una costante quando un valore non cambierà segnala l’intento e lascia che il linguaggio intercetti le riassegnazioni accidentali.</p>
 
   <h2>Perché le variabili contano</h2>
   <p>Le variabili permettono a un programma di <strong>conservare e manipolare dati</strong> invece di trattare solo valori fissi. Contengono l’input dell’utente, un totale corrente, lo stato attuale di un gioco, il risultato di un calcolo. Combina le variabili con la logica e hai un <a href="/it/e/blog/2026-06-14-what-is-an-algorithm.html">algoritmo</a>; combina gli algoritmi con i dati e hai un programma. Tutto parte da questa piccola idea: un nome che rappresenta un valore.</p>
@@ -49,8 +49,8 @@ age = 31            # riassegnazione — la scatola contiene ora 31</code></pre>
   <h2>FAQ</h2>
   <p><strong>Che cos’è una variabile, in parole semplici?</strong> Una scatola con un nome che memorizza un valore che il tuo programma può leggere e modificare più tardi richiamandolo tramite il suo nome.</p>
   <p><strong>Qual è la differenza tra una variabile e una costante?</strong> Il valore di una variabile può cambiare durante l’esecuzione; quello di una costante è fisso una volta impostato. Usa una costante quando il valore non deve cambiare.</p>
-  <p><strong>Che cos’è il tipo di una variabile?</strong> Il genere di valore che contiene — numero, testo (stringa), booleano, lista, oggetto, ecc. Alcuni linguaggi verificano i tipi prima dell’esecuzione; altri li seguono a runtime.</p>
-  <p><strong>Che cos’è l’ambito di una variabile?</strong> La parte del codice in cui la variabile esiste e può essere usata — di solito locale (in una funzione) o globale (in tutto il programma). Un ambito più piccolo è generalmente preferibile.</p>
+  <p><strong>Che cos’è il tipo di una variabile?</strong> Il genere di valore che contiene - numero, testo (stringa), booleano, lista, oggetto, ecc. Alcuni linguaggi verificano i tipi prima dell’esecuzione; altri li seguono a runtime.</p>
+  <p><strong>Che cos’è l’ambito di una variabile?</strong> La parte del codice in cui la variabile esiste e può essere usata - di solito locale (in una funzione) o globale (in tutto il programma). Un ambito più piccolo è generalmente preferibile.</p>
 
   <p>Le variabili sono i dati; la logica passo dopo passo che li usa è un <a href="/it/e/blog/2026-06-14-what-is-an-algorithm.html">algoritmo</a>. Sfoglia altre spiegazioni chiare nel nostro <a href="/it/e/">indice delle guide</a>.</p>
 

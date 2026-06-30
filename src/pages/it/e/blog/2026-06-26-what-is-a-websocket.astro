@@ -17,18 +17,18 @@ const description = 'Un WebSocket mantiene una connessione aperta così che serv
     <figcaption>Un WebSocket tiene aperta una sola connessione in entrambe le direzioni: invece di aprire una nuova richiesta per ogni messaggio, client e server continuano a dialogare sulla stessa linea.</figcaption>
   </figure>
 
-  <p>La maggior parte del web funziona per richiesta e risposta: il browser chiede, il server risponde, la connessione si chiude. Va benissimo per caricare una pagina, ma crolla quando vuoi aggiornamenti <strong>dal vivo</strong> — un messaggio di chat, una quotazione di borsa, una mossa multiplayer — che il server deve <em>inviare</em> nell’istante in cui accadono. Un <strong>WebSocket</strong> è la risposta standard. Questa guida spiega cos’è un WebSocket, in cosa differisce dal normale HTTP e quando ti serve davvero.</p>
+  <p>La maggior parte del web funziona per richiesta e risposta: il browser chiede, il server risponde, la connessione si chiude. Va benissimo per caricare una pagina, ma crolla quando vuoi aggiornamenti <strong>dal vivo</strong> - un messaggio di chat, una quotazione di borsa, una mossa multiplayer - che il server deve <em>inviare</em> nell’istante in cui accadono. Un <strong>WebSocket</strong> è la risposta standard. Questa guida spiega cos’è un WebSocket, in cosa differisce dal normale HTTP e quando ti serve davvero.</p>
 
   <h2>L’idea centrale: una connessione, entrambe le direzioni</h2>
-  <p>Un WebSocket è una connessione persistente e bidirezionale (full-duplex) tra un client — di solito un browser — e un server. Una volta aperta, ciascun lato può inviare un messaggio in qualsiasi momento, senza che l’altro debba prima chiederlo. È questa la differenza fondamentale rispetto a una normale <a href="/it/e/blog/2026-06-14-what-is-an-api.html">API HTTP</a>: HTTP è una richiesta, una risposta, e finisce lì; un WebSocket resta aperto e trasporta messaggi in entrambe le direzioni per tutto il tempo che ti serve.</p>
-  <p>Poiché la connessione è già aperta, i messaggi arrivano con pochissimo overhead e quasi nessun ritardo. Niente header ripetuti, nessun nuovo handshake per messaggio — solo una piccola frame di dati in ciascuna direzione. È questo che rende i WebSocket adatti a tutto ciò che deve sembrare istantaneo.</p>
+  <p>Un WebSocket è una connessione persistente e bidirezionale (full-duplex) tra un client - di solito un browser - e un server. Una volta aperta, ciascun lato può inviare un messaggio in qualsiasi momento, senza che l’altro debba prima chiederlo. È questa la differenza fondamentale rispetto a una normale <a href="/it/e/blog/2026-06-14-what-is-an-api.html">API HTTP</a>: HTTP è una richiesta, una risposta, e finisce lì; un WebSocket resta aperto e trasporta messaggi in entrambe le direzioni per tutto il tempo che ti serve.</p>
+  <p>Poiché la connessione è già aperta, i messaggi arrivano con pochissimo overhead e quasi nessun ritardo. Niente header ripetuti, nessun nuovo handshake per messaggio - solo una piccola frame di dati in ciascuna direzione. È questo che rende i WebSocket adatti a tutto ciò che deve sembrare istantaneo.</p>
 
   <h2>Come parte un WebSocket: l’handshake HTTP</h2>
-  <p>Un WebSocket non spunta dal nulla — inizia come una normale richiesta HTTP. Il browser invia una richiesta normale con un header <code>Upgrade: websocket</code>, chiedendo in sostanza al server di cambiare protocollo. Se il server accetta, risponde con lo stato <code>101 Switching Protocols</code>, e da quel momento la stessa connessione TCP smette di parlare HTTP e inizia a parlare il protocollo WebSocket. È per questo che i WebSocket viaggiano sulle stesse porte del web (80 e 443) e attraversano la maggior parte dei firewall che già consentono il traffico web.</p>
-  <p>Dopo l’handshake, i dati si muovono come <em>frame</em> leggere. Ogni messaggio può essere testo — molto spesso <a href="/it/e/blog/2026-06-14-what-is-json.html">JSON</a> — o binario, e non c’è una forma fissa richiesta/risposta: i messaggi semplicemente scorrono quando c’è qualcosa da inviare.</p>
+  <p>Un WebSocket non spunta dal nulla - inizia come una normale richiesta HTTP. Il browser invia una richiesta normale con un header <code>Upgrade: websocket</code>, chiedendo in sostanza al server di cambiare protocollo. Se il server accetta, risponde con lo stato <code>101 Switching Protocols</code>, e da quel momento la stessa connessione TCP smette di parlare HTTP e inizia a parlare il protocollo WebSocket. È per questo che i WebSocket viaggiano sulle stesse porte del web (80 e 443) e attraversano la maggior parte dei firewall che già consentono il traffico web.</p>
+  <p>Dopo l’handshake, i dati si muovono come <em>frame</em> leggere. Ogni messaggio può essere testo - molto spesso <a href="/it/e/blog/2026-06-14-what-is-json.html">JSON</a> - o binario, e non c’è una forma fissa richiesta/risposta: i messaggi semplicemente scorrono quando c’è qualcosa da inviare.</p>
 
   <h2>ws vs wss</h2>
-  <p>Gli URL WebSocket usano un proprio schema. <code>ws://</code> è una connessione non cifrata, e <code>wss://</code> è la versione cifrata, protetta con TLS esattamente come lo è <code>https://</code>. In pratica dovresti usare sempre <strong>wss://</strong> in produzione — è cifrato ed è molto meno probabile che venga bloccato da proxy e reti aziendali che diffidano del traffico <code>ws://</code> in chiaro.</p>
+  <p>Gli URL WebSocket usano un proprio schema. <code>ws://</code> è una connessione non cifrata, e <code>wss://</code> è la versione cifrata, protetta con TLS esattamente come lo è <code>https://</code>. In pratica dovresti usare sempre <strong>wss://</strong> in produzione - è cifrato ed è molto meno probabile che venga bloccato da proxy e reti aziendali che diffidano del traffico <code>ws://</code> in chiaro.</p>
 
   <figure>
     <img src="/img/websocket-2026-code.jpg" alt="Codice sorgente HTML e JavaScript mostrato su uno schermo" width="1000" height="667" loading="lazy" />
@@ -38,22 +38,22 @@ const description = 'Un WebSocket mantiene una connessione aperta così che serv
   <h2>Quando usare un WebSocket (e quando no)</h2>
   <p>I WebSocket danno il meglio ogni volta che il server deve inviare dati al client nel momento in cui accadono:</p>
   <ul>
-    <li><strong>Chat e messaggistica</strong> — i messaggi compaiono nell’istante in cui vengono inviati.</li>
-    <li><strong>Dashboard e quotazioni dal vivo</strong> — ticker di borsa, metriche, risultati sportivi.</li>
-    <li><strong>Collaborazione</strong> — documenti e lavagne condivise in cui le modifiche si sincronizzano dal vivo.</li>
-    <li><strong>Giochi multiplayer</strong> — aggiornamenti di stato a bassa latenza in entrambe le direzioni.</li>
-    <li><strong>Notifiche</strong> — tutto ciò che l’utente deve vedere senza ricaricare.</li>
+    <li><strong>Chat e messaggistica</strong> - i messaggi compaiono nell’istante in cui vengono inviati.</li>
+    <li><strong>Dashboard e quotazioni dal vivo</strong> - ticker di borsa, metriche, risultati sportivi.</li>
+    <li><strong>Collaborazione</strong> - documenti e lavagne condivise in cui le modifiche si sincronizzano dal vivo.</li>
+    <li><strong>Giochi multiplayer</strong> - aggiornamenti di stato a bassa latenza in entrambe le direzioni.</li>
+    <li><strong>Notifiche</strong> - tutto ciò che l’utente deve vedere senza ricaricare.</li>
   </ul>
-  <p><em>Non</em> sono lo strumento giusto per tutto. Se il client si limita sempre a chiedere e il server sempre a rispondere — caricare una pagina, inviare un modulo, recuperare un record — una semplice API HTTP è più semplice, cacheabile e più facile da scalare. Ricorri a un WebSocket quando è il <em>server</em> a dover avviare la conversazione.</p>
+  <p><em>Non</em> sono lo strumento giusto per tutto. Se il client si limita sempre a chiedere e il server sempre a rispondere - caricare una pagina, inviare un modulo, recuperare un record - una semplice API HTTP è più semplice, cacheabile e più facile da scalare. Ricorri a un WebSocket quando è il <em>server</em> a dover avviare la conversazione.</p>
 
   <h2>WebSocket vs polling vs SSE</h2>
-  <p>Prima dei WebSocket, il trucco abituale per i dati «dal vivo» era il <strong>polling</strong>: il client chiede al server «c’è qualcosa di nuovo?» ogni pochi secondi. Funziona, ma è uno spreco — la maggior parte delle richieste torna vuota, e gli aggiornamenti restano comunque in ritardo dell’intervallo di polling. Un WebSocket sostituisce tutto questo con una connessione aperta e zero richieste sprecate.</p>
+  <p>Prima dei WebSocket, il trucco abituale per i dati «dal vivo» era il <strong>polling</strong>: il client chiede al server «c’è qualcosa di nuovo?» ogni pochi secondi. Funziona, ma è uno spreco - la maggior parte delle richieste torna vuota, e gli aggiornamenti restano comunque in ritardo dell’intervallo di polling. Un WebSocket sostituisce tutto questo con una connessione aperta e zero richieste sprecate.</p>
   <p>Ci sono anche i <strong>Server-Sent Events (SSE)</strong>, che ti danno un flusso a senso unico dal server al client su HTTP semplice. SSE è più semplice quando ti serve solo che il server invii (un feed di notizie, una barra di avanzamento). Scegli un WebSocket quando hai bisogno che i messaggi scorrano in <em>entrambe</em> le direzioni, e SSE quando una sola direzione basta.</p>
 
   <h2>Una nota sull’infrastruttura</h2>
   <p>Poiché un WebSocket tiene aperta una connessione, cambia il modo in cui distribuisci. Le connessioni di lunga durata hanno bisogno di un server e di un <a href="/it/e/blog/2026-06-26-what-is-a-reverse-proxy.html">reverse proxy</a> configurati per tenerle in vita anziché chiuderle per timeout, e scalare molte connessioni simultanee è un problema di progettazione a sé. È questo il compromesso: un WebSocket ti offre una comunicazione istantanea e bidirezionale in cambio del mantenere uno stato aperto sul server.</p>
 
   <h2>In sintesi</h2>
-  <p>Un WebSocket è una connessione unica, persistente e bidirezionale che permette a server e browser di scambiarsi messaggi nel momento in cui accadono — senza il ritmo chiedi-e-attendi dell’HTTP. Nasce come una richiesta HTTP che viene aggiornata (upgrade), poi trasporta frame leggere in entrambe le direzioni. Usa <code>wss://</code>, ricorri a esso quando il server deve inviare dati dal vivo, e resta su una normale API HTTP quando bastano una semplice richiesta e risposta.</p>
+  <p>Un WebSocket è una connessione unica, persistente e bidirezionale che permette a server e browser di scambiarsi messaggi nel momento in cui accadono - senza il ritmo chiedi-e-attendi dell’HTTP. Nasce come una richiesta HTTP che viene aggiornata (upgrade), poi trasporta frame leggere in entrambe le direzioni. Usa <code>wss://</code>, ricorri a esso quando il server deve inviare dati dal vivo, e resta su una normale API HTTP quando bastano una semplice richiesta e risposta.</p>
   </div>
 </Base>

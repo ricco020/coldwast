@@ -29,7 +29,7 @@ function catAvatar(cats=''){
   return AV.lambda;
 }
 ---
-<Base title={`${c.label} — Coldwast guides`} description={`All Coldwast guides on ${c.label}. Original, regularly-updated programming references.`} path={`/e/c/${c.slug}.html`}>
+<Base title={`${c.label} - Coldwast guides`} description={`All Coldwast guides on ${c.label}. Original, regularly-updated programming references.`} path={`/e/c/${c.slug}.html`}>
   <div class="wrap">
     <div class="cathead">
       <p class="k">Category</p>
@@ -47,7 +47,7 @@ function catAvatar(cats=''){
             <div>
               <p class="by"><a href="/about.html">Coldwast</a> <em>wrote</em></p>
               <h3><a href={s.href} set:html={s.title} /></h3>
-              <p class="ex"><span class="date">{s.date}</span> in {s.cats} — {s.dek}</p>
+              <p class="ex"><span class="date">{s.date}</span> in {s.cats} - {s.dek}</p>
               <a class="more" href={s.href}>Read more…</a>
               <div class="metab"><span>📅 {s.read}</span><span>↬ Updated 2026</span></div>
             </div>

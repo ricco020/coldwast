@@ -5,7 +5,7 @@ const SITE = 'https://coldwa.st';
 const HEADER = `# coldwa.st
 
 > Independent, community-maintained programming resources. Original, regularly
-> updated guides on Haskell and the modern Haskell developer toolchain — the
+> updated guides on Haskell and the modern Haskell developer toolchain - the
 > language itself, GHC, GHCup, Cabal, Stack and the Haskell Language Server.
 > Written to be clear and practical for people learning or working in Haskell.
 > Also includes plain-language introductions to core programming concepts

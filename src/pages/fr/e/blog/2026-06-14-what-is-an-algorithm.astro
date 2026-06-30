@@ -14,27 +14,27 @@ const description = 'Un algorithme est une procédure finie, étape par étape, 
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&q=80&auto=format&fit=crop" alt="Des flux de code vert sur un écran sombre" width="1200" height="420" loading="eager" />
-    <figcaption>Des flux de code à l’écran — un algorithme est la logique étape par étape qu’exécute un code comme celui-ci.</figcaption>
+    <figcaption>Des flux de code à l’écran - un algorithme est la logique étape par étape qu’exécute un code comme celui-ci.</figcaption>
   </figure>
 
-  <p>C’est l’un des mots les plus employés dans la tech — « l’algorithme décide », « un algorithme plus rapide », « le fil algorithmique » — et l’un des moins précisément expliqués. Un <strong>algorithme</strong> est une idée simple et fondamentale qui se trouve sous tout l’informatique. Ce guide explique ce qu’est un algorithme, ses propriétés clés, des exemples tirés de la vie quotidienne et du code, pourquoi l’efficacité compte, et en quoi il diffère d’un programme.</p>
+  <p>C’est l’un des mots les plus employés dans la tech - « l’algorithme décide », « un algorithme plus rapide », « le fil algorithmique » - et l’un des moins précisément expliqués. Un <strong>algorithme</strong> est une idée simple et fondamentale qui se trouve sous tout l’informatique. Ce guide explique ce qu’est un algorithme, ses propriétés clés, des exemples tirés de la vie quotidienne et du code, pourquoi l’efficacité compte, et en quoi il diffère d’un programme.</p>
 
   <h2>La définition courte</h2>
-  <p><strong>Un algorithme est une procédure finie, étape par étape, pour résoudre un problème ou produire une sortie à partir d’une entrée.</strong> Donnez-lui la même entrée et suivez les étapes exactement, et il produit le même résultat à chaque fois. C’est une recette précise — indépendante de tout langage de programmation particulier.</p>
+  <p><strong>Un algorithme est une procédure finie, étape par étape, pour résoudre un problème ou produire une sortie à partir d’une entrée.</strong> Donnez-lui la même entrée et suivez les étapes exactement, et il produit le même résultat à chaque fois. C’est une recette précise - indépendante de tout langage de programmation particulier.</p>
 
   <h2>Une analogie du quotidien</h2>
-  <p>Une recette de cuisine est un algorithme : une liste définie d’étapes (« hacher les oignons, chauffer l’huile, ajouter et remuer pendant 5 minutes ») qui transforme des entrées (les ingrédients) en une sortie (un plat). De même que les instructions de la division posée apprise à l’école, ou les étapes pour monter un meuble en kit. L’idée précède largement les ordinateurs — le mot vient du mathématicien du IXe siècle al-Khwarizmi.</p>
+  <p>Une recette de cuisine est un algorithme : une liste définie d’étapes (« hacher les oignons, chauffer l’huile, ajouter et remuer pendant 5 minutes ») qui transforme des entrées (les ingrédients) en une sortie (un plat). De même que les instructions de la division posée apprise à l’école, ou les étapes pour monter un meuble en kit. L’idée précède largement les ordinateurs - le mot vient du mathématicien du IXe siècle al-Khwarizmi.</p>
 
   <h2>Les propriétés clés</h2>
   <ul>
-    <li><strong>Des étapes bien définies</strong> — chaque instruction est claire et sans ambiguïté.</li>
-    <li><strong>Fini</strong> — il doit se terminer après un nombre limité d’étapes, et non tourner indéfiniment.</li>
-    <li><strong>Entrée et sortie définies</strong> — il prend zéro ou plusieurs entrées et produit un résultat.</li>
-    <li><strong>Effectif</strong> — chaque étape est assez élémentaire pour être réellement exécutée.</li>
+    <li><strong>Des étapes bien définies</strong> - chaque instruction est claire et sans ambiguïté.</li>
+    <li><strong>Fini</strong> - il doit se terminer après un nombre limité d’étapes, et non tourner indéfiniment.</li>
+    <li><strong>Entrée et sortie définies</strong> - il prend zéro ou plusieurs entrées et produit un résultat.</li>
+    <li><strong>Effectif</strong> - chaque étape est assez élémentaire pour être réellement exécutée.</li>
   </ul>
   <p>Un algorithme est aussi <em>indépendant du langage</em> : le même algorithme de tri peut être écrit en Python, Haskell, Rust ou à la main sur papier. L’algorithme est l’<em>idée</em> ; le code en est une expression.</p>
 
-  <figure><img src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=1200&q=80&auto=format&fit=crop" alt="Du code source coloré sur un moniteur" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Du code source coloré sur un moniteur — le code est une expression concrète d’un algorithme, l’idée sous-jacente étape par étape.</figcaption></figure>
+  <figure><img src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=1200&q=80&auto=format&fit=crop" alt="Du code source coloré sur un moniteur" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Du code source coloré sur un moniteur - le code est une expression concrète d’un algorithme, l’idée sous-jacente étape par étape.</figcaption></figure>
 
   <h2>Un exemple concret</h2>
   <p>Pour trouver le plus grand nombre dans une liste, l’algorithme est :</p>
@@ -42,19 +42,19 @@ const description = 'Un algorithme est une procédure finie, étape par étape, 
 2. Look at each remaining number in turn.
 3. If it is bigger than the largest so far, make it the new largest.
 4. After the last number, the largest so far is the answer.</code></pre>
-  <p>C’est un algorithme complet — écrit en clair, sans code requis. Le traduire dans un langage est une étape séparée et mécanique.</p>
+  <p>C’est un algorithme complet - écrit en clair, sans code requis. Le traduire dans un langage est une étape séparée et mécanique.</p>
 
   <h2>Pourquoi l’efficacité compte : Big-O</h2>
-  <p>Différents algorithmes peuvent résoudre le même problème avec des quantités de travail très différentes. La <strong>notation Big-O</strong> décrit comment le coût d’un algorithme croît à mesure que l’entrée grandit. Parcourir une liste une fois pour trouver la plus grande valeur est en <code>O(n)</code> — le travail croît proportionnellement au nombre d’éléments. Une approche naïve qui comparerait chaque paire serait en <code>O(n²)</code> — bien plus lente pour de grandes entrées. Choisir un meilleur algorithme compte souvent plus qu’un ordinateur plus rapide : un tri en <code>O(n log n)</code> battra un tri en <code>O(n²)</code> sur une grande liste à chaque fois.</p>
+  <p>Différents algorithmes peuvent résoudre le même problème avec des quantités de travail très différentes. La <strong>notation Big-O</strong> décrit comment le coût d’un algorithme croît à mesure que l’entrée grandit. Parcourir une liste une fois pour trouver la plus grande valeur est en <code>O(n)</code> - le travail croît proportionnellement au nombre d’éléments. Une approche naïve qui comparerait chaque paire serait en <code>O(n²)</code> - bien plus lente pour de grandes entrées. Choisir un meilleur algorithme compte souvent plus qu’un ordinateur plus rapide : un tri en <code>O(n log n)</code> battra un tri en <code>O(n²)</code> sur une grande liste à chaque fois.</p>
 
   <h2>Algorithme vs programme</h2>
-  <p>Ils sont liés mais ne sont pas la même chose. Un <strong>algorithme</strong> est la méthode abstraite — les étapes. Un <strong>programme</strong> est une implémentation concrète d’un ou plusieurs algorithmes dans un langage précis, avec tous les détails du monde réel (gestion des entrées, erreurs, mémoire) renseignés. On conçoit d’abord l’algorithme, puis on l’implémente. Le même algorithme peut alimenter de nombreux programmes.</p>
+  <p>Ils sont liés mais ne sont pas la même chose. Un <strong>algorithme</strong> est la méthode abstraite - les étapes. Un <strong>programme</strong> est une implémentation concrète d’un ou plusieurs algorithmes dans un langage précis, avec tous les détails du monde réel (gestion des entrées, erreurs, mémoire) renseignés. On conçoit d’abord l’algorithme, puis on l’implémente. Le même algorithme peut alimenter de nombreux programmes.</p>
 
   <h2>FAQ</h2>
   <p><strong>Un algorithme est-il la même chose que du code ?</strong> Non. L’algorithme est l’ensemble d’étapes indépendant du langage ; le code en est une implémentation. Le même algorithme peut s’écrire dans de nombreux langages.</p>
   <p><strong>Qu’est-ce qui rend un algorithme « bon » ?</strong> La correction d’abord (il produit la bonne sortie pour chaque entrée valide), puis l’efficacité (il utilise une quantité acceptable de temps et de mémoire, décrite par le Big-O), puis la clarté.</p>
-  <p><strong>Qu’est-ce que la notation Big-O ?</strong> Une façon de décrire comment le temps d’exécution ou la mémoire d’un algorithme croît avec la taille de l’entrée — par ex. <code>O(n)</code> linéaire, <code>O(n log n)</code>, <code>O(n²)</code> quadratique. Elle compare les algorithmes indépendamment de la machine exacte.</p>
-  <p><strong>Faut-il des maths pour comprendre les algorithmes ?</strong> Une logique de base suffit pour commencer. Ceux du quotidien — recherche, tri, comptage — sont intuitifs ; les maths deviennent utiles quand on analyse et compare leur efficacité.</p>
+  <p><strong>Qu’est-ce que la notation Big-O ?</strong> Une façon de décrire comment le temps d’exécution ou la mémoire d’un algorithme croît avec la taille de l’entrée - par ex. <code>O(n)</code> linéaire, <code>O(n log n)</code>, <code>O(n²)</code> quadratique. Elle compare les algorithmes indépendamment de la machine exacte.</p>
+  <p><strong>Faut-il des maths pour comprendre les algorithmes ?</strong> Une logique de base suffit pour commencer. Ceux du quotidien - recherche, tri, comptage - sont intuitifs ; les maths deviennent utiles quand on analyse et compare leur efficacité.</p>
 
   <p>Les algorithmes sont le « quoi faire » ; un langage comme Haskell ou les données transportées par une <a href="/fr/e/blog/2026-06-14-what-is-an-api.html">API</a> sont le « comment » et le « avec quoi ». Parcourez d’autres explications claires dans notre <a href="/fr/e/">index des guides</a>.</p>
 

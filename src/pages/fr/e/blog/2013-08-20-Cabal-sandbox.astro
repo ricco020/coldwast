@@ -2,7 +2,7 @@
 import Base from '../../../../layouts/Base.astro';
 const path = '/fr/e/blog/2013-08-20-Cabal-sandbox.html';
 const title = 'Les sandboxes Cabal : ce qu’elles étaient et ce qui les a remplacées (mis à jour)';
-const description = 'Un guide moderne, mis à jour par la communauté, sur les sandboxes Cabal — l’isolation des dépendances par projet introduite dans cabal-install 1.18 — et le workflow v2-build façon nix qui les a remplacées dans la chaîne d’outils Haskell d’aujourd’hui.';
+const description = 'Un guide moderne, mis à jour par la communauté, sur les sandboxes Cabal - l’isolation des dépendances par projet introduite dans cabal-install 1.18 - et le workflow v2-build façon nix qui les a remplacées dans la chaîne d’outils Haskell d’aujourd’hui.';
 ---
 <Base title={title} description={description} path={path} type="article" lang="fr"
   image="https://coldwa.st/img/cabal-sandbox.svg" datePublished="2013-08-20" dateModified="2026-06-13">
@@ -14,14 +14,14 @@ const description = 'Un guide moderne, mis à jour par la communauté, sur les s
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="/img/cabal-sandbox.svg" alt="Trois sandboxes Cabal isolées, chacune contenant son propre ensemble de paquets, à côté d’un terminal exécutant cabal sandbox init" width="1200" height="420" />
-    <figcaption>L’isolation des dépendances par projet — l’idée qu’ont introduite les sandboxes, désormais le comportement par défaut.</figcaption>
+    <figcaption>L’isolation des dépendances par projet - l’idée qu’ont introduite les sandboxes, désormais le comportement par défaut.</figcaption>
   </figure>
 
-  <div class="note">Ceci est une réécriture mise à jour, maintenue par la communauté, d’un sujet pour lequel ce domaine était historiquement connu. C’est un contenu original, non rédigé par l’ancien propriétaire du domaine ni affilié à lui. <code>cabal sandbox</code> lui-même appartient désormais à l’histoire — si vous voulez juste le workflow moderne, passez directement à <a href="#today">quoi utiliser aujourd’hui</a>.</div>
+  <div class="note">Ceci est une réécriture mise à jour, maintenue par la communauté, d’un sujet pour lequel ce domaine était historiquement connu. C’est un contenu original, non rédigé par l’ancien propriétaire du domaine ni affilié à lui. <code>cabal sandbox</code> lui-même appartient désormais à l’histoire - si vous voulez juste le workflow moderne, passez directement à <a href="#today">quoi utiliser aujourd’hui</a>.</div>
 
-  <p>Quand <code>cabal sandbox</code> est arrivé dans cabal-install <strong>1.18</strong> en août 2013, il a corrigé la chose la plus pénible du développement Haskell de l’époque : la base de paquets globale. Avant les sandboxes, chaque <code>cabal install</code> écrivait dans un store <code>~/.cabal</code> partagé unique. Installez deux projets nécessitant des versions différentes de la même bibliothèque et vous obteniez le fameux « enfer des dépendances » — une base globale corrompue qui se terminait souvent par <code>rm -rf ~/.ghc ~/.cabal</code> et un nouveau départ.</p>
+  <p>Quand <code>cabal sandbox</code> est arrivé dans cabal-install <strong>1.18</strong> en août 2013, il a corrigé la chose la plus pénible du développement Haskell de l’époque : la base de paquets globale. Avant les sandboxes, chaque <code>cabal install</code> écrivait dans un store <code>~/.cabal</code> partagé unique. Installez deux projets nécessitant des versions différentes de la même bibliothèque et vous obteniez le fameux « enfer des dépendances » - une base globale corrompue qui se terminait souvent par <code>rm -rf ~/.ghc ~/.cabal</code> et un nouveau départ.</p>
 
-  <p>Les sandboxes ont rendu les dépendances <strong>propres à chaque projet</strong>. Ce principe n’a jamais disparu — mais le mécanisme, oui. Voici le tableau complet, du fonctionnement des sandboxes au workflow façon nix qui les a remplacées.</p>
+  <p>Les sandboxes ont rendu les dépendances <strong>propres à chaque projet</strong>. Ce principe n’a jamais disparu - mais le mécanisme, oui. Voici le tableau complet, du fonctionnement des sandboxes au workflow façon nix qui les a remplacées.</p>
 
   <h2>Ce qu’était réellement une sandbox</h2>
   <p>Une sandbox était une base de paquets locale au projet. Vous en créiez une dans le répertoire de votre projet :</p>
@@ -34,7 +34,7 @@ Creating a new sandbox at
   <p>À partir de là, <code>cabal install</code> et <code>cabal build</code> exécutés dans ce répertoire utilisaient <code>.cabal-sandbox/</code> au lieu du store global. Deux projets pouvaient dépendre de versions conflictuelles de <code>aeson</code> ou <code>text</code> sans jamais interférer, car chacun avait sa propre base isolée.</p>
 
   <h3>Dépendances source locales</h3>
-  <p>L’autre fonctionnalité réellement utile était <code>add-source</code>, qui permettait à une sandbox d’intégrer une bibliothèque directement depuis un dépôt local — inestimable quand on bricole une bibliothèque et une application ensemble :</p>
+  <p>L’autre fonctionnalité réellement utile était <code>add-source</code>, qui permettait à une sandbox d’intégrer une bibliothèque directement depuis un dépôt local - inestimable quand on bricole une bibliothèque et une application ensemble :</p>
   <pre><code>$ cabal sandbox add-source ../my-library
 $ cabal install --dependencies-only
 $ cabal build</code></pre>
@@ -43,14 +43,14 @@ $ cabal build</code></pre>
   <h2>Pourquoi les sandboxes ont fini par être retirées</h2>
   <p>Les sandboxes résolvaient l’isolation mais laissaient deux problèmes non résolus :</p>
   <ul>
-    <li><strong>Aucun partage entre projets.</strong> Chaque sandbox recompilait le monde de zéro. Dix projets dépendant de <code>lens</code> signifiaient dix builds distincts de <code>lens</code> et de son énorme arbre de dépendances — lent et gourmand en disque.</li>
+    <li><strong>Aucun partage entre projets.</strong> Chaque sandbox recompilait le monde de zéro. Dix projets dépendant de <code>lens</code> signifiaient dix builds distincts de <code>lens</code> et de son énorme arbre de dépendances - lent et gourmand en disque.</li>
     <li><strong>Aucune reproductibilité entre machines.</strong> Une sandbox capturait <em>où</em> vivaient les paquets, pas un plan précis et reproductible de <em>quelles versions exactes</em> seraient choisies. Deux développeurs exécutant les mêmes commandes à une semaine d’intervalle pouvaient quand même obtenir des builds différents.</li>
   </ul>
   <p>La solution, empruntée conceptuellement à Nix, fut de rendre les builds <strong>adressés par contenu et partagés globalement</strong> : construire une combinaison paquet-version-options donnée une seule fois, la stocker sous un hash dans un store global immuable, et laisser chaque projet ayant besoin de cette combinaison exacte la réutiliser. C’est cela les « builds locaux façon nix », apparus sous le nom de <code>new-build</code> dans Cabal 2.0.</p>
 
   <h2 id="today">Quoi utiliser aujourd’hui (2026)</h2>
   <figure><img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80&auto=format&fit=crop" alt="Du code source sur un écran d’ordinateur" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Du code source sur un écran d’ordinateur</figcaption></figure>
-  <p><code>cabal sandbox</code> a été déprécié durant la série Cabal 2.x et entièrement supprimé dans les versions ultérieures. Le workflow moderne par défaut du <code>cabal-install</code> actuel ne nécessite <strong>aucune étape d’init</strong> — l’isolation est automatique :</p>
+  <p><code>cabal sandbox</code> a été déprécié durant la série Cabal 2.x et entièrement supprimé dans les versions ultérieures. Le workflow moderne par défaut du <code>cabal-install</code> actuel ne nécessite <strong>aucune étape d’init</strong> - l’isolation est automatique :</p>
   <pre><code># In any project directory with a .cabal file:
 $ cabal build          # nix-style local build (v2 is the default now)
 $ cabal run
@@ -78,19 +78,19 @@ source-repository-package
   <h3>Pinning de versions reproductible</h3>
   <p>Pour la reproductibilité que les sandboxes n’ont jamais offerte, générez un fichier de gel qui verrouille chaque version transitive :</p>
   <pre><code>$ cabal freeze        # writes cabal.project.freeze
-# commit it — every machine now resolves the identical plan</code></pre>
+# commit it - every machine now resolves the identical plan</code></pre>
 
   <h2>Et Stack dans tout ça ?</h2>
-  <p>Stack aborde les mêmes objectifs sous un autre angle : au lieu de résoudre les versions par projet, il construit contre des <em>snapshots</em> curés (les resolvers Stackage comme <code>lts-22.x</code>) où tout un ensemble de paquets est connu pour compiler ensemble, et partage les builds globalement par snapshot. Les deux outils sont sains et largement utilisés en 2026 ; la répartition pratique est en gros « je veux la chaîne d’outils standard et un contrôle fin » (Cabal) contre « je veux un ensemble curé et fiable clé en main » (Stack). Ni l’un ni l’autre n’utilise les sandboxes — le concept est pleinement dépassé des deux côtés.</p>
+  <p>Stack aborde les mêmes objectifs sous un autre angle : au lieu de résoudre les versions par projet, il construit contre des <em>snapshots</em> curés (les resolvers Stackage comme <code>lts-22.x</code>) où tout un ensemble de paquets est connu pour compiler ensemble, et partage les builds globalement par snapshot. Les deux outils sont sains et largement utilisés en 2026 ; la répartition pratique est en gros « je veux la chaîne d’outils standard et un contrôle fin » (Cabal) contre « je veux un ensemble curé et fiable clé en main » (Stack). Ni l’un ni l’autre n’utilise les sandboxes - le concept est pleinement dépassé des deux côtés.</p>
 
   <h2>Aide-mémoire de migration</h2>
-  <pre><code>cabal sandbox init                 →  (nothing — just `cabal build`)
+  <pre><code>cabal sandbox init                 →  (nothing - just `cabal build`)
 cabal sandbox add-source ../lib    →  packages: . ../lib   (in cabal.project)
 cabal install --dependencies-only  →  cabal build --only-dependencies
 .cabal-sandbox/                    →  dist-newstyle/ (local) + ~/.cabal/store (shared)
 cabal.sandbox.config               →  cabal.project (+ cabal.project.freeze)</code></pre>
 
-  <p>La leçon qu’ont enseignée les sandboxes — ne jamais polluer un état mutable global, isoler par projet — l’a emporté si complètement qu’elle est devenue invisible : c’est simplement la façon dont <code>cabal build</code> se comporte. Si vous lisez ceci parce qu’un vieux lien ou tutoriel vous a pointé vers <code>cabal sandbox init</code>, vous pouvez sans crainte oublier cette commande. Faites simplement <code>cabal build</code>.</p>
+  <p>La leçon qu’ont enseignée les sandboxes - ne jamais polluer un état mutable global, isoler par projet - l’a emporté si complètement qu’elle est devenue invisible : c’est simplement la façon dont <code>cabal build</code> se comporte. Si vous lisez ceci parce qu’un vieux lien ou tutoriel vous a pointé vers <code>cabal sandbox init</code>, vous pouvez sans crainte oublier cette commande. Faites simplement <code>cabal build</code>.</p>
 
   <hr />
   <p class="meta">À lire aussi : <a href="/fr/e/blog/2017-09-09-Cabal-2-0.html">Cabal 2.0 et les builds façon nix</a> · <a href="/fr/e/blog/2011-08-22-GSoC-Final.html">Paralléliser cabal-install</a> · <a href="/fr/e/">tous les guides</a></p>

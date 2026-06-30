@@ -14,24 +14,24 @@ const description = 'Git is a distributed version-control system that tracks eve
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80&auto=format&fit=crop" alt="Lines of source code on a dark screen" width="1200" height="420" loading="eager" />
-    <figcaption>Lines of source code on a screen — Git records the full history of changes to code like this.</figcaption>
+    <figcaption>Lines of source code on a screen - Git records the full history of changes to code like this.</figcaption>
   </figure>
 
   <p>If you write code, you will meet <strong>Git</strong> within a day. It is the tool nearly every software project uses to track changes, and the foundation under GitHub, GitLab and the modern developer workflow. This guide explains what Git is, the handful of concepts that make it click, why it matters, and how it differs from GitHub.</p>
 
   <h2>The short definition</h2>
-  <p><strong>Git is a distributed version-control system: it records the history of changes to a set of files so you can review, branch, merge, collaborate and roll back.</strong> Created by Linus Torvalds in 2005 to manage the Linux kernel, it is now the de-facto standard. &quot;Distributed&quot; means every copy of the project carries its full history — you can work, commit and view history entirely offline.</p>
+  <p><strong>Git is a distributed version-control system: it records the history of changes to a set of files so you can review, branch, merge, collaborate and roll back.</strong> Created by Linus Torvalds in 2005 to manage the Linux kernel, it is now the de-facto standard. &quot;Distributed&quot; means every copy of the project carries its full history - you can work, commit and view history entirely offline.</p>
 
   <h2>The core concepts</h2>
   <ul>
-    <li><strong>Repository (repo)</strong> — the project folder plus its entire history, stored in a hidden <code>.git</code> directory.</li>
-    <li><strong>Commit</strong> — a saved snapshot of your files at a point in time, with a message describing the change. History is a chain of commits.</li>
-    <li><strong>Branch</strong> — a movable pointer that lets you develop a feature in isolation without disturbing the main line (usually <code>main</code>).</li>
-    <li><strong>Merge</strong> — combining the changes from one branch into another.</li>
-    <li><strong>Remote</strong> — a shared copy of the repo hosted elsewhere (e.g. on GitHub) that you <code>push</code> to and <code>pull</code> from.</li>
+    <li><strong>Repository (repo)</strong> - the project folder plus its entire history, stored in a hidden <code>.git</code> directory.</li>
+    <li><strong>Commit</strong> - a saved snapshot of your files at a point in time, with a message describing the change. History is a chain of commits.</li>
+    <li><strong>Branch</strong> - a movable pointer that lets you develop a feature in isolation without disturbing the main line (usually <code>main</code>).</li>
+    <li><strong>Merge</strong> - combining the changes from one branch into another.</li>
+    <li><strong>Remote</strong> - a shared copy of the repo hosted elsewhere (e.g. on GitHub) that you <code>push</code> to and <code>pull</code> from.</li>
   </ul>
 
-  <figure><img src="https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=1200&q=80&auto=format&fit=crop" alt="A terminal prompt on a screen" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>A terminal prompt — Git is most often driven from the command line, though editors and GUIs wrap it too.</figcaption></figure>
+  <figure><img src="https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=1200&q=80&auto=format&fit=crop" alt="A terminal prompt on a screen" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>A terminal prompt - Git is most often driven from the command line, though editors and GUIs wrap it too.</figcaption></figure>
 
   <h2>The everyday workflow</h2>
   <p>The loop most developers run dozens of times a day:</p>
@@ -44,26 +44,26 @@ git push             # send your commits to the shared remote</code></pre>
 
   <h2>Why Git matters</h2>
   <ul>
-    <li><strong>History and undo</strong> — every change is recorded, so you can see who changed what, when and why, and roll back a mistake.</li>
-    <li><strong>Collaboration</strong> — many people can work on the same project in parallel on branches, then merge safely.</li>
-    <li><strong>Safe experimentation</strong> — branch off, try something, throw it away if it fails — the main line is untouched.</li>
-    <li><strong>It is everywhere</strong> — open source, companies, CI/CD pipelines and deployment all assume Git.</li>
+    <li><strong>History and undo</strong> - every change is recorded, so you can see who changed what, when and why, and roll back a mistake.</li>
+    <li><strong>Collaboration</strong> - many people can work on the same project in parallel on branches, then merge safely.</li>
+    <li><strong>Safe experimentation</strong> - branch off, try something, throw it away if it fails - the main line is untouched.</li>
+    <li><strong>It is everywhere</strong> - open source, companies, CI/CD pipelines and deployment all assume Git.</li>
   </ul>
 
   <h2>Git vs GitHub</h2>
-  <p>They are constantly confused. <strong>Git</strong> is the version-control tool that runs on your machine. <strong>GitHub</strong> (like GitLab or Bitbucket) is a <em>hosting service</em> that stores Git repositories online and adds collaboration features — pull requests, issues, access control, CI. You can use Git with no GitHub account at all; GitHub is one popular place to put a Git remote, not Git itself.</p>
+  <p>They are constantly confused. <strong>Git</strong> is the version-control tool that runs on your machine. <strong>GitHub</strong> (like GitLab or Bitbucket) is a <em>hosting service</em> that stores Git repositories online and adds collaboration features - pull requests, issues, access control, CI. You can use Git with no GitHub account at all; GitHub is one popular place to put a Git remote, not Git itself.</p>
 
   <h2>The honest learning curve</h2>
-  <p>Git is powerful, and its command set can feel confusing at first — merges can conflict, and a few commands can rewrite history in ways that surprise beginners. The good news: 90% of daily work uses just <code>clone</code>, <code>add</code>, <code>commit</code>, <code>push</code>, <code>pull</code> and <code>branch</code>. Learn those well, and pick up the rest (rebase, stash, reset) when you actually need them.</p>
+  <p>Git is powerful, and its command set can feel confusing at first - merges can conflict, and a few commands can rewrite history in ways that surprise beginners. The good news: 90% of daily work uses just <code>clone</code>, <code>add</code>, <code>commit</code>, <code>push</code>, <code>pull</code> and <code>branch</code>. Learn those well, and pick up the rest (rebase, stash, reset) when you actually need them.</p>
 
   <h2>FAQ</h2>
   <p><strong>Is Git the same as GitHub?</strong> No. Git is the version-control software on your computer; GitHub is an online service that hosts Git repositories and adds collaboration tools. Git works without GitHub.</p>
   <p><strong>What is a commit?</strong> A saved snapshot of your project at a moment in time, with a message describing what changed. A project&#39;s history is a sequence of commits.</p>
-  <p><strong>Do I have to use the command line?</strong> No — editors (VS Code) and GUI clients wrap Git, and most <a href="/e/blog/2026-06-18-what-is-an-ide.html">IDEs</a> build it in — but the command line is universal and worth learning, since every tutorial and CI system speaks it.</p>
+  <p><strong>Do I have to use the command line?</strong> No - editors (VS Code) and GUI clients wrap Git, and most <a href="/e/blog/2026-06-18-what-is-an-ide.html">IDEs</a> build it in - but the command line is universal and worth learning, since every tutorial and CI system speaks it.</p>
   <p><strong>What does &quot;distributed&quot; mean?</strong> Every clone of a Git repository contains the full history, so you can commit, branch and browse history offline. There is no single central copy you depend on to work.</p>
 
   <p>Git tracks the code; the <a href="/e/blog/2026-06-14-what-is-an-algorithm.html">algorithms</a> and <a href="/e/blog/2026-06-14-what-is-an-api.html">APIs</a> are what that code expresses. Browse more clear explainers in our <a href="/e/">guides index</a>.</p>
 
-  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about Git. Commands reflect standard Git behaviour — verify against the official Git documentation for details and edge cases.</div>
+  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about Git. Commands reflect standard Git behaviour - verify against the official Git documentation for details and edge cases.</div>
   </div>
 </Base>

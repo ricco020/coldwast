@@ -2,7 +2,7 @@
 import Base from '../../../../layouts/Base.astro';
 const path = '/fr/e/blog/2026-06-14-lazy-evaluation-haskell.html';
 const title = 'L’évaluation paresseuse en Haskell, expliquée (2026)';
-const description = 'L’évaluation paresseuse signifie que Haskell calcule une valeur seulement quand elle est réellement nécessaire — pas quand elle est définie. Ce qu’est l’évaluation paresseuse, les thunks, pourquoi elle permet des structures de données infinies, le piège des fuites de mémoire et comment forcer la rigueur avec seq et BangPatterns.';
+const description = 'L’évaluation paresseuse signifie que Haskell calcule une valeur seulement quand elle est réellement nécessaire - pas quand elle est définie. Ce qu’est l’évaluation paresseuse, les thunks, pourquoi elle permet des structures de données infinies, le piège des fuites de mémoire et comment forcer la rigueur avec seq et BangPatterns.';
 ---
 <Base title={title} description={description} path={path} type="article" lang="fr"
   image="https://images.pexels.com/photos/2004161/pexels-photo-2004161.jpeg?auto=compress&cs=tinysrgb&w=1200" datePublished="2026-06-14" dateModified="2026-06-14">
@@ -14,31 +14,31 @@ const description = 'L’évaluation paresseuse signifie que Haskell calcule une
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.pexels.com/photos/2004161/pexels-photo-2004161.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Du code source coloré à l'écran" width="1200" height="420" loading="eager" />
-    <figcaption>Du code source coloré à l'écran — l'évaluation paresseuse décide quand un code comme celui-ci calcule réellement une valeur.</figcaption>
+    <figcaption>Du code source coloré à l'écran - l'évaluation paresseuse décide quand un code comme celui-ci calcule réellement une valeur.</figcaption>
   </figure>
 
-  <p>La plupart des langages sont <strong>stricts</strong> : une expression est évaluée dès qu’elle est liée à un nom. Haskell est différent — il est <strong>paresseux</strong> (plus précisément <em>non strict</em>) par défaut : une expression n’est pas évaluée tant que son résultat n’est pas véritablement nécessaire. Ce seul choix de conception est derrière certains des pouvoirs les plus distinctifs de Haskell <em>et</em> son piège le plus notoire. Ce guide explique ce qu’est l’évaluation paresseuse, comment fonctionnent les thunks, ce qu’elle vous apporte, et comment la désactiver quand il le faut.</p>
+  <p>La plupart des langages sont <strong>stricts</strong> : une expression est évaluée dès qu’elle est liée à un nom. Haskell est différent - il est <strong>paresseux</strong> (plus précisément <em>non strict</em>) par défaut : une expression n’est pas évaluée tant que son résultat n’est pas véritablement nécessaire. Ce seul choix de conception est derrière certains des pouvoirs les plus distinctifs de Haskell <em>et</em> son piège le plus notoire. Ce guide explique ce qu’est l’évaluation paresseuse, comment fonctionnent les thunks, ce qu’elle vous apporte, et comment la désactiver quand il le faut.</p>
 
   <h2>L’idée en une phrase</h2>
-  <p>Sous l’évaluation paresseuse, lier une valeur ne la calcule pas — Haskell stocke un calcul différé (un <strong>thunk</strong>) et ne le force que lorsqu’un autre calcul exige le résultat. Si le résultat n’est jamais exigé, le travail n’est jamais fait.</p>
+  <p>Sous l’évaluation paresseuse, lier une valeur ne la calcule pas - Haskell stocke un calcul différé (un <strong>thunk</strong>) et ne le force que lorsqu’un autre calcul exige le résultat. Si le résultat n’est jamais exigé, le travail n’est jamais fait.</p>
 
   <h2>Thunks : le calcul différé</h2>
-  <p>Quand vous écrivez <code>let x = expensive 42</code>, Haskell n’exécute <em>pas</em> <code>expensive</code>. Il crée un thunk — une promesse non évaluée de <code>expensive 42</code>. Le thunk n’est forcé que lorsque quelque chose a besoin de la valeur réelle de <code>x</code> (par exemple l’afficher ou faire du pattern matching dessus). Forcez-le une fois, et le résultat est mis en cache pour ne pas être recalculé.</p>
+  <p>Quand vous écrivez <code>let x = expensive 42</code>, Haskell n’exécute <em>pas</em> <code>expensive</code>. Il crée un thunk - une promesse non évaluée de <code>expensive 42</code>. Le thunk n’est forcé que lorsque quelque chose a besoin de la valeur réelle de <code>x</code> (par exemple l’afficher ou faire du pattern matching dessus). Forcez-le une fois, et le résultat est mis en cache pour ne pas être recalculé.</p>
   <pre><code>let x = expensive 42   -- nothing runs yet; x is a thunk
 let y = x + 1          -- still nothing; y is a thunk too
 print y                -- NOW x and y are forced and evaluated</code></pre>
 
   <h2>Ce que la paresse vous apporte</h2>
-  <figure><img src="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80&auto=format&fit=crop" alt="Lignes de code sur un écran sombre" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Lignes de code à l’écran — la paresse vous laisse définir des structures infinies et n’évaluer jamais que la partie que vous consommez.</figcaption></figure>
+  <figure><img src="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80&auto=format&fit=crop" alt="Lignes de code sur un écran sombre" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Lignes de code à l’écran - la paresse vous laisse définir des structures infinies et n’évaluer jamais que la partie que vous consommez.</figcaption></figure>
   <ul>
     <li><strong>Structures de données infinies.</strong> <code>[1..]</code> est la liste infinie des entiers. <code>take 5 [1..]</code> renvoie <code>[1,2,3,4,5]</code> parce que seuls les cinq premiers sont jamais exigés.</li>
-    <li><strong>Composition sans gaspillage.</strong> Vous pouvez enchaîner <code>filter</code> et <code>map</code> sur une liste énorme et Haskell fusionne le travail, ne produisant que ce que le consommateur tire — pas de listes intermédiaires complètes si elles ne sont jamais entièrement exigées.</li>
+    <li><strong>Composition sans gaspillage.</strong> Vous pouvez enchaîner <code>filter</code> et <code>map</code> sur une liste énorme et Haskell fusionne le travail, ne produisant que ce que le consommateur tire - pas de listes intermédiaires complètes si elles ne sont jamais entièrement exigées.</li>
     <li><strong>Court-circuit gratuit.</strong> <code>False &amp;&amp; undefined</code> renvoie <code>False</code> sans jamais toucher <code>undefined</code>, parce que le second argument n’est jamais forcé.</li>
-    <li><strong>Auto-référence.</strong> Des one-liners classiques comme <code>fibs = 0 : 1 : zipWith (+) fibs (tail fibs)</code> définissent le flux infini de Fibonacci — possible uniquement parce que la structure est construite paresseusement.</li>
+    <li><strong>Auto-référence.</strong> Des one-liners classiques comme <code>fibs = 0 : 1 : zipWith (+) fibs (tail fibs)</code> définissent le flux infini de Fibonacci - possible uniquement parce que la structure est construite paresseusement.</li>
   </ul>
 
   <h2>Le piège : les fuites de mémoire</h2>
-  <p>La paresse a un coût. Les thunks non évalués s’accumulent en mémoire, et une longue chaîne de calculs différés peut faire silencieusement gonfler l’usage du tas — une <strong>fuite de mémoire</strong> (space leak). Le cas d’école est un fold à gauche paresseux qui construit une tour géante de thunks <code>(((0 + 1) + 2) + 3) ...</code> au lieu d’additionner au fur et à mesure :</p>
+  <p>La paresse a un coût. Les thunks non évalués s’accumulent en mémoire, et une longue chaîne de calculs différés peut faire silencieusement gonfler l’usage du tas - une <strong>fuite de mémoire</strong> (space leak). Le cas d’école est un fold à gauche paresseux qui construit une tour géante de thunks <code>(((0 + 1) + 2) + 3) ...</code> au lieu d’additionner au fur et à mesure :</p>
   <pre><code>foldl (+) 0 [1..1000000]    -- builds a million thunks, may blow the stack
 foldl' (+) 0 [1..1000000]   -- strict fold: adds as it goes, constant space</code></pre>
   <p>La solution est de <strong>forcer l’évaluation</strong> là où ça compte. Recourez au fold à gauche strict <code>foldl'</code> (de <code>Data.List</code>) pour les accumulations.</p>
@@ -46,21 +46,21 @@ foldl' (+) 0 [1..1000000]   -- strict fold: adds as it goes, constant space</cod
   <h2>Forcer la rigueur : seq, $! et BangPatterns</h2>
   <p>Haskell vous donne des outils précis pour exiger l’évaluation :</p>
   <ul>
-    <li><strong><code>seq a b</code></strong> — force <code>a</code> en forme normale de tête faible avant de renvoyer <code>b</code>.</li>
-    <li><strong><code>($!)</code></strong> — application stricte : <code>f $! x</code> force <code>x</code> avant d’appliquer <code>f</code>.</li>
-    <li><strong><code>BangPatterns</code></strong> — l’extension <code>&#123;-# LANGUAGE BangPatterns #-&#125;</code> vous laisse écrire <code>let !x = ...</code> pour forcer une liaison.</li>
+    <li><strong><code>seq a b</code></strong> - force <code>a</code> en forme normale de tête faible avant de renvoyer <code>b</code>.</li>
+    <li><strong><code>($!)</code></strong> - application stricte : <code>f $! x</code> force <code>x</code> avant d’appliquer <code>f</code>.</li>
+    <li><strong><code>BangPatterns</code></strong> - l’extension <code>&#123;-# LANGUAGE BangPatterns #-&#125;</code> vous laisse écrire <code>let !x = ...</code> pour forcer une liaison.</li>
   </ul>
   <p>Une subtilité à connaître : forcer atteint typiquement la <em>forme normale de tête faible</em> (le constructeur le plus externe), pas l’évaluation complète. Pour forcer en profondeur, utilisez <code>force</code> / <code>deepseq</code> du paquet <code>deepseq</code>.</p>
 
   <h2>FAQ</h2>
   <p><strong>Haskell est-il paresseux ou non strict ?</strong> Techniquement non strict (une garantie sémantique) ; GHC l’implémente via l’évaluation paresseuse avec thunks et partage. En pratique on dit « paresseux ».</p>
-  <p><strong>Pourquoi mon programme Haskell utilise-t-il autant de mémoire ?</strong> Souvent une fuite de mémoire due à des thunks accumulés — couramment un <code>foldl</code> paresseux. Passez à <code>foldl'</code> ou ajoutez de la rigueur avec <code>seq</code>/BangPatterns.</p>
+  <p><strong>Pourquoi mon programme Haskell utilise-t-il autant de mémoire ?</strong> Souvent une fuite de mémoire due à des thunks accumulés - couramment un <code>foldl</code> paresseux. Passez à <code>foldl'</code> ou ajoutez de la rigueur avec <code>seq</code>/BangPatterns.</p>
   <p><strong>Qu’est-ce qu’un thunk ?</strong> Un calcul non évalué et différé stocké à la place d’une valeur, forcé seulement quand la valeur est exigée, puis mis en cache.</p>
-  <p><strong>La paresse rend-elle Haskell lent ?</strong> Pas intrinsèquement — elle peut éviter du travail inutile et permettre la fusion. Mais une paresse négligente cause des fuites de mémoire ; savoir quand forcer fait partie de l’écriture d’un bon Haskell.</p>
+  <p><strong>La paresse rend-elle Haskell lent ?</strong> Pas intrinsèquement - elle peut éviter du travail inutile et permettre la fusion. Mais une paresse négligente cause des fuites de mémoire ; savoir quand forcer fait partie de l’écriture d’un bon Haskell.</p>
 
-  <p>La paresse est la même mécanique qui fait que les autres abstractions de Haskell se composent proprement — voyez comment fonctionne le séquencement dans notre guide sur les <a href="/fr/e/blog/2026-06-14-haskell-monads.html">monades en Haskell</a>, et mettez en place la chaîne d’outils pour essayer ces exemples dans GHCi avec le <a href="/fr/e/blog/2026-06-14-ghc-compiler-guide.html">guide du compilateur GHC</a>.</p>
+  <p>La paresse est la même mécanique qui fait que les autres abstractions de Haskell se composent proprement - voyez comment fonctionne le séquencement dans notre guide sur les <a href="/fr/e/blog/2026-06-14-haskell-monads.html">monades en Haskell</a>, et mettez en place la chaîne d’outils pour essayer ces exemples dans GHCi avec le <a href="/fr/e/blog/2026-06-14-ghc-compiler-guide.html">guide du compilateur GHC</a>.</p>
 
-  <div class="note">Guide indépendant, maintenu par la communauté. <strong>coldwa.st</strong> est un site de ressources de programmation ; cet article est un écrit explicatif neuf et original sur l’évaluation paresseuse en Haskell, sans affiliation avec aucun projet ni rédigé par lui. Le code reflète le comportement standard de Haskell/GHC — vérifiez auprès de la documentation GHC actuelle.</div>
+  <div class="note">Guide indépendant, maintenu par la communauté. <strong>coldwa.st</strong> est un site de ressources de programmation ; cet article est un écrit explicatif neuf et original sur l’évaluation paresseuse en Haskell, sans affiliation avec aucun projet ni rédigé par lui. Le code reflète le comportement standard de Haskell/GHC - vérifiez auprès de la documentation GHC actuelle.</div>
   <p class="related-guides">Guides liés : <a href="/fr/e/blog/2026-06-14-haskell-list-comprehensions.html">les compréhensions de listes</a>, <a href="/fr/e/blog/2026-06-24-higher-order-functions.html">les fonctions d’ordre supérieur</a>.</p>
   </div>
 </Base>

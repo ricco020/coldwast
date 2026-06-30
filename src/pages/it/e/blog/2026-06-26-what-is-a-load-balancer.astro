@@ -17,37 +17,37 @@ const description = 'Un load balancer distribuisce le richieste in arrivo tra pi
     <figcaption>Un load balancer si trova davanti a più server identici e suddivide tra loro le richieste in arrivo, così che nessuna macchina porti da sola tutto il carico.</figcaption>
   </figure>
 
-  <p>Un singolo server ha i suoi limiti. Quando il traffico supera ciò che una sola macchina può servire — o quando semplicemente non puoi permetterti che il sito vada giù se quella macchina si guasta — ne metti in esecuzione più copie e poni un <strong>load balancer</strong> davanti a esse. Questa guida spiega cos’è un load balancer, come decide dove va ogni richiesta e in che modo si lega al <a href="/it/e/blog/2026-06-26-what-is-a-reverse-proxy.html">reverse proxy</a> che forse già conosci.</p>
+  <p>Un singolo server ha i suoi limiti. Quando il traffico supera ciò che una sola macchina può servire - o quando semplicemente non puoi permetterti che il sito vada giù se quella macchina si guasta - ne metti in esecuzione più copie e poni un <strong>load balancer</strong> davanti a esse. Questa guida spiega cos’è un load balancer, come decide dove va ogni richiesta e in che modo si lega al <a href="/it/e/blog/2026-06-26-what-is-a-reverse-proxy.html">reverse proxy</a> che forse già conosci.</p>
 
   <h2>L’idea di fondo: condividere il lavoro</h2>
-  <p>Un load balancer è un componente che riceve le richieste in arrivo e le distribuisce su un pool di server backend — di solito copie identiche della stessa app. Per il visitatore c’è un solo indirizzo; dietro, il load balancer ripartisce il traffico in silenzio così che nessun server sia sovraccarico. Risolve due problemi insieme: la <strong>scalabilità</strong> (gestire più traffico di quanto potrebbe una sola macchina) e la <strong>disponibilità</strong> (se un server muore, gli altri continuano a servire).</p>
+  <p>Un load balancer è un componente che riceve le richieste in arrivo e le distribuisce su un pool di server backend - di solito copie identiche della stessa app. Per il visitatore c’è un solo indirizzo; dietro, il load balancer ripartisce il traffico in silenzio così che nessun server sia sovraccarico. Risolve due problemi insieme: la <strong>scalabilità</strong> (gestire più traffico di quanto potrebbe una sola macchina) e la <strong>disponibilità</strong> (se un server muore, gli altri continuano a servire).</p>
   <p>Questo secondo punto è quello che si sottovaluta. Un load balancer verifica di continuo se ogni backend è in salute e smette di inviare traffico a quelli che smettono di rispondere. Un singolo server difettoso non manda più giù tutto il sito: la sua quota di richieste viene semplicemente reindirizzata verso quelli sani.</p>
 
   <h2>Come decide: gli algoritmi di bilanciamento</h2>
   <p>Il load balancer ha bisogno di una regola per scegliere quale server gestisce la richiesta successiva. I più comuni sono:</p>
   <ul>
-    <li><strong>Round-robin</strong> — affidare ogni nuova richiesta al server successivo, a turno. Semplice ed equo quando i server sono simili.</li>
-    <li><strong>Least connections</strong> (meno connessioni) — inviare la richiesta al server che ha al momento meno connessioni attive. Meglio quando le richieste variano nel costo.</li>
-    <li><strong>IP hash</strong> — scegliere il server in base all’IP del client, così che lo stesso visitatore atterri sempre sullo stesso backend (utile per la persistenza di sessione).</li>
-    <li><strong>Pesato (weighted)</strong> — dare ai server più potenti una quota maggiore di traffico.</li>
+    <li><strong>Round-robin</strong> - affidare ogni nuova richiesta al server successivo, a turno. Semplice ed equo quando i server sono simili.</li>
+    <li><strong>Least connections</strong> (meno connessioni) - inviare la richiesta al server che ha al momento meno connessioni attive. Meglio quando le richieste variano nel costo.</li>
+    <li><strong>IP hash</strong> - scegliere il server in base all’IP del client, così che lo stesso visitatore atterri sempre sullo stesso backend (utile per la persistenza di sessione).</li>
+    <li><strong>Pesato (weighted)</strong> - dare ai server più potenti una quota maggiore di traffico.</li>
   </ul>
 
   <figure>
     <img src="/img/load-balancer-2026-servers.jpg" alt="Un rack di server con luci di stato accese in un data center" width="1000" height="667" loading="lazy" />
-    <figcaption>Gli health check permettono al balancer di aggirare automaticamente un server guasto — le luci restano accese anche quando una macchina cade.</figcaption>
+    <figcaption>Gli health check permettono al balancer di aggirare automaticamente un server guasto - le luci restano accese anche quando una macchina cade.</figcaption>
   </figure>
 
   <h2>Layer 4 vs Layer 7</h2>
-  <p>I load balancer lavorano su uno di due livelli. Un balancer di <strong>Layer 4 (trasporto)</strong> instrada per indirizzo IP e porta senza guardare dentro al traffico — veloce e indipendente dal protocollo. Un balancer di <strong>Layer 7 (applicazione)</strong> capisce HTTP, quindi può instradare per percorso URL, hostname o header, terminare il TLS e prendere decisioni più intelligenti. Il Layer 7 è la scelta comune per le app web; il Layer 4 vince quando la velocità pura conta più di un instradamento consapevole del contenuto.</p>
+  <p>I load balancer lavorano su uno di due livelli. Un balancer di <strong>Layer 4 (trasporto)</strong> instrada per indirizzo IP e porta senza guardare dentro al traffico - veloce e indipendente dal protocollo. Un balancer di <strong>Layer 7 (applicazione)</strong> capisce HTTP, quindi può instradare per percorso URL, hostname o header, terminare il TLS e prendere decisioni più intelligenti. Il Layer 7 è la scelta comune per le app web; il Layer 4 vince quando la velocità pura conta più di un instradamento consapevole del contenuto.</p>
 
   <h2>Load balancer vs reverse proxy</h2>
-  <p>È la domanda che manda in confusione. La risposta onesta: <strong>il bilanciamento del carico è uno dei compiti che un reverse proxy può svolgere.</strong> Un reverse proxy è l’idea più ampia — un server che sta davanti ai tuoi backend e può instradare, mettere in cache, terminare il TLS e distribuire il carico. Un «load balancer» è quella stessa porta d’ingresso concentrata sul compito di distribuzione. In pratica gli strumenti si sovrappongono: <a href="/it/e/blog/2026-06-26-what-is-a-reverse-proxy.html">Nginx, HAProxy e Caddy</a> fungono tutti da load balancer, e un load balancer cloud è una versione gestita dello stesso ruolo.</p>
+  <p>È la domanda che manda in confusione. La risposta onesta: <strong>il bilanciamento del carico è uno dei compiti che un reverse proxy può svolgere.</strong> Un reverse proxy è l’idea più ampia - un server che sta davanti ai tuoi backend e può instradare, mettere in cache, terminare il TLS e distribuire il carico. Un «load balancer» è quella stessa porta d’ingresso concentrata sul compito di distribuzione. In pratica gli strumenti si sovrappongono: <a href="/it/e/blog/2026-06-26-what-is-a-reverse-proxy.html">Nginx, HAProxy e Caddy</a> fungono tutti da load balancer, e un load balancer cloud è una versione gestita dello stesso ruolo.</p>
 
   <h2>Dove girano i load balancer</h2>
-  <p>Li incontri in alcune forme. I load balancer <strong>software</strong> — Nginx, HAProxy, Traefik — girano su un server che controlli tu. I load balancer <strong>cloud</strong> (AWS, Google Cloud, Azure) sono servizi gestiti che configuri anziché ospitare. E nelle piattaforme a container come <a href="/it/e/blog/2026-06-19-what-is-kubernetes.html">Kubernetes</a>, il bilanciamento del carico è integrato e distribuisce il traffico tra i pod man mano che compaiono e scompaiono. Qualunque cosa usi, vorrai più di un backend — di solito qualche <a href="/it/e/blog/2026-06-19-what-is-a-vps.html">server</a> che esegue copie identiche dell’app.</p>
+  <p>Li incontri in alcune forme. I load balancer <strong>software</strong> - Nginx, HAProxy, Traefik - girano su un server che controlli tu. I load balancer <strong>cloud</strong> (AWS, Google Cloud, Azure) sono servizi gestiti che configuri anziché ospitare. E nelle piattaforme a container come <a href="/it/e/blog/2026-06-19-what-is-kubernetes.html">Kubernetes</a>, il bilanciamento del carico è integrato e distribuisce il traffico tra i pod man mano che compaiono e scompaiono. Qualunque cosa usi, vorrai più di un backend - di solito qualche <a href="/it/e/blog/2026-06-19-what-is-a-vps.html">server</a> che esegue copie identiche dell’app.</p>
 
   <h2>In sintesi</h2>
-  <p>Un load balancer distribuisce le richieste in arrivo tra più server così che il sistema possa gestire più traffico e sopravvivere al guasto di un server. Sceglie un backend tramite un algoritmo come round-robin o least connections, verifica la salute di ogni server e può lavorare a livello di trasporto (L4) o di applicazione (L7). Pensalo come il compito di distribuzione di un reverse proxy — il pezzo che trasforma un’app su una sola macchina in un servizio che scala e resta online.</p>
+  <p>Un load balancer distribuisce le richieste in arrivo tra più server così che il sistema possa gestire più traffico e sopravvivere al guasto di un server. Sceglie un backend tramite un algoritmo come round-robin o least connections, verifica la salute di ogni server e può lavorare a livello di trasporto (L4) o di applicazione (L7). Pensalo come il compito di distribuzione di un reverse proxy - il pezzo che trasforma un’app su una sola macchina in un servizio che scala e resta online.</p>
 
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",

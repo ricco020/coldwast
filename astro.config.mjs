@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import { existsSync } from 'node:fs';
 
-// coldwa.st — static dev/programming resources.
+// coldwa.st - static dev/programming resources.
 // build.format:'file' so legacy paths like /e/blog/2013-08-20-Cabal-sandbox.html
 // are emitted as literal .html files (exact backlink recovery).
 export default defineConfig({
@@ -21,7 +21,7 @@ export default defineConfig({
       // their .html URL (about.html, /e/blog/X.html, /e/c/X.html…). @astrojs/sitemap
       // strips the extension → those <loc>s 404 for Googlebot. Re-append .html for any
       // URL whose built output is a leaf file (dist/<path>.html); directory indexes
-      // (/, /e, /fr, /es — served clean) are left untouched.
+      // (/, /e, /fr, /es - served clean) are left untouched.
       serialize(item) {
         const u = new URL(item.url);
         const path = decodeURIComponent(u.pathname).replace(/\/$/, '');

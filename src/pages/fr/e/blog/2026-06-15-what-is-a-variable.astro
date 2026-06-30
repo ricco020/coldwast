@@ -14,7 +14,7 @@ const description = 'Une variable est un conteneur nommé qui contient une valeu
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80&auto=format&fit=crop" alt="Du code sur un écran d’ordinateur" width="1200" height="420" loading="eager" />
-    <figcaption>Du code sur un écran — les variables sont les valeurs nommées qu’un code comme celui-ci stocke, lit et modifie.</figcaption>
+    <figcaption>Du code sur un écran - les variables sont les valeurs nommées qu’un code comme celui-ci stocke, lit et modifie.</figcaption>
   </figure>
 
   <p>Si tu écris une seule ligne de code, tu utiliseras une <strong>variable</strong>. C’est le premier concept que présente tout tutoriel de programmation, et l’un des rares à exister dans tous les langages jamais créés. Ce guide explique ce qu’est une variable, comment en créer et en utiliser une, les types et la portée, la différence avec une constante, et pourquoi elles sont le fondement de toute programmation.</p>
@@ -26,19 +26,19 @@ const description = 'Une variable est un conteneur nommé qui contient une valeu
   <p>Tu <strong>déclares</strong> une variable (tu la crées, tu lui donnes un nom) et tu lui <strong>affectes</strong> une valeur. Dans la plupart des langages, cela ressemble à ceci :</p>
   <pre><code>age = 30            # nom : age, valeur : 30
 nom = "Ada"         # un morceau de texte
-age = 31            # réaffectation — la boîte contient maintenant 31</code></pre>
-  <p>Après <code>age = 31</code>, l’ancienne valeur a disparu et <code>age</code> désigne <code>31</code>. Cette capacité à <em>changer</em> dans le temps est exactement ce qui la rend « variable » — par opposition à une constante figée.</p>
+age = 31            # réaffectation - la boîte contient maintenant 31</code></pre>
+  <p>Après <code>age = 31</code>, l’ancienne valeur a disparu et <code>age</code> désigne <code>31</code>. Cette capacité à <em>changer</em> dans le temps est exactement ce qui la rend « variable » - par opposition à une constante figée.</p>
 
   <h2>Les types de valeur</h2>
-  <p>Une variable contient une valeur, et les valeurs ont des <strong>types</strong> : un nombre (<code>30</code>), une chaîne de texte (<code>&quot;Ada&quot;</code>), un booléen (<code>true</code> / <code>false</code>), ou des choses plus complexes comme des listes et des objets. Certains langages sont à <em>typage statique</em> (tu déclares le type, vérifié avant l’exécution — comme Haskell ou Rust) ; d’autres à <em>typage dynamique</em> (le type voyage avec la valeur à l’exécution — comme Python ou JavaScript).</p>
+  <p>Une variable contient une valeur, et les valeurs ont des <strong>types</strong> : un nombre (<code>30</code>), une chaîne de texte (<code>&quot;Ada&quot;</code>), un booléen (<code>true</code> / <code>false</code>), ou des choses plus complexes comme des listes et des objets. Certains langages sont à <em>typage statique</em> (tu déclares le type, vérifié avant l’exécution - comme Haskell ou Rust) ; d’autres à <em>typage dynamique</em> (le type voyage avec la valeur à l’exécution - comme Python ou JavaScript).</p>
 
-  <figure><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80&auto=format&fit=crop" alt="Un ordinateur portable ouvert affichant du code sur un bureau" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Un ordinateur portable affichant du code — chaque valeur nommée que tu vois dans un programme, d’un compteur à un nom d’utilisateur, est une variable.</figcaption></figure>
+  <figure><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80&auto=format&fit=crop" alt="Un ordinateur portable ouvert affichant du code sur un bureau" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Un ordinateur portable affichant du code - chaque valeur nommée que tu vois dans un programme, d’un compteur à un nom d’utilisateur, est une variable.</figcaption></figure>
 
   <h2>La portée : où vit une variable</h2>
-  <p>La <strong>portée</strong> est la région de code où une variable existe et peut être utilisée. Une variable déclarée dans une fonction est généralement <em>locale</em> — elle n’existe que pendant l’exécution de cette fonction, et le code ailleurs ne peut pas la voir. Une variable déclarée au niveau supérieur peut être <em>globale</em>, visible dans tout le programme. Garder les variables dans la plus petite portée possible est une habitude essentielle : cela évite les conflits accidentels et rend le code plus facile à raisonner.</p>
+  <p>La <strong>portée</strong> est la région de code où une variable existe et peut être utilisée. Une variable déclarée dans une fonction est généralement <em>locale</em> - elle n’existe que pendant l’exécution de cette fonction, et le code ailleurs ne peut pas la voir. Une variable déclarée au niveau supérieur peut être <em>globale</em>, visible dans tout le programme. Garder les variables dans la plus petite portée possible est une habitude essentielle : cela évite les conflits accidentels et rend le code plus facile à raisonner.</p>
 
   <h2>Variables vs constantes</h2>
-  <p>Une <strong>constante</strong> est comme une variable dont la valeur ne doit pas changer après avoir été fixée — utile pour ce qui ne doit pas bouger, comme un taux de TVA ou le nombre de jours dans une semaine. Beaucoup de langages ont un mot-clé pour cela (<code>const</code>, <code>final</code>, <code>val</code>). Utiliser une constante quand une valeur ne changera pas signale l’intention et laisse le langage attraper les réaffectations accidentelles.</p>
+  <p>Une <strong>constante</strong> est comme une variable dont la valeur ne doit pas changer après avoir été fixée - utile pour ce qui ne doit pas bouger, comme un taux de TVA ou le nombre de jours dans une semaine. Beaucoup de langages ont un mot-clé pour cela (<code>const</code>, <code>final</code>, <code>val</code>). Utiliser une constante quand une valeur ne changera pas signale l’intention et laisse le langage attraper les réaffectations accidentelles.</p>
 
   <h2>Pourquoi les variables comptent</h2>
   <p>Les variables permettent à un programme de <strong>retenir et manipuler des données</strong> au lieu de ne traiter que des valeurs figées. Elles contiennent l’entrée de l’utilisateur, un total courant, l’état actuel d’un jeu, le résultat d’un calcul. Combine des variables avec de la logique et tu as un <a href="/fr/e/blog/2026-06-14-what-is-an-algorithm.html">algorithme</a> ; combine des algorithmes avec des données et tu as un programme. Tout part de cette petite idée : un nom qui représente une valeur.</p>
@@ -49,8 +49,8 @@ age = 31            # réaffectation — la boîte contient maintenant 31</code>
   <h2>FAQ</h2>
   <p><strong>Qu’est-ce qu’une variable, simplement ?</strong> Une boîte nommée qui stocke une valeur que ton programme peut lire et modifier plus tard en la désignant par son nom.</p>
   <p><strong>Quelle différence entre une variable et une constante ?</strong> La valeur d’une variable peut changer pendant l’exécution ; celle d’une constante est figée une fois fixée. Utilise une constante quand la valeur ne doit pas changer.</p>
-  <p><strong>Qu’est-ce que le type d’une variable ?</strong> Le genre de valeur qu’elle contient — nombre, texte (chaîne), booléen, liste, objet, etc. Certains langages vérifient les types avant l’exécution ; d’autres les suivent à l’exécution.</p>
-  <p><strong>Qu’est-ce que la portée d’une variable ?</strong> La partie du code où la variable existe et peut être utilisée — généralement locale (dans une fonction) ou globale (dans tout le programme). Une portée plus petite est généralement préférable.</p>
+  <p><strong>Qu’est-ce que le type d’une variable ?</strong> Le genre de valeur qu’elle contient - nombre, texte (chaîne), booléen, liste, objet, etc. Certains langages vérifient les types avant l’exécution ; d’autres les suivent à l’exécution.</p>
+  <p><strong>Qu’est-ce que la portée d’une variable ?</strong> La partie du code où la variable existe et peut être utilisée - généralement locale (dans une fonction) ou globale (dans tout le programme). Une portée plus petite est généralement préférable.</p>
 
   <p>Les variables sont les données ; la logique étape par étape qui les utilise est un <a href="/fr/e/blog/2026-06-14-what-is-an-algorithm.html">algorithme</a>. Parcours d’autres explications claires dans notre <a href="/fr/e/">index des guides</a>.</p>
 

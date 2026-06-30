@@ -14,24 +14,24 @@ const description = 'SQL ist die Standardsprache zum Speichern, Abfragen und Än
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=1200&q=80&auto=format&fit=crop" alt="Farbiger Quellcode auf einem Monitor" width="1200" height="420" loading="eager" />
-    <figcaption>Farbiger Quellcode auf einem Monitor — SQL ist eine Abfragesprache, die du schreibst, um eine Datenbank um genau die Daten zu bitten, die du willst.</figcaption>
+    <figcaption>Farbiger Quellcode auf einem Monitor - SQL ist eine Abfragesprache, die du schreibst, um eine Datenbank um genau die Daten zu bitten, die du willst.</figcaption>
   </figure>
 
-  <p>Hinter fast jeder App, Website und jedem Dashboard steckt eine Datenbank — und die Sprache, mit der man zu ihr spricht, ist meist <strong>SQL</strong>. Sie ist seit fünfzig Jahren ein Rückgrat der Software und bleibt eine der wertvollsten Fähigkeiten, die ein Entwickler oder Analyst haben kann. Dieser Leitfaden erklärt, was SQL ist, seine wichtigsten Befehle, wie eine Abfrage funktioniert, der Vergleich mit NoSQL und warum es Bestand hat.</p>
+  <p>Hinter fast jeder App, Website und jedem Dashboard steckt eine Datenbank - und die Sprache, mit der man zu ihr spricht, ist meist <strong>SQL</strong>. Sie ist seit fünfzig Jahren ein Rückgrat der Software und bleibt eine der wertvollsten Fähigkeiten, die ein Entwickler oder Analyst haben kann. Dieser Leitfaden erklärt, was SQL ist, seine wichtigsten Befehle, wie eine Abfrage funktioniert, der Vergleich mit NoSQL und warum es Bestand hat.</p>
 
   <h2>Die kurze Definition</h2>
-  <p><strong>SQL (Structured Query Language) ist die Standardsprache zum Speichern, Abrufen und Ändern von Daten in einer relationalen Datenbank.</strong> Eine relationale Datenbank organisiert Daten in <em>Tabellen</em> — Zeilen und Spalten, wie eine Tabellenkalkulation — und SQL ist die Art, wie du diesen Daten Fragen stellst und sie änderst. Es wird „es-ku-el“ oder „sequel“ ausgesprochen und treibt Datenbanken wie PostgreSQL, MySQL, SQLite, SQL Server und Oracle an.</p>
+  <p><strong>SQL (Structured Query Language) ist die Standardsprache zum Speichern, Abrufen und Ändern von Daten in einer relationalen Datenbank.</strong> Eine relationale Datenbank organisiert Daten in <em>Tabellen</em> - Zeilen und Spalten, wie eine Tabellenkalkulation - und SQL ist die Art, wie du diesen Daten Fragen stellst und sie änderst. Es wird „es-ku-el“ oder „sequel“ ausgesprochen und treibt Datenbanken wie PostgreSQL, MySQL, SQLite, SQL Server und Oracle an.</p>
 
   <h2>Tabellen, Zeilen und Spalten</h2>
-  <p>Das relationale Modell ist einfach. Eine Tabelle <code>users</code> kann die Spalten <code>id</code>, <code>name</code> und <code>age</code> haben; jede <strong>Zeile</strong> ist ein Benutzer. Tabellen können sich aufeinander beziehen — eine Tabelle <code>orders</code> kann einen Benutzer über seine <code>id</code> referenzieren — daher kommt das „relational“, und hier zeigt sich die Stärke von SQL, Daten zu kombinieren.</p>
+  <p>Das relationale Modell ist einfach. Eine Tabelle <code>users</code> kann die Spalten <code>id</code>, <code>name</code> und <code>age</code> haben; jede <strong>Zeile</strong> ist ein Benutzer. Tabellen können sich aufeinander beziehen - eine Tabelle <code>orders</code> kann einen Benutzer über seine <code>id</code> referenzieren - daher kommt das „relational“, und hier zeigt sich die Stärke von SQL, Daten zu kombinieren.</p>
 
   <h2>Die wichtigsten Befehle</h2>
   <p>Der Großteil der SQL-Arbeit nutzt vier Verben, oft CRUD genannt (create, read, update, delete):</p>
   <ul>
-    <li><strong>SELECT</strong> — Daten lesen („gib mir die Benutzer über 18“).</li>
-    <li><strong>INSERT</strong> — eine neue Zeile hinzufügen.</li>
-    <li><strong>UPDATE</strong> — bestehende Zeilen ändern.</li>
-    <li><strong>DELETE</strong> — Zeilen löschen.</li>
+    <li><strong>SELECT</strong> - Daten lesen („gib mir die Benutzer über 18“).</li>
+    <li><strong>INSERT</strong> - eine neue Zeile hinzufügen.</li>
+    <li><strong>UPDATE</strong> - bestehende Zeilen ändern.</li>
+    <li><strong>DELETE</strong> - Zeilen löschen.</li>
   </ul>
   <p>Eine grundlegende Abfrage liest sich fast wie Englisch:</p>
   <pre><code>SELECT name, age
@@ -40,30 +40,30 @@ WHERE age &gt;= 18
 ORDER BY age DESC;</code></pre>
   <p>Dies fragt den Namen und das Alter jedes Benutzers ab, der 18 Jahre oder älter ist, vom neuesten zum ältesten. <code>WHERE</code> filtert die Zeilen, <code>ORDER BY</code> sortiert sie, und du kannst Tabellen mit <code>JOIN</code> zusammenführen, um zusammenhängende Daten in einem einzigen Ergebnis zu kombinieren.</p>
 
-  <figure><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=crop" alt="Ein Laptop, der ein Daten-Dashboard mit Diagrammen anzeigt" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Ein Daten-Dashboard — die Diagramme und Tabellen, die du in Apps siehst, werden meist aus SQL-Abfragen gegen eine Datenbank aufgebaut.</figcaption></figure>
+  <figure><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=crop" alt="Ein Laptop, der ein Daten-Dashboard mit Diagrammen anzeigt" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Ein Daten-Dashboard - die Diagramme und Tabellen, die du in Apps siehst, werden meist aus SQL-Abfragen gegen eine Datenbank aufgebaut.</figcaption></figure>
 
   <h2>Wie eine Abfrage tatsächlich ausgeführt wird</h2>
-  <p>Du schreibst, <em>was</em> du willst, nicht <em>wie</em> du es bekommst — SQL ist <strong>deklarativ</strong>. Der <em>Abfrageplaner</em> der Datenbank findet den effizientesten Weg, das Ergebnis zu beschaffen, und nutzt Indizes (Strukturen für schnelle Suche), um nicht jede Zeile durchlaufen zu müssen. Diese Trennung ist ein großer Teil der Langlebigkeit von SQL: Dieselbe Abfrage funktioniert weiter, während die Daten wachsen, während die Datenbank die Ausführung darunter optimiert.</p>
+  <p>Du schreibst, <em>was</em> du willst, nicht <em>wie</em> du es bekommst - SQL ist <strong>deklarativ</strong>. Der <em>Abfrageplaner</em> der Datenbank findet den effizientesten Weg, das Ergebnis zu beschaffen, und nutzt Indizes (Strukturen für schnelle Suche), um nicht jede Zeile durchlaufen zu müssen. Diese Trennung ist ein großer Teil der Langlebigkeit von SQL: Dieselbe Abfrage funktioniert weiter, während die Daten wachsen, während die Datenbank die Ausführung darunter optimiert.</p>
 
   <h2>SQL vs NoSQL</h2>
-  <p>Man stellt SQL oft den <strong>NoSQL</strong>-Datenbanken gegenüber (MongoDB, Redis, Cassandra und andere). SQL-/relationale Datenbanken erzwingen ein strukturiertes Schema und glänzen bei komplexen Abfragen und garantierter Konsistenz (ACID-Transaktionen). NoSQL-Datenbanken lockern die Struktur zugunsten von Flexibilität und horizontaler Skalierung — nützlich für riesige Volumen oder sich rasch ändernde Datenformen. Keine ersetzt die andere: Viele Systeme nutzen beide. Für strukturierte Daten mit Beziehungen bleibt SQL die Standardwahl.</p>
+  <p>Man stellt SQL oft den <strong>NoSQL</strong>-Datenbanken gegenüber (MongoDB, Redis, Cassandra und andere). SQL-/relationale Datenbanken erzwingen ein strukturiertes Schema und glänzen bei komplexen Abfragen und garantierter Konsistenz (ACID-Transaktionen). NoSQL-Datenbanken lockern die Struktur zugunsten von Flexibilität und horizontaler Skalierung - nützlich für riesige Volumen oder sich rasch ändernde Datenformen. Keine ersetzt die andere: Viele Systeme nutzen beide. Für strukturierte Daten mit Beziehungen bleibt SQL die Standardwahl.</p>
 
   <h2>Warum SQL auch 2026 noch zählt</h2>
   <ul>
-    <li><strong>Es ist überall</strong> — relationale Datenbanken betreiben Banken, Shops, Apps und Analytik; SQL ist die gemeinsame Sprache zwischen ihnen.</li>
-    <li><strong>Es ist übertragbares Wissen</strong> — der Kern ist standardisiert, also lassen sich die Fähigkeiten zwischen PostgreSQL, MySQL, SQLite und dem Rest übertragen.</li>
-    <li><strong>Es treibt die Analytik an</strong> — Datenanalysten und BI-Werkzeuge fragen täglich Data Warehouses mit SQL ab.</li>
-    <li><strong>Es ist zugänglich</strong> — die Grundlagen sind lesbar und du kannst schnell produktiv werden.</li>
+    <li><strong>Es ist überall</strong> - relationale Datenbanken betreiben Banken, Shops, Apps und Analytik; SQL ist die gemeinsame Sprache zwischen ihnen.</li>
+    <li><strong>Es ist übertragbares Wissen</strong> - der Kern ist standardisiert, also lassen sich die Fähigkeiten zwischen PostgreSQL, MySQL, SQLite und dem Rest übertragen.</li>
+    <li><strong>Es treibt die Analytik an</strong> - Datenanalysten und BI-Werkzeuge fragen täglich Data Warehouses mit SQL ab.</li>
+    <li><strong>Es ist zugänglich</strong> - die Grundlagen sind lesbar und du kannst schnell produktiv werden.</li>
   </ul>
 
   <h2>Die ehrlichen Grenzen</h2>
-  <p>Die SQL-Dialekte unterscheiden sich in den Details, sodass eine für eine Datenbank optimierte Abfrage auf einer anderen Anpassungen erfordern kann. Schlecht geschriebene Abfragen oder fehlende Indizes können auf großen Tabellen langsam sein, und SQL-Strings aus nicht vertrauenswürdigen Eingaben zu bauen, verursacht <em>SQL-Injection</em> — eine klassische Sicherheitslücke, die man durch parametrisierte Abfragen vermeidet. Nichts davon untergräbt die Grundlagen; es ist das tägliche Handwerk des guten SQL-Gebrauchs.</p>
+  <p>Die SQL-Dialekte unterscheiden sich in den Details, sodass eine für eine Datenbank optimierte Abfrage auf einer anderen Anpassungen erfordern kann. Schlecht geschriebene Abfragen oder fehlende Indizes können auf großen Tabellen langsam sein, und SQL-Strings aus nicht vertrauenswürdigen Eingaben zu bauen, verursacht <em>SQL-Injection</em> - eine klassische Sicherheitslücke, die man durch parametrisierte Abfragen vermeidet. Nichts davon untergräbt die Grundlagen; es ist das tägliche Handwerk des guten SQL-Gebrauchs.</p>
 
   <h2>FAQ</h2>
-  <p><strong>Ist SQL eine Programmiersprache?</strong> Es ist eine deklarative, domänenspezifische Sprache für die Arbeit mit Daten — keine Allzwecksprache wie Python. Du beschreibst die Daten, die du willst, und die Datenbank findet heraus, wie sie sie beschafft.</p>
+  <p><strong>Ist SQL eine Programmiersprache?</strong> Es ist eine deklarative, domänenspezifische Sprache für die Arbeit mit Daten - keine Allzwecksprache wie Python. Du beschreibst die Daten, die du willst, und die Datenbank findet heraus, wie sie sie beschafft.</p>
   <p><strong>Was ist der Unterschied zwischen SQL und MySQL?</strong> SQL ist die Sprache; MySQL (wie PostgreSQL oder SQLite) ist ein Datenbanksystem, mit dem du in SQL sprichst. Die Sprache ist geteilt; die Systeme unterscheiden sich in Funktionen und Leistung.</p>
   <p><strong>Brauche ich SQL, wenn ich ein ORM benutze?</strong> ORMs erzeugen SQL für dich, aber SQL zu verstehen bleibt unverzichtbar für Performance, Debugging und komplexe Abfragen, die das ORM schlecht handhabt.</p>
-  <p><strong>Lohnt es sich 2026 noch, SQL zu lernen?</strong> Ja — es bleibt eine der gefragtesten und beständigsten Fähigkeiten für Entwickler, Analysten und Data Engineers, und relationale Datenbanken verschwinden so bald nicht.</p>
+  <p><strong>Lohnt es sich 2026 noch, SQL zu lernen?</strong> Ja - es bleibt eine der gefragtesten und beständigsten Fähigkeiten für Entwickler, Analysten und Data Engineers, und relationale Datenbanken verschwinden so bald nicht.</p>
 
   <p>SQL fragt die Daten ab; das <a href="/de/e/blog/2026-06-14-what-is-json.html">JSON</a>, das eine <a href="/de/e/blog/2026-06-14-what-is-an-api.html">API</a> zurückgibt, sind oft dieselben Daten auf dem Weg in eine App. Stöbere durch weitere klare Erklärungen in unserem <a href="/de/e/">Leitfaden-Index</a>.</p>
 

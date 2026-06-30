@@ -1,5 +1,5 @@
 ---
-// Feed d'accueil localisé (fr/es) AVEC pagination — miroir de HomeFeed (EN).
+// Feed d'accueil localisé (fr/es) AVEC pagination - miroir de HomeFeed (EN).
 // Source de vérité = data/guides.js (filtré par traduction réelle via hasTx).
 // Page 1 affiche aussi les 3 blocks ; les pages 2+ uniquement la liste paginée.
 import { guides, categories, guideTitle, guideDek, guideHref, catLabel, guideRead, guideCats } from '../data/guides.js';
@@ -123,7 +123,7 @@ function catAvatar(cats=''){
           <a href={guideHref(lead, lang)} class="lead-media"><img src={lead.img} alt={lead.imgAlt} width="1200" height="675" loading="eager" /></a>
           <p class="by"><a href={localized('/about.html', lang)}>Coldwast</a> <em>{t.wrote}</em></p>
           <h2><a href={guideHref(lead, lang)} set:html={guideTitle(lead, lang)} /></h2>
-          <p class="ex"><span class="date">{lead.date}</span> {t.in_word} {guideCats(lead, lang)} — {guideDek(lead, lang)}</p>
+          <p class="ex"><span class="date">{lead.date}</span> {t.in_word} {guideCats(lead, lang)} - {guideDek(lead, lang)}</p>
           <a class="more" href={guideHref(lead, lang)}>{t.read_more}</a>
           <div class="metab"><span>📅 {guideRead(lead, lang)}</span><span>↻ {t.updated}</span></div>
         </article>
@@ -134,7 +134,7 @@ function catAvatar(cats=''){
           <div>
             <p class="by"><a href={localized('/about.html', lang)}>Coldwast</a> <em>{t.wrote}</em></p>
             <h3><a href={guideHref(s, lang)} set:html={guideTitle(s, lang)} /></h3>
-            <p class="ex"><span class="date">{s.date}</span> {t.in_word} {guideCats(s, lang)} — {guideDek(s, lang)}</p>
+            <p class="ex"><span class="date">{s.date}</span> {t.in_word} {guideCats(s, lang)} - {guideDek(s, lang)}</p>
             <a class="more" href={guideHref(s, lang)}>{t.read_more}</a>
             <div class="metab"><span>📅 {guideRead(s, lang)}</span><span>↬ {t.updated}</span></div>
           </div>

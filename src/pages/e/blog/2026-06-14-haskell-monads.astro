@@ -2,7 +2,7 @@
 import Base from '../../../layouts/Base.astro';
 const path = '/e/blog/2026-06-14-haskell-monads.html';
 const title = 'Monads in Haskell, explained without the jargon (2026)';
-const description = 'A monad in Haskell is a type that sequences computations carrying context — Maybe, Either, IO, lists. What a monad really is, bind (>>=) and return, do-notation, and the common monads, explained plainly.';
+const description = 'A monad in Haskell is a type that sequences computations carrying context - Maybe, Either, IO, lists. What a monad really is, bind (>>=) and return, do-notation, and the common monads, explained plainly.';
 ---
 <Base title={title} description={description} path={path} type="article"
   image="https://images.unsplash.com/photo-1613068687893-5e85b4638b56?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
@@ -14,10 +14,10 @@ const description = 'A monad in Haskell is a type that sequences computations ca
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.unsplash.com/photo-1613068687893-5e85b4638b56?w=1200&q=80&auto=format&fit=crop" alt="Source code on a dark screen" width="1200" height="420" loading="eager" />
-    <figcaption>Source code on a dark screen — monads are a pattern you write directly in code like this.</figcaption>
+    <figcaption>Source code on a dark screen - monads are a pattern you write directly in code like this.</figcaption>
   </figure>
 
-  <p>"Monad" has a fearsome reputation it doesn't deserve. Stripped of the jargon, a <strong>monad</strong> in Haskell is just a type that lets you <strong>sequence computations which carry some context</strong> — a possible failure, a side effect, multiple results — without writing the plumbing by hand each time. This guide explains what a monad really is, the two operations that define it, do-notation, and the everyday monads you already use.</p>
+  <p>"Monad" has a fearsome reputation it doesn't deserve. Stripped of the jargon, a <strong>monad</strong> in Haskell is just a type that lets you <strong>sequence computations which carry some context</strong> - a possible failure, a side effect, multiple results - without writing the plumbing by hand each time. This guide explains what a monad really is, the two operations that define it, do-notation, and the everyday monads you already use.</p>
 
   <h2>The idea in one sentence</h2>
   <p>A monad is a type with a way to <strong>chain steps</strong> where each step depends on the result of the previous one, and the "context" (failure, effects, nondeterminism) is threaded through automatically. That's it. The famous <code>Maybe</code>, <code>Either</code>, <code>IO</code> and list types are all monads because each defines that chaining for its own kind of context.</p>
@@ -26,10 +26,10 @@ const description = 'A monad in Haskell is a type that sequences computations ca
   <p>The <code>Monad</code> typeclass is defined by two functions:</p>
   <pre><code>return :: a -> m a          -- wrap a plain value into the monad
 (>>=)  :: m a -> (a -> m b) -> m b   -- "bind": feed the result into the next step</code></pre>
-  <p><code>&gt;&gt;=</code> (pronounced "bind") is the heart of it: it takes a value <em>in context</em>, and a function that produces the next value <em>in context</em>, and stitches them together — handling the context for you.</p>
+  <p><code>&gt;&gt;=</code> (pronounced "bind") is the heart of it: it takes a value <em>in context</em>, and a function that produces the next value <em>in context</em>, and stitches them together - handling the context for you.</p>
 
   <h2>do-notation: the same thing, readable</h2>
-  <figure><img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80&auto=format&fit=crop" alt="Source code on a computer screen" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Source code on a screen — do-notation is syntactic sugar over the bind operator.</figcaption></figure>
+  <figure><img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80&auto=format&fit=crop" alt="Source code on a computer screen" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Source code on a screen - do-notation is syntactic sugar over the bind operator.</figcaption></figure>
   <p><code>do</code> blocks are just sugar over <code>&gt;&gt;=</code>. These are equivalent:</p>
   <pre><code>-- with bind
 getLine >>= \name -> putStrLn ("Hi " ++ name)
@@ -41,23 +41,23 @@ do name <- getLine
 
   <h2>The monads you already use</h2>
   <ul>
-    <li><strong><code>Maybe</code></strong> — context is "might be absent". Bind short-circuits on <code>Nothing</code>, so you chain lookups without nested null checks.</li>
-    <li><strong><code>Either</code></strong> — context is "might fail with an error". Like <code>Maybe</code> but carries why it failed.</li>
-    <li><strong><code>IO</code></strong> — context is "performs side effects". The IO monad is how Haskell sequences effects while staying pure; <code>main :: IO ()</code> is the entry point.</li>
-    <li><strong>List (<code>[]</code>)</strong> — context is "multiple results". Bind explores every combination (nondeterminism).</li>
+    <li><strong><code>Maybe</code></strong> - context is "might be absent". Bind short-circuits on <code>Nothing</code>, so you chain lookups without nested null checks.</li>
+    <li><strong><code>Either</code></strong> - context is "might fail with an error". Like <code>Maybe</code> but carries why it failed.</li>
+    <li><strong><code>IO</code></strong> - context is "performs side effects". The IO monad is how Haskell sequences effects while staying pure; <code>main :: IO ()</code> is the entry point.</li>
+    <li><strong>List (<code>[]</code>)</strong> - context is "multiple results". Bind explores every combination (nondeterminism).</li>
   </ul>
-  <p>You have been using monads since your first <code>main</code> — IO is one.</p>
+  <p>You have been using monads since your first <code>main</code> - IO is one.</p>
 
   <h2>Why monads matter</h2>
-  <p>They let you abstract the <em>plumbing</em> of failure handling, effects and sequencing into a reusable pattern, so the same <code>do</code>-style code works across very different contexts. That is why Haskell can keep <code>IO</code> separate and explicit while still feeling ergonomic. To run any of this, you need the toolchain — see <a href="/e/blog/2026-06-14-ghcup-install-haskell.html">installing Haskell with GHCup</a> and the <a href="/e/blog/2026-06-14-ghc-compiler-guide.html">GHC compiler guide</a>, and try examples live in GHCi.</p>
+  <p>They let you abstract the <em>plumbing</em> of failure handling, effects and sequencing into a reusable pattern, so the same <code>do</code>-style code works across very different contexts. That is why Haskell can keep <code>IO</code> separate and explicit while still feeling ergonomic. To run any of this, you need the toolchain - see <a href="/e/blog/2026-06-14-ghcup-install-haskell.html">installing Haskell with GHCup</a> and the <a href="/e/blog/2026-06-14-ghc-compiler-guide.html">GHC compiler guide</a>, and try examples live in GHCi.</p>
 
   <h2>FAQ</h2>
   <p><strong>What is a monad in simple terms?</strong> A type that lets you chain computations carrying context (failure, effects, multiple results), threading that context through automatically via the bind operator.</p>
-  <p><strong>Is IO a monad?</strong> Yes — IO is the monad Haskell uses to sequence side effects while remaining pure. Your <code>main</code> runs in it.</p>
+  <p><strong>Is IO a monad?</strong> Yes - IO is the monad Haskell uses to sequence side effects while remaining pure. Your <code>main</code> runs in it.</p>
   <p><strong>Do I need to understand category theory?</strong> No. You can use monads productively in Haskell knowing only <code>return</code>, <code>&gt;&gt;=</code> and do-notation; the theory is optional.</p>
   <p><strong>What's the difference between Maybe and Either?</strong> Both model possible failure; <code>Maybe</code> just says "absent" (<code>Nothing</code>), while <code>Either</code> carries an error value explaining the failure.</p>
 
-  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about Haskell monads, not affiliated with or authored by any project. Code reflects standard Haskell behaviour — verify against current GHC docs.</div>
+  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about Haskell monads, not affiliated with or authored by any project. Code reflects standard Haskell behaviour - verify against current GHC docs.</div>
   <p class="related-guides">Related guides: <a href="/e/blog/2026-06-14-haskell-language-server.html">the Haskell Language Server</a>.</p>
   </div>
 </Base>

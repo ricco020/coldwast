@@ -2,11 +2,11 @@
 import Base from '../../../../layouts/Base.astro';
 const path = '/it/e/blog/2026-06-17-what-is-a-webhook.html';
 const title = 'Che cos’è un webhook? Funzionamento ed esempi (2026)';
-const description = 'Un webhook è una richiesta HTTP automatica che un servizio ti invia quando si verifica un evento — l’inverso di una chiamata API che fai tu. Che cos’è un webhook, in cosa differisce dal polling di una API, come riceverlo in sicurezza ed esempi reali.';
+const description = 'Un webhook è una richiesta HTTP automatica che un servizio ti invia quando si verifica un evento - l’inverso di una chiamata API che fai tu. Che cos’è un webhook, in cosa differisce dal polling di una API, come riceverlo in sicurezza ed esempi reali.';
 const hero = '/img/what-is-a-webhook-2026.jpg';
 const faq = [
-  { q: 'Che cos’è un webhook, in parole semplici?', a: 'Un webhook è un messaggio automatico che un servizio invia a un URL che controlli tu nell’istante in cui qualcosa accade — per esempio «un pagamento è andato a buon fine» o «un commit è stato pushato». Invece di chiedere continuamente al servizio «ci sono novità?» (il polling della sua API), il servizio ti chiama con una richiesta HTTP POST appena l’evento si verifica. Si parla spesso di «API inversa»: con una API classica sei tu a fare la richiesta; con un webhook è il servizio a farla a te.' },
-  { q: 'Qual è la differenza tra un webhook e una API?', a: 'Sono collegati ma vanno in senso inverso. Con una API (REST) classica, invii una richiesta al fornitore quando vuoi dei dati, e lui risponde. Con un webhook, il fornitore invia una richiesta al tuo server quando si verifica un evento: i dati ti vengono spinti quasi in tempo reale senza chiedere nulla. Un webhook passa per la stessa meccanica HTTP di una API — è il fornitore a fare la parte del client e il tuo endpoint quella del server.' },
+  { q: 'Che cos’è un webhook, in parole semplici?', a: 'Un webhook è un messaggio automatico che un servizio invia a un URL che controlli tu nell’istante in cui qualcosa accade - per esempio «un pagamento è andato a buon fine» o «un commit è stato pushato». Invece di chiedere continuamente al servizio «ci sono novità?» (il polling della sua API), il servizio ti chiama con una richiesta HTTP POST appena l’evento si verifica. Si parla spesso di «API inversa»: con una API classica sei tu a fare la richiesta; con un webhook è il servizio a farla a te.' },
+  { q: 'Qual è la differenza tra un webhook e una API?', a: 'Sono collegati ma vanno in senso inverso. Con una API (REST) classica, invii una richiesta al fornitore quando vuoi dei dati, e lui risponde. Con un webhook, il fornitore invia una richiesta al tuo server quando si verifica un evento: i dati ti vengono spinti quasi in tempo reale senza chiedere nulla. Un webhook passa per la stessa meccanica HTTP di una API - è il fornitore a fare la parte del client e il tuo endpoint quella del server.' },
   { q: 'Perché un webhook invece del polling?', a: 'Il polling consiste nel chiamare una API a intervalli regolari per controllare i cambiamenti, il che spreca richieste e aggiunge un ritardo tra l’evento e la tua reazione. I webhook ti spingono l’evento nell’istante in cui arriva: più efficienti e molto più vicini al tempo reale. In cambio, devi far girare un endpoint sempre online e gestire i ritentativi e le consegne in doppio.' },
   { q: 'Come ricevere un webhook in sicurezza?', a: 'Esponi un endpoint HTTPS che accetta i POST, restituisci in fretta uno stato 2xx per accusare ricezione, poi elabora il lavoro in modo asincrono. Verifica la firma che il fornitore invia (un HMAC del corpo con un segreto condiviso) per confermare l’autenticità, e rendi l’elaborazione idempotente perché uno stesso evento può essere consegnato più volte. Rifiuta tutto ciò che non supera la verifica della firma.' },
 ];
@@ -21,30 +21,30 @@ const faq = [
 
   <figure>
     <img class="hero" src={hero} alt="Un server e uno switch di rete collegati da un cavo Ethernet arancione" width="1200" height="420" loading="eager" />
-    <figcaption>Un server collegato a uno switch di rete — un webhook è un messaggio automatico che un server invia a un altro non appena si verifica un evento.</figcaption>
+    <figcaption>Un server collegato a uno switch di rete - un webhook è un messaggio automatico che un server invia a un altro non appena si verifica un evento.</figcaption>
   </figure>
 
   <p>Configuri un pagamento, e la tua applicazione reagisce nell’istante in cui il denaro viene incassato. Pushi un commit, e una build parte da sola. Dietro questa immediatezza c’è quasi sempre un <strong>webhook</strong>. Questa guida spiega, in modo semplice, che cos’è un webhook, in cosa differisce da una chiamata API classica, come riceverlo in sicurezza e dove già ne dipendi.</p>
 
   <h2>La definizione breve</h2>
   <p>Un <strong>webhook è una richiesta HTTP automatica che un servizio invia a un URL che controlli tu quando si verifica un evento.</strong> Anziché chiedere notizie a un servizio, è lui ad avvisare <em>te</em> non appena ce ne sono.</p>
-  <p>Da qui il soprannome di <strong>«API inversa»</strong>. Con una <a href="/it/e/blog/2026-06-14-what-is-an-api.html">API</a> classica, sei il client: fai la richiesta, il server risponde. Con un webhook i ruoli si invertono — il fornitore diventa il client e <em>il tuo</em> endpoint è il server che lui chiama.</p>
+  <p>Da qui il soprannome di <strong>«API inversa»</strong>. Con una <a href="/it/e/blog/2026-06-14-what-is-an-api.html">API</a> classica, sei il client: fai la richiesta, il server risponde. Con un webhook i ruoli si invertono - il fornitore diventa il client e <em>il tuo</em> endpoint è il server che lui chiama.</p>
 
   <h2>Webhook vs polling di una API</h2>
-  <p>Prima dei webhook, il modo abituale di restare aggiornati era il <strong>polling</strong>: chiamare una API su un timer («ci sono novità?») di continuo. È semplice ma dispendioso — la maggior parte delle chiamate non restituisce nulla, e c’è sempre uno scarto tra l’evento e la verifica successiva.</p>
+  <p>Prima dei webhook, il modo abituale di restare aggiornati era il <strong>polling</strong>: chiamare una API su un timer («ci sono novità?») di continuo. È semplice ma dispendioso - la maggior parte delle chiamate non restituisce nulla, e c’è sempre uno scarto tra l’evento e la verifica successiva.</p>
   <ul>
-    <li><strong>Polling</strong> — chiedi in loop. Molte richieste inutili, reazione ritardata, semplice da costruire.</li>
-    <li><strong>Webhook</strong> — il servizio ti avvisa una volta, immediatamente. Efficiente e quasi in tempo reale, ma devi far girare un endpoint per riceverlo.</li>
+    <li><strong>Polling</strong> - chiedi in loop. Molte richieste inutili, reazione ritardata, semplice da costruire.</li>
+    <li><strong>Webhook</strong> - il servizio ti avvisa una volta, immediatamente. Efficiente e quasi in tempo reale, ma devi far girare un endpoint per riceverlo.</li>
   </ul>
 
-  <figure><img src="/img/what-is-a-webhook-2026-servers.jpg" alt="Tre torri di server nere con indicatori a forma di frecce verdi luminose" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Server che spingono dati verso l’esterno — un webhook si attiva quando un servizio fa un POST di un evento verso l’endpoint di un altro servizio.</figcaption></figure>
+  <figure><img src="/img/what-is-a-webhook-2026-servers.jpg" alt="Tre torri di server nere con indicatori a forma di frecce verdi luminose" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Server che spingono dati verso l’esterno - un webhook si attiva quando un servizio fa un POST di un evento verso l’endpoint di un altro servizio.</figcaption></figure>
 
   <h2>Come funziona, passo dopo passo</h2>
   <ol>
     <li>Registri un <strong>URL</strong> (il tuo endpoint) presso il fornitore e scegli gli eventi che ti interessano.</li>
     <li>Quando un tale evento si verifica, il fornitore invia un <strong>POST</strong> HTTP al tuo URL con un corpo (spesso JSON) che lo descrive.</li>
     <li>Il tuo server legge il contenuto, restituisce in fretta uno stato <strong>2xx</strong> per accusarlo, e fa il vero lavoro dopo.</li>
-    <li>Se il tuo endpoint è offline o restituisce un errore, la maggior parte dei fornitori <strong>ritenta</strong> con backoff — da qui i possibili doppioni.</li>
+    <li>Se il tuo endpoint è offline o restituisce un errore, la maggior parte dei fornitori <strong>ritenta</strong> con backoff - da qui i possibili doppioni.</li>
   </ol>
   <p>Una consegna assomiglia a una qualsiasi richiesta HTTP:</p>
   <pre><code>POST /webhooks/payments  HTTP/1.1
@@ -55,34 +55,34 @@ X-Signature: t=1718600000,v1=9f86d08...
 
   <h2>Esempi che conosci già</h2>
   <ul>
-    <li><strong>Pagamenti</strong> — Stripe e PayPal inviano un webhook quando un pagamento va a buon fine, fallisce o viene rimborsato, così che la tua app aggiorni l’ordine senza polling.</li>
-    <li><strong>Hosting di codice</strong> — GitHub e GitLab attivano un webhook su push, pull request o issue: è così che vengono avviati build CI e bot.</li>
-    <li><strong>Messaggistica</strong> — Slack, Discord e le piattaforme di chat usano webhook in entrata per pubblicare messaggi e notificare la tua app.</li>
+    <li><strong>Pagamenti</strong> - Stripe e PayPal inviano un webhook quando un pagamento va a buon fine, fallisce o viene rimborsato, così che la tua app aggiorni l’ordine senza polling.</li>
+    <li><strong>Hosting di codice</strong> - GitHub e GitLab attivano un webhook su push, pull request o issue: è così che vengono avviati build CI e bot.</li>
+    <li><strong>Messaggistica</strong> - Slack, Discord e le piattaforme di chat usano webhook in entrata per pubblicare messaggi e notificare la tua app.</li>
   </ul>
 
   <h2>Riceverlo in sicurezza</h2>
   <p>Un ricevitore robusto fa quattro cose:</p>
   <ul>
     <li><strong>Servire in HTTPS</strong> e accettare i <strong>POST</strong>; rispondere in fretta con un 2xx, poi elaborare in modo asincrono.</li>
-    <li><strong>Verificare la firma</strong> — i fornitori firmano il corpo (un HMAC con un segreto condiviso). Rifiutare ciò che fallisce.</li>
-    <li><strong>Essere idempotente</strong> — lo stesso evento può arrivare più volte; usa l’id dell’evento affinché la riconsegna sia senza effetto.</li>
-    <li><strong>Restituire gli errori onestamente</strong> — se non puoi elaborare, restituisci un non-2xx affinché il fornitore ritenti invece di rinunciare.</li>
+    <li><strong>Verificare la firma</strong> - i fornitori firmano il corpo (un HMAC con un segreto condiviso). Rifiutare ciò che fallisce.</li>
+    <li><strong>Essere idempotente</strong> - lo stesso evento può arrivare più volte; usa l’id dell’evento affinché la riconsegna sia senza effetto.</li>
+    <li><strong>Restituire gli errori onestamente</strong> - se non puoi elaborare, restituisci un non-2xx affinché il fornitore ritenti invece di rinunciare.</li>
   </ul>
-  <p>I webhook hanno bisogno di un <strong>endpoint sempre online</strong> con un URL HTTPS pubblico — ecco perché un piccolo server o un’istanza cloud è la casa abituale di un ricevitore di webhook, anziché una macchina che va in standby.</p>
+  <p>I webhook hanno bisogno di un <strong>endpoint sempre online</strong> con un URL HTTPS pubblico - ecco perché un piccolo server o un’istanza cloud è la casa abituale di un ricevitore di webhook, anziché una macchina che va in standby.</p>
 
   <div class="affbox" style="margin:28px 0;">
     <span class="tag">Consigliato</span>
     <h3>Ti serve un posto dove ricevere i tuoi webhook?</h3>
-    <p>Un ricevitore di webhook deve essere online 24/7 su un URL HTTPS pubblico. Un piccolo VPS o server cloud è la casa più semplice. Infomaniak — un host svizzero, rispettoso della privacy — offre VPS e server cloud adatti.</p>
+    <p>Un ricevitore di webhook deve essere online 24/7 su un URL HTTPS pubblico. Un piccolo VPS o server cloud è la casa più semplice. Infomaniak - un host svizzero, rispettoso della privacy - offre VPS e server cloud adatti.</p>
     <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Vedi il cloud Infomaniak →</a>
-    <p class="disc">Link di affiliazione — sostiene queste guide gratuite.</p>
+    <p class="disc">Link di affiliazione - sostiene queste guide gratuite.</p>
   </div>
 
   <h2>Domande frequenti</h2>
   {faq.map((f) => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}
 
   <h2>In sintesi</h2>
-  <p>Un webhook è il modo del web di dire «non chiamarci, ti chiamiamo noi»: una richiesta HTTP automatica che un servizio invia al tuo endpoint non appena si verifica un evento. È più efficiente e molto più in tempo reale del polling di una API — al prezzo di un endpoint affidabile, che verifica le firme, per riceverlo. Una volta individuati, vedrai i webhook dietro quasi ogni «si è aggiornato da solo» del software moderno.</p>
+  <p>Un webhook è il modo del web di dire «non chiamarci, ti chiamiamo noi»: una richiesta HTTP automatica che un servizio invia al tuo endpoint non appena si verifica un evento. È più efficiente e molto più in tempo reale del polling di una API - al prezzo di un endpoint affidabile, che verifica le firme, per riceverlo. Una volta individuati, vedrai i webhook dietro quasi ogni «si è aggiornato da solo» del software moderno.</p>
   <p class="related-guides">Guide correlate: <a href="/it/e/blog/2026-06-17-rest-vs-graphql.html">REST vs GraphQL</a>.</p>
   </div>
 

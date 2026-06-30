@@ -2,7 +2,7 @@
 import Base from '../../../../layouts/Base.astro';
 const path = '/de/e/blog/2026-06-14-lazy-evaluation-haskell.html';
 const title = 'Lazy Evaluation in Haskell, erklärt (2026)';
-const description = 'Lazy Evaluation bedeutet, dass Haskell einen Wert erst berechnet, wenn er wirklich gebraucht wird — nicht, wenn er definiert wird. Was Lazy Evaluation ist, Thunks, warum sie unendliche Datenstrukturen ermöglicht, die Falle der Speicherlecks und wie man mit seq und BangPatterns Striktheit erzwingt.';
+const description = 'Lazy Evaluation bedeutet, dass Haskell einen Wert erst berechnet, wenn er wirklich gebraucht wird - nicht, wenn er definiert wird. Was Lazy Evaluation ist, Thunks, warum sie unendliche Datenstrukturen ermöglicht, die Falle der Speicherlecks und wie man mit seq und BangPatterns Striktheit erzwingt.';
 ---
 <Base title={title} description={description} path={path} type="article" lang="de"
   image="https://images.pexels.com/photos/2004161/pexels-photo-2004161.jpeg?auto=compress&cs=tinysrgb&w=1200" datePublished="2026-06-14" dateModified="2026-06-14">
@@ -14,31 +14,31 @@ const description = 'Lazy Evaluation bedeutet, dass Haskell einen Wert erst bere
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.pexels.com/photos/2004161/pexels-photo-2004161.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Farbiger Quellcode auf dem Bildschirm" width="1200" height="420" loading="eager" />
-    <figcaption>Farbiger Quellcode auf dem Bildschirm — Lazy Evaluation entscheidet, wann Code wie dieser einen Wert tatsächlich berechnet.</figcaption>
+    <figcaption>Farbiger Quellcode auf dem Bildschirm - Lazy Evaluation entscheidet, wann Code wie dieser einen Wert tatsächlich berechnet.</figcaption>
   </figure>
 
-  <p>Die meisten Sprachen sind <strong>strikt</strong>: Ein Ausdruck wird ausgewertet, sobald er an einen Namen gebunden wird. Haskell ist anders — es ist standardmäßig <strong>lazy</strong> (genauer <em>nicht-strikt</em>): Ein Ausdruck wird nicht ausgewertet, solange sein Ergebnis nicht wirklich gebraucht wird. Diese eine Entwurfsentscheidung steckt hinter einigen der charakteristischsten Stärken von Haskell <em>und</em> hinter seiner berüchtigtsten Falle. Dieser Leitfaden erklärt, was Lazy Evaluation ist, wie Thunks funktionieren, was sie Ihnen bringt und wie man sie abschaltet, wenn es nötig ist.</p>
+  <p>Die meisten Sprachen sind <strong>strikt</strong>: Ein Ausdruck wird ausgewertet, sobald er an einen Namen gebunden wird. Haskell ist anders - es ist standardmäßig <strong>lazy</strong> (genauer <em>nicht-strikt</em>): Ein Ausdruck wird nicht ausgewertet, solange sein Ergebnis nicht wirklich gebraucht wird. Diese eine Entwurfsentscheidung steckt hinter einigen der charakteristischsten Stärken von Haskell <em>und</em> hinter seiner berüchtigtsten Falle. Dieser Leitfaden erklärt, was Lazy Evaluation ist, wie Thunks funktionieren, was sie Ihnen bringt und wie man sie abschaltet, wenn es nötig ist.</p>
 
   <h2>Die Idee in einem Satz</h2>
-  <p>Unter Lazy Evaluation berechnet das Binden eines Werts ihn nicht — Haskell speichert eine aufgeschobene Berechnung (einen <strong>Thunk</strong>) und erzwingt sie erst, wenn eine andere Berechnung das Ergebnis verlangt. Wird das Ergebnis nie verlangt, wird die Arbeit nie geleistet.</p>
+  <p>Unter Lazy Evaluation berechnet das Binden eines Werts ihn nicht - Haskell speichert eine aufgeschobene Berechnung (einen <strong>Thunk</strong>) und erzwingt sie erst, wenn eine andere Berechnung das Ergebnis verlangt. Wird das Ergebnis nie verlangt, wird die Arbeit nie geleistet.</p>
 
   <h2>Thunks: die aufgeschobene Berechnung</h2>
-  <p>Wenn Sie <code>let x = expensive 42</code> schreiben, führt Haskell <code>expensive</code> <em>nicht</em> aus. Es erzeugt einen Thunk — ein unausgewertetes Versprechen von <code>expensive 42</code>. Der Thunk wird erst erzwungen, wenn etwas den tatsächlichen Wert von <code>x</code> braucht (etwa ihn auszugeben oder ein Pattern-Matching darauf zu machen). Erzwingen Sie ihn einmal, und das Ergebnis wird zwischengespeichert, um nicht neu berechnet zu werden.</p>
+  <p>Wenn Sie <code>let x = expensive 42</code> schreiben, führt Haskell <code>expensive</code> <em>nicht</em> aus. Es erzeugt einen Thunk - ein unausgewertetes Versprechen von <code>expensive 42</code>. Der Thunk wird erst erzwungen, wenn etwas den tatsächlichen Wert von <code>x</code> braucht (etwa ihn auszugeben oder ein Pattern-Matching darauf zu machen). Erzwingen Sie ihn einmal, und das Ergebnis wird zwischengespeichert, um nicht neu berechnet zu werden.</p>
   <pre><code>let x = expensive 42   -- nothing runs yet; x is a thunk
 let y = x + 1          -- still nothing; y is a thunk too
 print y                -- NOW x and y are forced and evaluated</code></pre>
 
   <h2>Was Lazyness Ihnen bringt</h2>
-  <figure><img src="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80&auto=format&fit=crop" alt="Codezeilen auf einem dunklen Bildschirm" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Codezeilen auf dem Bildschirm — Lazyness lässt Sie unendliche Strukturen definieren und immer nur den Teil auswerten, den Sie konsumieren.</figcaption></figure>
+  <figure><img src="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80&auto=format&fit=crop" alt="Codezeilen auf einem dunklen Bildschirm" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Codezeilen auf dem Bildschirm - Lazyness lässt Sie unendliche Strukturen definieren und immer nur den Teil auswerten, den Sie konsumieren.</figcaption></figure>
   <ul>
     <li><strong>Unendliche Datenstrukturen.</strong> <code>[1..]</code> ist die unendliche Liste der ganzen Zahlen. <code>take 5 [1..]</code> liefert <code>[1,2,3,4,5]</code>, weil nur die ersten fünf je verlangt werden.</li>
-    <li><strong>Komposition ohne Verschwendung.</strong> Sie können <code>filter</code> und <code>map</code> über eine riesige Liste verketten, und Haskell verschmilzt die Arbeit und erzeugt nur das, was der Konsument abzieht — keine vollständigen Zwischenlisten, wenn sie nie ganz verlangt werden.</li>
+    <li><strong>Komposition ohne Verschwendung.</strong> Sie können <code>filter</code> und <code>map</code> über eine riesige Liste verketten, und Haskell verschmilzt die Arbeit und erzeugt nur das, was der Konsument abzieht - keine vollständigen Zwischenlisten, wenn sie nie ganz verlangt werden.</li>
     <li><strong>Kostenlose Kurzschluss-Auswertung.</strong> <code>False &amp;&amp; undefined</code> liefert <code>False</code>, ohne <code>undefined</code> je zu berühren, weil das zweite Argument nie erzwungen wird.</li>
-    <li><strong>Selbstbezug.</strong> Klassische Einzeiler wie <code>fibs = 0 : 1 : zipWith (+) fibs (tail fibs)</code> definieren den unendlichen Fibonacci-Strom — möglich nur, weil die Struktur lazy aufgebaut wird.</li>
+    <li><strong>Selbstbezug.</strong> Klassische Einzeiler wie <code>fibs = 0 : 1 : zipWith (+) fibs (tail fibs)</code> definieren den unendlichen Fibonacci-Strom - möglich nur, weil die Struktur lazy aufgebaut wird.</li>
   </ul>
 
   <h2>Die Falle: Speicherlecks</h2>
-  <p>Lazyness hat einen Preis. Unausgewertete Thunks sammeln sich im Speicher an, und eine lange Kette aufgeschobener Berechnungen kann den Heap-Verbrauch still aufblähen — ein <strong>Speicherleck</strong> (space leak). Das Schulbeispiel ist ein lazy Left-Fold, der einen riesigen Turm von Thunks <code>(((0 + 1) + 2) + 3) ...</code> aufbaut, statt unterwegs zu addieren:</p>
+  <p>Lazyness hat einen Preis. Unausgewertete Thunks sammeln sich im Speicher an, und eine lange Kette aufgeschobener Berechnungen kann den Heap-Verbrauch still aufblähen - ein <strong>Speicherleck</strong> (space leak). Das Schulbeispiel ist ein lazy Left-Fold, der einen riesigen Turm von Thunks <code>(((0 + 1) + 2) + 3) ...</code> aufbaut, statt unterwegs zu addieren:</p>
   <pre><code>foldl (+) 0 [1..1000000]    -- builds a million thunks, may blow the stack
 foldl' (+) 0 [1..1000000]   -- strict fold: adds as it goes, constant space</code></pre>
   <p>Die Lösung ist, die <strong>Auswertung zu erzwingen</strong>, wo es zählt. Greifen Sie für Akkumulationen zum strikten Left-Fold <code>foldl'</code> (aus <code>Data.List</code>).</p>
@@ -46,21 +46,21 @@ foldl' (+) 0 [1..1000000]   -- strict fold: adds as it goes, constant space</cod
   <h2>Striktheit erzwingen: seq, $! und BangPatterns</h2>
   <p>Haskell gibt Ihnen präzise Werkzeuge, um die Auswertung zu verlangen:</p>
   <ul>
-    <li><strong><code>seq a b</code></strong> — erzwingt <code>a</code> in die schwache Kopf-Normalform, bevor <code>b</code> zurückgegeben wird.</li>
-    <li><strong><code>($!)</code></strong> — strikte Anwendung: <code>f $! x</code> erzwingt <code>x</code>, bevor <code>f</code> angewendet wird.</li>
-    <li><strong><code>BangPatterns</code></strong> — die Erweiterung <code>&#123;-# LANGUAGE BangPatterns #-&#125;</code> lässt Sie <code>let !x = ...</code> schreiben, um eine Bindung zu erzwingen.</li>
+    <li><strong><code>seq a b</code></strong> - erzwingt <code>a</code> in die schwache Kopf-Normalform, bevor <code>b</code> zurückgegeben wird.</li>
+    <li><strong><code>($!)</code></strong> - strikte Anwendung: <code>f $! x</code> erzwingt <code>x</code>, bevor <code>f</code> angewendet wird.</li>
+    <li><strong><code>BangPatterns</code></strong> - die Erweiterung <code>&#123;-# LANGUAGE BangPatterns #-&#125;</code> lässt Sie <code>let !x = ...</code> schreiben, um eine Bindung zu erzwingen.</li>
   </ul>
   <p>Eine wichtige Feinheit: Erzwingen erreicht typischerweise die <em>schwache Kopf-Normalform</em> (den äußersten Konstruktor), nicht die vollständige Auswertung. Um tief zu erzwingen, verwenden Sie <code>force</code> / <code>deepseq</code> aus dem Paket <code>deepseq</code>.</p>
 
   <h2>FAQ</h2>
   <p><strong>Ist Haskell lazy oder nicht-strikt?</strong> Technisch nicht-strikt (eine semantische Garantie); GHC implementiert es über Lazy Evaluation mit Thunks und Sharing. In der Praxis sagt man „lazy“.</p>
-  <p><strong>Warum verbraucht mein Haskell-Programm so viel Speicher?</strong> Oft ein Speicherleck durch angesammelte Thunks — häufig ein lazy <code>foldl</code>. Wechseln Sie zu <code>foldl'</code> oder fügen Sie Striktheit mit <code>seq</code>/BangPatterns hinzu.</p>
+  <p><strong>Warum verbraucht mein Haskell-Programm so viel Speicher?</strong> Oft ein Speicherleck durch angesammelte Thunks - häufig ein lazy <code>foldl</code>. Wechseln Sie zu <code>foldl'</code> oder fügen Sie Striktheit mit <code>seq</code>/BangPatterns hinzu.</p>
   <p><strong>Was ist ein Thunk?</strong> Eine unausgewertete, aufgeschobene Berechnung, die anstelle eines Werts gespeichert wird, erst erzwungen, wenn der Wert verlangt wird, und dann zwischengespeichert.</p>
-  <p><strong>Macht Lazyness Haskell langsam?</strong> Nicht von Natur aus — sie kann unnötige Arbeit vermeiden und Fusion ermöglichen. Aber nachlässige Lazyness verursacht Speicherlecks; zu wissen, wann man erzwingt, gehört zum Schreiben von gutem Haskell.</p>
+  <p><strong>Macht Lazyness Haskell langsam?</strong> Nicht von Natur aus - sie kann unnötige Arbeit vermeiden und Fusion ermöglichen. Aber nachlässige Lazyness verursacht Speicherlecks; zu wissen, wann man erzwingt, gehört zum Schreiben von gutem Haskell.</p>
 
-  <p>Lazyness ist dieselbe Mechanik, die dafür sorgt, dass sich Haskells andere Abstraktionen sauber komponieren — sehen Sie, wie die Sequenzierung in unserem Leitfaden zu <a href="/de/e/blog/2026-06-14-haskell-monads.html">Monaden in Haskell</a> funktioniert, und richten Sie die Toolchain ein, um diese Beispiele in GHCi mit dem <a href="/de/e/blog/2026-06-14-ghc-compiler-guide.html">GHC-Compiler-Leitfaden</a> auszuprobieren.</p>
+  <p>Lazyness ist dieselbe Mechanik, die dafür sorgt, dass sich Haskells andere Abstraktionen sauber komponieren - sehen Sie, wie die Sequenzierung in unserem Leitfaden zu <a href="/de/e/blog/2026-06-14-haskell-monads.html">Monaden in Haskell</a> funktioniert, und richten Sie die Toolchain ein, um diese Beispiele in GHCi mit dem <a href="/de/e/blog/2026-06-14-ghc-compiler-guide.html">GHC-Compiler-Leitfaden</a> auszuprobieren.</p>
 
-  <div class="note">Unabhängiger, von der Community gepflegter Leitfaden. <strong>coldwa.st</strong> ist eine Programmier-Ressourcen-Website; dieser Artikel ist ein neuer und origineller erklärender Text über Lazy Evaluation in Haskell, ohne Verbindung zu oder verfasst von einem bestimmten Projekt. Der Code spiegelt das Standardverhalten von Haskell/GHC wider — prüfen Sie es anhand der aktuellen GHC-Dokumentation.</div>
+  <div class="note">Unabhängiger, von der Community gepflegter Leitfaden. <strong>coldwa.st</strong> ist eine Programmier-Ressourcen-Website; dieser Artikel ist ein neuer und origineller erklärender Text über Lazy Evaluation in Haskell, ohne Verbindung zu oder verfasst von einem bestimmten Projekt. Der Code spiegelt das Standardverhalten von Haskell/GHC wider - prüfen Sie es anhand der aktuellen GHC-Dokumentation.</div>
   <p class="related-guides">Verwandte Leitfäden: <a href="/de/e/blog/2026-06-14-haskell-list-comprehensions.html">List Comprehensions</a>, <a href="/de/e/blog/2026-06-24-higher-order-functions.html">Funktionen höherer Ordnung</a>.</p>
   </div>
 </Base>

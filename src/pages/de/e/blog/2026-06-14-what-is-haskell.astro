@@ -2,7 +2,7 @@
 import Base from '../../../../layouts/Base.astro';
 const path = '/de/e/blog/2026-06-14-what-is-haskell.html';
 const title = 'Was ist Haskell? Eine klare Einführung (2026)';
-const description = 'Haskell ist eine rein funktionale, statisch typisierte und lazy auswertende Programmiersprache mit mächtiger Typinferenz. Was Haskell ist, die prägenden Ideen — Reinheit, Unveränderlichkeit, Lazy Evaluation, starke Typen —, wofür es dient und wie man startet.';
+const description = 'Haskell ist eine rein funktionale, statisch typisierte und lazy auswertende Programmiersprache mit mächtiger Typinferenz. Was Haskell ist, die prägenden Ideen - Reinheit, Unveränderlichkeit, Lazy Evaluation, starke Typen -, wofür es dient und wie man startet.';
 ---
 <Base title={title} description={description} path={path} type="article" lang="de"
   image="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
@@ -17,18 +17,18 @@ const description = 'Haskell ist eine rein funktionale, statisch typisierte und 
     <figcaption>Haskell ist eine rein funktionale, statisch typisierte Sprache, bekannt für ihr robustes Typsystem und ihre Lazy Evaluation.</figcaption>
   </figure>
 
-  <p><strong>Haskell</strong> ist eine <strong>rein funktionale</strong>, <strong>statisch typisierte</strong> und <strong>lazy auswertende</strong> Programmiersprache mit mächtiger Typinferenz. Sie gilt als akademisch, doch die zugrunde liegenden Ideen — Programme als Komposition reiner Funktionen zu schreiben, mit einem Typsystem, das ganze Klassen von Fehlern erkennt, bevor der Code läuft — tauchen immer häufiger überall auf. Dieser Leitfaden erklärt, was Haskell ist, die prägenden Ideen, wofür es dient und wie man startet.</p>
+  <p><strong>Haskell</strong> ist eine <strong>rein funktionale</strong>, <strong>statisch typisierte</strong> und <strong>lazy auswertende</strong> Programmiersprache mit mächtiger Typinferenz. Sie gilt als akademisch, doch die zugrunde liegenden Ideen - Programme als Komposition reiner Funktionen zu schreiben, mit einem Typsystem, das ganze Klassen von Fehlern erkennt, bevor der Code läuft - tauchen immer häufiger überall auf. Dieser Leitfaden erklärt, was Haskell ist, die prägenden Ideen, wofür es dient und wie man startet.</p>
 
   <h2>Die Ideen, die Haskell prägen</h2>
   <ul>
     <li><strong>Rein funktional.</strong> Du baust Programme, indem du Funktionen komponierst, die bei gleicher Eingabe stets dieselbe Ausgabe liefern und keine Seiteneffekte haben. Effekte (E/A, Zustand) werden explizit verwaltet, statt überall verstreut zu sein.</li>
-    <li><strong>Statische Typisierung mit Inferenz.</strong> Jeder Ausdruck hat einen zur Kompilierzeit geprüften Typ, doch du schreibst die Typen selten explizit hin — der Compiler leitet sie ab. „Wenn es kompiliert, läuft es oft“ ist in Haskell eine sehr reale Erfahrung.</li>
+    <li><strong>Statische Typisierung mit Inferenz.</strong> Jeder Ausdruck hat einen zur Kompilierzeit geprüften Typ, doch du schreibst die Typen selten explizit hin - der Compiler leitet sie ab. „Wenn es kompiliert, läuft es oft“ ist in Haskell eine sehr reale Erfahrung.</li>
     <li><strong>Standardmäßig unveränderlich.</strong> Werte ändern sich nicht an Ort und Stelle; du erzeugst neue Werte. Das beseitigt eine riesige Fehlerquelle rund um geteilten veränderlichen Zustand.</li>
-    <li><strong>Lazy Evaluation.</strong> Ausdrücke werden nur berechnet, wenn sie gebraucht werden, was unendliche Datenstrukturen und elegante Komposition ermöglicht — siehe unseren <a href="/de/e/blog/2026-06-14-lazy-evaluation-haskell.html">Leitfaden zur Lazy Evaluation</a>.</li>
+    <li><strong>Lazy Evaluation.</strong> Ausdrücke werden nur berechnet, wenn sie gebraucht werden, was unendliche Datenstrukturen und elegante Komposition ermöglicht - siehe unseren <a href="/de/e/blog/2026-06-14-lazy-evaluation-haskell.html">Leitfaden zur Lazy Evaluation</a>.</li>
   </ul>
 
   <h2>Ein Blick auf die Syntax</h2>
-  <figure><img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&q=80&auto=format&fit=crop" alt="Quellcode auf einem Bildschirm" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Quellcode auf einem Bildschirm — Haskell-Code ist knapp, mit abgeleiteten Typen und komponierten Funktionen.</figcaption></figure>
+  <figure><img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&q=80&auto=format&fit=crop" alt="Quellcode auf einem Bildschirm" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Quellcode auf einem Bildschirm - Haskell-Code ist knapp, mit abgeleiteten Typen und komponierten Funktionen.</figcaption></figure>
   <pre><code>-- a function with an inferred type
 double x = x * 2
 
@@ -38,24 +38,24 @@ evens = [x*x | x &lt;- [1..20], even x]
 -- pattern matching and recursion
 factorial 0 = 1
 factorial n = n * factorial (n - 1)</code></pre>
-  <p>Beachte, dass es oben keine Typannotationen gibt — Haskell leitet sie ab — und keine Schleifen; die Iteration wird durch Rekursion und Funktionen höherer Ordnung wie <code>map</code> und <code>filter</code> ausgedrückt.</p>
+  <p>Beachte, dass es oben keine Typannotationen gibt - Haskell leitet sie ab - und keine Schleifen; die Iteration wird durch Rekursion und Funktionen höherer Ordnung wie <code>map</code> und <code>filter</code> ausgedrückt.</p>
 
   <h2>Wofür Haskell dient</h2>
-  <p>Haskell betreibt mehr reale Software, als sein akademischer Ruf vermuten lässt: Compiler und Sprach-Tooling, Finanz- und Trading-Systeme, in denen Korrektheit zählt, Blockchain- und Kryptowährungsplattformen, Datenverarbeitungs-Pipelines und Web-Backends. Seine Stärken — Korrektheit, Wartbarkeit und furchtloses Refactoring, gestützt vom Typsystem — passen zu Bereichen, in denen ein Fehler teuer ist. Es ist auch eine großartige Sprache, um die Ideen der funktionalen Programmierung zu <em>lernen</em>, die dann verbessern, wie du in jeder Sprache schreibst.</p>
+  <p>Haskell betreibt mehr reale Software, als sein akademischer Ruf vermuten lässt: Compiler und Sprach-Tooling, Finanz- und Trading-Systeme, in denen Korrektheit zählt, Blockchain- und Kryptowährungsplattformen, Datenverarbeitungs-Pipelines und Web-Backends. Seine Stärken - Korrektheit, Wartbarkeit und furchtloses Refactoring, gestützt vom Typsystem - passen zu Bereichen, in denen ein Fehler teuer ist. Es ist auch eine großartige Sprache, um die Ideen der funktionalen Programmierung zu <em>lernen</em>, die dann verbessern, wie du in jeder Sprache schreibst.</p>
 
   <h2>Warum das Typsystem zählt</h2>
   <p>Haskells Typen erkennen nicht nur Tippfehler. Sie erlauben dir, illegale Zustände unmöglich darstellbar zu machen, Garantien zu kodieren (ein möglicherweise fehlender Wert ist ein <code>Maybe</code>, eine Berechnung mit Effekten liegt in <code>IO</code>) und mit Zuversicht zu refactoren, weil der Compiler alles meldet, was eine Änderung bricht. Abstraktionen wie <a href="/de/e/blog/2026-06-14-haskell-monads.html">Monaden</a> bauen darauf auf, um Effekte sauber zu sequenzieren und die Funktionen dabei rein zu halten.</p>
 
   <h2>Wie man startet</h2>
-  <p>Der moderne Weg, Haskell zu installieren, ist <strong>GHCup</strong>, das den Compiler (GHC), die Build-Tools (Cabal/Stack) und die Editor-Integration (HLS) zusammen einrichtet — siehe unseren <a href="/de/e/blog/2026-06-14-ghcup-install-haskell.html">Leitfaden zur GHCup-Installation</a>. Danach zeigt der <a href="/de/e/blog/2026-06-14-ghc-compiler-guide.html">Leitfaden zum GHC-Compiler</a>, wie man kompiliert und GHCi nutzt, die interaktive REPL, in der das meiste Lernen stattfindet. Probiere die obigen Schnipsel in GHCi aus und arbeite dich von dort weiter vor.</p>
+  <p>Der moderne Weg, Haskell zu installieren, ist <strong>GHCup</strong>, das den Compiler (GHC), die Build-Tools (Cabal/Stack) und die Editor-Integration (HLS) zusammen einrichtet - siehe unseren <a href="/de/e/blog/2026-06-14-ghcup-install-haskell.html">Leitfaden zur GHCup-Installation</a>. Danach zeigt der <a href="/de/e/blog/2026-06-14-ghc-compiler-guide.html">Leitfaden zum GHC-Compiler</a>, wie man kompiliert und GHCi nutzt, die interaktive REPL, in der das meiste Lernen stattfindet. Probiere die obigen Schnipsel in GHCi aus und arbeite dich von dort weiter vor.</p>
 
   <h2>FAQ</h2>
   <p><strong>Ist Haskell schwer zu lernen?</strong> Es verlangt, anders zu denken (Funktionen und Typen statt Schritte und Mutation), was anfangs verwirrend wirkt, aber der Kern ist klein und in sich stimmig. Viele empfinden es als erhellend, sobald das Modell sitzt.</p>
-  <p><strong>Wofür dient Haskell in der Industrie?</strong> Compiler, Fintech, Blockchain, Daten-Pipelines und Backends — Bereiche, die Korrektheit und Wartbarkeit schätzen.</p>
-  <p><strong>Ist Haskell 2026 noch relevant?</strong> Ja — es wird weiterhin aktiv entwickelt, und seine Ideen (Unveränderlichkeit, starke Typen, reine Funktionen) haben sich in die Mainstream-Sprachen verbreitet, was es wertvoll zu lernen macht, selbst wenn du anderswo programmierst.</p>
+  <p><strong>Wofür dient Haskell in der Industrie?</strong> Compiler, Fintech, Blockchain, Daten-Pipelines und Backends - Bereiche, die Korrektheit und Wartbarkeit schätzen.</p>
+  <p><strong>Ist Haskell 2026 noch relevant?</strong> Ja - es wird weiterhin aktiv entwickelt, und seine Ideen (Unveränderlichkeit, starke Typen, reine Funktionen) haben sich in die Mainstream-Sprachen verbreitet, was es wertvoll zu lernen macht, selbst wenn du anderswo programmierst.</p>
   <p><strong>Muss man Mathematik können?</strong> Nein. Ein Teil der Terminologie stammt aus der Mathematik, aber du kannst nützliches Haskell schreiben, wenn du Funktionen, Typen und die do-Notation kennst, ohne Kategorientheorie.</p>
 
-  <div class="note">Unabhängiger, von der Community gepflegter Leitfaden. <strong>coldwa.st</strong> ist eine Website mit Programmierressourcen; dieser Artikel ist ein neuer, eigenständiger einführender Text über Haskell, ohne Verbindung zu den Sprach-Maintainern. Der Code entspricht dem Standardverhalten von Haskell/GHC — prüfe es in der aktuellen GHC-Dokumentation.</div>
+  <div class="note">Unabhängiger, von der Community gepflegter Leitfaden. <strong>coldwa.st</strong> ist eine Website mit Programmierressourcen; dieser Artikel ist ein neuer, eigenständiger einführender Text über Haskell, ohne Verbindung zu den Sprach-Maintainern. Der Code entspricht dem Standardverhalten von Haskell/GHC - prüfe es in der aktuellen GHC-Dokumentation.</div>
   <p class="related-guides">Verwandte Leitfäden: <a href="/de/e/blog/2026-06-23-what-is-a-compiler.html">wie ein Compiler arbeitet</a>, <a href="/de/e/blog/2026-06-14-haskell-list-comprehensions.html">List Comprehensions</a>, <a href="/de/e/blog/2026-06-15-what-is-a-variable.html">was eine Variable ist</a>, <a href="/de/e/blog/2026-06-24-higher-order-functions.html">Funktionen höherer Ordnung</a>.</p>
   </div>
 </Base>

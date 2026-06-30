@@ -1,4 +1,4 @@
-// Auto-généré depuis src/pages/e/blog/*.astro — liste partagée home + archive (/blog). Trié date desc.
+// Auto-généré depuis src/pages/e/blog/*.astro - liste partagée home + archive (/blog). Trié date desc.
 export const articles = [
   {
     "href": "/e/blog/2026-06-19-what-is-docker.html",
@@ -13,7 +13,7 @@ export const articles = [
   {
     "href": "/e/blog/2026-06-18-what-is-an-ide.html",
     "title": "What Is an IDE? Integrated Development Environments (2026)",
-    "dek": "An IDE bundles a code editor, build tools, a debugger and version control into one app — so you write, run and fix code in one place. What an IDE includes, IDE vs editor, and how to pick one.",
+    "dek": "An IDE bundles a code editor, build tools, a debugger and version control into one app - so you write, run and fix code in one place. What an IDE includes, IDE vs editor, and how to pick one.",
     "img": "/img/what-is-an-ide-2026.jpg",
     "imgAlt": "A code editor open on a laptop, showing syntax-highlighted code",
     "date": "Jun 18, 2026",
@@ -53,7 +53,7 @@ export const articles = [
   {
     "href": "/e/blog/2026-06-17-what-is-a-webhook.html",
     "title": "What Is a Webhook? How They Work, with Examples (2026)",
-    "dek": "A webhook is an automated HTTP request a service sends you when an event happens — the \"reverse\" of an API call you make. What webhooks are, how they differ from polling an API, how to receive one safely, and real examples (Stripe, GitHub, Slack).",
+    "dek": "A webhook is an automated HTTP request a service sends you when an event happens - the \"reverse\" of an API call you make. What webhooks are, how they differ from polling an API, how to receive one safely, and real examples (Stripe, GitHub, Slack).",
     "img": "/img/what-is-a-webhook-2026.jpg",
     "imgAlt": "A server and a network switch connected by an orange Ethernet cable",
     "date": "Jun 17, 2026",
@@ -113,7 +113,7 @@ export const articles = [
   {
     "href": "/e/blog/2026-06-14-ghcup-install-haskell.html",
     "title": "Install Haskell with GHCup: the 2026 toolchain guide (GHC, Cabal, Stack, HLS)",
-    "dek": "GHCup is the recommended way to install and manage the Haskell toolchain in 2026. How to install GHC, cabal-install, Stack and the Haskell Language Server, switch versions, and fix the common pitfalls — on Linux, macOS and Windows.",
+    "dek": "GHCup is the recommended way to install and manage the Haskell toolchain in 2026. How to install GHC, cabal-install, Stack and the Haskell Language Server, switch versions, and fix the common pitfalls - on Linux, macOS and Windows.",
     "img": "https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=1200&q=80&auto=format&fit=crop",
     "imgAlt": "Syntax-highlighted source code on a dark screen",
     "date": "Jun 14, 2026",
@@ -133,7 +133,7 @@ export const articles = [
   {
     "href": "/e/blog/2026-06-14-haskell-list-comprehensions.html",
     "title": "Haskell List Comprehensions, Explained (2026)",
-    "dek": "A list comprehension builds a list from one or more generators with optional guards — concise, readable, and close to mathematical set-builder notation. The syntax, multiple generators, guards, and how they relate to map and filter.",
+    "dek": "A list comprehension builds a list from one or more generators with optional guards - concise, readable, and close to mathematical set-builder notation. The syntax, multiple generators, guards, and how they relate to map and filter.",
     "img": "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=1200&q=80&auto=format&fit=crop",
     "imgAlt": "Source code on a screen",
     "date": "Jun 14, 2026",
@@ -143,7 +143,7 @@ export const articles = [
   {
     "href": "/e/blog/2026-06-14-haskell-monads.html",
     "title": "Monads in Haskell, explained without the jargon (2026)",
-    "dek": "A monad in Haskell is a type that sequences computations carrying context — Maybe, Either, IO, lists. What a monad really is, bind (>>=) and return, do-notation, and the common monads, explained plainly.",
+    "dek": "A monad in Haskell is a type that sequences computations carrying context - Maybe, Either, IO, lists. What a monad really is, bind (>>=) and return, do-notation, and the common monads, explained plainly.",
     "img": "https://images.unsplash.com/photo-1613068687893-5e85b4638b56?w=1200&q=80&auto=format&fit=crop",
     "imgAlt": "Source code on a dark screen",
     "date": "Jun 14, 2026",
@@ -153,7 +153,7 @@ export const articles = [
   {
     "href": "/e/blog/2026-06-14-lazy-evaluation-haskell.html",
     "title": "Lazy Evaluation in Haskell, Explained (2026)",
-    "dek": "Lazy evaluation means Haskell computes a value only when it is actually needed — not when it is defined. What lazy evaluation is, thunks, why it enables infinite data structures, the space-leak trap, and how to force strictness with seq and BangPatterns.",
+    "dek": "Lazy evaluation means Haskell computes a value only when it is actually needed - not when it is defined. What lazy evaluation is, thunks, why it enables infinite data structures, the space-leak trap, and how to force strictness with seq and BangPatterns.",
     "img": "https://images.pexels.com/photos/2004161/pexels-photo-2004161.jpeg?auto=compress&cs=tinysrgb&w=1200",
     "imgAlt": "Colourful source code on a screen",
     "date": "Jun 14, 2026",
@@ -203,7 +203,7 @@ export const articles = [
   {
     "href": "/e/blog/2026-06-14-what-is-haskell.html",
     "title": "What Is Haskell? A Clear Introduction (2026)",
-    "dek": "Haskell is a purely functional, statically typed, lazy programming language with powerful type inference. What Haskell is, the ideas that define it — purity, immutability, laziness, strong types — what it is used for, and how to start.",
+    "dek": "Haskell is a purely functional, statically typed, lazy programming language with powerful type inference. What Haskell is, the ideas that define it - purity, immutability, laziness, strong types - what it is used for, and how to start.",
     "img": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80&auto=format&fit=crop",
     "imgAlt": "An open laptop showing code on a desk",
     "date": "Jun 14, 2026",
@@ -213,7 +213,7 @@ export const articles = [
   {
     "href": "/e/blog/2026-06-14-what-is-json.html",
     "title": "What Is JSON? The Data Format Behind Modern Apps (2026)",
-    "dek": "JSON is a lightweight, human-readable text format for structured data — the language most web APIs and config files speak. What JSON is, its syntax, why it is everywhere, how it compares to XML, and its honest limits.",
+    "dek": "JSON is a lightweight, human-readable text format for structured data - the language most web APIs and config files speak. What JSON is, its syntax, why it is everywhere, how it compares to XML, and its honest limits.",
     "img": "https://images.unsplash.com/photo-1607706189992-eae578626c86?w=1200&q=80&auto=format&fit=crop",
     "imgAlt": "Code in an editor on a screen",
     "date": "Jun 14, 2026",
@@ -233,7 +233,7 @@ export const articles = [
   {
     "href": "/e/blog/2017-09-09-Cabal-2-0.html",
     "title": "Cabal 2.0: the Release that Reshaped Haskell Builds (Updated)",
-    "dek": "A community-updated guide to Cabal 2.0 (2017) — nix-style local builds, Backpack mixins, the caret-version operator and a better solver — and how each of those features stands in the 2026 toolchain.",
+    "dek": "A community-updated guide to Cabal 2.0 (2017) - nix-style local builds, Backpack mixins, the caret-version operator and a better solver - and how each of those features stands in the 2026 toolchain.",
     "img": "https://coldwa.st/img/cabal-2-0.svg",
     "imgAlt": "A dependency graph and a terminal running cabal new-build, illustrating Cabal 2.0 nix-style builds",
     "date": "Sep 9, 2017",
@@ -243,7 +243,7 @@ export const articles = [
   {
     "href": "/e/blog/2013-08-20-Cabal-sandbox.html",
     "title": "Cabal Sandboxes: What They Were, and What Replaced Them (Updated)",
-    "dek": "A modern, community-updated guide to Cabal sandboxes — the per-project dependency isolation introduced in cabal-install 1.18 — and the nix-style v2-build workflow that replaced them in today\\",
+    "dek": "A modern, community-updated guide to Cabal sandboxes - the per-project dependency isolation introduced in cabal-install 1.18 - and the nix-style v2-build workflow that replaced them in today\\",
     "img": "https://coldwa.st/img/cabal-sandbox.svg",
     "imgAlt": "Three isolated Cabal sandboxes, each holding its own package set, beside a terminal running cabal sandbox init",
     "date": "Aug 20, 2013",
@@ -253,7 +253,7 @@ export const articles = [
   {
     "href": "/e/blog/2011-08-22-GSoC-Final.html",
     "title": "Parallelising cabal-install: How Haskell Builds Use Your Cores (Updated)",
-    "dek": "A community-updated guide to parallel builds in cabal-install — the dependency-graph parallelism whose foundations were laid in a 2011 Google Summer of Code project — and how -j builds and GHC semaphores work in the 2026 toolchain.",
+    "dek": "A community-updated guide to parallel builds in cabal-install - the dependency-graph parallelism whose foundations were laid in a 2011 Google Summer of Code project - and how -j builds and GHC semaphores work in the 2026 toolchain.",
     "img": "https://coldwa.st/img/gsoc-parallel.svg",
     "imgAlt": "Parallel build lanes showing independent Haskell packages compiling concurrently under cabal build -j",
     "date": "Aug 22, 2011",

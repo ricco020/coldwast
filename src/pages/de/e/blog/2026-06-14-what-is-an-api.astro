@@ -14,32 +14,32 @@ const description = 'Eine API ist ein Vertrag, der es einer Software ermöglicht
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.unsplash.com/photo-1607799279861-4dd421887fb3?w=1200&q=80&auto=format&fit=crop" alt="Code in einem Editor auf dem Bildschirm" width="1200" height="420" loading="eager" />
-    <figcaption>Code in einem Editor — eine API ist die Menge der Aufrufe, die ein Programm bereitstellt, damit Code wie dieser sie nutzt.</figcaption>
+    <figcaption>Code in einem Editor - eine API ist die Menge der Aufrufe, die ein Programm bereitstellt, damit Code wie dieser sie nutzt.</figcaption>
   </figure>
 
-  <p>Sie hören es ständig: „die API aufrufen“, „die öffentliche API“, „ein API-Schlüssel“. Eine <strong>API</strong> (Application Programming Interface) ist eine der nützlichsten Ideen der Software — und eine der am meisten mit Fachjargon überladenen. Dieser Leitfaden erklärt einfach, was eine API ist, welche Haupttypen Ihnen begegnen, wie eine typische Web-API-Anfrage funktioniert und warum APIs überall sind.</p>
+  <p>Sie hören es ständig: „die API aufrufen“, „die öffentliche API“, „ein API-Schlüssel“. Eine <strong>API</strong> (Application Programming Interface) ist eine der nützlichsten Ideen der Software - und eine der am meisten mit Fachjargon überladenen. Dieser Leitfaden erklärt einfach, was eine API ist, welche Haupttypen Ihnen begegnen, wie eine typische Web-API-Anfrage funktioniert und warum APIs überall sind.</p>
 
   <h2>Die kurze Definition</h2>
-  <p>Eine <strong>API ist ein Vertrag, der es einer Software ermöglicht, mit einer anderen zu kommunizieren</strong>. Sie legt fest, welche Anfragen Sie stellen können, welche Daten Sie senden müssen und was Sie zurückbekommen — ohne dass Sie wissen müssen, wie die andere Seite intern aufgebaut ist.</p>
+  <p>Eine <strong>API ist ein Vertrag, der es einer Software ermöglicht, mit einer anderen zu kommunizieren</strong>. Sie legt fest, welche Anfragen Sie stellen können, welche Daten Sie senden müssen und was Sie zurückbekommen - ohne dass Sie wissen müssen, wie die andere Seite intern aufgebaut ist.</p>
   <p>Die klassische Analogie ist das Restaurant. Sie (ein Programm) lesen eine <em>Speisekarte</em> (die API) und geben beim <em>Kellner</em> eine Bestellung auf. Sie betreten die Küche nicht und müssen nicht wissen, wie das Gericht zubereitet wird. Die Speisekarte ist die vereinbarte Schnittstelle; die Küche ist die Implementierung, dahinter verborgen. Eine API ist diese Speisekarte für Software.</p>
 
   <h2>Die wichtigsten API-Typen</h2>
   <ul>
-    <li><strong>Web-API (die meistdiskutierte)</strong> — ein Programm spricht <em>über das Netzwerk</em> mit einem anderen, meist per HTTP. Wenn eine Wetter-App die Vorhersage anzeigt, ruft sie die Web-API eines Wetterdienstes auf. Die meisten modernen Web-APIs folgen dem <strong>REST</strong>-Stil und tauschen Daten als JSON aus (siehe <a href="/de/e/blog/2026-06-17-rest-vs-graphql.html">REST vs. GraphQL</a> und <a href="/de/e/blog/2026-06-18-grpc-vs-rest.html">gRPC vs. REST</a> für die wichtigsten Alternativen).</li>
-    <li><strong>Bibliotheks-/Framework-API</strong> — die Menge an Funktionen und Typen, die eine Code-Bibliothek bereitstellt, damit Sie sie aufrufen. Wenn Sie eine Datums-Bibliothek nutzen, <em>sind</em> die Funktionen, die sie Ihnen bietet, ihre API.</li>
-    <li><strong>Betriebssystem-API</strong> — die Art, wie ein Programm das Betriebssystem bittet, eine Datei zu öffnen, ein Fenster zu zeichnen oder das Netzwerk zu nutzen. POSIX ist eine davon.</li>
+    <li><strong>Web-API (die meistdiskutierte)</strong> - ein Programm spricht <em>über das Netzwerk</em> mit einem anderen, meist per HTTP. Wenn eine Wetter-App die Vorhersage anzeigt, ruft sie die Web-API eines Wetterdienstes auf. Die meisten modernen Web-APIs folgen dem <strong>REST</strong>-Stil und tauschen Daten als JSON aus (siehe <a href="/de/e/blog/2026-06-17-rest-vs-graphql.html">REST vs. GraphQL</a> und <a href="/de/e/blog/2026-06-18-grpc-vs-rest.html">gRPC vs. REST</a> für die wichtigsten Alternativen).</li>
+    <li><strong>Bibliotheks-/Framework-API</strong> - die Menge an Funktionen und Typen, die eine Code-Bibliothek bereitstellt, damit Sie sie aufrufen. Wenn Sie eine Datums-Bibliothek nutzen, <em>sind</em> die Funktionen, die sie Ihnen bietet, ihre API.</li>
+    <li><strong>Betriebssystem-API</strong> - die Art, wie ein Programm das Betriebssystem bittet, eine Datei zu öffnen, ein Fenster zu zeichnen oder das Netzwerk zu nutzen. POSIX ist eine davon.</li>
   </ul>
   <p>Der rote Faden: Eine API ist die <strong>veröffentlichte Oberfläche</strong> von etwas, der Teil, den Sie nutzen dürfen, getrennt von den internen Abläufen, von denen Sie nicht abhängen sollen.</p>
 
-  <figure><img src="https://images.unsplash.com/photo-1556656793-08538906a9f8?w=1200&q=80&auto=format&fit=crop" alt="Eine Person hält ein Smartphone mit beiden Händen" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Ein Smartphone im Gebrauch — die enthaltenen Apps rufen im Hintergrund ständig Web-APIs auf, um Nachrichten, Karten, Preise und mehr abzurufen.</figcaption></figure>
+  <figure><img src="https://images.unsplash.com/photo-1556656793-08538906a9f8?w=1200&q=80&auto=format&fit=crop" alt="Eine Person hält ein Smartphone mit beiden Händen" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Ein Smartphone im Gebrauch - die enthaltenen Apps rufen im Hintergrund ständig Web-APIs auf, um Nachrichten, Karten, Preise und mehr abzurufen.</figcaption></figure>
 
   <h2>Wie eine Web-API-Anfrage funktioniert</h2>
   <p>Ein Web-API-Aufruf ist eine <strong>Anfrage</strong> und eine <strong>Antwort</strong>. Der Client sendet eine HTTP-Anfrage an eine URL (einen <em>Endpunkt</em>) mit einer Methode, die seine Absicht signalisiert, und der Server gibt einen Statuscode und meist Daten zurück. Die gängigen Methoden:</p>
   <ul>
-    <li><strong>GET</strong> — Daten lesen („gib mir Benutzer 42“).</li>
-    <li><strong>POST</strong> — etwas Neues erstellen.</li>
-    <li><strong>PUT</strong> / <strong>PATCH</strong> — etwas aktualisieren.</li>
-    <li><strong>DELETE</strong> — etwas löschen.</li>
+    <li><strong>GET</strong> - Daten lesen („gib mir Benutzer 42“).</li>
+    <li><strong>POST</strong> - etwas Neues erstellen.</li>
+    <li><strong>PUT</strong> / <strong>PATCH</strong> - etwas aktualisieren.</li>
+    <li><strong>DELETE</strong> - etwas löschen.</li>
   </ul>
   <p>Eine einfache Anfrage zum Lesen eines Benutzers könnte so aussehen, wobei der Server mit JSON antwortet:</p>
   <pre><code>GET /users/42  HTTP/1.1
@@ -48,23 +48,23 @@ Host: api.example.com
 -- response --
 200 OK
 &#123; &quot;id&quot;: 42, &quot;name&quot;: &quot;Ada&quot;, &quot;active&quot;: true &#125;</code></pre>
-  <p>Die <code>200</code> ist ein <strong>Statuscode</strong>, der Erfolg bedeutet; <code>404</code> bedeutet nicht gefunden, <code>401</code> nicht authentifiziert, <code>500</code> ein Serverfehler. Der Body ist <strong>JSON</strong> — das leichtgewichtige, menschenlesbare Format, das die meisten Web-APIs zum Austausch strukturierter Daten nutzen.</p>
+  <p>Die <code>200</code> ist ein <strong>Statuscode</strong>, der Erfolg bedeutet; <code>404</code> bedeutet nicht gefunden, <code>401</code> nicht authentifiziert, <code>500</code> ein Serverfehler. Der Body ist <strong>JSON</strong> - das leichtgewichtige, menschenlesbare Format, das die meisten Web-APIs zum Austausch strukturierter Daten nutzen.</p>
 
   <h2>Authentifizierung und Schlüssel</h2>
-  <p>Viele APIs verlangen, dass Sie sich mit einem <strong>API-Schlüssel</strong> oder Token ausweisen, gesendet in einem Anfrage-Header. So kann der Anbieter steuern, wer den Dienst nutzt, Ratenbegrenzungen durchsetzen und die Nutzung abrechnen. Halten Sie Schlüssel geheim — ein durchgesickerter Schlüssel ist wie ein durchgesickertes Passwort.</p>
+  <p>Viele APIs verlangen, dass Sie sich mit einem <strong>API-Schlüssel</strong> oder Token ausweisen, gesendet in einem Anfrage-Header. So kann der Anbieter steuern, wer den Dienst nutzt, Ratenbegrenzungen durchsetzen und die Nutzung abrechnen. Halten Sie Schlüssel geheim - ein durchgesickerter Schlüssel ist wie ein durchgesickertes Passwort.</p>
 
   <h2>Warum APIs wichtig sind</h2>
-  <p>APIs sind das, was es ermöglicht, Software zu <strong>komponieren</strong>, statt sie neu zu bauen. Ein Shop kann Zahlungen einziehen, ohne eine Bank zu schreiben; eine App kann eine Karte anzeigen, ohne die Welt zu zeichnen; die Dienste eines Unternehmens sprechen über interne APIs miteinander. Sie verwandeln die Fähigkeiten anderer in Bausteine, die Sie mit wenigen Zeilen aufrufen — und das ist im Kern die Art, wie moderne Software entsteht.</p>
+  <p>APIs sind das, was es ermöglicht, Software zu <strong>komponieren</strong>, statt sie neu zu bauen. Ein Shop kann Zahlungen einziehen, ohne eine Bank zu schreiben; eine App kann eine Karte anzeigen, ohne die Welt zu zeichnen; die Dienste eines Unternehmens sprechen über interne APIs miteinander. Sie verwandeln die Fähigkeiten anderer in Bausteine, die Sie mit wenigen Zeilen aufrufen - und das ist im Kern die Art, wie moderne Software entsteht.</p>
 
   <h2>Die ehrlichen Grenzen</h2>
-  <p>Eine API ist eine <em>Abhängigkeit</em>. Wenn der Anbieter sie ändert, Sie in der Rate begrenzt, die Preise erhöht oder den Dienst einstellt, ist Ihre Software betroffen — deshalb sind gute APIs <strong>versioniert</strong> und dokumentiert, und deshalb behandeln Sie Fehler und Timeouts, statt anzunehmen, dass jeder Aufruf gelingt. Eine API verbirgt Komplexität; sie beseitigt sie nicht.</p>
+  <p>Eine API ist eine <em>Abhängigkeit</em>. Wenn der Anbieter sie ändert, Sie in der Rate begrenzt, die Preise erhöht oder den Dienst einstellt, ist Ihre Software betroffen - deshalb sind gute APIs <strong>versioniert</strong> und dokumentiert, und deshalb behandeln Sie Fehler und Timeouts, statt anzunehmen, dass jeder Aufruf gelingt. Eine API verbirgt Komplexität; sie beseitigt sie nicht.</p>
 
   <h2>Zusammengefasst</h2>
-  <p>Eine API ist ein Vertrag, der es einem Programm ermöglicht, die Fähigkeiten eines anderen über eine definierte Menge von Anfragen und Antworten zu nutzen, ohne dessen interne Abläufe zu berühren. Web-/REST-APIs über HTTP mit JSON sind der Typ, dem Sie am häufigsten begegnen, aber die Idee — eine veröffentlichte Schnittstelle, getrennt von der zugrunde liegenden Implementierung — zieht sich durch Bibliotheken, Betriebssysteme und jedes gut strukturierte Programm. Lernen Sie, die Dokumentation einer API zu lesen, und Sie können fast alles mit allem verbinden.</p>
+  <p>Eine API ist ein Vertrag, der es einem Programm ermöglicht, die Fähigkeiten eines anderen über eine definierte Menge von Anfragen und Antworten zu nutzen, ohne dessen interne Abläufe zu berühren. Web-/REST-APIs über HTTP mit JSON sind der Typ, dem Sie am häufigsten begegnen, aber die Idee - eine veröffentlichte Schnittstelle, getrennt von der zugrunde liegenden Implementierung - zieht sich durch Bibliotheken, Betriebssysteme und jedes gut strukturierte Programm. Lernen Sie, die Dokumentation einer API zu lesen, und Sie können fast alles mit allem verbinden.</p>
 
   <p>Neu in einer Sprache zum Bauen oder Aufrufen von APIs? Durchstöbern Sie unseren <a href="/de/e/">Guide-Index</a> für klare und originelle Programmiererklärungen.</p>
 
-  <div class="note">Unabhängiger, von der Community gepflegter Leitfaden. <strong>coldwa.st</strong> ist eine Programmier-Ressourcen-Website; dieser Artikel ist ein neuer und origineller erklärender Text über APIs. Die Beispiele spiegeln das Standardverhalten von HTTP/REST wider — prüfen Sie es anhand der Dokumentation der konkreten API, die Sie verwenden.</div>
+  <div class="note">Unabhängiger, von der Community gepflegter Leitfaden. <strong>coldwa.st</strong> ist eine Programmier-Ressourcen-Website; dieser Artikel ist ein neuer und origineller erklärender Text über APIs. Die Beispiele spiegeln das Standardverhalten von HTTP/REST wider - prüfen Sie es anhand der Dokumentation der konkreten API, die Sie verwenden.</div>
   <p class="related-guides">Verwandte Leitfäden: <a href="/de/e/blog/2026-06-14-what-is-sql.html">was SQL ist</a>, <a href="/de/e/blog/2026-06-15-what-is-a-database.html">was eine Datenbank ist</a>, <a href="/de/e/blog/2026-06-17-what-is-a-webhook.html">was ein Webhook ist</a>.</p>
   </div>
 </Base>

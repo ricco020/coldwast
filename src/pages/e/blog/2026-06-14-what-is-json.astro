@@ -2,7 +2,7 @@
 import Base from '../../../layouts/Base.astro';
 const path = '/e/blog/2026-06-14-what-is-json.html';
 const title = 'What Is JSON? The Data Format Behind Modern Apps (2026)';
-const description = 'JSON is a lightweight, human-readable text format for structured data — the language most web APIs and config files speak. What JSON is, its syntax, why it is everywhere, how it compares to XML, and its honest limits.';
+const description = 'JSON is a lightweight, human-readable text format for structured data - the language most web APIs and config files speak. What JSON is, its syntax, why it is everywhere, how it compares to XML, and its honest limits.';
 ---
 <Base title={title} description={description} path={path} type="article"
   image="https://images.unsplash.com/photo-1607706189992-eae578626c86?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
@@ -14,13 +14,13 @@ const description = 'JSON is a lightweight, human-readable text format for struc
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.unsplash.com/photo-1607706189992-eae578626c86?w=1200&q=80&auto=format&fit=crop" alt="Code in an editor on a screen" width="1200" height="420" loading="eager" />
-    <figcaption>Code in an editor — JSON is the text format data like this is often exchanged in.</figcaption>
+    <figcaption>Code in an editor - JSON is the text format data like this is often exchanged in.</figcaption>
   </figure>
 
   <p>Open almost any web <a href="/e/blog/2026-06-14-what-is-an-api.html">API</a> response, a JavaScript config file, or a modern app&#39;s saved settings, and you will see <strong>JSON</strong>. It is the format that quietly carries most of the structured data moving around the internet. This guide explains what JSON is, its small syntax, why it took over, how it compares to XML, and where it falls short.</p>
 
   <h2>The short definition</h2>
-  <p><strong>JSON (JavaScript Object Notation) is a lightweight, text-based format for representing structured data.</strong> It is easy for humans to read and easy for machines to parse, and despite the name it is <em>language-independent</em> — practically every programming language can read and write it.</p>
+  <p><strong>JSON (JavaScript Object Notation) is a lightweight, text-based format for representing structured data.</strong> It is easy for humans to read and easy for machines to parse, and despite the name it is <em>language-independent</em> - practically every programming language can read and write it.</p>
 
   <h2>The syntax, in one example</h2>
   <p>JSON is built from a handful of value types: objects, arrays, strings, numbers, booleans and <code>null</code>. An object is a set of key–value pairs in braces; an array is an ordered list in brackets:</p>
@@ -31,9 +31,9 @@ const description = 'JSON is a lightweight, human-readable text format for struc
   &quot;roles&quot;: [&quot;admin&quot;, &quot;author&quot;],
   &quot;address&quot;: &#123; &quot;city&quot;: &quot;London&quot;, &quot;zip&quot;: &quot;EC1&quot; &#125;
 &#125;</code></pre>
-  <p>That is essentially the whole format. Keys are always strings in double quotes; values can themselves be objects or arrays, so JSON nests to any depth. There are no functions, no variables and no logic — it describes <em>data</em>, nothing more.</p>
+  <p>That is essentially the whole format. Keys are always strings in double quotes; values can themselves be objects or arrays, so JSON nests to any depth. There are no functions, no variables and no logic - it describes <em>data</em>, nothing more.</p>
 
-  <figure><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=crop" alt="A laptop showing a data dashboard with charts" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>A laptop showing a data dashboard — services constantly exchange structured data as JSON behind interfaces like this.</figcaption></figure>
+  <figure><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=crop" alt="A laptop showing a data dashboard with charts" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>A laptop showing a data dashboard - services constantly exchange structured data as JSON behind interfaces like this.</figcaption></figure>
 
   <h2>Why JSON is everywhere</h2>
   <ul>
@@ -44,26 +44,26 @@ const description = 'JSON is a lightweight, human-readable text format for struc
   </ul>
 
   <h2>JSON vs XML</h2>
-  <p>Before JSON, <strong>XML</strong> was the common data-exchange format. XML is more verbose — every value is wrapped in opening and closing tags — and supports features like attributes, namespaces and schemas that JSON does not. JSON won for web APIs because it is lighter, less noisy, and maps directly onto JavaScript objects in the browser. XML still has its place where its richer document features matter; for most data exchange, JSON is the default.</p>
+  <p>Before JSON, <strong>XML</strong> was the common data-exchange format. XML is more verbose - every value is wrapped in opening and closing tags - and supports features like attributes, namespaces and schemas that JSON does not. JSON won for web APIs because it is lighter, less noisy, and maps directly onto JavaScript objects in the browser. XML still has its place where its richer document features matter; for most data exchange, JSON is the default.</p>
 
   <h2>The honest limits</h2>
-  <p>JSON&#39;s simplicity has trade-offs. It has <strong>no comments</strong>, so you cannot annotate a config file inline. It has <strong>no date type</strong> — dates are passed as strings by convention. It has no schema built in (though tools like JSON Schema add one separately), and large JSON documents are less efficient than purpose-built binary formats. For most web data, none of this matters; for very large or strongly-typed data, it is worth knowing.</p>
+  <p>JSON&#39;s simplicity has trade-offs. It has <strong>no comments</strong>, so you cannot annotate a config file inline. It has <strong>no date type</strong> - dates are passed as strings by convention. It has no schema built in (though tools like JSON Schema add one separately), and large JSON documents are less efficient than purpose-built binary formats. For most web data, none of this matters; for very large or strongly-typed data, it is worth knowing.</p>
 
   <h2>FAQ</h2>
-  <p><strong>Is JSON only for JavaScript?</strong> No. The name comes from JavaScript syntax, but JSON is language-independent — Python, Go, Rust, Java and the rest all read and write it natively.</p>
+  <p><strong>Is JSON only for JavaScript?</strong> No. The name comes from JavaScript syntax, but JSON is language-independent - Python, Go, Rust, Java and the rest all read and write it natively.</p>
   <p><strong>What is the difference between JSON and a JavaScript object?</strong> They look similar, but JSON is a text format (a string); a JavaScript object is a live in-memory value. You <em>parse</em> JSON text into an object, and <em>stringify</em> an object back into JSON.</p>
   <p><strong>Can JSON store comments?</strong> No. The format deliberately omits comments. Some tools accept &quot;JSON with comments&quot; variants, but standard JSON does not.</p>
-  <p><strong>How are dates handled in JSON?</strong> As strings, by convention — usually ISO 8601 like &quot;2026-06-14&quot;. JSON itself has no dedicated date type.</p>
+  <p><strong>How are dates handled in JSON?</strong> As strings, by convention - usually ISO 8601 like &quot;2026-06-14&quot;. JSON itself has no dedicated date type.</p>
 
   <p>JSON is the data half of most web communication; the request-and-response machinery around it is the <a href="/e/blog/2026-06-14-what-is-an-api.html">API</a>. Browse more clear explainers in our <a href="/e/">guides index</a>.</p>
 
   <h2>Frequently asked questions</h2>
   <details><summary>What is JSON in simple terms?</summary><p>JSON (JavaScript Object Notation) is a lightweight, human-readable text format for structured data. It represents data as key/value pairs and ordered lists, using a handful of types: objects, arrays, strings, numbers, booleans and null. It is the format most web APIs and configuration files use to exchange data, because it is simple for both people and machines to read and write.</p></details>
   <details><summary>What is the difference between JSON and XML?</summary><p>Both store structured data as text, but JSON is lighter and less verbose: it has no closing tags and maps directly to the data types of most programming languages, which makes it easy to parse. XML is more verbose and supports things JSON does not, such as attributes, comments and schemas/namespaces. For most modern web APIs, JSON has become the default; XML still appears in older or document-centric systems.</p></details>
-  <details><summary>Is JSON a programming language?</summary><p>No. JSON is a data format, not a programming language — it only describes data, it cannot contain logic or run code. Its syntax was derived from JavaScript object literals, but JSON is language-independent and is read and written by virtually every programming language today.</p></details>
+  <details><summary>Is JSON a programming language?</summary><p>No. JSON is a data format, not a programming language - it only describes data, it cannot contain logic or run code. Its syntax was derived from JavaScript object literals, but JSON is language-independent and is read and written by virtually every programming language today.</p></details>
   <details><summary>What are JSON's main limitations?</summary><p>JSON has no native date/time type (dates are usually strings), no comments, and no support for things like binary data without encoding. It also has no built-in schema in the format itself (though JSON Schema exists separately). For configuration where comments matter, formats like YAML or TOML are sometimes preferred; for data exchange, JSON remains the standard.</p></details>
 
-  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about JSON. Examples reflect the standard JSON format — verify against the specification (json.org / ECMA-404) for edge cases.</div>
+  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about JSON. Examples reflect the standard JSON format - verify against the specification (json.org / ECMA-404) for edge cases.</div>
   </div>
 
   <script type="application/ld+json" set:html={JSON.stringify({
@@ -72,7 +72,7 @@ const description = 'JSON is a lightweight, human-readable text format for struc
     "mainEntity": [
       { "@type": "Question", "name": "What is JSON in simple terms?", "acceptedAnswer": { "@type": "Answer", "text": "JSON (JavaScript Object Notation) is a lightweight, human-readable text format for structured data. It represents data as key/value pairs and ordered lists using a few types: objects, arrays, strings, numbers, booleans and null. It is the format most web APIs and config files use to exchange data." } },
       { "@type": "Question", "name": "What is the difference between JSON and XML?", "acceptedAnswer": { "@type": "Answer", "text": "Both store structured data as text, but JSON is lighter and less verbose, with no closing tags, and maps directly to most languages' data types, making it easy to parse. XML is more verbose and supports attributes, comments and schemas. Most modern web APIs default to JSON; XML still appears in older or document-centric systems." } },
-      { "@type": "Question", "name": "Is JSON a programming language?", "acceptedAnswer": { "@type": "Answer", "text": "No. JSON is a data format, not a programming language — it only describes data and cannot contain logic or run code. Its syntax came from JavaScript object literals, but JSON is language-independent and read/written by virtually every language." } },
+      { "@type": "Question", "name": "Is JSON a programming language?", "acceptedAnswer": { "@type": "Answer", "text": "No. JSON is a data format, not a programming language - it only describes data and cannot contain logic or run code. Its syntax came from JavaScript object literals, but JSON is language-independent and read/written by virtually every language." } },
       { "@type": "Question", "name": "What are JSON's main limitations?", "acceptedAnswer": { "@type": "Answer", "text": "JSON has no native date/time type (dates are usually strings), no comments, and no binary data without encoding. The format has no built-in schema (JSON Schema exists separately). For commented configuration, YAML or TOML are sometimes preferred; for data exchange, JSON remains the standard." } }
     ]
   })} />

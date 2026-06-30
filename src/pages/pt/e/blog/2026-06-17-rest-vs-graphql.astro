@@ -5,9 +5,9 @@ const title = 'REST vs GraphQL: que estilo de API, honestamente (2026)';
 const description = 'REST e GraphQL são duas formas de construir uma API web. REST usa muitos endpoints de resposta fixa; GraphQL um único endpoint onde o cliente pede exatamente os campos que quer. As verdadeiras diferenças, o over/under-fetching, a cache e qual escolher.';
 const hero = '/img/rest-vs-graphql-2026.jpg';
 const faq = [
-  { q: 'Qual é a diferença entre REST e GraphQL?', a: 'REST e GraphQL são dois estilos para construir uma API web. Uma API REST expõe muitos URLs (endpoints), cada um devolvendo uma forma de dados fixa — chamas /users/42 e obténs o que esse endpoint devolve. GraphQL expõe um único endpoint ao qual o cliente envia uma query que descreve exatamente os campos que quer, e recebe apenas esses. Em suma: com REST o servidor decide a forma da resposta por endpoint; com GraphQL decide-a o cliente por query. Ambos passam por HTTP e trocam, em geral, JSON.' },
-  { q: 'O GraphQL é melhor do que o REST?', a: 'Nenhum é universalmente melhor — fazem compromissos diferentes. O GraphQL brilha quando os clientes precisam de dados flexíveis e precisos (ex.: ecrãs móveis variados) porque evita o over-fetching e o under-fetching e agrupa várias chamadas numa única query. O REST brilha em APIs simples orientadas a recursos e beneficia de uma cache HTTP gratuita e madura e de um tooling sólido. O GraphQL acrescenta complexidade no servidor (esquema, resolvers, controlo do custo das queries); o REST pode exigir várias idas e voltas. Escolhe consoante as necessidades de dados dos teus clientes, não a moda.' },
-  { q: 'O que é o over-fetching e o under-fetching?', a: 'O over-fetching é quando um endpoint devolve mais dados do que o necessário — pedes um utilizador e recebes dezenas de campos para mostrar apenas um nome, desperdiçando largura de banda. O under-fetching é quando um endpoint não devolve o suficiente, obrigando-te a várias chamadas para montar o que um ecrã pede. O REST está sujeito a isso porque cada endpoint tem uma resposta fixa. O GraphQL evita ambos ao deixar o cliente pedir exatamente os campos que quer numa única query — é o seu principal atrativo.' },
+  { q: 'Qual é a diferença entre REST e GraphQL?', a: 'REST e GraphQL são dois estilos para construir uma API web. Uma API REST expõe muitos URLs (endpoints), cada um devolvendo uma forma de dados fixa - chamas /users/42 e obténs o que esse endpoint devolve. GraphQL expõe um único endpoint ao qual o cliente envia uma query que descreve exatamente os campos que quer, e recebe apenas esses. Em suma: com REST o servidor decide a forma da resposta por endpoint; com GraphQL decide-a o cliente por query. Ambos passam por HTTP e trocam, em geral, JSON.' },
+  { q: 'O GraphQL é melhor do que o REST?', a: 'Nenhum é universalmente melhor - fazem compromissos diferentes. O GraphQL brilha quando os clientes precisam de dados flexíveis e precisos (ex.: ecrãs móveis variados) porque evita o over-fetching e o under-fetching e agrupa várias chamadas numa única query. O REST brilha em APIs simples orientadas a recursos e beneficia de uma cache HTTP gratuita e madura e de um tooling sólido. O GraphQL acrescenta complexidade no servidor (esquema, resolvers, controlo do custo das queries); o REST pode exigir várias idas e voltas. Escolhe consoante as necessidades de dados dos teus clientes, não a moda.' },
+  { q: 'O que é o over-fetching e o under-fetching?', a: 'O over-fetching é quando um endpoint devolve mais dados do que o necessário - pedes um utilizador e recebes dezenas de campos para mostrar apenas um nome, desperdiçando largura de banda. O under-fetching é quando um endpoint não devolve o suficiente, obrigando-te a várias chamadas para montar o que um ecrã pede. O REST está sujeito a isso porque cada endpoint tem uma resposta fixa. O GraphQL evita ambos ao deixar o cliente pedir exatamente os campos que quer numa única query - é o seu principal atrativo.' },
   { q: 'REST ou GraphQL: qual fica melhor em cache?', a: 'O REST é geralmente mais simples de pôr em cache. Como o REST usa URLs distintos e métodos HTTP (sobretudo GET para leituras), funciona naturalmente com a cache HTTP, as CDN e a cache do navegador indexadas no URL. O GraphQL envia, em geral, as queries em POST para um único endpoint, pelo que a cache HTTP padrão não se aplica logo, e apoias-te numa cache do lado do cliente (como o Apollo) ou em queries persistidas. Se uma cache HTTP padrão e gratuita conta muito para ti, é um ponto a favor do REST.' },
 ];
 ---
@@ -21,15 +21,15 @@ const faq = [
 
   <figure>
     <img class="hero" src={hero} alt="Um portátil a mostrar código de folha de estilos num editor de tema escuro" width="1200" height="420" loading="eager" />
-    <figcaption>Dois estilos de API, um mesmo trabalho — expor dados via HTTP. REST e GraphQL diferem apenas em quem decide a forma da resposta.</figcaption>
+    <figcaption>Dois estilos de API, um mesmo trabalho - expor dados via HTTP. REST e GraphQL diferem apenas em quem decide a forma da resposta.</figcaption>
   </figure>
 
-  <p>Estás a construir uma <a href="/pt/e/blog/2026-06-14-what-is-an-api.html">API</a> e a primeira grande bifurcação é o estilo: <strong>REST</strong> ou <strong>GraphQL</strong>. Resolvem o mesmo problema — deixar os clientes ler e escrever dados via HTTP — mas colocam o controlo em mãos diferentes. Este guia compara-os honestamente quanto à obtenção de dados, cache, complexidade e tooling, para escolheres com conhecimento de causa.</p>
+  <p>Estás a construir uma <a href="/pt/e/blog/2026-06-14-what-is-an-api.html">API</a> e a primeira grande bifurcação é o estilo: <strong>REST</strong> ou <strong>GraphQL</strong>. Resolvem o mesmo problema - deixar os clientes ler e escrever dados via HTTP - mas colocam o controlo em mãos diferentes. Este guia compara-os honestamente quanto à obtenção de dados, cache, complexidade e tooling, para escolheres com conhecimento de causa.</p>
 
   <h2>A diferença fundamental</h2>
   <ul>
-    <li><strong>REST</strong> — muitos <strong>endpoints</strong> (URLs), cada um devolvendo uma <strong>forma fixa</strong> de dados. Chamas <code>/users/42</code> e obténs o que esse endpoint foi feito para devolver. É o <em>servidor</em> que decide a forma.</li>
-    <li><strong>GraphQL</strong> — um <strong>único endpoint</strong> ao qual o cliente envia uma <strong>query</strong> que nomeia exatamente os campos que quer, e recebe apenas esses. É o <em>cliente</em> que decide a forma.</li>
+    <li><strong>REST</strong> - muitos <strong>endpoints</strong> (URLs), cada um devolvendo uma <strong>forma fixa</strong> de dados. Chamas <code>/users/42</code> e obténs o que esse endpoint foi feito para devolver. É o <em>servidor</em> que decide a forma.</li>
+    <li><strong>GraphQL</strong> - um <strong>único endpoint</strong> ao qual o cliente envia uma <strong>query</strong> que nomeia exatamente os campos que quer, e recebe apenas esses. É o <em>cliente</em> que decide a forma.</li>
   </ul>
   <p>Ambos passam por HTTP e falam, em geral, <a href="/pt/e/blog/2026-06-14-what-is-json.html">JSON</a>. A diferença: quem controla o que volta.</p>
 
@@ -43,51 +43,51 @@ GET /users/42/posts
 POST /graphql
 &#123; user(id: 42) &#123; name posts &#123; title &#125; &#125; &#125;</code></pre>
 
-  <figure><img src="/img/rest-vs-graphql-2026-dev.jpg" alt="Uma pessoa a digitar num computador de secretária a mostrar código-fonte" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>A escolha é um compromisso de design, não um vencedor — depende da variedade das necessidades de dados dos teus clientes.</figcaption></figure>
+  <figure><img src="/img/rest-vs-graphql-2026-dev.jpg" alt="Uma pessoa a digitar num computador de secretária a mostrar código-fonte" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>A escolha é um compromisso de design, não um vencedor - depende da variedade das necessidades de dados dos teus clientes.</figcaption></figure>
 
   <h2>Over-fetching e under-fetching</h2>
   <p>É o argumento principal do GraphQL. Com as respostas fixas do REST, encontras muitas vezes:</p>
   <ul>
-    <li><strong>O over-fetching</strong> — o endpoint devolve muito mais do que o necessário (dezenas de campos para mostrar um nome).</li>
-    <li><strong>O under-fetching</strong> — um endpoint não chega, fazes várias outras chamadas para construir um ecrã.</li>
+    <li><strong>O over-fetching</strong> - o endpoint devolve muito mais do que o necessário (dezenas de campos para mostrar um nome).</li>
+    <li><strong>O under-fetching</strong> - um endpoint não chega, fazes várias outras chamadas para construir um ecrã.</li>
   </ul>
   <p>O GraphQL evita os dois: o cliente pede exatamente os campos que quer, numa única query. Para apps com muitos ecrãs (sobretudo móveis), essa precisão é a principal razão de adoção.</p>
 
   <h2>Onde o REST ainda ganha</h2>
   <ul>
-    <li><strong>Cache</strong> — URLs distintos + GET fazem o REST funcionar naturalmente com as caches HTTP e as CDN. O GraphQL (POST para um endpoint) precisa de uma cache cliente ou de queries persistidas.</li>
-    <li><strong>Simplicidade</strong> — para dados orientados a recursos, o REST tem menos a aprender e a operar; sem esquema, resolvers nem limites de custo de query.</li>
-    <li><strong>Tooling e ubiquidade</strong> — o REST está em todo o lado, com um tooling maduro e gratuito e uma curva de aprendizagem suave.</li>
+    <li><strong>Cache</strong> - URLs distintos + GET fazem o REST funcionar naturalmente com as caches HTTP e as CDN. O GraphQL (POST para um endpoint) precisa de uma cache cliente ou de queries persistidas.</li>
+    <li><strong>Simplicidade</strong> - para dados orientados a recursos, o REST tem menos a aprender e a operar; sem esquema, resolvers nem limites de custo de query.</li>
+    <li><strong>Tooling e ubiquidade</strong> - o REST está em todo o lado, com um tooling maduro e gratuito e uma curva de aprendizagem suave.</li>
   </ul>
 
   <h2>Onde o GraphQL ganha</h2>
   <ul>
-    <li><strong>Dados flexíveis e precisos</strong> — os clientes obtêm exatamente aquilo de que precisam, nada mais.</li>
-    <li><strong>Menos idas e voltas</strong> — dados ligados numa única query em vez de várias chamadas.</li>
-    <li><strong>Um esquema tipado</strong> — um contrato autodocumentado e um tooling poderoso (introspeção, codegen).</li>
+    <li><strong>Dados flexíveis e precisos</strong> - os clientes obtêm exatamente aquilo de que precisam, nada mais.</li>
+    <li><strong>Menos idas e voltas</strong> - dados ligados numa única query em vez de várias chamadas.</li>
+    <li><strong>Um esquema tipado</strong> - um contrato autodocumentado e um tooling poderoso (introspeção, codegen).</li>
   </ul>
   <p>O custo: mais complexidade no servidor (esquema, resolvers, proteção contra queries dispendiosas) e uma cache para desenhar em vez de obtida de graça.</p>
 
   <div class="affbox" style="margin:28px 0;">
     <span class="tag">Recomendado</span>
     <h3>Um sítio para alojar a tua API</h3>
-    <p>REST ou GraphQL, a tua API precisa de um sítio fiável onde viver. Um VPS ou servidor cloud dá-te o controlo total do runtime, da base de dados e da cache. A Infomaniak — um alojamento suíço, respeitador da privacidade — oferece VPS e servidores cloud adequados.</p>
+    <p>REST ou GraphQL, a tua API precisa de um sítio fiável onde viver. Um VPS ou servidor cloud dá-te o controlo total do runtime, da base de dados e da cache. A Infomaniak - um alojamento suíço, respeitador da privacidade - oferece VPS e servidores cloud adequados.</p>
     <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Ver a cloud Infomaniak →</a>
-    <p class="disc">Ligação de afiliado — apoia estes guias gratuitos.</p>
+    <p class="disc">Ligação de afiliado - apoia estes guias gratuitos.</p>
   </div>
 
   <h2>Como escolher</h2>
   <ul>
     <li><strong>Escolhe REST</strong> para APIs mais simples, orientadas a recursos, em que a cache HTTP gratuita, a ubiquidade e uma curva suave contam.</li>
-    <li><strong>Escolhe GraphQL</strong> quando os clientes têm necessidades de dados variadas e em evolução e queres evitar o over/under-fetching — e consegues absorver a complexidade extra no servidor.</li>
-    <li><strong>Ambos é válido</strong> — muitos sistemas expõem REST para o acesso simples/público e GraphQL para as apps cliente ricas.</li>
+    <li><strong>Escolhe GraphQL</strong> quando os clientes têm necessidades de dados variadas e em evolução e queres evitar o over/under-fetching - e consegues absorver a complexidade extra no servidor.</li>
+    <li><strong>Ambos é válido</strong> - muitos sistemas expõem REST para o acesso simples/público e GraphQL para as apps cliente ricas.</li>
   </ul>
 
   <h2>Perguntas frequentes</h2>
   {faq.map((f) => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}
 
   <h2>Em resumo</h2>
-  <p>REST e GraphQL não são inimigos — são duas respostas a «quem decide a forma da resposta?». O REST mantém-na do lado do servidor com endpoints simples e cacheáveis; o GraphQL confia-a ao cliente para queries precisas e flexíveis, ao preço de uma complexidade acrescida. Escolhe consoante as necessidades de dados dos teus clientes e o teu apetite por complexidade operacional — e lembra-te de que podes usar ambos onde cada um for adequado.</p>
+  <p>REST e GraphQL não são inimigos - são duas respostas a «quem decide a forma da resposta?». O REST mantém-na do lado do servidor com endpoints simples e cacheáveis; o GraphQL confia-a ao cliente para queries precisas e flexíveis, ao preço de uma complexidade acrescida. Escolhe consoante as necessidades de dados dos teus clientes e o teu apetite por complexidade operacional - e lembra-te de que podes usar ambos onde cada um for adequado.</p>
   </div>
 
   <script type="application/ld+json" set:html={JSON.stringify({

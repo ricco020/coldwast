@@ -14,32 +14,32 @@ const description = 'Uma API é um contrato que permite a um software comunicar 
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.unsplash.com/photo-1607799279861-4dd421887fb3?w=1200&q=80&auto=format&fit=crop" alt="Código num editor no ecrã" width="1200" height="420" loading="eager" />
-    <figcaption>Código num editor — uma API é o conjunto de chamadas que um programa expõe para que código como este o utilize.</figcaption>
+    <figcaption>Código num editor - uma API é o conjunto de chamadas que um programa expõe para que código como este o utilize.</figcaption>
   </figure>
 
-  <p>Ouve-o constantemente: « chamar a API », « a API pública », « uma chave de API ». Uma <strong>API</strong> (Application Programming Interface) é uma das ideias mais úteis do software — e uma das mais carregadas de jargão. Este guia explica, de forma simples, o que é uma API, os principais tipos com que se vai deparar, como funciona um pedido típico a uma API web e porque é que as APIs estão em todo o lado.</p>
+  <p>Ouve-o constantemente: « chamar a API », « a API pública », « uma chave de API ». Uma <strong>API</strong> (Application Programming Interface) é uma das ideias mais úteis do software - e uma das mais carregadas de jargão. Este guia explica, de forma simples, o que é uma API, os principais tipos com que se vai deparar, como funciona um pedido típico a uma API web e porque é que as APIs estão em todo o lado.</p>
 
   <h2>A definição curta</h2>
-  <p>Uma <strong>API é um contrato que permite a um software comunicar com outro</strong>. Define que pedidos pode fazer, que dados deve enviar e o que recebe em troca — sem que precise de saber como o outro lado está construído internamente.</p>
+  <p>Uma <strong>API é um contrato que permite a um software comunicar com outro</strong>. Define que pedidos pode fazer, que dados deve enviar e o que recebe em troca - sem que precise de saber como o outro lado está construído internamente.</p>
   <p>A analogia clássica é o restaurante. Você (um programa) lê uma <em>ementa</em> (a API) e faz um pedido ao <em>empregado de mesa</em>. Não entra na cozinha nem precisa de saber como o prato é preparado. A ementa é a interface acordada; a cozinha é a implementação, escondida por trás. Uma API é essa ementa para o software.</p>
 
   <h2>Os principais tipos de API</h2>
   <ul>
-    <li><strong>API web (as mais discutidas)</strong> — um programa fala com outro <em>através da rede</em>, normalmente via HTTP. Quando uma app de meteorologia mostra a previsão, chama a API web de um serviço meteorológico. A maioria das APIs web modernas segue o estilo <strong>REST</strong> e troca dados em JSON (ver <a href="/pt/e/blog/2026-06-17-rest-vs-graphql.html">REST vs GraphQL</a> e <a href="/pt/e/blog/2026-06-18-grpc-vs-rest.html">gRPC vs REST</a> para as principais alternativas).</li>
-    <li><strong>API de biblioteca / framework</strong> — o conjunto de funções e tipos que uma biblioteca de código expõe para que os chame. Quando usa uma biblioteca de datas, as funções que ela lhe oferece <em>são</em> a sua API.</li>
-    <li><strong>API do sistema operativo</strong> — a forma como um programa pede ao sistema operativo para abrir um ficheiro, desenhar uma janela ou usar a rede. O POSIX é uma delas.</li>
+    <li><strong>API web (as mais discutidas)</strong> - um programa fala com outro <em>através da rede</em>, normalmente via HTTP. Quando uma app de meteorologia mostra a previsão, chama a API web de um serviço meteorológico. A maioria das APIs web modernas segue o estilo <strong>REST</strong> e troca dados em JSON (ver <a href="/pt/e/blog/2026-06-17-rest-vs-graphql.html">REST vs GraphQL</a> e <a href="/pt/e/blog/2026-06-18-grpc-vs-rest.html">gRPC vs REST</a> para as principais alternativas).</li>
+    <li><strong>API de biblioteca / framework</strong> - o conjunto de funções e tipos que uma biblioteca de código expõe para que os chame. Quando usa uma biblioteca de datas, as funções que ela lhe oferece <em>são</em> a sua API.</li>
+    <li><strong>API do sistema operativo</strong> - a forma como um programa pede ao sistema operativo para abrir um ficheiro, desenhar uma janela ou usar a rede. O POSIX é uma delas.</li>
   </ul>
   <p>O fio condutor: uma API é a <strong>superfície publicada</strong> de algo, a parte que tem o direito de usar, separada dos mecanismos internos dos quais não deve depender.</p>
 
-  <figure><img src="https://images.unsplash.com/photo-1556656793-08538906a9f8?w=1200&q=80&auto=format&fit=crop" alt="Uma pessoa segura um smartphone com as duas mãos" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Um smartphone em uso — as apps que contém chamam constantemente APIs web em segundo plano para obter mensagens, mapas, preços e muito mais.</figcaption></figure>
+  <figure><img src="https://images.unsplash.com/photo-1556656793-08538906a9f8?w=1200&q=80&auto=format&fit=crop" alt="Uma pessoa segura um smartphone com as duas mãos" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Um smartphone em uso - as apps que contém chamam constantemente APIs web em segundo plano para obter mensagens, mapas, preços e muito mais.</figcaption></figure>
 
   <h2>Como funciona um pedido a uma API web</h2>
   <p>Uma chamada a uma API web é um <strong>pedido</strong> e uma <strong>resposta</strong>. O cliente envia um pedido HTTP a um URL (um <em>endpoint</em>) usando um método que sinaliza a sua intenção, e o servidor devolve um código de estado e, normalmente, dados. Os métodos comuns:</p>
   <ul>
-    <li><strong>GET</strong> — ler dados (« dá-me o utilizador 42 »).</li>
-    <li><strong>POST</strong> — criar algo novo.</li>
-    <li><strong>PUT</strong> / <strong>PATCH</strong> — atualizar algo.</li>
-    <li><strong>DELETE</strong> — eliminar algo.</li>
+    <li><strong>GET</strong> - ler dados (« dá-me o utilizador 42 »).</li>
+    <li><strong>POST</strong> - criar algo novo.</li>
+    <li><strong>PUT</strong> / <strong>PATCH</strong> - atualizar algo.</li>
+    <li><strong>DELETE</strong> - eliminar algo.</li>
   </ul>
   <p>Um pedido simples para ler um utilizador poderia parecer-se com isto, com o servidor a responder em JSON:</p>
   <pre><code>GET /users/42  HTTP/1.1
@@ -48,23 +48,23 @@ Host: api.example.com
 -- response --
 200 OK
 &#123; &quot;id&quot;: 42, &quot;name&quot;: &quot;Ada&quot;, &quot;active&quot;: true &#125;</code></pre>
-  <p>O <code>200</code> é um <strong>código de estado</strong> que significa sucesso; <code>404</code> significa não encontrado, <code>401</code> não autenticado, <code>500</code> um erro do servidor. O corpo é <strong>JSON</strong> — o formato leve e legível por humanos que a maioria das APIs web usa para trocar dados estruturados.</p>
+  <p>O <code>200</code> é um <strong>código de estado</strong> que significa sucesso; <code>404</code> significa não encontrado, <code>401</code> não autenticado, <code>500</code> um erro do servidor. O corpo é <strong>JSON</strong> - o formato leve e legível por humanos que a maioria das APIs web usa para trocar dados estruturados.</p>
 
   <h2>Autenticação e chaves</h2>
-  <p>Muitas APIs exigem que se identifique com uma <strong>chave de API</strong> ou um token, enviado num cabeçalho do pedido. Isto permite ao fornecedor controlar quem usa o serviço, aplicar limites de taxa e cobrar a utilização. Mantenha as chaves secretas — uma chave divulgada é como uma palavra-passe divulgada.</p>
+  <p>Muitas APIs exigem que se identifique com uma <strong>chave de API</strong> ou um token, enviado num cabeçalho do pedido. Isto permite ao fornecedor controlar quem usa o serviço, aplicar limites de taxa e cobrar a utilização. Mantenha as chaves secretas - uma chave divulgada é como uma palavra-passe divulgada.</p>
 
   <h2>Porque é que as APIs importam</h2>
-  <p>As APIs são o que permite <strong>compor</strong> o software em vez de o reconstruir. Uma loja pode cobrar pagamentos sem escrever um banco; uma app pode mostrar um mapa sem desenhar o mundo; os serviços de uma mesma empresa falam entre si através de APIs internas. Transformam as capacidades dos outros em blocos que chama com poucas linhas — e isso é, no essencial, a forma como o software moderno se constrói.</p>
+  <p>As APIs são o que permite <strong>compor</strong> o software em vez de o reconstruir. Uma loja pode cobrar pagamentos sem escrever um banco; uma app pode mostrar um mapa sem desenhar o mundo; os serviços de uma mesma empresa falam entre si através de APIs internas. Transformam as capacidades dos outros em blocos que chama com poucas linhas - e isso é, no essencial, a forma como o software moderno se constrói.</p>
 
   <h2>Os limites honestos</h2>
-  <p>Uma API é uma <em>dependência</em>. Se o fornecedor a alterar, o limitar na taxa, aumentar os preços ou encerrar, o seu software é afetado — por isso é que as boas APIs são <strong>versionadas</strong> e documentadas, e por isso é que trata erros e tempos limite em vez de assumir que cada chamada tem sucesso. Uma API esconde a complexidade; não a elimina.</p>
+  <p>Uma API é uma <em>dependência</em>. Se o fornecedor a alterar, o limitar na taxa, aumentar os preços ou encerrar, o seu software é afetado - por isso é que as boas APIs são <strong>versionadas</strong> e documentadas, e por isso é que trata erros e tempos limite em vez de assumir que cada chamada tem sucesso. Uma API esconde a complexidade; não a elimina.</p>
 
   <h2>Em resumo</h2>
-  <p>Uma API é um contrato que permite a um programa usar as capacidades de outro através de um conjunto definido de pedidos e respostas, sem tocar nos seus mecanismos internos. As APIs web/REST sobre HTTP com JSON são o tipo com que mais se irá deparar, mas a ideia — uma interface publicada, separada da implementação subjacente — atravessa bibliotecas, sistemas operativos e qualquer programa bem estruturado. Aprenda a ler a documentação de uma API e poderá ligar quase tudo a tudo.</p>
+  <p>Uma API é um contrato que permite a um programa usar as capacidades de outro através de um conjunto definido de pedidos e respostas, sem tocar nos seus mecanismos internos. As APIs web/REST sobre HTTP com JSON são o tipo com que mais se irá deparar, mas a ideia - uma interface publicada, separada da implementação subjacente - atravessa bibliotecas, sistemas operativos e qualquer programa bem estruturado. Aprenda a ler a documentação de uma API e poderá ligar quase tudo a tudo.</p>
 
   <p>Novo numa linguagem para construir ou chamar APIs? Percorra o nosso <a href="/pt/e/">índice de guias</a> para explicações de programação claras e originais.</p>
 
-  <div class="note">Guia independente, mantido pela comunidade. <strong>coldwa.st</strong> é um site de recursos de programação; este artigo é um texto explicativo novo e original sobre APIs. Os exemplos refletem o comportamento padrão de HTTP/REST — confirme com a documentação da API específica que está a usar.</div>
+  <div class="note">Guia independente, mantido pela comunidade. <strong>coldwa.st</strong> é um site de recursos de programação; este artigo é um texto explicativo novo e original sobre APIs. Os exemplos refletem o comportamento padrão de HTTP/REST - confirme com a documentação da API específica que está a usar.</div>
   <p class="related-guides">Guias relacionados: <a href="/pt/e/blog/2026-06-14-what-is-sql.html">o que é o SQL</a>, <a href="/pt/e/blog/2026-06-15-what-is-a-database.html">o que é uma base de dados</a>, <a href="/pt/e/blog/2026-06-17-what-is-a-webhook.html">o que é um webhook</a>.</p>
   </div>
 </Base>

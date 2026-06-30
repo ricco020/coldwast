@@ -2,7 +2,7 @@
 import Base from '../../../../layouts/Base.astro';
 const path = '/fr/e/blog/2026-06-14-haskell-list-comprehensions.html';
 const title = 'Les compréhensions de listes en Haskell, expliquées (2026)';
-const description = 'Une compréhension de liste construit une liste à partir d’un ou plusieurs générateurs avec des gardes optionnelles — concise, lisible et proche de la notation mathématique en compréhension. La syntaxe, les générateurs multiples, les gardes et leur lien avec map et filter.';
+const description = 'Une compréhension de liste construit une liste à partir d’un ou plusieurs générateurs avec des gardes optionnelles - concise, lisible et proche de la notation mathématique en compréhension. La syntaxe, les générateurs multiples, les gardes et leur lien avec map et filter.';
 ---
 <Base title={title} description={description} path={path} type="article" lang="fr"
   image="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
@@ -14,7 +14,7 @@ const description = 'Une compréhension de liste construit une liste à partir d
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=1200&q=80&auto=format&fit=crop" alt="Du code source sur un écran" width="1200" height="420" loading="eager" />
-    <figcaption>Du code source sur un écran — les compréhensions de liste sont une façon concise de construire des listes en code.</figcaption>
+    <figcaption>Du code source sur un écran - les compréhensions de liste sont une façon concise de construire des listes en code.</figcaption>
   </figure>
 
   <p>L’une des premières choses qui rendent Haskell élégant est la <strong>compréhension de liste</strong> : une façon concise de construire une nouvelle liste à partir de listes existantes, reflétant la notation mathématique en compréhension que vous vous rappelez peut-être de l’école. Ce guide explique la syntaxe, les générateurs multiples, les gardes, et le lien entre les compréhensions et <code>map</code> et <code>filter</code>.</p>
@@ -27,7 +27,7 @@ squares = [x*x | x &lt;- [1..10]]
   <p>Ici <code>x &lt;- [1..10]</code> est un <strong>générateur</strong> : il tire chaque <code>x</code> de la liste <code>[1..10]</code>, et la partie avant la barre, <code>x*x</code>, est l’<strong>expression de sortie</strong> appliquée à chaque élément.</p>
 
   <h2>Ajouter des gardes (filtrage)</h2>
-  <figure><img src="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80&auto=format&fit=crop" alt="Lignes de code source sur un écran sombre" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Lignes de code à l’écran — une garde ne conserve que les éléments qui satisfont une condition.</figcaption></figure>
+  <figure><img src="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80&auto=format&fit=crop" alt="Lignes de code source sur un écran sombre" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Lignes de code à l’écran - une garde ne conserve que les éléments qui satisfont une condition.</figcaption></figure>
   <p>Une <strong>garde</strong> est une condition booléenne qui ne conserve que les éléments qui la satisfont :</p>
   <pre><code>-- even numbers from 1 to 20, doubled
 result = [x*2 | x &lt;- [1..20], even x]
@@ -39,10 +39,10 @@ result = [x*2 | x &lt;- [1..20], even x]
   <pre><code>-- all pairs from two small lists
 pairs = [(x, y) | x &lt;- [1,2,3], y &lt;- [&#39;a&#39;,&#39;b&#39;]]
 -- [(1,'a'),(1,'b'),(2,'a'),(2,'b'),(3,'a'),(3,'b')]</code></pre>
-  <p>Le générateur le plus à droite varie le plus vite. Vous pouvez aussi faire dépendre un générateur ultérieur d’un précédent — par exemple en tirant <code>y</code> de <code>[x..10]</code>.</p>
+  <p>Le générateur le plus à droite varie le plus vite. Vous pouvez aussi faire dépendre un générateur ultérieur d’un précédent - par exemple en tirant <code>y</code> de <code>[x..10]</code>.</p>
 
   <h2>Leur lien avec map et filter</h2>
-  <p>Une compréhension est essentiellement <code>map</code> et <code>filter</code> sous une forme lisible unique — et les deux sont des <a href="/fr/e/blog/2026-06-24-higher-order-functions.html">fonctions d’ordre supérieur</a>, puisque chacune prend une fonction comme argument. Ceux-ci sont équivalents :</p>
+  <p>Une compréhension est essentiellement <code>map</code> et <code>filter</code> sous une forme lisible unique - et les deux sont des <a href="/fr/e/blog/2026-06-24-higher-order-functions.html">fonctions d’ordre supérieur</a>, puisque chacune prend une fonction comme argument. Ceux-ci sont équivalents :</p>
   <pre><code>[x*2 | x &lt;- xs, even x]
 map (*2) (filter even xs)</code></pre>
   <p>Utilisez ce qui se lit le mieux selon le cas. Les compréhensions brillent quand vous avez plusieurs générateurs ou plusieurs gardes ; <code>map</code>/<code>filter</code> se composent bien dans des pipelines point-free. Parce que Haskell est <a href="/fr/e/blog/2026-06-14-lazy-evaluation-haskell.html">paresseux</a>, une compréhension sur une liste infinie comme <code>[1..]</code> ne calcule que les éléments que vous consommez réellement.</p>
@@ -50,12 +50,12 @@ map (*2) (filter even xs)</code></pre>
   <h2>FAQ</h2>
   <p><strong>Qu’est-ce qu’un générateur dans une compréhension de liste ?</strong> La partie <code>x &lt;- xs</code> : elle tire chaque valeur de <code>x</code> de la liste <code>xs</code> pour alimenter l’expression de sortie.</p>
   <p><strong>Qu’est-ce qu’une garde ?</strong> Une condition booléenne (comme <code>even x</code>) placée après une virgule ; seuls les éléments pour lesquels elle est vraie sont conservés.</p>
-  <p><strong>Puis-je utiliser plusieurs générateurs ?</strong> Oui — la compréhension produit chaque combinaison, le générateur le plus à droite variant le plus vite, comme des boucles imbriquées.</p>
+  <p><strong>Puis-je utiliser plusieurs générateurs ?</strong> Oui - la compréhension produit chaque combinaison, le générateur le plus à droite variant le plus vite, comme des boucles imbriquées.</p>
   <p><strong>Les compréhensions sont-elles juste map et filter ?</strong> Conceptuellement oui pour les cas simples ; les compréhensions sont souvent plus lisibles avec plusieurs générateurs ou gardes, tandis que map/filter se composent bien dans des pipelines.</p>
 
   <p>Pour le langage derrière la syntaxe, voyez <a href="/fr/e/blog/2026-06-14-what-is-haskell.html">ce qu’est Haskell</a> ; les compréhensions sont l’une des fonctionnalités qui le rendent concis et expressif.</p>
 
-  <div class="note">Guide indépendant, maintenu par la communauté. <strong>coldwa.st</strong> est un site de ressources de programmation ; cet article est un écrit explicatif neuf et original sur les compréhensions de listes en Haskell, sans affiliation avec les mainteneurs du langage. Le code reflète le comportement standard de Haskell/GHC — vérifiez auprès de la documentation GHC actuelle.</div>
+  <div class="note">Guide indépendant, maintenu par la communauté. <strong>coldwa.st</strong> est un site de ressources de programmation ; cet article est un écrit explicatif neuf et original sur les compréhensions de listes en Haskell, sans affiliation avec les mainteneurs du langage. Le code reflète le comportement standard de Haskell/GHC - vérifiez auprès de la documentation GHC actuelle.</div>
   <p class="related-guides">Guides liés : <a href="/fr/e/blog/2026-06-14-haskell-monads.html">les monades en Haskell</a>.</p>
   </div>
 </Base>

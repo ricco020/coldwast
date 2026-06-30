@@ -14,50 +14,50 @@ const description = 'GHC is the standard Haskell compiler. What it is, installin
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&q=80&auto=format&fit=crop" alt="Source code on a screen" width="1200" height="420" loading="eager" />
-    <figcaption>GHC turns your Haskell source into fast native binaries — and powers GHCi and the wider toolchain.</figcaption>
+    <figcaption>GHC turns your Haskell source into fast native binaries - and powers GHCi and the wider toolchain.</figcaption>
   </figure>
 
-  <p><strong>GHC</strong> — the Glasgow Haskell Compiler — is the standard compiler for Haskell, and effectively the engine under everything else in the ecosystem: Cabal, Stack and the Haskell Language Server all drive it. This guide explains what GHC is, how to install it cleanly in 2026, how to use GHCi, the compiler flags that actually matter, and how it fits with the build tools.</p>
+  <p><strong>GHC</strong> - the Glasgow Haskell Compiler - is the standard compiler for Haskell, and effectively the engine under everything else in the ecosystem: Cabal, Stack and the Haskell Language Server all drive it. This guide explains what GHC is, how to install it cleanly in 2026, how to use GHCi, the compiler flags that actually matter, and how it fits with the build tools.</p>
 
   <h2>What GHC is</h2>
   <p>GHC compiles Haskell source into optimised native executables and provides <strong>GHCi</strong>, an interactive REPL for exploring code. It is a mature, heavily optimising compiler with a rich type system, and it ships the libraries (<code>base</code> and friends) your programs build on. Almost everything else in Haskell tooling is, at some level, a wrapper that invokes GHC with the right arguments.</p>
 
   <h2>Installing GHC (use GHCup)</h2>
-  <p>Do not install GHC by hand. The clean, supported path is <strong>GHCup</strong>, which manages multiple GHC versions and lets you switch per project — see our <a href="/e/blog/2026-06-14-ghcup-install-haskell.html">GHCup install guide</a>. In short:</p>
+  <p>Do not install GHC by hand. The clean, supported path is <strong>GHCup</strong>, which manages multiple GHC versions and lets you switch per project - see our <a href="/e/blog/2026-06-14-ghcup-install-haskell.html">GHCup install guide</a>. In short:</p>
   <pre><code>ghcup install ghc recommended
 ghcup set ghc 9.10.1
 ghc --version</code></pre>
   <p>The reason version management matters: real projects pin specific GHC versions, and GHCup makes having several installed painless.</p>
 
   <h2>GHCi: the interactive REPL</h2>
-  <figure><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80&auto=format&fit=crop" alt="An open laptop showing code on a desk" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>An open laptop showing code — GHCi lets you load modules and test functions interactively.</figcaption></figure>
+  <figure><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80&auto=format&fit=crop" alt="An open laptop showing code on a desk" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>An open laptop showing code - GHCi lets you load modules and test functions interactively.</figcaption></figure>
   <pre><code>ghci                 # start the REPL
 :load Main.hs        # load a module (:l)
 :type foldr          # show a type (:t)
 :reload              # reload after edits (:r)
 :quit                # exit (:q)</code></pre>
-  <p>GHCi is where most Haskell development actually happens — load a module, test functions, inspect types, iterate.</p>
+  <p>GHCi is where most Haskell development actually happens - load a module, test functions, inspect types, iterate.</p>
 
   <h2>The flags that matter</h2>
   <ul>
-    <li><strong><code>-O2</code></strong> — full optimisation for release builds (slower compile, faster runtime). Default is <code>-O0</code>.</li>
-    <li><strong><code>-Wall</code></strong> — enable the broad warning set; pair with <code>-Werror</code> in CI to fail on warnings.</li>
-    <li><strong><code>-threaded</code></strong> — link the threaded runtime, needed for real concurrency/parallelism.</li>
-    <li><strong><code>-j</code></strong> — compile modules in parallel (see <a href="/e/blog/2011-08-22-GSoC-Final.html">how Haskell builds use your cores</a>).</li>
-    <li><strong><code>-rtsopts +RTS -N</code></strong> — let the program use multiple cores at runtime.</li>
+    <li><strong><code>-O2</code></strong> - full optimisation for release builds (slower compile, faster runtime). Default is <code>-O0</code>.</li>
+    <li><strong><code>-Wall</code></strong> - enable the broad warning set; pair with <code>-Werror</code> in CI to fail on warnings.</li>
+    <li><strong><code>-threaded</code></strong> - link the threaded runtime, needed for real concurrency/parallelism.</li>
+    <li><strong><code>-j</code></strong> - compile modules in parallel (see <a href="/e/blog/2011-08-22-GSoC-Final.html">how Haskell builds use your cores</a>).</li>
+    <li><strong><code>-rtsopts +RTS -N</code></strong> - let the program use multiple cores at runtime.</li>
   </ul>
   <p>Compile directly with <code>ghc -O2 Main.hs</code>, but for anything beyond a single file you will drive GHC through a build tool.</p>
 
   <h2>How GHC fits with Cabal and Stack</h2>
-  <p>You rarely call <code>ghc</code> by hand on a project. <strong>Cabal</strong> and <strong>Stack</strong> resolve dependencies and invoke GHC with the correct flags and package database for you — see the build-model background in <a href="/e/blog/2017-09-09-Cabal-2-0.html">Cabal 2.0</a> and the isolation history in <a href="/e/blog/2013-08-20-Cabal-sandbox.html">Cabal sandboxes</a>. The Haskell Language Server also runs GHC behind the scenes to give your editor types and diagnostics — see our <a href="/e/blog/2026-06-14-haskell-language-server.html">HLS guide</a>.</p>
+  <p>You rarely call <code>ghc</code> by hand on a project. <strong>Cabal</strong> and <strong>Stack</strong> resolve dependencies and invoke GHC with the correct flags and package database for you - see the build-model background in <a href="/e/blog/2017-09-09-Cabal-2-0.html">Cabal 2.0</a> and the isolation history in <a href="/e/blog/2013-08-20-Cabal-sandbox.html">Cabal sandboxes</a>. The Haskell Language Server also runs GHC behind the scenes to give your editor types and diagnostics - see our <a href="/e/blog/2026-06-14-haskell-language-server.html">HLS guide</a>.</p>
 
   <h2>FAQ</h2>
   <p><strong>Is GHC the only Haskell compiler?</strong> It is by far the dominant, standard one in 2026; other compilers exist but GHC is what virtually all tooling and libraries target.</p>
-  <p><strong>How do I install GHC?</strong> Via GHCup — it manages versions and is the recommended installer on haskell.org.</p>
+  <p><strong>How do I install GHC?</strong> Via GHCup - it manages versions and is the recommended installer on haskell.org.</p>
   <p><strong>What does -O2 do?</strong> It enables full optimisation: longer compile time, faster runtime. Use it for releases; the default -O0 is fine for fast iteration.</p>
-  <p><strong>Do I need to call GHC directly?</strong> Rarely — Cabal or Stack invoke it for you on real projects. Direct <code>ghc</code> is handy for single-file scripts.</p>
+  <p><strong>Do I need to call GHC directly?</strong> Rarely - Cabal or Stack invoke it for you on real projects. Direct <code>ghc</code> is handy for single-file scripts.</p>
 
-  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original writing about GHC and the current Haskell toolchain, not affiliated with or authored by the project's maintainers. Commands reflect documented GHC/GHCup behaviour — check the official docs for the latest version numbers.</div>
+  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original writing about GHC and the current Haskell toolchain, not affiliated with or authored by the project's maintainers. Commands reflect documented GHC/GHCup behaviour - check the official docs for the latest version numbers.</div>
   <p class="related-guides">Related guides: <a href="/e/blog/2026-06-23-what-is-a-compiler.html">how a compiler works</a>, <a href="/e/blog/2026-06-14-stack-vs-cabal-haskell.html">Stack vs Cabal</a>.</p>
   </div>
 </Base>

@@ -14,24 +14,24 @@ const description = 'Git è un sistema di controllo di versione distribuito che 
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80&auto=format&fit=crop" alt="Righe di codice sorgente su uno schermo scuro" width="1200" height="420" loading="eager" />
-    <figcaption>Righe di codice sorgente sullo schermo — Git registra la cronologia completa delle modifiche di un codice come questo.</figcaption>
+    <figcaption>Righe di codice sorgente sullo schermo - Git registra la cronologia completa delle modifiche di un codice come questo.</figcaption>
   </figure>
 
   <p>Se scrivi codice, incontrerai <strong>Git</strong> fin dal primo giorno. È lo strumento che quasi tutti i progetti software usano per tracciare le modifiche, e la base sotto GitHub, GitLab e il flusso di lavoro di sviluppo moderno. Questa guida spiega cos’è Git, la manciata di concetti che lo rendono evidente, perché conta e in cosa differisce da GitHub.</p>
 
   <h2>La definizione breve</h2>
-  <p><strong>Git è un sistema di controllo di versione distribuito: registra la cronologia delle modifiche di un insieme di file così che tu possa rivederla, ramificare, unire, collaborare e tornare indietro.</strong> Creato da Linus Torvalds nel 2005 per gestire il kernel Linux, è oggi lo standard di fatto. „Distribuito“ significa che ogni copia del progetto porta con sé la sua cronologia completa — puoi lavorare, fare commit e consultare la cronologia interamente offline.</p>
+  <p><strong>Git è un sistema di controllo di versione distribuito: registra la cronologia delle modifiche di un insieme di file così che tu possa rivederla, ramificare, unire, collaborare e tornare indietro.</strong> Creato da Linus Torvalds nel 2005 per gestire il kernel Linux, è oggi lo standard di fatto. „Distribuito“ significa che ogni copia del progetto porta con sé la sua cronologia completa - puoi lavorare, fare commit e consultare la cronologia interamente offline.</p>
 
   <h2>I concetti fondamentali</h2>
   <ul>
-    <li><strong>Repository (repo)</strong> — la cartella del progetto più tutta la sua cronologia, archiviate in una directory nascosta <code>.git</code>.</li>
-    <li><strong>Commit</strong> — un’istantanea salvata dei tuoi file in un dato istante, con un messaggio che descrive la modifica. La cronologia è una catena di commit.</li>
-    <li><strong>Branch (ramo)</strong> — un puntatore mobile che ti permette di sviluppare una funzionalità in modo isolato senza disturbare la linea principale (di solito <code>main</code>).</li>
-    <li><strong>Merge (fusione)</strong> — combinare le modifiche di un ramo in un altro.</li>
-    <li><strong>Remote (remoto)</strong> — una copia condivisa del repository ospitata altrove (ad es. su GitHub) verso cui fai <code>push</code> e da cui fai <code>pull</code>.</li>
+    <li><strong>Repository (repo)</strong> - la cartella del progetto più tutta la sua cronologia, archiviate in una directory nascosta <code>.git</code>.</li>
+    <li><strong>Commit</strong> - un’istantanea salvata dei tuoi file in un dato istante, con un messaggio che descrive la modifica. La cronologia è una catena di commit.</li>
+    <li><strong>Branch (ramo)</strong> - un puntatore mobile che ti permette di sviluppare una funzionalità in modo isolato senza disturbare la linea principale (di solito <code>main</code>).</li>
+    <li><strong>Merge (fusione)</strong> - combinare le modifiche di un ramo in un altro.</li>
+    <li><strong>Remote (remoto)</strong> - una copia condivisa del repository ospitata altrove (ad es. su GitHub) verso cui fai <code>push</code> e da cui fai <code>pull</code>.</li>
   </ul>
 
-  <figure><img src="https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=1200&q=80&auto=format&fit=crop" alt="Un prompt del terminale su uno schermo" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Un prompt del terminale — Git si pilota perlopiù da riga di comando, anche se editor e interfacce grafiche lo avvolgono a loro volta.</figcaption></figure>
+  <figure><img src="https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=1200&q=80&auto=format&fit=crop" alt="Un prompt del terminale su uno schermo" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Un prompt del terminale - Git si pilota perlopiù da riga di comando, anche se editor e interfacce grafiche lo avvolgono a loro volta.</figcaption></figure>
 
   <h2>Il flusso di lavoro quotidiano</h2>
   <p>Il ciclo che la maggior parte degli sviluppatori esegue decine di volte al giorno:</p>
@@ -44,26 +44,26 @@ git push             # send your commits to the shared remote</code></pre>
 
   <h2>Perché Git conta</h2>
   <ul>
-    <li><strong>Cronologia e annullamento</strong> — ogni modifica viene registrata, quindi puoi vedere chi ha cambiato cosa, quando e perché, e tornare indietro su un errore.</li>
-    <li><strong>Collaborazione</strong> — molte persone possono lavorare in parallelo sullo stesso progetto su rami diversi, poi unire in sicurezza.</li>
-    <li><strong>Sperimentazione sicura</strong> — crea un ramo, prova qualcosa, scartalo se fallisce — la linea principale resta intatta.</li>
-    <li><strong>È ovunque</strong> — l’open source, le aziende, le pipeline CI/CD e il deployment danno tutti per scontato Git.</li>
+    <li><strong>Cronologia e annullamento</strong> - ogni modifica viene registrata, quindi puoi vedere chi ha cambiato cosa, quando e perché, e tornare indietro su un errore.</li>
+    <li><strong>Collaborazione</strong> - molte persone possono lavorare in parallelo sullo stesso progetto su rami diversi, poi unire in sicurezza.</li>
+    <li><strong>Sperimentazione sicura</strong> - crea un ramo, prova qualcosa, scartalo se fallisce - la linea principale resta intatta.</li>
+    <li><strong>È ovunque</strong> - l’open source, le aziende, le pipeline CI/CD e il deployment danno tutti per scontato Git.</li>
   </ul>
 
   <h2>Git vs GitHub</h2>
-  <p>Vengono confusi di continuo. <strong>Git</strong> è lo strumento di controllo di versione che gira sulla tua macchina. <strong>GitHub</strong> (come GitLab o Bitbucket) è un <em>servizio di hosting</em> che archivia repository Git online e aggiunge funzionalità di collaborazione — pull request, issue, controllo degli accessi, CI. Puoi usare Git senza alcun account GitHub; GitHub è un luogo popolare dove collocare un remote Git, non Git stesso.</p>
+  <p>Vengono confusi di continuo. <strong>Git</strong> è lo strumento di controllo di versione che gira sulla tua macchina. <strong>GitHub</strong> (come GitLab o Bitbucket) è un <em>servizio di hosting</em> che archivia repository Git online e aggiunge funzionalità di collaborazione - pull request, issue, controllo degli accessi, CI. Puoi usare Git senza alcun account GitHub; GitHub è un luogo popolare dove collocare un remote Git, non Git stesso.</p>
 
   <h2>La curva di apprendimento onesta</h2>
-  <p>Git è potente, e il suo insieme di comandi può sembrare disorientante all’inizio — i merge possono entrare in conflitto, e alcuni comandi possono riscrivere la cronologia in modi che sorprendono i principianti. La buona notizia: il 90 % del lavoro quotidiano usa solo <code>clone</code>, <code>add</code>, <code>commit</code>, <code>push</code>, <code>pull</code> e <code>branch</code>. Padroneggia questi e impara il resto (rebase, stash, reset) quando ne avrai davvero bisogno.</p>
+  <p>Git è potente, e il suo insieme di comandi può sembrare disorientante all’inizio - i merge possono entrare in conflitto, e alcuni comandi possono riscrivere la cronologia in modi che sorprendono i principianti. La buona notizia: il 90 % del lavoro quotidiano usa solo <code>clone</code>, <code>add</code>, <code>commit</code>, <code>push</code>, <code>pull</code> e <code>branch</code>. Padroneggia questi e impara il resto (rebase, stash, reset) quando ne avrai davvero bisogno.</p>
 
   <h2>FAQ</h2>
   <p><strong>Git è la stessa cosa di GitHub?</strong> No. Git è il software di controllo di versione sul tuo computer; GitHub è un servizio online che ospita repository Git e aggiunge strumenti di collaborazione. Git funziona senza GitHub.</p>
   <p><strong>Cos’è un commit?</strong> Un’istantanea salvata del tuo progetto in un dato istante, con un messaggio che descrive cosa è cambiato. La cronologia di un progetto è una sequenza di commit.</p>
-  <p><strong>Bisogna usare la riga di comando?</strong> No — gli editor (VS Code) e i client grafici avvolgono Git, e la maggior parte degli <a href="/it/e/blog/2026-06-18-what-is-an-ide.html">IDE</a> lo integra — ma la riga di comando è universale e vale la pena impararla, dato che ogni tutorial e ogni sistema di CI la parlano.</p>
+  <p><strong>Bisogna usare la riga di comando?</strong> No - gli editor (VS Code) e i client grafici avvolgono Git, e la maggior parte degli <a href="/it/e/blog/2026-06-18-what-is-an-ide.html">IDE</a> lo integra - ma la riga di comando è universale e vale la pena impararla, dato che ogni tutorial e ogni sistema di CI la parlano.</p>
   <p><strong>Cosa significa „distribuito“?</strong> Ogni clone di un repository Git contiene la cronologia completa, quindi puoi fare commit, ramificare e scorrere la cronologia offline. Non esiste una singola copia centrale da cui dipendere per lavorare.</p>
 
   <p>Git traccia il codice; gli <a href="/it/e/blog/2026-06-14-what-is-an-algorithm.html">algoritmi</a> e le <a href="/it/e/blog/2026-06-14-what-is-an-api.html">API</a> sono ciò che quel codice esprime. Sfoglia altre spiegazioni chiare nel nostro <a href="/it/e/">indice delle guide</a>.</p>
 
-  <div class="note">Guida indipendente, mantenuta dalla comunità. <strong>coldwa.st</strong> è un sito di risorse di programmazione; questo articolo è uno scritto esplicativo nuovo e originale su Git. I comandi riflettono il comportamento standard di Git — verifica dettagli e casi particolari sulla documentazione ufficiale di Git.</div>
+  <div class="note">Guida indipendente, mantenuta dalla comunità. <strong>coldwa.st</strong> è un sito di risorse di programmazione; questo articolo è uno scritto esplicativo nuovo e originale su Git. I comandi riflettono il comportamento standard di Git - verifica dettagli e casi particolari sulla documentazione ufficiale di Git.</div>
   </div>
 </Base>

@@ -14,24 +14,24 @@ const description = 'SQL is the standard language for storing, querying and chan
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=1200&q=80&auto=format&fit=crop" alt="Colorful source code on a monitor" width="1200" height="420" loading="eager" />
-    <figcaption>Colorful source code on a monitor — SQL is a query language you write to ask a database for exactly the data you want.</figcaption>
+    <figcaption>Colorful source code on a monitor - SQL is a query language you write to ask a database for exactly the data you want.</figcaption>
   </figure>
 
-  <p>Behind almost every app, website and dashboard sits a database — and the language used to talk to it is, more often than not, <strong>SQL</strong>. It has been a backbone of software for fifty years and is still one of the most valuable skills a developer or analyst can have. This guide explains what SQL is, its core commands, how a query works, how it compares to NoSQL, and why it endures.</p>
+  <p>Behind almost every app, website and dashboard sits a database - and the language used to talk to it is, more often than not, <strong>SQL</strong>. It has been a backbone of software for fifty years and is still one of the most valuable skills a developer or analyst can have. This guide explains what SQL is, its core commands, how a query works, how it compares to NoSQL, and why it endures.</p>
 
   <h2>The short definition</h2>
-  <p><strong>SQL (Structured Query Language) is the standard language for storing, retrieving and modifying data in a relational database.</strong> A relational database organises data into <em>tables</em> — rows and columns, like a spreadsheet — and SQL is how you ask questions of that data and change it. It is pronounced &quot;ess-cue-ell&quot; or &quot;sequel&quot;, and powers databases like PostgreSQL, MySQL, SQLite, SQL Server and Oracle.</p>
+  <p><strong>SQL (Structured Query Language) is the standard language for storing, retrieving and modifying data in a relational database.</strong> A relational database organises data into <em>tables</em> - rows and columns, like a spreadsheet - and SQL is how you ask questions of that data and change it. It is pronounced &quot;ess-cue-ell&quot; or &quot;sequel&quot;, and powers databases like PostgreSQL, MySQL, SQLite, SQL Server and Oracle.</p>
 
   <h2>Tables, rows and columns</h2>
-  <p>The relational model is simple. A <code>users</code> table might have columns <code>id</code>, <code>name</code> and <code>age</code>; each <strong>row</strong> is one user. Tables can relate to each other — an <code>orders</code> table can reference a user by <code>id</code> — which is where the &quot;relational&quot; comes from, and where SQL&#39;s power to combine data shows.</p>
+  <p>The relational model is simple. A <code>users</code> table might have columns <code>id</code>, <code>name</code> and <code>age</code>; each <strong>row</strong> is one user. Tables can relate to each other - an <code>orders</code> table can reference a user by <code>id</code> - which is where the &quot;relational&quot; comes from, and where SQL&#39;s power to combine data shows.</p>
 
   <h2>The core commands</h2>
   <p>Most SQL work uses four verbs, often called CRUD (create, read, update, delete):</p>
   <ul>
-    <li><strong>SELECT</strong> — read data (&quot;give me the users over 18&quot;).</li>
-    <li><strong>INSERT</strong> — add a new row.</li>
-    <li><strong>UPDATE</strong> — change existing rows.</li>
-    <li><strong>DELETE</strong> — remove rows.</li>
+    <li><strong>SELECT</strong> - read data (&quot;give me the users over 18&quot;).</li>
+    <li><strong>INSERT</strong> - add a new row.</li>
+    <li><strong>UPDATE</strong> - change existing rows.</li>
+    <li><strong>DELETE</strong> - remove rows.</li>
   </ul>
   <p>A basic query reads almost like English:</p>
   <pre><code>SELECT name, age
@@ -40,38 +40,38 @@ WHERE age &gt;= 18
 ORDER BY age DESC;</code></pre>
   <p>This asks for the name and age of every user aged 18 or over, newest-oldest first. <code>WHERE</code> filters rows, <code>ORDER BY</code> sorts them, and you can <code>JOIN</code> tables together to combine related data in a single result.</p>
 
-  <figure><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=crop" alt="A laptop showing a data dashboard with charts" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>A data dashboard — the charts and tables you see in apps are usually built from SQL queries running against a database.</figcaption></figure>
+  <figure><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=crop" alt="A laptop showing a data dashboard with charts" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>A data dashboard - the charts and tables you see in apps are usually built from SQL queries running against a database.</figcaption></figure>
 
   <h2>How a query actually runs</h2>
-  <p>You write <em>what</em> you want, not <em>how</em> to get it — SQL is <strong>declarative</strong>. The database&#39;s <em>query planner</em> figures out the most efficient way to fetch the result, using indexes (fast lookup structures) to avoid scanning every row. That separation is a big part of SQL&#39;s longevity: the same query keeps working as the data grows, while the database optimises execution underneath.</p>
+  <p>You write <em>what</em> you want, not <em>how</em> to get it - SQL is <strong>declarative</strong>. The database&#39;s <em>query planner</em> figures out the most efficient way to fetch the result, using indexes (fast lookup structures) to avoid scanning every row. That separation is a big part of SQL&#39;s longevity: the same query keeps working as the data grows, while the database optimises execution underneath.</p>
 
   <h2>SQL vs NoSQL</h2>
-  <p>You will hear SQL contrasted with <strong>NoSQL</strong> databases (MongoDB, Redis, Cassandra and others). SQL/relational databases enforce a structured schema and excel at complex queries and guaranteed consistency (ACID transactions). NoSQL databases relax structure for flexibility and horizontal scale — useful for huge volumes or rapidly-changing shapes of data. Neither replaces the other: many systems use both. For structured data with relationships, SQL remains the default.</p>
+  <p>You will hear SQL contrasted with <strong>NoSQL</strong> databases (MongoDB, Redis, Cassandra and others). SQL/relational databases enforce a structured schema and excel at complex queries and guaranteed consistency (ACID transactions). NoSQL databases relax structure for flexibility and horizontal scale - useful for huge volumes or rapidly-changing shapes of data. Neither replaces the other: many systems use both. For structured data with relationships, SQL remains the default.</p>
 
   <h2>Why SQL still matters in 2026</h2>
   <ul>
-    <li><strong>It is everywhere</strong> — relational databases run banks, shops, apps and analytics; SQL is the common language across them.</li>
-    <li><strong>It is portable knowledge</strong> — the core is standardised, so skills transfer between PostgreSQL, MySQL, SQLite and the rest.</li>
-    <li><strong>It powers analytics</strong> — data analysts and BI tools query warehouses with SQL daily.</li>
-    <li><strong>It is approachable</strong> — the basics are readable and you can be productive quickly.</li>
+    <li><strong>It is everywhere</strong> - relational databases run banks, shops, apps and analytics; SQL is the common language across them.</li>
+    <li><strong>It is portable knowledge</strong> - the core is standardised, so skills transfer between PostgreSQL, MySQL, SQLite and the rest.</li>
+    <li><strong>It powers analytics</strong> - data analysts and BI tools query warehouses with SQL daily.</li>
+    <li><strong>It is approachable</strong> - the basics are readable and you can be productive quickly.</li>
   </ul>
 
   <h2>The honest limits</h2>
-  <p>SQL dialects differ in the details, so a query tuned for one database may need tweaks on another. Poorly written queries or missing indexes can be slow on large tables, and building SQL strings from untrusted input causes <em>SQL injection</em> — a classic security flaw, avoided by using parameterised queries. None of this dents the fundamentals; it is the everyday craft of using SQL well.</p>
+  <p>SQL dialects differ in the details, so a query tuned for one database may need tweaks on another. Poorly written queries or missing indexes can be slow on large tables, and building SQL strings from untrusted input causes <em>SQL injection</em> - a classic security flaw, avoided by using parameterised queries. None of this dents the fundamentals; it is the everyday craft of using SQL well.</p>
 
   <h2>FAQ</h2>
-  <p><strong>Is SQL a programming language?</strong> It is a domain-specific, declarative language for working with data — not a general-purpose one like Python. You describe the data you want and the database works out how to get it.</p>
+  <p><strong>Is SQL a programming language?</strong> It is a domain-specific, declarative language for working with data - not a general-purpose one like Python. You describe the data you want and the database works out how to get it.</p>
   <p><strong>What is the difference between SQL and MySQL?</strong> SQL is the language; MySQL (like PostgreSQL or SQLite) is a database system that you use SQL to talk to. The language is shared; the systems differ in features and performance.</p>
   <p><strong>Do I need SQL if I use an ORM?</strong> ORMs generate SQL for you, but understanding SQL is still essential for performance, debugging and complex queries the ORM handles poorly.</p>
-  <p><strong>Is SQL still worth learning in 2026?</strong> Yes — it remains one of the most in-demand and durable skills for developers, analysts and data engineers, and relational databases are not going anywhere.</p>
+  <p><strong>Is SQL still worth learning in 2026?</strong> Yes - it remains one of the most in-demand and durable skills for developers, analysts and data engineers, and relational databases are not going anywhere.</p>
 
   <p>SQL queries the data; the <a href="/e/blog/2026-06-14-what-is-json.html">JSON</a> that an <a href="/e/blog/2026-06-14-what-is-an-api.html">API</a> returns is often that same data on its way to an app. Browse more clear explainers in our <a href="/e/">guides index</a>.</p>
 
   <h2>Frequently asked questions</h2>
   <details><summary>What is SQL in simple terms?</summary><p>SQL (Structured Query Language) is the standard language for working with data in relational databases. You use it to read, add, change and delete data, and to define the structure that holds it. A query like <code>SELECT name FROM users WHERE active = true</code> reads as almost-English: it asks the database for the names of active users. Most relational databases (PostgreSQL, MySQL, SQLite, SQL Server) speak SQL.</p></details>
-  <details><summary>What are the main SQL commands?</summary><p>The core commands are SELECT (read data), INSERT (add rows), UPDATE (change rows) and DELETE (remove rows) — often called CRUD. Alongside them are DDL commands like CREATE, ALTER and DROP that define tables and schema, plus JOIN to combine related tables and WHERE to filter. SELECT with WHERE and JOIN covers the large majority of everyday use.</p></details>
+  <details><summary>What are the main SQL commands?</summary><p>The core commands are SELECT (read data), INSERT (add rows), UPDATE (change rows) and DELETE (remove rows) - often called CRUD. Alongside them are DDL commands like CREATE, ALTER and DROP that define tables and schema, plus JOIN to combine related tables and WHERE to filter. SELECT with WHERE and JOIN covers the large majority of everyday use.</p></details>
   <details><summary>What is the difference between SQL and MySQL?</summary><p>SQL is the language; MySQL is a database system that uses it. SQL is the standard you write to query data; MySQL, PostgreSQL, SQLite and SQL Server are different database engines that each implement SQL (with small dialect differences). So you write SQL, and a system like MySQL runs it.</p></details>
-  <details><summary>Is SQL still worth learning in 2026?</summary><p>Yes. Relational databases remain the backbone of most applications, and SQL is the way you talk to them — it is one of the most durable, transferable skills in software. Even with NoSQL and ORMs, understanding SQL helps you query, debug and reason about data across almost any stack.</p></details>
+  <details><summary>Is SQL still worth learning in 2026?</summary><p>Yes. Relational databases remain the backbone of most applications, and SQL is the way you talk to them - it is one of the most durable, transferable skills in software. Even with NoSQL and ORMs, understanding SQL helps you query, debug and reason about data across almost any stack.</p></details>
 
   <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about SQL. Examples use standard SQL; verify dialect-specific behaviour against your database&#39;s documentation.</div>
   <p class="related-guides">Related guides: <a href="/e/blog/2026-06-15-what-is-a-database.html">what a database is</a>, <a href="/e/blog/2026-06-18-sql-vs-nosql.html">SQL vs NoSQL</a>.</p>
@@ -84,7 +84,7 @@ ORDER BY age DESC;</code></pre>
       { "@type": "Question", "name": "What is SQL in simple terms?", "acceptedAnswer": { "@type": "Answer", "text": "SQL (Structured Query Language) is the standard language for working with data in relational databases. You use it to read, add, change and delete data and to define its structure. A query like SELECT name FROM users WHERE active = true asks the database for the names of active users. Most relational databases speak SQL." } },
       { "@type": "Question", "name": "What are the main SQL commands?", "acceptedAnswer": { "@type": "Answer", "text": "The core commands are SELECT, INSERT, UPDATE and DELETE (CRUD), plus DDL like CREATE, ALTER and DROP to define tables, JOIN to combine related tables and WHERE to filter. SELECT with WHERE and JOIN covers most everyday use." } },
       { "@type": "Question", "name": "What is the difference between SQL and MySQL?", "acceptedAnswer": { "@type": "Answer", "text": "SQL is the language; MySQL is a database system that uses it. You write SQL to query data; MySQL, PostgreSQL, SQLite and SQL Server are engines that each implement SQL with small dialect differences." } },
-      { "@type": "Question", "name": "Is SQL still worth learning in 2026?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Relational databases remain the backbone of most applications and SQL is how you talk to them — a durable, transferable skill. Even with NoSQL and ORMs, understanding SQL helps you query, debug and reason about data across almost any stack." } }
+      { "@type": "Question", "name": "Is SQL still worth learning in 2026?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Relational databases remain the backbone of most applications and SQL is how you talk to them - a durable, transferable skill. Even with NoSQL and ORMs, understanding SQL helps you query, debug and reason about data across almost any stack." } }
     ]
   })} />
 </Base>

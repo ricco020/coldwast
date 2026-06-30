@@ -2,7 +2,7 @@
 import Base from '../../../../layouts/Base.astro';
 const path = '/fr/e/blog/2026-06-14-haskell-monads.html';
 const title = 'Les monades en Haskell, expliquées sans le jargon (2026)';
-const description = 'Une monade en Haskell est un type qui séquence des calculs portant un contexte — Maybe, Either, IO, listes. Ce qu’est réellement une monade, bind (>>=) et return, la do-notation, et les monades courantes, expliqués simplement.';
+const description = 'Une monade en Haskell est un type qui séquence des calculs portant un contexte - Maybe, Either, IO, listes. Ce qu’est réellement une monade, bind (>>=) et return, la do-notation, et les monades courantes, expliqués simplement.';
 ---
 <Base title={title} description={description} path={path} type="article" lang="fr"
   image="https://images.unsplash.com/photo-1613068687893-5e85b4638b56?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
@@ -14,10 +14,10 @@ const description = 'Une monade en Haskell est un type qui séquence des calculs
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.unsplash.com/photo-1613068687893-5e85b4638b56?w=1200&q=80&auto=format&fit=crop" alt="Du code source sur un écran sombre" width="1200" height="420" loading="eager" />
-    <figcaption>Du code source sur un écran sombre — les monades sont un motif qu'on écrit directement dans du code comme celui-ci.</figcaption>
+    <figcaption>Du code source sur un écran sombre - les monades sont un motif qu'on écrit directement dans du code comme celui-ci.</figcaption>
   </figure>
 
-  <p>« Monade » a une réputation effrayante qu’elle ne mérite pas. Dépouillée du jargon, une <strong>monade</strong> en Haskell est simplement un type qui vous laisse <strong>séquencer des calculs qui portent un certain contexte</strong> — un échec possible, un effet de bord, plusieurs résultats — sans écrire la tuyauterie à la main à chaque fois. Ce guide explique ce qu’est réellement une monade, les deux opérations qui la définissent, la do-notation, et les monades du quotidien que vous utilisez déjà.</p>
+  <p>« Monade » a une réputation effrayante qu’elle ne mérite pas. Dépouillée du jargon, une <strong>monade</strong> en Haskell est simplement un type qui vous laisse <strong>séquencer des calculs qui portent un certain contexte</strong> - un échec possible, un effet de bord, plusieurs résultats - sans écrire la tuyauterie à la main à chaque fois. Ce guide explique ce qu’est réellement une monade, les deux opérations qui la définissent, la do-notation, et les monades du quotidien que vous utilisez déjà.</p>
 
   <h2>L’idée en une phrase</h2>
   <p>Une monade est un type doté d’un moyen de <strong>chaîner des étapes</strong> où chaque étape dépend du résultat de la précédente, et où le « contexte » (échec, effets, non-déterminisme) est propagé automatiquement. C’est tout. Les fameux types <code>Maybe</code>, <code>Either</code>, <code>IO</code> et liste sont tous des monades parce que chacun définit ce chaînage pour son propre type de contexte.</p>
@@ -26,10 +26,10 @@ const description = 'Une monade en Haskell est un type qui séquence des calculs
   <p>La typeclass <code>Monad</code> est définie par deux fonctions :</p>
   <pre><code>return :: a -> m a          -- wrap a plain value into the monad
 (>>=)  :: m a -> (a -> m b) -> m b   -- "bind": feed the result into the next step</code></pre>
-  <p><code>&gt;&gt;=</code> (qu’on prononce « bind ») en est le cœur : il prend une valeur <em>en contexte</em>, et une fonction qui produit la valeur suivante <em>en contexte</em>, et les assemble — en gérant le contexte pour vous.</p>
+  <p><code>&gt;&gt;=</code> (qu’on prononce « bind ») en est le cœur : il prend une valeur <em>en contexte</em>, et une fonction qui produit la valeur suivante <em>en contexte</em>, et les assemble - en gérant le contexte pour vous.</p>
 
   <h2>do-notation : la même chose, en lisible</h2>
-  <figure><img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80&auto=format&fit=crop" alt="Du code source sur un écran d’ordinateur" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Du code source à l’écran — la do-notation est du sucre syntaxique au-dessus de l’opérateur bind.</figcaption></figure>
+  <figure><img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80&auto=format&fit=crop" alt="Du code source sur un écran d’ordinateur" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Du code source à l’écran - la do-notation est du sucre syntaxique au-dessus de l’opérateur bind.</figcaption></figure>
   <p>Les blocs <code>do</code> ne sont que du sucre au-dessus de <code>&gt;&gt;=</code>. Ceux-ci sont équivalents :</p>
   <pre><code>-- with bind
 getLine >>= \name -> putStrLn ("Hi " ++ name)
@@ -41,23 +41,23 @@ do name <- getLine
 
   <h2>Les monades que vous utilisez déjà</h2>
   <ul>
-    <li><strong><code>Maybe</code></strong> — le contexte est « peut être absent ». Bind court-circuite sur <code>Nothing</code>, donc vous enchaînez des recherches sans vérifications de null imbriquées.</li>
-    <li><strong><code>Either</code></strong> — le contexte est « peut échouer avec une erreur ». Comme <code>Maybe</code> mais porte la raison de l’échec.</li>
-    <li><strong><code>IO</code></strong> — le contexte est « effectue des effets de bord ». La monade IO est la façon dont Haskell séquence les effets tout en restant pur ; <code>main :: IO ()</code> est le point d’entrée.</li>
-    <li><strong>Liste (<code>[]</code>)</strong> — le contexte est « plusieurs résultats ». Bind explore chaque combinaison (non-déterminisme).</li>
+    <li><strong><code>Maybe</code></strong> - le contexte est « peut être absent ». Bind court-circuite sur <code>Nothing</code>, donc vous enchaînez des recherches sans vérifications de null imbriquées.</li>
+    <li><strong><code>Either</code></strong> - le contexte est « peut échouer avec une erreur ». Comme <code>Maybe</code> mais porte la raison de l’échec.</li>
+    <li><strong><code>IO</code></strong> - le contexte est « effectue des effets de bord ». La monade IO est la façon dont Haskell séquence les effets tout en restant pur ; <code>main :: IO ()</code> est le point d’entrée.</li>
+    <li><strong>Liste (<code>[]</code>)</strong> - le contexte est « plusieurs résultats ». Bind explore chaque combinaison (non-déterminisme).</li>
   </ul>
-  <p>Vous utilisez des monades depuis votre tout premier <code>main</code> — IO en est une.</p>
+  <p>Vous utilisez des monades depuis votre tout premier <code>main</code> - IO en est une.</p>
 
   <h2>Pourquoi les monades comptent</h2>
-  <p>Elles vous laissent abstraire la <em>tuyauterie</em> de la gestion d’échec, des effets et du séquencement en un motif réutilisable, pour que le même code en style <code>do</code> fonctionne à travers des contextes très différents. C’est pourquoi Haskell peut garder <code>IO</code> séparé et explicite tout en restant ergonomique. Pour exécuter tout cela, il vous faut la chaîne d’outils — voyez <a href="/fr/e/blog/2026-06-14-ghcup-install-haskell.html">installer Haskell avec GHCup</a> et le <a href="/fr/e/blog/2026-06-14-ghc-compiler-guide.html">guide du compilateur GHC</a>, et essayez les exemples en direct dans GHCi.</p>
+  <p>Elles vous laissent abstraire la <em>tuyauterie</em> de la gestion d’échec, des effets et du séquencement en un motif réutilisable, pour que le même code en style <code>do</code> fonctionne à travers des contextes très différents. C’est pourquoi Haskell peut garder <code>IO</code> séparé et explicite tout en restant ergonomique. Pour exécuter tout cela, il vous faut la chaîne d’outils - voyez <a href="/fr/e/blog/2026-06-14-ghcup-install-haskell.html">installer Haskell avec GHCup</a> et le <a href="/fr/e/blog/2026-06-14-ghc-compiler-guide.html">guide du compilateur GHC</a>, et essayez les exemples en direct dans GHCi.</p>
 
   <h2>FAQ</h2>
   <p><strong>Qu’est-ce qu’une monade en termes simples ?</strong> Un type qui vous laisse chaîner des calculs portant un contexte (échec, effets, résultats multiples), en propageant ce contexte automatiquement via l’opérateur bind.</p>
-  <p><strong>IO est-elle une monade ?</strong> Oui — IO est la monade que Haskell utilise pour séquencer les effets de bord tout en restant pur. Votre <code>main</code> s’exécute dedans.</p>
+  <p><strong>IO est-elle une monade ?</strong> Oui - IO est la monade que Haskell utilise pour séquencer les effets de bord tout en restant pur. Votre <code>main</code> s’exécute dedans.</p>
   <p><strong>Faut-il comprendre la théorie des catégories ?</strong> Non. Vous pouvez utiliser les monades de façon productive en Haskell en ne connaissant que <code>return</code>, <code>&gt;&gt;=</code> et la do-notation ; la théorie est optionnelle.</p>
   <p><strong>Quelle est la différence entre Maybe et Either ?</strong> Les deux modélisent un échec possible ; <code>Maybe</code> dit juste « absent » (<code>Nothing</code>), tandis que <code>Either</code> porte une valeur d’erreur expliquant l’échec.</p>
 
-  <div class="note">Guide indépendant, maintenu par la communauté. <strong>coldwa.st</strong> est un site de ressources de programmation ; cet article est un écrit explicatif neuf et original sur les monades en Haskell, sans affiliation avec aucun projet ni rédigé par lui. Le code reflète le comportement standard de Haskell — vérifiez auprès de la documentation GHC actuelle.</div>
+  <div class="note">Guide indépendant, maintenu par la communauté. <strong>coldwa.st</strong> est un site de ressources de programmation ; cet article est un écrit explicatif neuf et original sur les monades en Haskell, sans affiliation avec aucun projet ni rédigé par lui. Le code reflète le comportement standard de Haskell - vérifiez auprès de la documentation GHC actuelle.</div>
   <p class="related-guides">Guides liés : <a href="/fr/e/blog/2026-06-14-haskell-language-server.html">le Haskell Language Server</a>.</p>
   </div>
 </Base>

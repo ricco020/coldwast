@@ -20,10 +20,10 @@ const description = 'SSH (Secure Shell) is the encrypted protocol you use to log
   <p>The moment you rent a <a href="/e/blog/2026-06-19-what-is-a-vps.html">VPS</a> or deploy to a remote server, you hit the same question: how do you actually log in and run commands on a machine that lives in a data centre? The answer is almost always <strong>SSH</strong>. This guide explains what SSH is, how it keeps your session safe, and the handful of commands you really need.</p>
 
   <h2>The short definition</h2>
-  <p><strong>SSH — Secure Shell — is a protocol for logging in to a remote computer and running commands over an encrypted connection.</strong> It gives you a terminal on a machine somewhere else, as if it were right in front of you, and it scrambles everything that passes between you and the server. That encryption is the whole point: it replaced older tools like Telnet, which sent passwords and commands in plain text for anyone on the network to read.</p>
+  <p><strong>SSH - Secure Shell - is a protocol for logging in to a remote computer and running commands over an encrypted connection.</strong> It gives you a terminal on a machine somewhere else, as if it were right in front of you, and it scrambles everything that passes between you and the server. That encryption is the whole point: it replaced older tools like Telnet, which sent passwords and commands in plain text for anyone on the network to read.</p>
 
   <h2>How SSH works</h2>
-  <p>When you connect, your SSH client and the server run a quick handshake. They agree on encryption settings and set up a shared secret key, so the rest of the session is private. The server also proves its identity with its own key, which is why your client warns you the first time it sees a new server. After that, you authenticate — you prove who you are — and you get a shell prompt on the remote machine. Every keystroke and every reply from then on is encrypted.</p>
+  <p>When you connect, your SSH client and the server run a quick handshake. They agree on encryption settings and set up a shared secret key, so the rest of the session is private. The server also proves its identity with its own key, which is why your client warns you the first time it sees a new server. After that, you authenticate - you prove who you are - and you get a shell prompt on the remote machine. Every keystroke and every reply from then on is encrypted.</p>
 
   <figure><img src="/img/px-cbf4af27da8a.jpg" alt="A server cabinet filled with network cables and patch cords" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>SSH is how you reach servers like these. You connect from your laptop and control the remote machine over an encrypted channel.</figcaption></figure>
 
@@ -49,16 +49,16 @@ const description = 'SSH (Secure Shell) is the encrypted protocol you use to log
   <details><summary>What is SSH in simple terms?</summary><p>SSH, or Secure Shell, is a way to log in to a computer somewhere else and run commands on it over an encrypted connection. It gives you a terminal on a remote machine as if it were in front of you, while scrambling everything sent between you and the server so no one on the network can read it.</p></details>
   <details><summary>What is the difference between an SSH password and an SSH key?</summary><p>A password is a secret you type, and it can be guessed or brute-forced by bots. An SSH key is a pair of files: a private key kept on your machine and a public key placed on the server. You're let in only if they match, and the private key never leaves your computer, which makes keys both safer and more convenient than passwords.</p></details>
   <details><summary>What port does SSH use?</summary><p>SSH uses TCP port 22 by default. Some administrators change it to a different port to cut down on automated login attempts, but that is a small obstacle rather than real security. The real protections are using SSH keys and turning off password login, not hiding the port.</p></details>
-  <details><summary>Is SSH secure?</summary><p>Yes, SSH is secure when set up properly, because it encrypts the whole session. Most break-ins come from weak configuration, not from SSH itself — usually password login left on with a guessable password. Using SSH keys, disabling password login and protecting your private key make it very safe.</p></details>
+  <details><summary>Is SSH secure?</summary><p>Yes, SSH is secure when set up properly, because it encrypts the whole session. Most break-ins come from weak configuration, not from SSH itself - usually password login left on with a guessable password. Using SSH keys, disabling password login and protecting your private key make it very safe.</p></details>
 
   <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about the SSH protocol. Commands shown are standard OpenSSH usage; check your own client and server documentation for specifics.</div>
 
   <div class="affbox" style="margin:28px 0;">
     <span class="tag">Recommended</span>
     <h3>A server to practise SSH on</h3>
-    <p>The best way to learn SSH is to have a real server to log in to. A VPS or cloud server gives you root access over SSH to deploy sites, APIs or containers. Infomaniak — a Swiss, privacy-respecting provider — offers VPS and cloud servers you can connect to and manage entirely over SSH.</p>
+    <p>The best way to learn SSH is to have a real server to log in to. A VPS or cloud server gives you root access over SSH to deploy sites, APIs or containers. Infomaniak - a Swiss, privacy-respecting provider - offers VPS and cloud servers you can connect to and manage entirely over SSH.</p>
     <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">See Infomaniak Cloud →</a>
-    <p class="disc">Affiliate link — it supports these free guides.</p>
+    <p class="disc">Affiliate link - it supports these free guides.</p>
   </div>
 
   <p>Browse more clear explainers in our <a href="/e/">guides index</a>.</p>

@@ -14,24 +14,24 @@ const description = 'Le SQL est le langage standard pour stocker, interroger et 
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=1200&q=80&auto=format&fit=crop" alt="Du code source coloré sur un moniteur" width="1200" height="420" loading="eager" />
-    <figcaption>Du code source coloré sur un moniteur — le SQL est un langage de requête que vous écrivez pour demander à une base de données exactement les données que vous voulez.</figcaption>
+    <figcaption>Du code source coloré sur un moniteur - le SQL est un langage de requête que vous écrivez pour demander à une base de données exactement les données que vous voulez.</figcaption>
   </figure>
 
-  <p>Derrière presque chaque app, site web et tableau de bord se trouve une base de données — et le langage utilisé pour lui parler est, le plus souvent, le <strong>SQL</strong>. Il est une colonne vertébrale du logiciel depuis cinquante ans et reste l’une des compétences les plus précieuses qu’un développeur ou un analyste puisse avoir. Ce guide explique ce qu’est le SQL, ses commandes clés, comment fonctionne une requête, sa comparaison avec NoSQL, et pourquoi il perdure.</p>
+  <p>Derrière presque chaque app, site web et tableau de bord se trouve une base de données - et le langage utilisé pour lui parler est, le plus souvent, le <strong>SQL</strong>. Il est une colonne vertébrale du logiciel depuis cinquante ans et reste l’une des compétences les plus précieuses qu’un développeur ou un analyste puisse avoir. Ce guide explique ce qu’est le SQL, ses commandes clés, comment fonctionne une requête, sa comparaison avec NoSQL, et pourquoi il perdure.</p>
 
   <h2>La définition courte</h2>
-  <p><strong>Le SQL (Structured Query Language) est le langage standard pour stocker, récupérer et modifier des données dans une base de données relationnelle.</strong> Une base de données relationnelle organise les données en <em>tables</em> — des lignes et des colonnes, comme un tableur — et le SQL est la façon dont vous posez des questions à ces données et les modifiez. Il se prononce « esse-cu-elle » ou « sequel », et anime des bases comme PostgreSQL, MySQL, SQLite, SQL Server et Oracle.</p>
+  <p><strong>Le SQL (Structured Query Language) est le langage standard pour stocker, récupérer et modifier des données dans une base de données relationnelle.</strong> Une base de données relationnelle organise les données en <em>tables</em> - des lignes et des colonnes, comme un tableur - et le SQL est la façon dont vous posez des questions à ces données et les modifiez. Il se prononce « esse-cu-elle » ou « sequel », et anime des bases comme PostgreSQL, MySQL, SQLite, SQL Server et Oracle.</p>
 
   <h2>Tables, lignes et colonnes</h2>
-  <p>Le modèle relationnel est simple. Une table <code>users</code> peut avoir les colonnes <code>id</code>, <code>name</code> et <code>age</code> ; chaque <strong>ligne</strong> est un utilisateur. Les tables peuvent se relier entre elles — une table <code>orders</code> peut référencer un utilisateur par son <code>id</code> — c’est de là que vient le « relationnel », et là que se révèle la puissance du SQL à combiner des données.</p>
+  <p>Le modèle relationnel est simple. Une table <code>users</code> peut avoir les colonnes <code>id</code>, <code>name</code> et <code>age</code> ; chaque <strong>ligne</strong> est un utilisateur. Les tables peuvent se relier entre elles - une table <code>orders</code> peut référencer un utilisateur par son <code>id</code> - c’est de là que vient le « relationnel », et là que se révèle la puissance du SQL à combiner des données.</p>
 
   <h2>Les commandes clés</h2>
   <p>L’essentiel du travail SQL utilise quatre verbes, souvent appelés CRUD (create, read, update, delete) :</p>
   <ul>
-    <li><strong>SELECT</strong> — lire des données (« donne-moi les utilisateurs de plus de 18 ans »).</li>
-    <li><strong>INSERT</strong> — ajouter une nouvelle ligne.</li>
-    <li><strong>UPDATE</strong> — modifier des lignes existantes.</li>
-    <li><strong>DELETE</strong> — supprimer des lignes.</li>
+    <li><strong>SELECT</strong> - lire des données (« donne-moi les utilisateurs de plus de 18 ans »).</li>
+    <li><strong>INSERT</strong> - ajouter une nouvelle ligne.</li>
+    <li><strong>UPDATE</strong> - modifier des lignes existantes.</li>
+    <li><strong>DELETE</strong> - supprimer des lignes.</li>
   </ul>
   <p>Une requête de base se lit presque comme de l’anglais :</p>
   <pre><code>SELECT name, age
@@ -40,30 +40,30 @@ WHERE age &gt;= 18
 ORDER BY age DESC;</code></pre>
   <p>Ceci demande le nom et l’âge de chaque utilisateur âgé de 18 ans ou plus, du plus récent au plus ancien. <code>WHERE</code> filtre les lignes, <code>ORDER BY</code> les trie, et vous pouvez <code>JOIN</code> des tables ensemble pour combiner des données liées en un seul résultat.</p>
 
-  <figure><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=crop" alt="Un ordinateur portable affichant un tableau de bord de données avec des graphiques" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Un tableau de bord de données — les graphiques et tableaux que vous voyez dans les apps sont généralement construits à partir de requêtes SQL exécutées contre une base de données.</figcaption></figure>
+  <figure><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=crop" alt="Un ordinateur portable affichant un tableau de bord de données avec des graphiques" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Un tableau de bord de données - les graphiques et tableaux que vous voyez dans les apps sont généralement construits à partir de requêtes SQL exécutées contre une base de données.</figcaption></figure>
 
   <h2>Comment une requête s’exécute réellement</h2>
-  <p>Vous écrivez <em>ce que</em> vous voulez, pas <em>comment</em> l’obtenir — le SQL est <strong>déclaratif</strong>. Le <em>planificateur de requêtes</em> de la base trouve la façon la plus efficace de récupérer le résultat, en utilisant des index (structures de recherche rapide) pour éviter de parcourir chaque ligne. Cette séparation est une grande partie de la longévité du SQL : la même requête continue de fonctionner à mesure que les données grandissent, tandis que la base optimise l’exécution en dessous.</p>
+  <p>Vous écrivez <em>ce que</em> vous voulez, pas <em>comment</em> l’obtenir - le SQL est <strong>déclaratif</strong>. Le <em>planificateur de requêtes</em> de la base trouve la façon la plus efficace de récupérer le résultat, en utilisant des index (structures de recherche rapide) pour éviter de parcourir chaque ligne. Cette séparation est une grande partie de la longévité du SQL : la même requête continue de fonctionner à mesure que les données grandissent, tandis que la base optimise l’exécution en dessous.</p>
 
   <h2>SQL vs NoSQL</h2>
-  <p>Vous entendrez opposer le SQL aux bases de données <strong>NoSQL</strong> (MongoDB, Redis, Cassandra et d’autres). Les bases SQL/relationnelles imposent un schéma structuré et excellent dans les requêtes complexes et la cohérence garantie (transactions ACID). Les bases NoSQL relâchent la structure au profit de la flexibilité et de la mise à l’échelle horizontale — utiles pour d’énormes volumes ou des formes de données en évolution rapide. Aucune ne remplace l’autre : beaucoup de systèmes utilisent les deux. Pour des données structurées avec des relations, le SQL reste le choix par défaut.</p>
+  <p>Vous entendrez opposer le SQL aux bases de données <strong>NoSQL</strong> (MongoDB, Redis, Cassandra et d’autres). Les bases SQL/relationnelles imposent un schéma structuré et excellent dans les requêtes complexes et la cohérence garantie (transactions ACID). Les bases NoSQL relâchent la structure au profit de la flexibilité et de la mise à l’échelle horizontale - utiles pour d’énormes volumes ou des formes de données en évolution rapide. Aucune ne remplace l’autre : beaucoup de systèmes utilisent les deux. Pour des données structurées avec des relations, le SQL reste le choix par défaut.</p>
 
   <h2>Pourquoi le SQL compte toujours en 2026</h2>
   <ul>
-    <li><strong>Il est partout</strong> — les bases relationnelles font tourner banques, boutiques, apps et analytique ; le SQL est la langue commune entre elles.</li>
-    <li><strong>C’est une connaissance portable</strong> — le cœur est standardisé, donc les compétences se transfèrent entre PostgreSQL, MySQL, SQLite et le reste.</li>
-    <li><strong>Il alimente l’analytique</strong> — les analystes de données et les outils de BI interrogent quotidiennement des entrepôts avec du SQL.</li>
-    <li><strong>Il est accessible</strong> — les bases sont lisibles et vous pouvez être productif rapidement.</li>
+    <li><strong>Il est partout</strong> - les bases relationnelles font tourner banques, boutiques, apps et analytique ; le SQL est la langue commune entre elles.</li>
+    <li><strong>C’est une connaissance portable</strong> - le cœur est standardisé, donc les compétences se transfèrent entre PostgreSQL, MySQL, SQLite et le reste.</li>
+    <li><strong>Il alimente l’analytique</strong> - les analystes de données et les outils de BI interrogent quotidiennement des entrepôts avec du SQL.</li>
+    <li><strong>Il est accessible</strong> - les bases sont lisibles et vous pouvez être productif rapidement.</li>
   </ul>
 
   <h2>Les limites honnêtes</h2>
-  <p>Les dialectes SQL diffèrent dans les détails, si bien qu’une requête optimisée pour une base peut nécessiter des ajustements sur une autre. Des requêtes mal écrites ou des index manquants peuvent être lents sur de grandes tables, et construire des chaînes SQL à partir d’entrées non fiables provoque l’<em>injection SQL</em> — une faille de sécurité classique, évitée en utilisant des requêtes paramétrées. Rien de tout cela n’entame les fondamentaux ; c’est l’artisanat quotidien du bon usage du SQL.</p>
+  <p>Les dialectes SQL diffèrent dans les détails, si bien qu’une requête optimisée pour une base peut nécessiter des ajustements sur une autre. Des requêtes mal écrites ou des index manquants peuvent être lents sur de grandes tables, et construire des chaînes SQL à partir d’entrées non fiables provoque l’<em>injection SQL</em> - une faille de sécurité classique, évitée en utilisant des requêtes paramétrées. Rien de tout cela n’entame les fondamentaux ; c’est l’artisanat quotidien du bon usage du SQL.</p>
 
   <h2>FAQ</h2>
-  <p><strong>Le SQL est-il un langage de programmation ?</strong> C’est un langage déclaratif spécifique à un domaine, pour travailler avec des données — pas un langage généraliste comme Python. Vous décrivez les données que vous voulez et la base trouve comment les obtenir.</p>
+  <p><strong>Le SQL est-il un langage de programmation ?</strong> C’est un langage déclaratif spécifique à un domaine, pour travailler avec des données - pas un langage généraliste comme Python. Vous décrivez les données que vous voulez et la base trouve comment les obtenir.</p>
   <p><strong>Quelle est la différence entre SQL et MySQL ?</strong> Le SQL est le langage ; MySQL (comme PostgreSQL ou SQLite) est un système de base de données auquel vous parlez en SQL. Le langage est partagé ; les systèmes diffèrent par leurs fonctionnalités et leurs performances.</p>
   <p><strong>Ai-je besoin du SQL si j’utilise un ORM ?</strong> Les ORM génèrent du SQL pour vous, mais comprendre le SQL reste essentiel pour la performance, le débogage et les requêtes complexes que l’ORM gère mal.</p>
-  <p><strong>Le SQL vaut-il encore la peine d’être appris en 2026 ?</strong> Oui — il reste l’une des compétences les plus demandées et durables pour les développeurs, analystes et ingénieurs de données, et les bases relationnelles ne sont pas près de disparaître.</p>
+  <p><strong>Le SQL vaut-il encore la peine d’être appris en 2026 ?</strong> Oui - il reste l’une des compétences les plus demandées et durables pour les développeurs, analystes et ingénieurs de données, et les bases relationnelles ne sont pas près de disparaître.</p>
 
   <p>Le SQL interroge les données ; le <a href="/fr/e/blog/2026-06-14-what-is-json.html">JSON</a> qu’une <a href="/fr/e/blog/2026-06-14-what-is-an-api.html">API</a> renvoie est souvent ces mêmes données en route vers une app. Parcourez d’autres explications claires dans notre <a href="/fr/e/">index des guides</a>.</p>
 

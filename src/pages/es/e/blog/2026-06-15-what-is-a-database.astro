@@ -14,39 +14,39 @@ const description = 'Una base de datos es una colección organizada de datos, ge
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&q=80&auto=format&fit=crop" alt="Bastidores de servidores en un centro de datos" width="1200" height="420" loading="eager" />
-    <figcaption>Bastidores de servidores en un centro de datos — las bases de datos se ejecutan en servidores como estos, almacenando los datos detrás de apps y sitios web.</figcaption>
+    <figcaption>Bastidores de servidores en un centro de datos - las bases de datos se ejecutan en servidores como estos, almacenando los datos detrás de apps y sitios web.</figcaption>
   </figure>
 
-  <p>Cada app que usas — tu banco, una tienda, un feed social — guarda su información en algún lugar donde se pueda encontrar, cambiar y confiar en ella. Ese lugar es una <strong>base de datos</strong>. Es una de las ideas fundamentales del software. Esta guía explica qué es una base de datos, los tipos principales, los conceptos que importan, ejemplos reales, y su conexión con <a href="/es/e/blog/2026-06-14-what-is-sql.html">SQL</a>.</p>
+  <p>Cada app que usas - tu banco, una tienda, un feed social - guarda su información en algún lugar donde se pueda encontrar, cambiar y confiar en ella. Ese lugar es una <strong>base de datos</strong>. Es una de las ideas fundamentales del software. Esta guía explica qué es una base de datos, los tipos principales, los conceptos que importan, ejemplos reales, y su conexión con <a href="/es/e/blog/2026-06-14-what-is-sql.html">SQL</a>.</p>
 
   <h2>La definición corta</h2>
   <p><strong>Una base de datos es una colección organizada de datos, gestionada por software (un sistema de gestión de bases de datos, o SGBD) que permite almacenar, recuperar, actualizar y proteger esos datos de forma fiable.</strong> Una hoja de cálculo también puede contener datos, pero una base de datos añade estructura, consultas rápidas a escala, acceso multiusuario y la garantía de que los datos siguen siendo coherentes aunque muchas cosas cambien a la vez.</p>
 
   <h2>Base de datos vs SGBD</h2>
-  <p>Dos palabras que se usan indistintamente pero significan cosas distintas. La <strong>base de datos</strong> son los datos en sí y cómo están organizados. El <strong>SGBD</strong> — PostgreSQL, MySQL, SQLite, MongoDB — es el software que los almacena, ejecuta tus consultas, aplica las reglas y gestiona el acceso concurrente. Cuando alguien pregunta «¿qué base de datos debería usar?», suele referirse al SGBD.</p>
+  <p>Dos palabras que se usan indistintamente pero significan cosas distintas. La <strong>base de datos</strong> son los datos en sí y cómo están organizados. El <strong>SGBD</strong> - PostgreSQL, MySQL, SQLite, MongoDB - es el software que los almacena, ejecuta tus consultas, aplica las reglas y gestiona el acceso concurrente. Cuando alguien pregunta «¿qué base de datos debería usar?», suele referirse al SGBD.</p>
 
   <h2>Las dos grandes familias</h2>
   <ul>
     <li><strong>Bases de datos relacionales (SQL)</strong>: organizan los datos en <em>tablas</em> de filas y columnas, con relaciones definidas entre ellas, y se consultan con <a href="/es/e/blog/2026-06-14-what-is-sql.html">SQL</a>. Destacan en datos estructurados y coherencia garantizada. Ejemplos: PostgreSQL, MySQL, SQLite, SQL Server.</li>
     <li><strong>Bases de datos NoSQL</strong>: relajan la estructura rígida de tablas para ganar flexibilidad y escala. Vienen en variantes: orientadas a documentos (MongoDB), clave-valor (Redis), columnas anchas (Cassandra) y grafos (Neo4j). Útiles para grandes volúmenes, caché rápida, o datos cuya forma cambia a menudo.</li>
   </ul>
-  <p>La mayoría de los sistemas reales usan más de una — por ejemplo una base relacional para los registros principales y un almacén clave-valor para la caché.</p>
+  <p>La mayoría de los sistemas reales usan más de una - por ejemplo una base relacional para los registros principales y un almacén clave-valor para la caché.</p>
 
-  <figure><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=crop" alt="Un portátil mostrando un panel de datos con gráficos" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Un panel de datos — los números y gráficos de una app se leen de una base de datos por debajo, normalmente con una consulta.</figcaption></figure>
+  <figure><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=crop" alt="Un portátil mostrando un panel de datos con gráficos" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Un panel de datos - los números y gráficos de una app se leen de una base de datos por debajo, normalmente con una consulta.</figcaption></figure>
 
   <h2>Los conceptos clave</h2>
   <ul>
-    <li><strong>Esquema</strong> — la estructura definida: qué tablas existen, sus columnas y tipos, y las reglas. Las bases relacionales son esquema primero; muchas NoSQL son flexibles.</li>
-    <li><strong>Consulta</strong> — una petición de datos concretos («todos los pedidos de la semana pasada»). En las bases relacionales se escriben en SQL.</li>
-    <li><strong>Índice</strong> — una estructura de búsqueda que hace las consultas rápidas evitando recorrer cada fila, como el índice al final de un libro.</li>
-    <li><strong>Transacción</strong> — un grupo de cambios que deben tener éxito todos o fallar todos juntos (mover dinero entre dos cuentas). Las bases relacionales lo garantizan con las propiedades <strong>ACID</strong>.</li>
+    <li><strong>Esquema</strong> - la estructura definida: qué tablas existen, sus columnas y tipos, y las reglas. Las bases relacionales son esquema primero; muchas NoSQL son flexibles.</li>
+    <li><strong>Consulta</strong> - una petición de datos concretos («todos los pedidos de la semana pasada»). En las bases relacionales se escriben en SQL.</li>
+    <li><strong>Índice</strong> - una estructura de búsqueda que hace las consultas rápidas evitando recorrer cada fila, como el índice al final de un libro.</li>
+    <li><strong>Transacción</strong> - un grupo de cambios que deben tener éxito todos o fallar todos juntos (mover dinero entre dos cuentas). Las bases relacionales lo garantizan con las propiedades <strong>ACID</strong>.</li>
   </ul>
 
   <h2>Qué significa ACID</h2>
   <p>ACID describe las garantías que una base de datos fiable da a una transacción: <strong>Atomicidad</strong> (todo o nada), <strong>Consistencia</strong> (los datos cumplen sus reglas antes y después), <strong>Aislamiento</strong> (las transacciones concurrentes no se corrompen entre sí) y <strong>Durabilidad</strong> (una vez confirmado, el cambio sobrevive a una caída). Estas garantías son la razón por la que confías dinero y registros a una base de datos en lugar de a un archivo simple.</p>
 
   <h2>Por qué importan las bases de datos</h2>
-  <p>Permiten al software almacenar los datos una vez y usarlos en todas partes, con seguridad, a escala, con muchos usuarios a la vez — y encontrar cualquier porción en milisegundos. Casi todo programa no trivial acaba necesitando una. La habilidad de elegir el tipo adecuado y consultarlo bien es de las más duraderas en el software.</p>
+  <p>Permiten al software almacenar los datos una vez y usarlos en todas partes, con seguridad, a escala, con muchos usuarios a la vez - y encontrar cualquier porción en milisegundos. Casi todo programa no trivial acaba necesitando una. La habilidad de elegir el tipo adecuado y consultarlo bien es de las más duraderas en el software.</p>
 
   <h2>Las compensaciones honestas</h2>
   <p>No hay una base de datos universalmente «mejor». Las relacionales dan fuerte consistencia y consultas potentes pero necesitan un esquema definido; NoSQL da flexibilidad y escala horizontal pero a menudo cede algunas garantías de consistencia. La elección correcta depende de la forma de tus datos, tu escala, y cuánto valoras la consistencia estricta frente a la flexibilidad. Muchos equipos combinan ambas.</p>
@@ -54,8 +54,8 @@ const description = 'Una base de datos es una colección organizada de datos, ge
   <h2>FAQ</h2>
   <p><strong>¿Una base de datos es lo mismo que SQL?</strong> No. Una base de datos almacena los datos; <a href="/es/e/blog/2026-06-14-what-is-sql.html">SQL</a> es el lenguaje usado para consultar las bases relacionales. Las bases NoSQL usan otros métodos de consulta.</p>
   <p><strong>¿Una hoja de cálculo es una base de datos?</strong> En sentido amplio, pero no realmente. Una hoja de cálculo contiene datos, pero una base de datos añade estructura impuesta, consultas rápidas a escala, seguridad multiusuario y garantías transaccionales que una hoja de cálculo no tiene.</p>
-  <p><strong>¿Qué diferencia hay entre SQL y NoSQL?</strong> Las bases SQL/relacionales usan tablas estructuradas y fuerte consistencia; las NoSQL relajan la estructura por flexibilidad y escala. Ninguna reemplaza a la otra — sirven para trabajos distintos. Para una comparación más a fondo, mira <a href="/es/e/blog/2026-06-18-sql-vs-nosql.html">SQL vs NoSQL: qué base de datos, y cuándo</a>.</p>
-  <p><strong>¿Qué base de datos debería aprender primero un principiante?</strong> Una relacional — SQLite o PostgreSQL — porque el modelo relacional y SQL se transfieren a todas partes y enseñan las ideas clave con claridad.</p>
+  <p><strong>¿Qué diferencia hay entre SQL y NoSQL?</strong> Las bases SQL/relacionales usan tablas estructuradas y fuerte consistencia; las NoSQL relajan la estructura por flexibilidad y escala. Ninguna reemplaza a la otra - sirven para trabajos distintos. Para una comparación más a fondo, mira <a href="/es/e/blog/2026-06-18-sql-vs-nosql.html">SQL vs NoSQL: qué base de datos, y cuándo</a>.</p>
+  <p><strong>¿Qué base de datos debería aprender primero un principiante?</strong> Una relacional - SQLite o PostgreSQL - porque el modelo relacional y SQL se transfieren a todas partes y enseñan las ideas clave con claridad.</p>
 
   <p>Para consultar una base relacional usarás <a href="/es/e/blog/2026-06-14-what-is-sql.html">SQL</a>; los datos que una base devuelve a una app a menudo viajan como <a href="/es/e/blog/2026-06-14-what-is-json.html">JSON</a>. Explora más explicaciones claras en nuestro <a href="/es/e/">índice de guías</a>.</p>
 

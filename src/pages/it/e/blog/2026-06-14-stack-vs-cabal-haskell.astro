@@ -17,7 +17,7 @@ const description = 'Cabal e Stack sono i due modi principali per costruire prog
     <figcaption>Cabal e Stack sono i due strumenti a riga di comando con cui viene costruita la maggior parte dei progetti Haskell.</figcaption>
   </figure>
 
-  <p>Una volta installato un compilatore Haskell, ti serve un modo per gestire le dipendenze e costruire il tuo progetto. Nel 2026 ci sono due scelte mainstream: <strong>Cabal</strong> e <strong>Stack</strong>. Fanno lo stesso lavoro di fondo — recuperare le librerie, costruire il tuo codice, eseguire i test — ma fanno compromessi diversi su dove provengono i pacchetti e su quanto sono riproducibili le build. Questa guida spiega cosa sono, in cosa differiscono, i comandi equivalenti e come scegliere.</p>
+  <p>Una volta installato un compilatore Haskell, ti serve un modo per gestire le dipendenze e costruire il tuo progetto. Nel 2026 ci sono due scelte mainstream: <strong>Cabal</strong> e <strong>Stack</strong>. Fanno lo stesso lavoro di fondo - recuperare le librerie, costruire il tuo codice, eseguire i test - ma fanno compromessi diversi su dove provengono i pacchetti e su quanto sono riproducibili le build. Questa guida spiega cosa sono, in cosa differiscono, i comandi equivalenti e come scegliere.</p>
 
   <h2>Cos’è Cabal</h2>
   <p><strong>Cabal</strong> è il sistema di build originale di Haskell. Il termine copre due cose: la <em>libreria/specifica Cabal</em> (il formato di file <code>.cabal</code> che descrive un pacchetto) e <strong>cabal-install</strong>, lo strumento a riga di comando <code>cabal</code> che costruisce i pacchetti e risolve le dipendenze. Per impostazione predefinita recupera le librerie da <a href="https://hackage.haskell.org">Hackage</a>, l’archivio centrale dei pacchetti Haskell.</p>
@@ -31,17 +31,17 @@ build-depends: base &gt;=4.14 &amp;&amp; &lt;5, text, aeson ^&gt;=2.1</code></pr
   <pre><code>resolver: lts-22.14
 packages:
   - .</code></pre>
-  <p>Poiché lo snapshot fissa ogni versione, chiunque recuperi il tuo progetto ed esegua <code>stack build</code> ottiene le stesse versioni di dipendenze — e Stack installerà automaticamente il GHC corrispondente a quello snapshot. Questa garanzia « funziona uguale ovunque » è l’attrattiva principale di Stack, soprattutto per i team e la CI.</p>
+  <p>Poiché lo snapshot fissa ogni versione, chiunque recuperi il tuo progetto ed esegua <code>stack build</code> ottiene le stesse versioni di dipendenze - e Stack installerà automaticamente il GHC corrispondente a quello snapshot. Questa garanzia « funziona uguale ovunque » è l’attrattiva principale di Stack, soprattutto per i team e la CI.</p>
 
-  <figure><img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&q=80&auto=format&fit=crop" alt="Flussi di codice verde su uno schermo scuro" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Flussi di codice sullo schermo — entrambi gli strumenti recuperano le dipendenze e le compilano; differiscono soprattutto per la provenienza delle versioni.</figcaption></figure>
+  <figure><img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&q=80&auto=format&fit=crop" alt="Flussi di codice verde su uno schermo scuro" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Flussi di codice sullo schermo - entrambi gli strumenti recuperano le dipendenze e le compilano; differiscono soprattutto per la provenienza delle versioni.</figcaption></figure>
 
   <h2>Le differenze chiave</h2>
   <ul>
-    <li><strong>Fonte dei pacchetti</strong> — Cabal risolve contro tutto Hackage; Stack costruisce contro uno snapshot Stackage curato. Stackage baratta un po’ di freschezza con insiemi garantiti compatibili.</li>
-    <li><strong>Riproducibilità</strong> — Stack fissa tutto tramite lo snapshot per impostazione predefinita. Cabal può essere altrettanto riproducibile con un file <code>cabal.project.freeze</code>, ma lo attivi esplicitamente.</li>
-    <li><strong>Gestione di GHC</strong> — Stack scarica e gestisce la versione di GHC di cui uno snapshot ha bisogno. Con Cabal, porti il tuo GHC (comunemente installato tramite <a href="/it/e/blog/2026-06-14-ghcup-install-haskell.html">GHCup</a>).</li>
-    <li><strong>File di configurazione</strong> — entrambi leggono il file <code>.cabal</code> del pacchetto. Stack aggiunge <code>stack.yaml</code>; Cabal aggiunge <code>cabal.project</code>.</li>
-    <li><strong>Allineamento all’ecosistema</strong> — Cabal segue da vicino le release di GHC e Hackage; Stack avanza al ritmo della curazione degli snapshot.</li>
+    <li><strong>Fonte dei pacchetti</strong> - Cabal risolve contro tutto Hackage; Stack costruisce contro uno snapshot Stackage curato. Stackage baratta un po’ di freschezza con insiemi garantiti compatibili.</li>
+    <li><strong>Riproducibilità</strong> - Stack fissa tutto tramite lo snapshot per impostazione predefinita. Cabal può essere altrettanto riproducibile con un file <code>cabal.project.freeze</code>, ma lo attivi esplicitamente.</li>
+    <li><strong>Gestione di GHC</strong> - Stack scarica e gestisce la versione di GHC di cui uno snapshot ha bisogno. Con Cabal, porti il tuo GHC (comunemente installato tramite <a href="/it/e/blog/2026-06-14-ghcup-install-haskell.html">GHCup</a>).</li>
+    <li><strong>File di configurazione</strong> - entrambi leggono il file <code>.cabal</code> del pacchetto. Stack aggiunge <code>stack.yaml</code>; Cabal aggiunge <code>cabal.project</code>.</li>
+    <li><strong>Allineamento all’ecosistema</strong> - Cabal segue da vicino le release di GHC e Hackage; Stack avanza al ritmo della curazione degli snapshot.</li>
   </ul>
 
   <h2>I comandi equivalenti</h2>
@@ -52,10 +52,10 @@ cabal run myapp           stack run
 cabal test                stack test
 cabal repl                stack ghci
 cabal haddock             stack haddock</code></pre>
-  <p>Entrambi pilotano lo stesso compilatore sotto — vedi la <a href="/it/e/blog/2026-06-14-ghc-compiler-guide.html">guida a GHC</a> per le opzioni che contano. Nota che il Cabal di oggi discende dal workflow introdotto in <a href="/it/e/blog/2017-09-09-Cabal-2-0.html">Cabal 2.0</a>, che ha sostituito il vecchio approccio delle <a href="/it/e/blog/2013-08-20-Cabal-sandbox.html">sandbox</a>.</p>
+  <p>Entrambi pilotano lo stesso compilatore sotto - vedi la <a href="/it/e/blog/2026-06-14-ghc-compiler-guide.html">guida a GHC</a> per le opzioni che contano. Nota che il Cabal di oggi discende dal workflow introdotto in <a href="/it/e/blog/2017-09-09-Cabal-2-0.html">Cabal 2.0</a>, che ha sostituito il vecchio approccio delle <a href="/it/e/blog/2013-08-20-Cabal-sandbox.html">sandbox</a>.</p>
 
   <h2>Quale scegliere?</h2>
-  <p>Nel 2026 entrambi sono buoni e attivamente mantenuti — non è un caso in cui uno è obsoleto. Una regola pratica ragionevole:</p>
+  <p>Nel 2026 entrambi sono buoni e attivamente mantenuti - non è un caso in cui uno è obsoleto. Una regola pratica ragionevole:</p>
   <ul>
     <li><strong>Scegli Cabal</strong> se vuoi la toolchain predefinita allineata a GHC, le ultime versioni di pacchetti da Hackage e un controllo fine sui vincoli di versione. È il percorso che la maggior parte dei nuovi tutorial presuppone.</li>
     <li><strong>Scegli Stack</strong> se apprezzi la riproducibilità chiavi in mano e la gestione automatica di GHC, o se sei in un team dove « tutti ottengono la stessa build » conta più dell’avere le versioni di librerie più recenti.</li>
@@ -66,18 +66,18 @@ cabal haddock             stack haddock</code></pre>
   <p><strong>Cabal o Stack, quale è migliore?</strong> Nessuno è strettamente migliore; ottimizzano per cose diverse. Cabal privilegia le versioni Hackage aggiornate e l’allineamento stretto a GHC; Stack privilegia snapshot curati e riproducibili e l’installazione automatica di GHC.</p>
   <p><strong>Stack e Cabal usano lo stesso formato di pacchetto?</strong> Sì. Entrambi leggono il file <code>.cabal</code> del pacchetto. Stack aggiunge <code>stack.yaml</code> sopra; Cabal aggiunge <code>cabal.project</code>.</p>
   <p><strong>Cos’è uno snapshot Stackage?</strong> Un insieme curato di versioni di pacchetti Hackage verificate per compilare insieme, identificato da un resolver come <code>lts-22.14</code>. Fissarne uno rende le build riproducibili.</p>
-  <p><strong>Posso passare da Stack a Cabal più tardi?</strong> Generalmente sì — il file <code>.cabal</code> è condiviso, quindi aggiungi soprattutto un <code>cabal.project</code> e fornisci un GHC (tramite GHCup). I vincoli di versione possono richiedere una piccola pulizia.</p>
+  <p><strong>Posso passare da Stack a Cabal più tardi?</strong> Generalmente sì - il file <code>.cabal</code> è condiviso, quindi aggiungi soprattutto un <code>cabal.project</code> e fornisci un GHC (tramite GHCup). I vincoli di versione possono richiedere una piccola pulizia.</p>
 
   <p>Nuovo alla toolchain? Inizia da <a href="/it/e/blog/2026-06-14-ghcup-install-haskell.html">installare Haskell con GHCup</a>, che configura GHC, Cabal e Stack insieme.</p>
 
   <div class="affbox">
     <span class="tag">Consigliato</span>
     <h3>Compila Haskell più velocemente</h3>
-    <p>Sia Stack sia Cabal compilano più velocemente con più core e RAM di un portatile — comodo per progetti grandi e CI. Infomaniak, host svizzero rispettoso della privacy, offre VPS e server cloud per le tue build.</p>
+    <p>Sia Stack sia Cabal compilano più velocemente con più core e RAM di un portatile - comodo per progetti grandi e CI. Infomaniak, host svizzero rispettoso della privacy, offre VPS e server cloud per le tue build.</p>
     <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Vedi il cloud Infomaniak →</a>
-    <p class="disc">Link affiliato — sostiene queste guide gratuite.</p>
+    <p class="disc">Link affiliato - sostiene queste guide gratuite.</p>
   </div>
 
-  <div class="note">Guida indipendente, mantenuta dalla community. <strong>coldwa.st</strong> è un sito di risorse di programmazione; questo articolo è uno scritto esplicativo nuovo e originale sugli strumenti di build Haskell, senza affiliazione con Cabal, Stack, Stackage o i manutentori di GHC. I comandi e i comportamenti riflettono gli strumenti Haskell standard — verifica con la documentazione Cabal/Stack attuale.</div>
+  <div class="note">Guida indipendente, mantenuta dalla community. <strong>coldwa.st</strong> è un sito di risorse di programmazione; questo articolo è uno scritto esplicativo nuovo e originale sugli strumenti di build Haskell, senza affiliazione con Cabal, Stack, Stackage o i manutentori di GHC. I comandi e i comportamenti riflettono gli strumenti Haskell standard - verifica con la documentazione Cabal/Stack attuale.</div>
   </div>
 </Base>

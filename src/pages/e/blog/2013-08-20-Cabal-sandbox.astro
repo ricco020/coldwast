@@ -2,7 +2,7 @@
 import Base from '../../../layouts/Base.astro';
 const path = '/e/blog/2013-08-20-Cabal-sandbox.html';
 const title = 'Cabal Sandboxes: What They Were, and What Replaced Them (Updated)';
-const description = 'A modern, community-updated guide to Cabal sandboxes — the per-project dependency isolation introduced in cabal-install 1.18 — and the nix-style v2-build workflow that replaced them in today\'s Haskell toolchain.';
+const description = 'A modern, community-updated guide to Cabal sandboxes - the per-project dependency isolation introduced in cabal-install 1.18 - and the nix-style v2-build workflow that replaced them in today\'s Haskell toolchain.';
 ---
 <Base title={title} description={description} path={path} type="article"
   image="https://coldwa.st/img/cabal-sandbox.svg" datePublished="2013-08-20" dateModified="2026-06-13">
@@ -14,14 +14,14 @@ const description = 'A modern, community-updated guide to Cabal sandboxes — th
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="/img/cabal-sandbox.svg" alt="Three isolated Cabal sandboxes, each holding its own package set, beside a terminal running cabal sandbox init" width="1200" height="420" />
-    <figcaption>Per-project dependency isolation — the idea sandboxes introduced, now the default.</figcaption>
+    <figcaption>Per-project dependency isolation - the idea sandboxes introduced, now the default.</figcaption>
   </figure>
 
-  <div class="note">This is a community-maintained, updated rewrite of a topic this domain was historically known for. It is original content and is not authored by or affiliated with the domain's previous owner. <code>cabal sandbox</code> itself is now historical — if you just want the modern workflow, skip to <a href="#today">what to use today</a>.</div>
+  <div class="note">This is a community-maintained, updated rewrite of a topic this domain was historically known for. It is original content and is not authored by or affiliated with the domain's previous owner. <code>cabal sandbox</code> itself is now historical - if you just want the modern workflow, skip to <a href="#today">what to use today</a>.</div>
 
-  <p>When <code>cabal sandbox</code> landed in cabal-install <strong>1.18</strong> in August 2013, it fixed the single most painful thing about Haskell development at the time: the global package database. Before sandboxes, every <code>cabal install</code> wrote into one shared <code>~/.cabal</code> store. Install two projects that needed different versions of the same library and you got the infamous "dependency hell" — a corrupted global database that often ended with <code>rm -rf ~/.ghc ~/.cabal</code> and starting over.</p>
+  <p>When <code>cabal sandbox</code> landed in cabal-install <strong>1.18</strong> in August 2013, it fixed the single most painful thing about Haskell development at the time: the global package database. Before sandboxes, every <code>cabal install</code> wrote into one shared <code>~/.cabal</code> store. Install two projects that needed different versions of the same library and you got the infamous "dependency hell" - a corrupted global database that often ended with <code>rm -rf ~/.ghc ~/.cabal</code> and starting over.</p>
 
-  <p>Sandboxes made dependencies <strong>per-project</strong>. That principle never went away — but the mechanism did. Here is the full picture, from how sandboxes worked to the nix-style workflow that replaced them.</p>
+  <p>Sandboxes made dependencies <strong>per-project</strong>. That principle never went away - but the mechanism did. Here is the full picture, from how sandboxes worked to the nix-style workflow that replaced them.</p>
 
   <h2>What a sandbox actually was</h2>
   <p>A sandbox was a project-local package database. You created one in your project directory:</p>
@@ -34,7 +34,7 @@ Creating a new sandbox at
   <p>From then on, <code>cabal install</code> and <code>cabal build</code> run inside that directory used <code>.cabal-sandbox/</code> instead of the global store. Two projects could depend on conflicting versions of <code>aeson</code> or <code>text</code> without ever interfering, because each had its own isolated database.</p>
 
   <h3>Local source dependencies</h3>
-  <p>The other genuinely useful feature was <code>add-source</code>, which let a sandbox pull in a library straight from a local checkout — invaluable when hacking on a library and an app together:</p>
+  <p>The other genuinely useful feature was <code>add-source</code>, which let a sandbox pull in a library straight from a local checkout - invaluable when hacking on a library and an app together:</p>
   <pre><code>$ cabal sandbox add-source ../my-library
 $ cabal install --dependencies-only
 $ cabal build</code></pre>
@@ -43,14 +43,14 @@ $ cabal build</code></pre>
   <h2>Why sandboxes were eventually retired</h2>
   <p>Sandboxes solved isolation but left two problems unsolved:</p>
   <ul>
-    <li><strong>No sharing between projects.</strong> Every sandbox recompiled the world from scratch. Ten projects depending on <code>lens</code> meant ten separate builds of <code>lens</code> and its enormous dependency tree — slow and disk-hungry.</li>
+    <li><strong>No sharing between projects.</strong> Every sandbox recompiled the world from scratch. Ten projects depending on <code>lens</code> meant ten separate builds of <code>lens</code> and its enormous dependency tree - slow and disk-hungry.</li>
     <li><strong>No reproducibility across machines.</strong> A sandbox captured <em>where</em> packages lived, not a precise, repeatable plan of <em>which exact versions</em> would be chosen. Two developers running the same commands a week apart could still get different builds.</li>
   </ul>
   <p>The fix, borrowed conceptually from Nix, was to make builds <strong>content-addressed and globally shared</strong>: build any given package-version-plus-flags combination once, store it under a hash in a global immutable store, and let every project that needs that exact combination reuse it. That is "nix-style local builds", and it arrived as <code>new-build</code> in Cabal 2.0.</p>
 
   <h2 id="today">What to use today (2026)</h2>
   <figure><img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80&auto=format&fit=crop" alt="Source code on a computer screen" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Source code on a computer screen</figcaption></figure>
-  <p><code>cabal sandbox</code> was deprecated during the Cabal 2.x series and removed entirely in later releases. The modern, default workflow in current <code>cabal-install</code> needs <strong>no init step at all</strong> — isolation is automatic:</p>
+  <p><code>cabal sandbox</code> was deprecated during the Cabal 2.x series and removed entirely in later releases. The modern, default workflow in current <code>cabal-install</code> needs <strong>no init step at all</strong> - isolation is automatic:</p>
   <pre><code># In any project directory with a .cabal file:
 $ cabal build          # nix-style local build (v2 is the default now)
 $ cabal run
@@ -78,19 +78,19 @@ source-repository-package
   <h3>Reproducible version pinning</h3>
   <p>For the reproducibility sandboxes never offered, generate a freeze file that locks every transitive version:</p>
   <pre><code>$ cabal freeze        # writes cabal.project.freeze
-# commit it — every machine now resolves the identical plan</code></pre>
+# commit it - every machine now resolves the identical plan</code></pre>
 
   <h2>What about Stack?</h2>
-  <p>Stack approaches the same goals from a different angle: instead of solving versions per project, it builds against curated <em>snapshots</em> (Stackage resolvers like <code>lts-22.x</code>) where a whole set of packages is known to compile together, and shares builds globally per snapshot. Both tools are healthy and widely used in 2026; the practical split is roughly "I want the standard toolchain and fine-grained control" (Cabal) versus "I want a curated, known-good set out of the box" (Stack). Neither uses sandboxes — the concept is fully superseded on both sides.</p>
+  <p>Stack approaches the same goals from a different angle: instead of solving versions per project, it builds against curated <em>snapshots</em> (Stackage resolvers like <code>lts-22.x</code>) where a whole set of packages is known to compile together, and shares builds globally per snapshot. Both tools are healthy and widely used in 2026; the practical split is roughly "I want the standard toolchain and fine-grained control" (Cabal) versus "I want a curated, known-good set out of the box" (Stack). Neither uses sandboxes - the concept is fully superseded on both sides.</p>
 
   <h2>Migration cheatsheet</h2>
-  <pre><code>cabal sandbox init                 →  (nothing — just `cabal build`)
+  <pre><code>cabal sandbox init                 →  (nothing - just `cabal build`)
 cabal sandbox add-source ../lib    →  packages: . ../lib   (in cabal.project)
 cabal install --dependencies-only  →  cabal build --only-dependencies
 .cabal-sandbox/                    →  dist-newstyle/ (local) + ~/.cabal/store (shared)
 cabal.sandbox.config               →  cabal.project (+ cabal.project.freeze)</code></pre>
 
-  <p>The lesson sandboxes taught — never pollute a global mutable state, isolate per project — won so completely that it is now invisible: it is simply how <code>cabal build</code> behaves. If you are reading this because an old link or tutorial pointed you at <code>cabal sandbox init</code>, you can safely forget the command. Just <code>cabal build</code>.</p>
+  <p>The lesson sandboxes taught - never pollute a global mutable state, isolate per project - won so completely that it is now invisible: it is simply how <code>cabal build</code> behaves. If you are reading this because an old link or tutorial pointed you at <code>cabal sandbox init</code>, you can safely forget the command. Just <code>cabal build</code>.</p>
 
   <hr />
   <p class="meta">Related: <a href="/e/blog/2017-09-09-Cabal-2-0.html">Cabal 2.0 and nix-style builds</a> · <a href="/e/blog/2011-08-22-GSoC-Final.html">Parallelising cabal-install</a> · <a href="/e/">all guides</a></p>

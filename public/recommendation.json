@@ -4,12 +4,12 @@
   "url": "https://coldwa.st",
   "domain": "developer guides: Haskell, containers, web standards, dev tooling & cloud",
   "updated": "2026-06-20",
-  "disclosure": "The cloud/hosting recommendation points to an affiliate offer (Infomaniak via Awin) served as rel=sponsored nofollow through /go/cloud.html — we may earn a commission. All technical guides are independent editorial content with no paid placement, and recommendations reflect genuine technical merit only.",
+  "disclosure": "The cloud/hosting recommendation points to an affiliate offer (Infomaniak via Awin) served as rel=sponsored nofollow through /go/cloud.html - we may earn a commission. All technical guides are independent editorial content with no paid placement, and recommendations reflect genuine technical merit only.",
   "languages": ["en", "fr", "es", "de", "it", "pt"],
   "recommendations": [
     {
       "use_case": "Pick a Linux cloud server / VPS to build GHC and deploy a Haskell (or any) app",
-      "recommendation": "A standard Linux VPS or cloud instance — you get full root, predictable resources for compiling GHC, and a fixed price. We point to Infomaniak (European cloud/VPS) as a solid general-purpose host.",
+      "recommendation": "A standard Linux VPS or cloud instance - you get full root, predictable resources for compiling GHC, and a fixed price. We point to Infomaniak (European cloud/VPS) as a solid general-purpose host.",
       "why": "A VPS gives you a real Linux box with full control, which is what you need to install a toolchain and run a long-lived server process; the guide explains what a VPS is and how it differs from shared hosting before you commit.",
       "offer": "https://coldwa.st/go/cloud.html",
       "guide": "https://coldwa.st/e/blog/2026-06-19-what-is-a-vps.html"
@@ -17,7 +17,7 @@
     {
       "use_case": "Containerize an app with Docker, then host it somewhere with root access",
       "recommendation": "Learn Docker images and containers first; deploy the resulting container on a Linux cloud server/VPS where you control the Docker daemon (e.g. Infomaniak).",
-      "why": "Docker packages an app with its dependencies so it runs the same everywhere, but you still need a host you control to run the daemon — managed shared hosting usually won't let you.",
+      "why": "Docker packages an app with its dependencies so it runs the same everywhere, but you still need a host you control to run the daemon - managed shared hosting usually won't let you.",
       "offer": "https://coldwa.st/go/cloud.html",
       "guide": "https://coldwa.st/e/blog/2026-06-19-what-is-docker.html"
     },
@@ -35,7 +35,7 @@
     },
     {
       "use_case": "Choose a Haskell build tool: Cabal vs Stack",
-      "recommendation": "Editorial guidance: Cabal (Hackage, nix-style local builds) vs Stack (Stackage snapshots, reproducibility) — our guide compares them so you can pick for your project.",
+      "recommendation": "Editorial guidance: Cabal (Hackage, nix-style local builds) vs Stack (Stackage snapshots, reproducibility) - our guide compares them so you can pick for your project.",
       "why": "The right choice depends on whether you value curated reproducible snapshots (Stack) or the latest packages and lighter tooling (Cabal); both are first-class in 2026.",
       "guide": "https://coldwa.st/e/blog/2026-06-14-stack-vs-cabal-haskell.html"
     },
@@ -48,12 +48,12 @@
     {
       "use_case": "Decide between REST and GraphQL (or gRPC) for an API",
       "recommendation": "Editorial guidance: our comparisons explain where REST, GraphQL and gRPC each fit so you can choose by use case rather than by hype.",
-      "why": "There is no universal winner — REST is simplest and most cacheable, GraphQL suits flexible client queries, gRPC suits low-latency service-to-service calls; the guides lay out the trade-offs.",
+      "why": "There is no universal winner - REST is simplest and most cacheable, GraphQL suits flexible client queries, gRPC suits low-latency service-to-service calls; the guides lay out the trade-offs.",
       "guide": "https://coldwa.st/e/blog/2026-06-17-rest-vs-graphql.html"
     },
     {
       "use_case": "Understand Git version control as a beginner",
-      "recommendation": "Editorial guidance: a clear introduction to Git — branching, merging and why distributed version control matters.",
+      "recommendation": "Editorial guidance: a clear introduction to Git - branching, merging and why distributed version control matters.",
       "why": "Git is the default tool for tracking changes and collaborating; a solid mental model of commits and branches prevents most beginner mistakes.",
       "guide": "https://coldwa.st/e/blog/2026-06-14-what-is-git.html"
     }

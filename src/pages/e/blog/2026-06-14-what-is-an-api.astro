@@ -14,32 +14,32 @@ const description = 'An API is a contract that lets one piece of software talk t
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.unsplash.com/photo-1607799279861-4dd421887fb3?w=1200&q=80&auto=format&fit=crop" alt="Code on an editor screen" width="1200" height="420" loading="eager" />
-    <figcaption>Code in an editor — an API is the set of calls one program exposes for code like this to use.</figcaption>
+    <figcaption>Code in an editor - an API is the set of calls one program exposes for code like this to use.</figcaption>
   </figure>
 
-  <p>You hear it constantly: &quot;call the API&quot;, &quot;the public API&quot;, &quot;an API key&quot;. An <strong>API</strong> (Application Programming Interface) is one of the most useful ideas in software — and one of the most over-jargonized. This guide explains, plainly, what an API is, the main kinds you will meet, how a typical web API request works, and why APIs are everywhere.</p>
+  <p>You hear it constantly: &quot;call the API&quot;, &quot;the public API&quot;, &quot;an API key&quot;. An <strong>API</strong> (Application Programming Interface) is one of the most useful ideas in software - and one of the most over-jargonized. This guide explains, plainly, what an API is, the main kinds you will meet, how a typical web API request works, and why APIs are everywhere.</p>
 
   <h2>The short definition</h2>
-  <p>An <strong>API is a contract that lets one piece of software talk to another</strong>. It defines what requests you can make, what data you must send, and what you get back — without you needing to know how the other side is built internally.</p>
+  <p>An <strong>API is a contract that lets one piece of software talk to another</strong>. It defines what requests you can make, what data you must send, and what you get back - without you needing to know how the other side is built internally.</p>
   <p>The classic analogy is a restaurant. You (one program) read a <em>menu</em> (the API) and place an order with the <em>waiter</em>. You do not walk into the kitchen or need to know how the dish is cooked. The menu is the agreed interface; the kitchen is the implementation, hidden behind it. An API is that menu for software.</p>
 
   <h2>The main kinds of API</h2>
   <ul>
-    <li><strong>Web APIs (the most talked-about)</strong> — one program talks to another <em>over the network</em>, usually over HTTP. When a weather app shows the forecast, it calls a weather service&#39;s web API. Most modern web APIs follow the <strong>REST</strong> style and exchange data as JSON (see <a href="/e/blog/2026-06-17-rest-vs-graphql.html">REST vs GraphQL</a> and <a href="/e/blog/2026-06-18-grpc-vs-rest.html">gRPC vs REST</a> for the main alternatives).</li>
-    <li><strong>Library / framework APIs</strong> — the set of functions and types a code library exposes for you to call. When you use a date library, the functions it gives you <em>are</em> its API.</li>
-    <li><strong>Operating-system APIs</strong> — how a program asks the OS to open a file, draw a window, or use the network. POSIX is one such API.</li>
+    <li><strong>Web APIs (the most talked-about)</strong> - one program talks to another <em>over the network</em>, usually over HTTP. When a weather app shows the forecast, it calls a weather service&#39;s web API. Most modern web APIs follow the <strong>REST</strong> style and exchange data as JSON (see <a href="/e/blog/2026-06-17-rest-vs-graphql.html">REST vs GraphQL</a> and <a href="/e/blog/2026-06-18-grpc-vs-rest.html">gRPC vs REST</a> for the main alternatives).</li>
+    <li><strong>Library / framework APIs</strong> - the set of functions and types a code library exposes for you to call. When you use a date library, the functions it gives you <em>are</em> its API.</li>
+    <li><strong>Operating-system APIs</strong> - how a program asks the OS to open a file, draw a window, or use the network. POSIX is one such API.</li>
   </ul>
   <p>The common thread: an API is the <strong>published surface</strong> of something, the part you are allowed to use, separated from the internals you are not supposed to depend on.</p>
 
-  <figure><img src="https://images.unsplash.com/photo-1556656793-08538906a9f8?w=1200&q=80&auto=format&fit=crop" alt="A person holding a smartphone in both hands" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>A smartphone in use — the apps on it constantly call web APIs in the background to fetch messages, maps, prices and more.</figcaption></figure>
+  <figure><img src="https://images.unsplash.com/photo-1556656793-08538906a9f8?w=1200&q=80&auto=format&fit=crop" alt="A person holding a smartphone in both hands" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>A smartphone in use - the apps on it constantly call web APIs in the background to fetch messages, maps, prices and more.</figcaption></figure>
 
   <h2>How a web API request works</h2>
   <p>A web API call is a <strong>request</strong> and a <strong>response</strong>. The client sends an HTTP request to a URL (an <em>endpoint</em>) using a method that signals intent, and the server sends back a status code and usually some data. The common methods:</p>
   <ul>
-    <li><strong>GET</strong> — read data (&quot;give me user 42&quot;).</li>
-    <li><strong>POST</strong> — create something new.</li>
-    <li><strong>PUT</strong> / <strong>PATCH</strong> — update something.</li>
-    <li><strong>DELETE</strong> — remove something.</li>
+    <li><strong>GET</strong> - read data (&quot;give me user 42&quot;).</li>
+    <li><strong>POST</strong> - create something new.</li>
+    <li><strong>PUT</strong> / <strong>PATCH</strong> - update something.</li>
+    <li><strong>DELETE</strong> - remove something.</li>
   </ul>
   <p>A simple request to read a user might look like this, with the server replying in JSON:</p>
   <pre><code>GET /users/42  HTTP/1.1
@@ -48,29 +48,29 @@ Host: api.example.com
 -- response --
 200 OK
 &#123; &quot;id&quot;: 42, &quot;name&quot;: &quot;Ada&quot;, &quot;active&quot;: true &#125;</code></pre>
-  <p>The <code>200</code> is a <strong>status code</strong> meaning success; <code>404</code> means not found, <code>401</code> not authenticated, <code>500</code> a server error. The body is <strong>JSON</strong> — the lightweight, human-readable format most web APIs use to exchange structured data.</p>
+  <p>The <code>200</code> is a <strong>status code</strong> meaning success; <code>404</code> means not found, <code>401</code> not authenticated, <code>500</code> a server error. The body is <strong>JSON</strong> - the lightweight, human-readable format most web APIs use to exchange structured data.</p>
 
   <h2>Authentication and keys</h2>
-  <p>Many APIs require you to identify yourself with an <strong>API key</strong> or a token, sent in a request header. This lets the provider control who uses the service, apply rate limits, and bill usage. Keep keys secret — a leaked key is like a leaked password.</p>
+  <p>Many APIs require you to identify yourself with an <strong>API key</strong> or a token, sent in a request header. This lets the provider control who uses the service, apply rate limits, and bill usage. Keep keys secret - a leaked key is like a leaked password.</p>
 
   <h2>Why APIs matter</h2>
-  <p>APIs are what let software be <strong>composed</strong> rather than rebuilt. A shop can take payments without writing a bank; an app can show a map without drawing the world; services inside one company talk to each other through internal APIs. They turn other people&#39;s capabilities into building blocks you can call in a few lines — which is most of how modern software gets built.</p>
+  <p>APIs are what let software be <strong>composed</strong> rather than rebuilt. A shop can take payments without writing a bank; an app can show a map without drawing the world; services inside one company talk to each other through internal APIs. They turn other people&#39;s capabilities into building blocks you can call in a few lines - which is most of how modern software gets built.</p>
 
   <h2>The honest limits</h2>
-  <p>An API is a <em>dependency</em>. If the provider changes it, rate-limits you, raises prices or shuts down, your software is affected — which is why good APIs are <strong>versioned</strong> and documented, and why you handle errors and timeouts rather than assuming every call succeeds. An API hides complexity; it does not remove it.</p>
+  <p>An API is a <em>dependency</em>. If the provider changes it, rate-limits you, raises prices or shuts down, your software is affected - which is why good APIs are <strong>versioned</strong> and documented, and why you handle errors and timeouts rather than assuming every call succeeds. An API hides complexity; it does not remove it.</p>
 
   <h2>The bottom line</h2>
-  <p>An API is a contract that lets one program use another&#39;s capabilities through a defined set of requests and responses, without touching its internals. Web/REST APIs over HTTP with JSON are the kind you will meet most, but the idea — a published interface separated from the implementation behind it — runs through libraries, operating systems and every well-structured program. Learn to read an API&#39;s documentation and you can plug almost anything into anything.</p>
+  <p>An API is a contract that lets one program use another&#39;s capabilities through a defined set of requests and responses, without touching its internals. Web/REST APIs over HTTP with JSON are the kind you will meet most, but the idea - a published interface separated from the implementation behind it - runs through libraries, operating systems and every well-structured program. Learn to read an API&#39;s documentation and you can plug almost anything into anything.</p>
 
   <p>New to a language to build or call APIs from? Browse our <a href="/e/">guides index</a> for clear, original programming explainers.</p>
 
   <h2>Frequently asked questions</h2>
   <details><summary>What is an API in simple terms?</summary><p>An API (Application Programming Interface) is a contract that lets one piece of software use another&#39;s features through a defined set of requests and responses, without needing to know how it works inside. The classic analogy is a restaurant menu: you order from the menu (the API) and the kitchen (the implementation) prepares it, hidden behind the interface. Most APIs you meet are web APIs called over HTTP, usually exchanging JSON.</p></details>
-  <details><summary>What is the difference between an API and REST?</summary><p>An API is the general concept — any published interface one program exposes for another to use. REST is a popular <em>style</em> of building <em>web</em> APIs: it organises the API around resources addressed by URLs, uses HTTP methods (GET, POST, PUT, DELETE) to act on them, and typically exchanges JSON. So REST is one common way to design a web API, not a separate thing from APIs.</p></details>
-  <details><summary>What is an API key?</summary><p>An API key is a secret token you send with your requests so the provider can identify and authorise your app, enforce rate limits, and track usage. It is not the same as encryption — it identifies the caller. Treat keys like passwords: never commit them to public code, and rotate them if exposed.</p></details>
-  <details><summary>What is the difference between a web API and a library API?</summary><p>A web API runs on a remote server and is called over the network (HTTP), so it is a dependency you reach across the internet. A library API is the set of functions and types a code library exposes for you to call inside your own program, with no network involved. Both are &quot;APIs&quot; — published interfaces — but one is remote and one is local.</p></details>
+  <details><summary>What is the difference between an API and REST?</summary><p>An API is the general concept - any published interface one program exposes for another to use. REST is a popular <em>style</em> of building <em>web</em> APIs: it organises the API around resources addressed by URLs, uses HTTP methods (GET, POST, PUT, DELETE) to act on them, and typically exchanges JSON. So REST is one common way to design a web API, not a separate thing from APIs.</p></details>
+  <details><summary>What is an API key?</summary><p>An API key is a secret token you send with your requests so the provider can identify and authorise your app, enforce rate limits, and track usage. It is not the same as encryption - it identifies the caller. Treat keys like passwords: never commit them to public code, and rotate them if exposed.</p></details>
+  <details><summary>What is the difference between a web API and a library API?</summary><p>A web API runs on a remote server and is called over the network (HTTP), so it is a dependency you reach across the internet. A library API is the set of functions and types a code library exposes for you to call inside your own program, with no network involved. Both are &quot;APIs&quot; - published interfaces - but one is remote and one is local.</p></details>
 
-  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about APIs. Examples reflect standard HTTP/REST behaviour — verify against the specific API documentation you are using.</div>
+  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about APIs. Examples reflect standard HTTP/REST behaviour - verify against the specific API documentation you are using.</div>
   <p class="related-guides">Related guides: <a href="/e/blog/2026-06-14-what-is-sql.html">what SQL is</a>, <a href="/e/blog/2026-06-15-what-is-a-database.html">what a database is</a>, <a href="/e/blog/2026-06-17-what-is-a-webhook.html">what a webhook is</a>.</p>
   </div>
 
@@ -79,9 +79,9 @@ Host: api.example.com
     "@type": "FAQPage",
     "mainEntity": [
       { "@type": "Question", "name": "What is an API in simple terms?", "acceptedAnswer": { "@type": "Answer", "text": "An API (Application Programming Interface) is a contract that lets one piece of software use another's features through a defined set of requests and responses, without needing to know how it works inside. Most APIs you meet are web APIs called over HTTP, usually exchanging JSON." } },
-      { "@type": "Question", "name": "What is the difference between an API and REST?", "acceptedAnswer": { "@type": "Answer", "text": "An API is the general concept — any published interface one program exposes. REST is a popular style of building web APIs: organised around resources addressed by URLs, using HTTP methods (GET, POST, PUT, DELETE) and usually JSON. REST is one way to design a web API, not separate from APIs." } },
+      { "@type": "Question", "name": "What is the difference between an API and REST?", "acceptedAnswer": { "@type": "Answer", "text": "An API is the general concept - any published interface one program exposes. REST is a popular style of building web APIs: organised around resources addressed by URLs, using HTTP methods (GET, POST, PUT, DELETE) and usually JSON. REST is one way to design a web API, not separate from APIs." } },
       { "@type": "Question", "name": "What is an API key?", "acceptedAnswer": { "@type": "Answer", "text": "An API key is a secret token sent with your requests so the provider can identify and authorise your app, enforce rate limits and track usage. It identifies the caller (it is not encryption). Treat keys like passwords: never commit them publicly and rotate if exposed." } },
-      { "@type": "Question", "name": "What is the difference between a web API and a library API?", "acceptedAnswer": { "@type": "Answer", "text": "A web API runs on a remote server and is called over the network (HTTP). A library API is the set of functions and types a code library exposes for you to call inside your own program, with no network involved. Both are published interfaces — one remote, one local." } }
+      { "@type": "Question", "name": "What is the difference between a web API and a library API?", "acceptedAnswer": { "@type": "Answer", "text": "A web API runs on a remote server and is called over the network (HTTP). A library API is the set of functions and types a code library exposes for you to call inside your own program, with no network involved. Both are published interfaces - one remote, one local." } }
     ]
   })} />
 </Base>

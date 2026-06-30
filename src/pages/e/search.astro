@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import { guides } from '../../data/guides.js';
 ---
-<Base title="Search guides — Coldwast" description="Search all Coldwast programming and Haskell guides." path="/e/search.html">
+<Base title="Search guides - Coldwast" description="Search all Coldwast programming and Haskell guides." path="/e/search.html">
   <div class="wrap">
     <div class="cathead">
       <p class="k">Search</p>
@@ -20,7 +20,7 @@ import { guides } from '../../data/guides.js';
             <div>
               <p class="by"><a href="/about.html">Coldwast</a> <em>wrote</em></p>
               <h3><a href={s.href} set:html={s.title} /></h3>
-              <p class="ex"><span class="date">{s.date}</span> in {s.cats} — {s.dek}</p>
+              <p class="ex"><span class="date">{s.date}</span> in {s.cats} - {s.dek}</p>
               <a class="more" href={s.href}>Read more…</a>
             </div>
           </article>

@@ -2,7 +2,7 @@
 import Base from '../../../../layouts/Base.astro';
 const path = '/es/e/blog/2026-06-14-haskell-monads.html';
 const title = 'Las mónadas en Haskell, explicadas sin jerga (2026)';
-const description = 'Una mónada en Haskell es un tipo que secuencia cómputos que llevan contexto — Maybe, Either, IO, listas. Qué es realmente una mónada, bind (>>=) y return, la notación do y las mónadas más comunes, explicadas con sencillez.';
+const description = 'Una mónada en Haskell es un tipo que secuencia cómputos que llevan contexto - Maybe, Either, IO, listas. Qué es realmente una mónada, bind (>>=) y return, la notación do y las mónadas más comunes, explicadas con sencillez.';
 ---
 <Base title={title} description={description} path={path} type="article" lang="es"
   image="https://images.unsplash.com/photo-1613068687893-5e85b4638b56?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
@@ -14,10 +14,10 @@ const description = 'Una mónada en Haskell es un tipo que secuencia cómputos q
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.unsplash.com/photo-1613068687893-5e85b4638b56?w=1200&q=80&auto=format&fit=crop" alt="Código fuente en una pantalla oscura" width="1200" height="420" loading="eager" />
-    <figcaption>Código fuente en una pantalla oscura — las mónadas son un patrón que se escribe directamente en código como este.</figcaption>
+    <figcaption>Código fuente en una pantalla oscura - las mónadas son un patrón que se escribe directamente en código como este.</figcaption>
   </figure>
 
-  <p>"Mónada" tiene una reputación temible que no se merece. Despojada de la jerga, una <strong>mónada</strong> en Haskell no es más que un tipo que te permite <strong>secuenciar cómputos que llevan cierto contexto</strong> — un posible fallo, un efecto secundario, múltiples resultados — sin escribir el cableado a mano cada vez. Esta guía explica qué es realmente una mónada, las dos operaciones que la definen, la notación do y las mónadas de cada día que ya usas.</p>
+  <p>"Mónada" tiene una reputación temible que no se merece. Despojada de la jerga, una <strong>mónada</strong> en Haskell no es más que un tipo que te permite <strong>secuenciar cómputos que llevan cierto contexto</strong> - un posible fallo, un efecto secundario, múltiples resultados - sin escribir el cableado a mano cada vez. Esta guía explica qué es realmente una mónada, las dos operaciones que la definen, la notación do y las mónadas de cada día que ya usas.</p>
 
   <h2>La idea en una frase</h2>
   <p>Una mónada es un tipo con una forma de <strong>encadenar pasos</strong> en los que cada paso depende del resultado del anterior, y el "contexto" (fallo, efectos, no determinismo) se hila automáticamente a través de ellos. Eso es todo. Los famosos tipos <code>Maybe</code>, <code>Either</code>, <code>IO</code> y listas son mónadas porque cada uno define ese encadenamiento para su propia clase de contexto.</p>
@@ -26,10 +26,10 @@ const description = 'Una mónada en Haskell es un tipo que secuencia cómputos q
   <p>La clase de tipos <code>Monad</code> se define mediante dos funciones:</p>
   <pre><code>return :: a -> m a          -- wrap a plain value into the monad
 (>>=)  :: m a -> (a -> m b) -> m b   -- "bind": feed the result into the next step</code></pre>
-  <p><code>&gt;&gt;=</code> (que se pronuncia "bind") es el corazón del asunto: toma un valor <em>en contexto</em> y una función que produce el siguiente valor <em>en contexto</em>, y los cose juntos — gestionando el contexto por ti.</p>
+  <p><code>&gt;&gt;=</code> (que se pronuncia "bind") es el corazón del asunto: toma un valor <em>en contexto</em> y una función que produce el siguiente valor <em>en contexto</em>, y los cose juntos - gestionando el contexto por ti.</p>
 
   <h2>La notación do: lo mismo, pero legible</h2>
-  <figure><img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80&auto=format&fit=crop" alt="Código fuente en la pantalla de un ordenador" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Código fuente en una pantalla — la notación do es azúcar sintáctico sobre el operador bind.</figcaption></figure>
+  <figure><img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80&auto=format&fit=crop" alt="Código fuente en la pantalla de un ordenador" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Código fuente en una pantalla - la notación do es azúcar sintáctico sobre el operador bind.</figcaption></figure>
   <p>Los bloques <code>do</code> son solo azúcar sobre <code>&gt;&gt;=</code>. Estos son equivalentes:</p>
   <pre><code>-- with bind
 getLine >>= \name -> putStrLn ("Hi " ++ name)
@@ -41,23 +41,23 @@ do name <- getLine
 
   <h2>Las mónadas que ya usas</h2>
   <ul>
-    <li><strong><code>Maybe</code></strong> — el contexto es "podría estar ausente". Bind cortocircuita en <code>Nothing</code>, así que encadenas búsquedas sin comprobaciones de nulos anidadas.</li>
-    <li><strong><code>Either</code></strong> — el contexto es "podría fallar con un error". Como <code>Maybe</code> pero lleva el porqué del fallo.</li>
-    <li><strong><code>IO</code></strong> — el contexto es "realiza efectos secundarios". La mónada IO es la forma en que Haskell secuencia efectos manteniéndose pura; <code>main :: IO ()</code> es el punto de entrada.</li>
-    <li><strong>Lista (<code>[]</code>)</strong> — el contexto es "múltiples resultados". Bind explora todas las combinaciones (no determinismo).</li>
+    <li><strong><code>Maybe</code></strong> - el contexto es "podría estar ausente". Bind cortocircuita en <code>Nothing</code>, así que encadenas búsquedas sin comprobaciones de nulos anidadas.</li>
+    <li><strong><code>Either</code></strong> - el contexto es "podría fallar con un error". Como <code>Maybe</code> pero lleva el porqué del fallo.</li>
+    <li><strong><code>IO</code></strong> - el contexto es "realiza efectos secundarios". La mónada IO es la forma en que Haskell secuencia efectos manteniéndose pura; <code>main :: IO ()</code> es el punto de entrada.</li>
+    <li><strong>Lista (<code>[]</code>)</strong> - el contexto es "múltiples resultados". Bind explora todas las combinaciones (no determinismo).</li>
   </ul>
-  <p>Has estado usando mónadas desde tu primer <code>main</code> — IO es una.</p>
+  <p>Has estado usando mónadas desde tu primer <code>main</code> - IO es una.</p>
 
   <h2>Por qué importan las mónadas</h2>
-  <p>Te permiten abstraer el <em>cableado</em> de la gestión de fallos, los efectos y la secuenciación en un patrón reutilizable, de modo que el mismo código en estilo <code>do</code> funciona en contextos muy distintos. Por eso Haskell puede mantener <code>IO</code> separado y explícito sin dejar de ser ergonómico. Para ejecutar todo esto necesitas el toolchain — consulta <a href="/es/e/blog/2026-06-14-ghcup-install-haskell.html">cómo instalar Haskell con GHCup</a> y la <a href="/es/e/blog/2026-06-14-ghc-compiler-guide.html">guía del compilador GHC</a>, y prueba los ejemplos en vivo en GHCi.</p>
+  <p>Te permiten abstraer el <em>cableado</em> de la gestión de fallos, los efectos y la secuenciación en un patrón reutilizable, de modo que el mismo código en estilo <code>do</code> funciona en contextos muy distintos. Por eso Haskell puede mantener <code>IO</code> separado y explícito sin dejar de ser ergonómico. Para ejecutar todo esto necesitas el toolchain - consulta <a href="/es/e/blog/2026-06-14-ghcup-install-haskell.html">cómo instalar Haskell con GHCup</a> y la <a href="/es/e/blog/2026-06-14-ghc-compiler-guide.html">guía del compilador GHC</a>, y prueba los ejemplos en vivo en GHCi.</p>
 
   <h2>Preguntas frecuentes</h2>
   <p><strong>¿Qué es una mónada en términos sencillos?</strong> Un tipo que te permite encadenar cómputos que llevan contexto (fallo, efectos, múltiples resultados), hilando ese contexto automáticamente mediante el operador bind.</p>
-  <p><strong>¿Es IO una mónada?</strong> Sí — IO es la mónada que Haskell usa para secuenciar efectos secundarios manteniéndose pura. Tu <code>main</code> se ejecuta en ella.</p>
+  <p><strong>¿Es IO una mónada?</strong> Sí - IO es la mónada que Haskell usa para secuenciar efectos secundarios manteniéndose pura. Tu <code>main</code> se ejecuta en ella.</p>
   <p><strong>¿Necesito entender la teoría de categorías?</strong> No. Puedes usar mónadas de forma productiva en Haskell conociendo solo <code>return</code>, <code>&gt;&gt;=</code> y la notación do; la teoría es opcional.</p>
   <p><strong>¿Cuál es la diferencia entre Maybe y Either?</strong> Ambas modelan un posible fallo; <code>Maybe</code> solo dice "ausente" (<code>Nothing</code>), mientras que <code>Either</code> lleva un valor de error que explica el fallo.</p>
 
-  <div class="note">Guía independiente y mantenida por la comunidad. <strong>coldwa.st</strong> es un sitio de recursos de programación; este artículo es texto explicativo nuevo y original sobre las mónadas de Haskell, no afiliado a ningún proyecto ni escrito por él. El código refleja el comportamiento estándar de Haskell — verifícalo con la documentación actual de GHC.</div>
+  <div class="note">Guía independiente y mantenida por la comunidad. <strong>coldwa.st</strong> es un sitio de recursos de programación; este artículo es texto explicativo nuevo y original sobre las mónadas de Haskell, no afiliado a ningún proyecto ni escrito por él. El código refleja el comportamiento estándar de Haskell - verifícalo con la documentación actual de GHC.</div>
   <p class="related-guides">Guías relacionadas: <a href="/es/e/blog/2026-06-14-haskell-language-server.html">el Haskell Language Server</a>.</p>
   </div>
 </Base>

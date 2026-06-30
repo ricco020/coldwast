@@ -2,7 +2,7 @@
 import Base from '../../../layouts/Base.astro';
 const path = '/e/blog/2011-08-22-GSoC-Final.html';
 const title = 'Parallelising cabal-install: How Haskell Builds Use Your Cores (Updated)';
-const description = 'A community-updated guide to parallel builds in cabal-install — the dependency-graph parallelism whose foundations were laid in a 2011 Google Summer of Code project — and how -j builds and GHC semaphores work in the 2026 toolchain.';
+const description = 'A community-updated guide to parallel builds in cabal-install - the dependency-graph parallelism whose foundations were laid in a 2011 Google Summer of Code project - and how -j builds and GHC semaphores work in the 2026 toolchain.';
 ---
 <Base title={title} description={description} path={path} type="article"
   image="https://coldwa.st/img/gsoc-parallel.svg" datePublished="2011-08-22" dateModified="2026-06-13">
@@ -14,15 +14,15 @@ const description = 'A community-updated guide to parallel builds in cabal-insta
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="/img/gsoc-parallel.svg" alt="Parallel build lanes showing independent Haskell packages compiling concurrently under cabal build -j" width="1200" height="420" />
-    <figcaption>Independent packages in the install plan build concurrently — the core idea behind today's <code>-j</code> builds.</figcaption>
+    <figcaption>Independent packages in the install plan build concurrently - the core idea behind today's <code>-j</code> builds.</figcaption>
   </figure>
 
   <div class="note">Community-maintained, updated rewrite. The original 2011 Google Summer of Code project "Parallelising cabal-install" was carried out by the domain's previous owner; this guide is <em>new, original writing</em> about the topic and does not reproduce or claim authorship of that work. It explains the idea and brings it up to the 2026 toolchain.</div>
 
-  <p>In 2011, building a Haskell project with a large dependency tree was a sequential slog: <code>cabal install</code> compiled one package, then the next, then the next — leaving most of a multicore machine idle. A Google Summer of Code project that year tackled exactly this: teach <code>cabal-install</code> to build independent packages <strong>in parallel</strong>. That idea is now baked into every Haskell build. Here is how it works, and how to get the most out of it today.</p>
+  <p>In 2011, building a Haskell project with a large dependency tree was a sequential slog: <code>cabal install</code> compiled one package, then the next, then the next - leaving most of a multicore machine idle. A Google Summer of Code project that year tackled exactly this: teach <code>cabal-install</code> to build independent packages <strong>in parallel</strong>. That idea is now baked into every Haskell build. Here is how it works, and how to get the most out of it today.</p>
 
   <h2>The key insight: a build is a DAG</h2>
-  <p>An install plan is a <strong>directed acyclic graph</strong> of packages. If <code>aeson</code> and <code>vector</code> both depend only on <code>base</code>, they don't depend on <em>each other</em> — so there is no reason to build them one after the other. You can compile every package whose dependencies are already built at the same time, bounded only by how many cores you want to use.</p>
+  <p>An install plan is a <strong>directed acyclic graph</strong> of packages. If <code>aeson</code> and <code>vector</code> both depend only on <code>base</code>, they don't depend on <em>each other</em> - so there is no reason to build them one after the other. You can compile every package whose dependencies are already built at the same time, bounded only by how many cores you want to use.</p>
   <p>Concretely the builder:</p>
   <ol>
     <li>Topologically sorts the dependency graph.</li>
@@ -50,24 +50,24 @@ jobs: 4</code></pre>
   <p>The trap is multiplying them: 8 parallel packages × 8 parallel modules each = up to 64 concurrent GHC threads on an 8-core box, which thrashes rather than helps.</p>
 
   <h3>The modern fix: a build semaphore</h3>
-  <p>Recent GHC and Cabal solve the oversubscription problem with a shared <strong>job semaphore</strong>. Instead of each package independently spawning <em>N</em> module jobs, Cabal hands GHC a single semaphore so that total concurrency — across <em>all</em> packages and <em>all</em> modules — stays bounded by one number:</p>
+  <p>Recent GHC and Cabal solve the oversubscription problem with a shared <strong>job semaphore</strong>. Instead of each package independently spawning <em>N</em> module jobs, Cabal hands GHC a single semaphore so that total concurrency - across <em>all</em> packages and <em>all</em> modules - stays bounded by one number:</p>
   <pre><code># cabal.project
 jobs: 8
 package *
   ghc-options: -jsem    # coordinate module + package parallelism
                         # via a shared semaphore</code></pre>
-  <p>With a semaphore, "8 jobs" means at most 8 GHC compilation tasks running at once in total, whether they come from one big package's modules or eight small packages — exactly the right behaviour on an 8-core machine.</p>
+  <p>With a semaphore, "8 jobs" means at most 8 GHC compilation tasks running at once in total, whether they come from one big package's modules or eight small packages - exactly the right behaviour on an 8-core machine.</p>
 
   <h2>Practical tuning</h2>
   <ul>
-    <li><strong>Cold CI builds:</strong> <code>cabal build -j</code> (all cores) is almost always the win — the dependency graph is wide and CI machines are otherwise idle.</li>
+    <li><strong>Cold CI builds:</strong> <code>cabal build -j</code> (all cores) is almost always the win - the dependency graph is wide and CI machines are otherwise idle.</li>
     <li><strong>Interactive dev:</strong> consider leaving a core or two free (<code>-j$(($(nproc)-2))</code>) so your editor/LSP stays responsive during a rebuild.</li>
     <li><strong>Memory, not cores, is often the limit.</strong> GHC can use a lot of RAM per compilation; if a parallel build starts swapping, lower <code>-j</code>. Cores are cheap, RAM pressure is what actually stalls big Haskell builds.</li>
-    <li><strong>Measure once:</strong> time a clean build at <code>-j2</code>, <code>-j4</code>, <code>-j</code> on your own hardware and dependency set — the sweet spot depends on both.</li>
+    <li><strong>Measure once:</strong> time a clean build at <code>-j2</code>, <code>-j4</code>, <code>-j</code> on your own hardware and dependency set - the sweet spot depends on both.</li>
   </ul>
 
   <h2>The takeaway</h2>
-  <p>The 2011 GSoC work answered a question that still matters: a build is a dependency graph, and independent nodes should compile concurrently. Fifteen years later that idea is the default, made safe by content-addressed storage and refined by build semaphores. If your Haskell builds still feel sequential, you are almost certainly leaving cores on the table — start with <code>cabal build -j</code>.</p>
+  <p>The 2011 GSoC work answered a question that still matters: a build is a dependency graph, and independent nodes should compile concurrently. Fifteen years later that idea is the default, made safe by content-addressed storage and refined by build semaphores. If your Haskell builds still feel sequential, you are almost certainly leaving cores on the table - start with <code>cabal build -j</code>.</p>
 
   <hr />
   <p class="meta">Related: <a href="/e/blog/2017-09-09-Cabal-2-0.html">Cabal 2.0 and nix-style builds</a> · <a href="/e/blog/2013-08-20-Cabal-sandbox.html">Cabal sandboxes and what replaced them</a> · <a href="/e/">all guides</a></p>

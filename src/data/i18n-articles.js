@@ -1,4 +1,4 @@
-// Which article slugs actually have a translated page per locale — derived from
+// Which article slugs actually have a translated page per locale - derived from
 // the page files at build time. Used so FR/ES indexes never link to an article
 // that has no translation yet (which would 404). EN always passes.
 const FR = import.meta.glob('/src/pages/fr/e/blog/*.astro');

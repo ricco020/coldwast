@@ -36,7 +36,7 @@ function catAvatar(cats=''){
   return AV.lambda;
 }
 ---
-<Base title={`${label} — Coldwast guides`} description={`Tous les guides Coldwast sur ${label}. Références de programmation originales et régulièrement mises à jour.`} path={path} lang={lang}>
+<Base title={`${label} - Coldwast guides`} description={`Tous les guides Coldwast sur ${label}. Références de programmation originales et régulièrement mises à jour.`} path={path} lang={lang}>
   <div class="wrap">
     <div class="cathead">
       <p class="k">{t.category}</p>
@@ -54,7 +54,7 @@ function catAvatar(cats=''){
             <div>
               <p class="by"><a href={localized('/about.html', lang)}>Coldwast</a> <em>{t.wrote}</em></p>
               <h3><a href={guideHref(s, lang)} set:html={guideTitle(s, lang)} /></h3>
-              <p class="ex"><span class="date">{s.date}</span> {t.in_word} {guideCats(s, lang)} — {guideDek(s, lang)}</p>
+              <p class="ex"><span class="date">{s.date}</span> {t.in_word} {guideCats(s, lang)} - {guideDek(s, lang)}</p>
               <a class="more" href={guideHref(s, lang)}>{t.read_more}</a>
               <div class="metab"><span>📅 {guideRead(s, lang)}</span><span>↬ {t.updated}</span></div>
             </div>

@@ -57,7 +57,7 @@ const cur = path;
 // switcher and hreflang alternates.
 const rootPath = path.replace(/^\/(fr|es|de|it|pt)(?=\/|$)/, '') || '/';
 // On an article page, only offer locales that actually have a translated page
-// (hasTx) — otherwise the switcher/hreflang point at non-existent /<loc>/ URLs
+// (hasTx) - otherwise the switcher/hreflang point at non-existent /<loc>/ URLs
 // (404). Non-article pages (home, index, categories) exist in every locale.
 const availLocales = isArticle ? LOCALES.filter((l) => hasTx(rootPath, l)) : LOCALES;
 const switcher = availLocales.map((l) => ({

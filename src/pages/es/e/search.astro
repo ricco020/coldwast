@@ -8,7 +8,7 @@ const t = ui[lang];
 const gwAll = t.guides_word[1];
 const txGuides = guides.filter((g) => hasTx(g.href, lang));
 ---
-<Base title="Buscar en las guías — Coldwast" description="Busca en todas las guías de programación y Haskell de Coldwast." path="/es/e/search.html" lang={lang}>
+<Base title="Buscar en las guías - Coldwast" description="Busca en todas las guías de programación y Haskell de Coldwast." path="/es/e/search.html" lang={lang}>
   <div class="wrap">
     <div class="cathead">
       <p class="k">{t.nav_guides}</p>
@@ -26,7 +26,7 @@ const txGuides = guides.filter((g) => hasTx(g.href, lang));
             <div>
               <p class="by"><a href={localized('/about.html', lang)}>Coldwast</a> <em>{t.wrote}</em></p>
               <h3><a href={guideHref(s, lang)} set:html={guideTitle(s, lang)} /></h3>
-              <p class="ex"><span class="date">{s.date}</span> {t.in_word} {s.cats} — {guideDek(s, lang)}</p>
+              <p class="ex"><span class="date">{s.date}</span> {t.in_word} {s.cats} - {guideDek(s, lang)}</p>
               <a class="more" href={guideHref(s, lang)}>{t.read_more}</a>
             </div>
           </article>

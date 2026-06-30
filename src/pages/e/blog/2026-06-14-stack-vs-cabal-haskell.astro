@@ -17,7 +17,7 @@ const description = 'Cabal and Stack are the two main ways to build Haskell proj
     <figcaption>Cabal and Stack are the two command-line tools most Haskell projects are built with.</figcaption>
   </figure>
 
-  <p>Once you have a Haskell compiler installed, you need a way to manage dependencies and build your project. In 2026 there are two mainstream choices: <strong>Cabal</strong> and <strong>Stack</strong>. They do the same core job — fetch libraries, build your code, run tests — but make different trade-offs around where packages come from and how reproducible builds are. This guide explains what each one is, how they differ, the equivalent commands, and how to choose.</p>
+  <p>Once you have a Haskell compiler installed, you need a way to manage dependencies and build your project. In 2026 there are two mainstream choices: <strong>Cabal</strong> and <strong>Stack</strong>. They do the same core job - fetch libraries, build your code, run tests - but make different trade-offs around where packages come from and how reproducible builds are. This guide explains what each one is, how they differ, the equivalent commands, and how to choose.</p>
 
   <h2>What Cabal is</h2>
   <p><strong>Cabal</strong> is Haskell&#39;s original build system. The word covers two things: the <em>Cabal library/specification</em> (the <code>.cabal</code> file format that describes a package) and <strong>cabal-install</strong>, the <code>cabal</code> command-line tool that builds packages and resolves dependencies. By default it pulls libraries from <a href="https://hackage.haskell.org">Hackage</a>, the central Haskell package archive.</p>
@@ -31,17 +31,17 @@ build-depends: base &gt;=4.14 &amp;&amp; &lt;5, text, aeson ^&gt;=2.1</code></pr
   <pre><code>resolver: lts-22.14
 packages:
   - .</code></pre>
-  <p>Because the snapshot fixes every version, anyone who checks out your project and runs <code>stack build</code> gets the same dependency versions — and Stack will install the matching GHC for that snapshot automatically. That &quot;it just works the same everywhere&quot; guarantee is Stack&#39;s main appeal, especially for teams and CI.</p>
+  <p>Because the snapshot fixes every version, anyone who checks out your project and runs <code>stack build</code> gets the same dependency versions - and Stack will install the matching GHC for that snapshot automatically. That &quot;it just works the same everywhere&quot; guarantee is Stack&#39;s main appeal, especially for teams and CI.</p>
 
-  <figure><img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&q=80&auto=format&fit=crop" alt="Streams of green code on a dark screen" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Streams of code on screen — both tools fetch dependencies and compile them; they differ mainly in where versions come from.</figcaption></figure>
+  <figure><img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&q=80&auto=format&fit=crop" alt="Streams of green code on a dark screen" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Streams of code on screen - both tools fetch dependencies and compile them; they differ mainly in where versions come from.</figcaption></figure>
 
   <h2>The key differences</h2>
   <ul>
-    <li><strong>Package source</strong> — Cabal resolves against all of Hackage; Stack builds against a curated Stackage snapshot. Stackage trades some freshness for guaranteed-compatible sets.</li>
-    <li><strong>Reproducibility</strong> — Stack pins everything via the snapshot by default. Cabal can be equally reproducible with a <code>cabal.project.freeze</code> file, but you opt into it.</li>
-    <li><strong>GHC management</strong> — Stack downloads and manages the GHC version a snapshot needs. With Cabal, you bring your own GHC (commonly installed via <a href="/e/blog/2026-06-14-ghcup-install-haskell.html">GHCup</a>).</li>
-    <li><strong>Config files</strong> — both read the package&#39;s <code>.cabal</code> file. Stack adds <code>stack.yaml</code>; Cabal adds <code>cabal.project</code>.</li>
-    <li><strong>Ecosystem alignment</strong> — Cabal tracks GHC and Hackage releases closely; Stack moves at the pace of snapshot curation.</li>
+    <li><strong>Package source</strong> - Cabal resolves against all of Hackage; Stack builds against a curated Stackage snapshot. Stackage trades some freshness for guaranteed-compatible sets.</li>
+    <li><strong>Reproducibility</strong> - Stack pins everything via the snapshot by default. Cabal can be equally reproducible with a <code>cabal.project.freeze</code> file, but you opt into it.</li>
+    <li><strong>GHC management</strong> - Stack downloads and manages the GHC version a snapshot needs. With Cabal, you bring your own GHC (commonly installed via <a href="/e/blog/2026-06-14-ghcup-install-haskell.html">GHCup</a>).</li>
+    <li><strong>Config files</strong> - both read the package&#39;s <code>.cabal</code> file. Stack adds <code>stack.yaml</code>; Cabal adds <code>cabal.project</code>.</li>
+    <li><strong>Ecosystem alignment</strong> - Cabal tracks GHC and Hackage releases closely; Stack moves at the pace of snapshot curation.</li>
   </ul>
 
   <h2>The equivalent commands</h2>
@@ -52,10 +52,10 @@ cabal run myapp           stack run
 cabal test                stack test
 cabal repl                stack ghci
 cabal haddock             stack haddock</code></pre>
-  <p>Both drive the same compiler underneath — see the <a href="/e/blog/2026-06-14-ghc-compiler-guide.html">GHC guide</a> for the flags that matter. Note that today&#39;s Cabal descends from the workflow introduced in <a href="/e/blog/2017-09-09-Cabal-2-0.html">Cabal 2.0</a>, which replaced the older <a href="/e/blog/2013-08-20-Cabal-sandbox.html">sandbox</a> approach.</p>
+  <p>Both drive the same compiler underneath - see the <a href="/e/blog/2026-06-14-ghc-compiler-guide.html">GHC guide</a> for the flags that matter. Note that today&#39;s Cabal descends from the workflow introduced in <a href="/e/blog/2017-09-09-Cabal-2-0.html">Cabal 2.0</a>, which replaced the older <a href="/e/blog/2013-08-20-Cabal-sandbox.html">sandbox</a> approach.</p>
 
   <h2>Which should you choose?</h2>
-  <p>In 2026, both are good and actively maintained — this is not a case where one is obsolete. A reasonable rule of thumb:</p>
+  <p>In 2026, both are good and actively maintained - this is not a case where one is obsolete. A reasonable rule of thumb:</p>
   <ul>
     <li><strong>Pick Cabal</strong> if you want the default, GHC-aligned toolchain, the latest package versions from Hackage, and fine-grained control over version bounds. It&#39;s the path most new tutorials assume.</li>
     <li><strong>Pick Stack</strong> if you value out-of-the-box reproducibility and automatic GHC management, or you&#39;re on a team where &quot;everyone gets the same build&quot; matters more than having the newest library versions.</li>
@@ -66,18 +66,18 @@ cabal haddock             stack haddock</code></pre>
   <p><strong>Is Cabal or Stack better?</strong> Neither is strictly better; they optimise for different things. Cabal favours up-to-date Hackage versions and close GHC alignment; Stack favours curated, reproducible snapshots and automatic GHC installs.</p>
   <p><strong>Do Stack and Cabal use the same package format?</strong> Yes. Both read the package&#39;s <code>.cabal</code> file. Stack layers <code>stack.yaml</code> on top; Cabal layers <code>cabal.project</code>.</p>
   <p><strong>What is a Stackage snapshot?</strong> A curated set of Hackage package versions verified to build together, identified by a resolver like <code>lts-22.14</code>. Pinning one makes builds reproducible.</p>
-  <p><strong>Can I switch from Stack to Cabal later?</strong> Usually yes — the <code>.cabal</code> file is shared, so you mainly add a <code>cabal.project</code> and provide a GHC (via GHCup). Version bounds may need a little tidying.</p>
+  <p><strong>Can I switch from Stack to Cabal later?</strong> Usually yes - the <code>.cabal</code> file is shared, so you mainly add a <code>cabal.project</code> and provide a GHC (via GHCup). Version bounds may need a little tidying.</p>
 
   <p>New to the toolchain? Start by <a href="/e/blog/2026-06-14-ghcup-install-haskell.html">installing Haskell with GHCup</a>, which sets up GHC, Cabal and Stack together.</p>
 
   <div class="affbox">
     <span class="tag">Recommended</span>
     <h3>Build Haskell faster</h3>
-    <p>Both Stack and Cabal compile faster with more cores and RAM than a laptop — handy for large projects and CI. Infomaniak, a Swiss, privacy-respecting host, offers VPS and cloud servers for builds.</p>
+    <p>Both Stack and Cabal compile faster with more cores and RAM than a laptop - handy for large projects and CI. Infomaniak, a Swiss, privacy-respecting host, offers VPS and cloud servers for builds.</p>
     <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">See Infomaniak cloud →</a>
-    <p class="disc">Affiliate link — supports these free guides.</p>
+    <p class="disc">Affiliate link - supports these free guides.</p>
   </div>
 
-  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about Haskell build tooling, not affiliated with Cabal, Stack, Stackage or the GHC maintainers. Commands and behaviour reflect standard Haskell tooling — verify against current Cabal/Stack docs.</div>
+  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about Haskell build tooling, not affiliated with Cabal, Stack, Stackage or the GHC maintainers. Commands and behaviour reflect standard Haskell tooling - verify against current Cabal/Stack docs.</div>
   </div>
 </Base>

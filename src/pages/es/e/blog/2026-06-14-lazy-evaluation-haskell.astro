@@ -2,7 +2,7 @@
 import Base from '../../../../layouts/Base.astro';
 const path = '/es/e/blog/2026-06-14-lazy-evaluation-haskell.html';
 const title = 'La evaluación perezosa en Haskell, explicada (2026)';
-const description = 'La evaluación perezosa significa que Haskell calcula un valor solo cuando realmente se necesita — no cuando se define. Qué es la evaluación perezosa, los thunks, por qué permite estructuras de datos infinitas, la trampa de las fugas de espacio y cómo forzar la evaluación estricta con seq y BangPatterns.';
+const description = 'La evaluación perezosa significa que Haskell calcula un valor solo cuando realmente se necesita - no cuando se define. Qué es la evaluación perezosa, los thunks, por qué permite estructuras de datos infinitas, la trampa de las fugas de espacio y cómo forzar la evaluación estricta con seq y BangPatterns.';
 ---
 <Base title={title} description={description} path={path} type="article" lang="es"
   image="https://images.pexels.com/photos/2004161/pexels-photo-2004161.jpeg?auto=compress&cs=tinysrgb&w=1200" datePublished="2026-06-14" dateModified="2026-06-14">
@@ -14,31 +14,31 @@ const description = 'La evaluación perezosa significa que Haskell calcula un va
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.pexels.com/photos/2004161/pexels-photo-2004161.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Código fuente de colores en una pantalla" width="1200" height="420" loading="eager" />
-    <figcaption>Código fuente de colores en una pantalla — la evaluación perezosa decide cuándo un código como este calcula realmente un valor.</figcaption>
+    <figcaption>Código fuente de colores en una pantalla - la evaluación perezosa decide cuándo un código como este calcula realmente un valor.</figcaption>
   </figure>
 
-  <p>La mayoría de los lenguajes son <strong>estrictos</strong>: una expresión se evalúa en cuanto se vincula a un nombre. Haskell es diferente — es <strong>perezoso</strong> (más precisamente, <em>no estricto</em>) por defecto: una expresión no se evalúa hasta que su resultado se necesita de verdad. Esta única decisión de diseño está detrás de algunos de los poderes más distintivos de Haskell <em>y</em> de su trampa más conocida. Esta guía explica qué es la evaluación perezosa, cómo funcionan los thunks, qué te aporta y cómo desactivarla cuando lo necesitas.</p>
+  <p>La mayoría de los lenguajes son <strong>estrictos</strong>: una expresión se evalúa en cuanto se vincula a un nombre. Haskell es diferente - es <strong>perezoso</strong> (más precisamente, <em>no estricto</em>) por defecto: una expresión no se evalúa hasta que su resultado se necesita de verdad. Esta única decisión de diseño está detrás de algunos de los poderes más distintivos de Haskell <em>y</em> de su trampa más conocida. Esta guía explica qué es la evaluación perezosa, cómo funcionan los thunks, qué te aporta y cómo desactivarla cuando lo necesitas.</p>
 
   <h2>La idea en una frase</h2>
-  <p>Bajo la evaluación perezosa, vincular un valor no lo calcula — Haskell almacena un cómputo diferido (un <strong>thunk</strong>) y solo lo fuerza cuando otro cómputo exige el resultado. Si el resultado nunca se exige, el trabajo nunca se hace.</p>
+  <p>Bajo la evaluación perezosa, vincular un valor no lo calcula - Haskell almacena un cómputo diferido (un <strong>thunk</strong>) y solo lo fuerza cuando otro cómputo exige el resultado. Si el resultado nunca se exige, el trabajo nunca se hace.</p>
 
   <h2>Thunks: cómputo diferido</h2>
-  <p>Cuando escribes <code>let x = expensive 42</code>, Haskell <em>no</em> ejecuta <code>expensive</code>. Crea un thunk — una promesa sin evaluar de <code>expensive 42</code>. El thunk se fuerza solo cuando algo necesita el valor real de <code>x</code> (por ejemplo, imprimirlo o hacer pattern matching sobre él). Fuérzalo una vez y el resultado se cachea para que no se vuelva a calcular.</p>
+  <p>Cuando escribes <code>let x = expensive 42</code>, Haskell <em>no</em> ejecuta <code>expensive</code>. Crea un thunk - una promesa sin evaluar de <code>expensive 42</code>. El thunk se fuerza solo cuando algo necesita el valor real de <code>x</code> (por ejemplo, imprimirlo o hacer pattern matching sobre él). Fuérzalo una vez y el resultado se cachea para que no se vuelva a calcular.</p>
   <pre><code>let x = expensive 42   -- nothing runs yet; x is a thunk
 let y = x + 1          -- still nothing; y is a thunk too
 print y                -- NOW x and y are forced and evaluated</code></pre>
 
   <h2>Qué te aporta la pereza</h2>
-  <figure><img src="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80&auto=format&fit=crop" alt="Líneas de código en una pantalla oscura" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Líneas de código en una pantalla — la pereza te permite definir estructuras infinitas y evaluar solo la parte que consumes.</figcaption></figure>
+  <figure><img src="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80&auto=format&fit=crop" alt="Líneas de código en una pantalla oscura" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Líneas de código en una pantalla - la pereza te permite definir estructuras infinitas y evaluar solo la parte que consumes.</figcaption></figure>
   <ul>
     <li><strong>Estructuras de datos infinitas.</strong> <code>[1..]</code> es la lista infinita de enteros. <code>take 5 [1..]</code> devuelve <code>[1,2,3,4,5]</code> porque solo se exigen los cinco primeros.</li>
-    <li><strong>Composición sin desperdicio.</strong> Puedes encadenar <code>filter</code> y <code>map</code> sobre una lista enorme y Haskell fusiona el trabajo, produciendo solo lo que el consumidor extrae — sin listas intermedias completas si nunca se exigen del todo.</li>
+    <li><strong>Composición sin desperdicio.</strong> Puedes encadenar <code>filter</code> y <code>map</code> sobre una lista enorme y Haskell fusiona el trabajo, produciendo solo lo que el consumidor extrae - sin listas intermedias completas si nunca se exigen del todo.</li>
     <li><strong>Cortocircuito gratis.</strong> <code>False &amp;&amp; undefined</code> devuelve <code>False</code> sin tocar nunca <code>undefined</code>, porque el segundo argumento nunca se fuerza.</li>
-    <li><strong>Autorreferencia.</strong> Clásicos de una línea como <code>fibs = 0 : 1 : zipWith (+) fibs (tail fibs)</code> definen el flujo infinito de Fibonacci — solo posible porque la estructura se construye de forma perezosa.</li>
+    <li><strong>Autorreferencia.</strong> Clásicos de una línea como <code>fibs = 0 : 1 : zipWith (+) fibs (tail fibs)</code> definen el flujo infinito de Fibonacci - solo posible porque la estructura se construye de forma perezosa.</li>
   </ul>
 
   <h2>La trampa: las fugas de espacio</h2>
-  <p>La pereza tiene un coste. Los thunks sin evaluar se acumulan en memoria, y una larga cadena de cómputos diferidos puede disparar silenciosamente el uso del heap — una <strong>fuga de espacio</strong>. El caso de manual es un fold por la izquierda perezoso que construye una torre gigantesca de thunks <code>(((0 + 1) + 2) + 3) ...</code> en lugar de ir sumando sobre la marcha:</p>
+  <p>La pereza tiene un coste. Los thunks sin evaluar se acumulan en memoria, y una larga cadena de cómputos diferidos puede disparar silenciosamente el uso del heap - una <strong>fuga de espacio</strong>. El caso de manual es un fold por la izquierda perezoso que construye una torre gigantesca de thunks <code>(((0 + 1) + 2) + 3) ...</code> en lugar de ir sumando sobre la marcha:</p>
   <pre><code>foldl (+) 0 [1..1000000]    -- builds a million thunks, may blow the stack
 foldl' (+) 0 [1..1000000]   -- strict fold: adds as it goes, constant space</code></pre>
   <p>La solución es <strong>forzar la evaluación</strong> donde importa. Recurre al fold por la izquierda estricto <code>foldl'</code> (de <code>Data.List</code>) para las acumulaciones.</p>
@@ -46,21 +46,21 @@ foldl' (+) 0 [1..1000000]   -- strict fold: adds as it goes, constant space</cod
   <h2>Forzar la evaluación estricta: seq, $! y BangPatterns</h2>
   <p>Haskell te da herramientas precisas para exigir la evaluación:</p>
   <ul>
-    <li><strong><code>seq a b</code></strong> — fuerza <code>a</code> a forma normal de cabeza débil antes de devolver <code>b</code>.</li>
-    <li><strong><code>($!)</code></strong> — aplicación estricta: <code>f $! x</code> fuerza <code>x</code> antes de aplicar <code>f</code>.</li>
-    <li><strong><code>BangPatterns</code></strong> — la extensión <code>&#123;-# LANGUAGE BangPatterns #-&#125;</code> te permite escribir <code>let !x = ...</code> para forzar una vinculación.</li>
+    <li><strong><code>seq a b</code></strong> - fuerza <code>a</code> a forma normal de cabeza débil antes de devolver <code>b</code>.</li>
+    <li><strong><code>($!)</code></strong> - aplicación estricta: <code>f $! x</code> fuerza <code>x</code> antes de aplicar <code>f</code>.</li>
+    <li><strong><code>BangPatterns</code></strong> - la extensión <code>&#123;-# LANGUAGE BangPatterns #-&#125;</code> te permite escribir <code>let !x = ...</code> para forzar una vinculación.</li>
   </ul>
   <p>Una sutileza que conviene saber: forzar normalmente llega a la <em>forma normal de cabeza débil</em> (el constructor más externo), no a la evaluación completa. Para forzar en profundidad, usa <code>force</code> / <code>deepseq</code> del paquete <code>deepseq</code>.</p>
 
   <h2>Preguntas frecuentes</h2>
   <p><strong>¿Es Haskell perezoso o no estricto?</strong> Técnicamente no estricto (una garantía semántica); GHC lo implementa mediante evaluación perezosa con thunks y compartición. En la práctica se dice "perezoso".</p>
-  <p><strong>¿Por qué mi programa Haskell usa tanta memoria?</strong> A menudo es una fuga de espacio por thunks acumulados — comúnmente un <code>foldl</code> perezoso. Cambia a <code>foldl'</code> o añade rigor con <code>seq</code>/BangPatterns.</p>
+  <p><strong>¿Por qué mi programa Haskell usa tanta memoria?</strong> A menudo es una fuga de espacio por thunks acumulados - comúnmente un <code>foldl</code> perezoso. Cambia a <code>foldl'</code> o añade rigor con <code>seq</code>/BangPatterns.</p>
   <p><strong>¿Qué es un thunk?</strong> Un cómputo diferido y sin evaluar almacenado en lugar de un valor, forzado solo cuando se exige el valor y luego cacheado.</p>
-  <p><strong>¿La pereza hace que Haskell sea lento?</strong> No de forma inherente — puede evitar trabajo innecesario y permitir la fusión. Pero la pereza descuidada provoca fugas de espacio; saber cuándo forzar es parte de escribir buen Haskell.</p>
+  <p><strong>¿La pereza hace que Haskell sea lento?</strong> No de forma inherente - puede evitar trabajo innecesario y permitir la fusión. Pero la pereza descuidada provoca fugas de espacio; saber cuándo forzar es parte de escribir buen Haskell.</p>
 
-  <p>La pereza es la misma maquinaria que hace que las demás abstracciones de Haskell se compongan limpiamente — consulta cómo funciona la secuenciación en nuestra guía sobre las <a href="/es/e/blog/2026-06-14-haskell-monads.html">mónadas en Haskell</a>, y configura el toolchain para probar estos ejemplos en GHCi con la <a href="/es/e/blog/2026-06-14-ghc-compiler-guide.html">guía del compilador GHC</a>.</p>
+  <p>La pereza es la misma maquinaria que hace que las demás abstracciones de Haskell se compongan limpiamente - consulta cómo funciona la secuenciación en nuestra guía sobre las <a href="/es/e/blog/2026-06-14-haskell-monads.html">mónadas en Haskell</a>, y configura el toolchain para probar estos ejemplos en GHCi con la <a href="/es/e/blog/2026-06-14-ghc-compiler-guide.html">guía del compilador GHC</a>.</p>
 
-  <div class="note">Guía independiente y mantenida por la comunidad. <strong>coldwa.st</strong> es un sitio de recursos de programación; este artículo es texto explicativo nuevo y original sobre la evaluación perezosa en Haskell, no afiliado a ningún proyecto ni escrito por él. El código refleja el comportamiento estándar de Haskell/GHC — verifícalo con la documentación actual de GHC.</div>
+  <div class="note">Guía independiente y mantenida por la comunidad. <strong>coldwa.st</strong> es un sitio de recursos de programación; este artículo es texto explicativo nuevo y original sobre la evaluación perezosa en Haskell, no afiliado a ningún proyecto ni escrito por él. El código refleja el comportamiento estándar de Haskell/GHC - verifícalo con la documentación actual de GHC.</div>
   <p class="related-guides">Guías relacionadas: <a href="/es/e/blog/2026-06-14-haskell-list-comprehensions.html">las comprensiones de listas</a>, <a href="/es/e/blog/2026-06-24-higher-order-functions.html">las funciones de orden superior</a>.</p>
   </div>
 </Base>

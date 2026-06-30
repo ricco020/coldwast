@@ -17,7 +17,7 @@ const description = 'Un reverse proxy si trova davanti ai tuoi server, riceve og
     <figcaption>Un reverse proxy è la porta d'ingresso unica ai tuoi server: ogni richiesta arriva nello stesso punto, che poi la inoltra al backend giusto dietro le quinte.</figcaption>
   </figure>
 
-  <p>Appena esegui più di un'applicazione su un server — un sito, un'<a href="/it/e/blog/2026-06-17-what-is-a-webhook.html">API</a>, magari qualche <a href="/it/e/blog/2026-06-19-what-is-docker.html">container</a> — ti scontri con un problema pratico: i visitatori arrivano tutti sulle porte 80 e 443, ma ogni applicazione ascolta altrove. Un <strong>reverse proxy</strong> è la risposta standard. Questa guida spiega cos'è un reverse proxy, in cosa differisce dal proxy che forse già conosci e perché quasi ogni ambiente di produzione ne ha uno.</p>
+  <p>Appena esegui più di un'applicazione su un server - un sito, un'<a href="/it/e/blog/2026-06-17-what-is-a-webhook.html">API</a>, magari qualche <a href="/it/e/blog/2026-06-19-what-is-docker.html">container</a> - ti scontri con un problema pratico: i visitatori arrivano tutti sulle porte 80 e 443, ma ogni applicazione ascolta altrove. Un <strong>reverse proxy</strong> è la risposta standard. Questa guida spiega cos'è un reverse proxy, in cosa differisce dal proxy che forse già conosci e perché quasi ogni ambiente di produzione ne ha uno.</p>
 
   <h2>La definizione breve</h2>
   <p><strong>Un reverse proxy è un server che si trova davanti a uno o più server backend, riceve ogni richiesta in entrata del client e la inoltra al backend appropriato, per poi restituire la risposta di quel backend al client.</strong> Per il visitatore, il reverse proxy <em>è</em> il sito: parla solo con lui e non vede mai i server dietro. La parola «reverse» (inverso) conta, e la sezione successiva spiega perché.</p>
@@ -37,7 +37,7 @@ const description = 'Un reverse proxy si trova davanti ai tuoi server, riceve og
   <p>In pratica routing e TLS bastano già a giustificarlo: ti permettono di ospitare diverse applicazioni in modo pulito su un solo <a href="/it/e/blog/2026-06-19-what-is-a-vps.html">VPS</a>, in HTTPS, dietro un unico indirizzo.</p>
 
   <h2>Reverse proxy vs load balancer</h2>
-  <p>Questi concetti si sovrappongono, da qui la confusione. Un <strong>load balancer</strong> (bilanciatore di carico) ha un compito preciso: distribuire il traffico in entrata su più backend identici perché nessuno venga sovraccaricato. Un reverse proxy è il concetto più ampio — inoltra le richieste e può fare molte cose (routing, TLS, cache), e <em>distribuire il carico tra i backend è una di queste</em>. Quindi un load balancer è in sostanza un reverse proxy concentrato sul compito di bilanciamento. La maggior parte dei reverse proxy moderni sa anche bilanciare il carico, mentre un load balancer dedicato a volte non fa molto altro.</p>
+  <p>Questi concetti si sovrappongono, da qui la confusione. Un <strong>load balancer</strong> (bilanciatore di carico) ha un compito preciso: distribuire il traffico in entrata su più backend identici perché nessuno venga sovraccaricato. Un reverse proxy è il concetto più ampio - inoltra le richieste e può fare molte cose (routing, TLS, cache), e <em>distribuire il carico tra i backend è una di queste</em>. Quindi un load balancer è in sostanza un reverse proxy concentrato sul compito di bilanciamento. La maggior parte dei reverse proxy moderni sa anche bilanciare il carico, mentre un load balancer dedicato a volte non fa molto altro.</p>
 
   <h2>Gli strumenti comuni</h2>
   <p>I reverse proxy più usati sono <strong>Nginx</strong>, <strong>Caddy</strong>, <strong>HAProxy</strong> e <strong>Traefik</strong>. Nginx è il riferimento storico ed è estremamente veloce nel servire e fare da proxy. Caddy è apprezzato perché ottiene e rinnova i certificati HTTPS automaticamente, quasi senza configurazione. Traefik è pensato per ambienti a <a href="/it/e/blog/2026-06-19-what-is-docker.html">container</a> e <a href="/it/e/blog/2026-06-19-what-is-kubernetes.html">Kubernetes</a>, dove scopre i servizi man mano che compaiono e scompaiono. HAProxy è preferito quando il bilanciamento di carico ad alto volume è la priorità. I provider cloud offrono anche reverse proxy e load balancer gestiti come servizio.</p>
@@ -56,7 +56,7 @@ const description = 'Un reverse proxy si trova davanti ai tuoi server, riceve og
   <p>Questa è tutta l'idea: le richieste per <code>example.com</code> arrivano a Nginx sulla porta 80, e Nginx le inoltra alla tua app sulla porta 3000, passando l'host originale. Aggiungi un blocco TLS e un secondo <code>server</code> per la tua API, e una sola macchina serve in modo pulito più applicazioni via HTTPS.</p>
 
   <h2>I compromessi onesti</h2>
-  <p>Un reverse proxy aggiunge un pezzo in movimento in più. Diventa il punto unico attraverso cui passa ogni richiesta, quindi se cade tutto ciò che sta dietro diventa irraggiungibile — ecco perché in produzione lo si esegue in modo affidabile e a volte in coppia. Aggiunge anche un po' di latenza e un altro file di configurazione da capire. Per una sola piccola app che già ascolta sulla porta 443, potresti non averne bisogno. Ma appena ospiti più di un servizio, vuoi gestire l'HTTPS in un solo posto o pensi di scalare, un reverse proxy si ripaga in fretta.</p>
+  <p>Un reverse proxy aggiunge un pezzo in movimento in più. Diventa il punto unico attraverso cui passa ogni richiesta, quindi se cade tutto ciò che sta dietro diventa irraggiungibile - ecco perché in produzione lo si esegue in modo affidabile e a volte in coppia. Aggiunge anche un po' di latenza e un altro file di configurazione da capire. Per una sola piccola app che già ascolta sulla porta 443, potresti non averne bisogno. Ma appena ospiti più di un servizio, vuoi gestire l'HTTPS in un solo posto o pensi di scalare, un reverse proxy si ripaga in fretta.</p>
 
   <h2>Domande frequenti</h2>
   <details><summary>Cos'è un reverse proxy in parole semplici?</summary><p>Un reverse proxy è un server che si pone davanti ai tuoi server reali. Ogni visitatore si collega a lui invece di parlare direttamente con le tue app, e lui inoltra ogni richiesta al backend giusto, poi ne restituisce la risposta. Per il visitatore sembra il sito stesso, mentre i server reali restano nascosti dietro.</p></details>
@@ -69,9 +69,9 @@ const description = 'Un reverse proxy si trova davanti ai tuoi server, riceve og
   <div class="affbox" style="margin:28px 0;">
     <span class="tag">Consigliato</span>
     <h3>Un server su cui far girare il tuo reverse proxy</h3>
-    <p>Far girare Nginx o Caddy come reverse proxy davanti alle tue app richiede un vero server Linux con controllo totale — un VPS o un server cloud su cui possiedi le porte 80 e 443. Infomaniak — provider svizzero rispettoso della privacy — offre VPS e server cloud su cui puoi installare un reverse proxy e instradare il traffico verso tutti i backend che vuoi.</p>
+    <p>Far girare Nginx o Caddy come reverse proxy davanti alle tue app richiede un vero server Linux con controllo totale - un VPS o un server cloud su cui possiedi le porte 80 e 443. Infomaniak - provider svizzero rispettoso della privacy - offre VPS e server cloud su cui puoi installare un reverse proxy e instradare il traffico verso tutti i backend che vuoi.</p>
     <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Scopri Infomaniak Cloud →</a>
-    <p class="disc">Link di affiliazione — sostiene queste guide gratuite.</p>
+    <p class="disc">Link di affiliazione - sostiene queste guide gratuite.</p>
   </div>
 
   <p>Sfoglia altre spiegazioni chiare nel nostro <a href="/it/e/">indice delle guide</a>.</p>

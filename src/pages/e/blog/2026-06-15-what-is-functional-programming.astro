@@ -14,21 +14,21 @@ const description = 'Functional programming is a style built on pure functions, 
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80&auto=format&fit=crop" alt="Lines of source code on a dark screen" width="1200" height="420" loading="eager" />
-    <figcaption>Lines of source code on a screen — functional programming is a style for writing code like this around pure functions and values.</figcaption>
+    <figcaption>Lines of source code on a screen - functional programming is a style for writing code like this around pure functions and values.</figcaption>
   </figure>
 
-  <p>You've probably heard the term thrown around — "FP", "pure functions", "no side effects", "Haskell". <strong>Functional programming</strong> (FP) is a way of writing software that builds programs out of functions applied to values, rather than sequences of statements that change shared state. This guide explains what FP really is, its core ideas, how it differs from the imperative and object-oriented styles, the honest trade-offs, and where a language like Haskell fits in.</p>
+  <p>You've probably heard the term thrown around - "FP", "pure functions", "no side effects", "Haskell". <strong>Functional programming</strong> (FP) is a way of writing software that builds programs out of functions applied to values, rather than sequences of statements that change shared state. This guide explains what FP really is, its core ideas, how it differs from the imperative and object-oriented styles, the honest trade-offs, and where a language like Haskell fits in.</p>
 
   <h2>The short definition</h2>
   <p><strong>Functional programming is a style of building programs by composing pure functions and avoiding shared, mutable state.</strong> You describe <em>what</em> you want computed as transformations of values, rather than spelling out <em>how</em> to mutate variables step by step. The same inputs always produce the same outputs, which makes code easier to reason about and test.</p>
 
   <h2>The core ideas</h2>
-  <p><strong>Pure functions.</strong> A pure function depends only on its inputs and produces only a return value — no reading or writing of outside state, no surprises. Call it with the same arguments and you always get the same result.</p>
+  <p><strong>Pure functions.</strong> A pure function depends only on its inputs and produces only a return value - no reading or writing of outside state, no surprises. Call it with the same arguments and you always get the same result.</p>
   <p><strong>Immutability.</strong> Instead of changing data in place, you create new values. A "modified" list is actually a new list; the original is untouched. This removes a whole category of bugs caused by something changing data you didn't expect.</p>
-  <p><strong>Functions as first-class values.</strong> Functions can be passed as arguments, returned from other functions, and stored in variables — so you build behaviour by combining small functions. A function that takes or returns another function is called a <a href="/e/blog/2026-06-24-higher-order-functions.html">higher-order function</a>, and <code>map</code>, <code>filter</code> and <code>reduce</code> are the everyday examples.</p>
+  <p><strong>Functions as first-class values.</strong> Functions can be passed as arguments, returned from other functions, and stored in variables - so you build behaviour by combining small functions. A function that takes or returns another function is called a <a href="/e/blog/2026-06-24-higher-order-functions.html">higher-order function</a>, and <code>map</code>, <code>filter</code> and <code>reduce</code> are the everyday examples.</p>
   <p><strong>Declarative over imperative.</strong> You say what the result should be, not the exact loop-and-mutate steps to get there.</p>
 
-  <figure><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80&auto=format&fit=crop" alt="An open laptop showing code on a desk" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>An open laptop showing code — in FP you build programs by composing small functions instead of mutating shared state.</figcaption></figure>
+  <figure><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80&auto=format&fit=crop" alt="An open laptop showing code on a desk" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>An open laptop showing code - in FP you build programs by composing small functions instead of mutating shared state.</figcaption></figure>
 
   <h2>A quick contrast</h2>
   <p>Imperative code often loops and mutates a running total:</p>
@@ -40,21 +40,21 @@ for n in numbers:
   <p>Both compute a number; the functional version has no changing state to track, which is easier to test and parallelise.</p>
 
   <h2>How it differs from OOP</h2>
-  <p>Object-oriented programming organises code around <em>objects</em> that bundle data with methods that often mutate that data. Functional programming keeps <strong>data and behaviour separate</strong>: data is immutable values, behaviour is pure functions that transform them. The two aren't enemies — many modern languages (Python, JavaScript, Kotlin, Scala) mix both — but the mindset differs: minimise state and side effects rather than encapsulate and mutate them.</p>
+  <p>Object-oriented programming organises code around <em>objects</em> that bundle data with methods that often mutate that data. Functional programming keeps <strong>data and behaviour separate</strong>: data is immutable values, behaviour is pure functions that transform them. The two aren't enemies - many modern languages (Python, JavaScript, Kotlin, Scala) mix both - but the mindset differs: minimise state and side effects rather than encapsulate and mutate them.</p>
 
   <h2>Where Haskell fits</h2>
-  <p>Most mainstream languages are <em>multi-paradigm</em> and let you write in a functional style. A few are <strong>purely functional</strong>, and <a href="/e/blog/2026-06-14-what-is-haskell.html">Haskell</a> is the best-known: purity and immutability aren't optional conveniences but enforced by the language and its type system, and side effects (like input/output) are made explicit — which is exactly what <a href="/e/blog/2026-06-14-haskell-monads.html">monads</a> are for. Learning FP in a language that enforces it tends to make the ideas click faster.</p>
+  <p>Most mainstream languages are <em>multi-paradigm</em> and let you write in a functional style. A few are <strong>purely functional</strong>, and <a href="/e/blog/2026-06-14-what-is-haskell.html">Haskell</a> is the best-known: purity and immutability aren't optional conveniences but enforced by the language and its type system, and side effects (like input/output) are made explicit - which is exactly what <a href="/e/blog/2026-06-14-haskell-monads.html">monads</a> are for. Learning FP in a language that enforces it tends to make the ideas click faster.</p>
 
   <h2>The honest trade-offs</h2>
-  <p>FP isn't a silver bullet. The strengths: code that's easier to reason about, test and run in parallel, with fewer state-related bugs. The costs: a learning curve (recursion and higher-order functions instead of loops), and some problems (heavy in-place mutation, certain performance-critical paths) map less naturally to a pure style. In practice most teams adopt functional <em>habits</em> — pure functions, immutability where it helps — without going fully pure.</p>
+  <p>FP isn't a silver bullet. The strengths: code that's easier to reason about, test and run in parallel, with fewer state-related bugs. The costs: a learning curve (recursion and higher-order functions instead of loops), and some problems (heavy in-place mutation, certain performance-critical paths) map less naturally to a pure style. In practice most teams adopt functional <em>habits</em> - pure functions, immutability where it helps - without going fully pure.</p>
 
   <h2>FAQ</h2>
-  <p><strong>What is functional programming in simple terms?</strong> A style of building programs from pure functions that transform values, while avoiding shared, mutable state — so the same inputs always give the same outputs.</p>
+  <p><strong>What is functional programming in simple terms?</strong> A style of building programs from pure functions that transform values, while avoiding shared, mutable state - so the same inputs always give the same outputs.</p>
   <p><strong>What is a pure function?</strong> A function whose result depends only on its inputs and that has no side effects (it doesn't read or change outside state). It's the building block of FP.</p>
   <p><strong>Is functional programming better than OOP?</strong> Neither is universally better. FP excels at predictability, testing and parallelism; OOP at modelling stateful entities. Many languages let you combine both.</p>
-  <p><strong>Which languages are functional?</strong> Haskell is purely functional. Many others support the style well — Scala, Elixir, Clojure, F#, and even Python and JavaScript via first-class functions.</p>
+  <p><strong>Which languages are functional?</strong> Haskell is purely functional. Many others support the style well - Scala, Elixir, Clojure, F#, and even Python and JavaScript via first-class functions.</p>
 
-  <p>Functional code is still made of step-by-step logic underneath — see <a href="/e/blog/2026-06-14-what-is-an-algorithm.html">what an algorithm is</a> — and the purest place to learn the style is <a href="/e/blog/2026-06-14-what-is-haskell.html">Haskell</a>. Browse more clear explainers in our <a href="/e/">guides index</a>.</p>
+  <p>Functional code is still made of step-by-step logic underneath - see <a href="/e/blog/2026-06-14-what-is-an-algorithm.html">what an algorithm is</a> - and the purest place to learn the style is <a href="/e/blog/2026-06-14-what-is-haskell.html">Haskell</a>. Browse more clear explainers in our <a href="/e/">guides index</a>.</p>
 
   <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about functional programming. Syntax and specifics vary by language; verify against your language's documentation.</div>
   <p class="related-guides">Related guides: <a href="/e/blog/2026-06-16-what-is-recursion.html">how recursion works</a>, <a href="/e/blog/2026-06-15-what-is-a-variable.html">what a variable is</a>.</p>

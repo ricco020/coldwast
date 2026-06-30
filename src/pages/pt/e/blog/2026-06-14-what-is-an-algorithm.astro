@@ -14,27 +14,27 @@ const description = 'Um algoritmo é um procedimento finito, passo a passo, que 
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&q=80&auto=format&fit=crop" alt="Fluxos de código verde num ecrã escuro" width="1200" height="420" loading="eager" />
-    <figcaption>Fluxos de código no ecrã — um algoritmo é a lógica passo a passo que código como este executa.</figcaption>
+    <figcaption>Fluxos de código no ecrã - um algoritmo é a lógica passo a passo que código como este executa.</figcaption>
   </figure>
 
-  <p>É uma das palavras mais usadas na tecnologia — « o algoritmo decide », « um algoritmo mais rápido », « o feed algorítmico » — e uma das menos explicadas com rigor. Um <strong>algoritmo</strong> é uma ideia simples e fundamental que está sob toda a informática. Este guia explica o que é um algoritmo, as suas propriedades chave, exemplos retirados da vida quotidiana e do código, porque é que a eficiência importa e em que difere de um programa.</p>
+  <p>É uma das palavras mais usadas na tecnologia - « o algoritmo decide », « um algoritmo mais rápido », « o feed algorítmico » - e uma das menos explicadas com rigor. Um <strong>algoritmo</strong> é uma ideia simples e fundamental que está sob toda a informática. Este guia explica o que é um algoritmo, as suas propriedades chave, exemplos retirados da vida quotidiana e do código, porque é que a eficiência importa e em que difere de um programa.</p>
 
   <h2>A definição curta</h2>
-  <p><strong>Um algoritmo é um procedimento finito, passo a passo, para resolver um problema ou produzir uma saída a partir de uma entrada.</strong> Dê-lhe a mesma entrada e siga os passos exatamente, e produz o mesmo resultado de cada vez. É uma receita precisa — independente de qualquer linguagem de programação em particular.</p>
+  <p><strong>Um algoritmo é um procedimento finito, passo a passo, para resolver um problema ou produzir uma saída a partir de uma entrada.</strong> Dê-lhe a mesma entrada e siga os passos exatamente, e produz o mesmo resultado de cada vez. É uma receita precisa - independente de qualquer linguagem de programação em particular.</p>
 
   <h2>Uma analogia do quotidiano</h2>
-  <p>Uma receita de cozinha é um algoritmo: uma lista definida de passos (« picar as cebolas, aquecer o azeite, adicionar e mexer durante 5 minutos ») que transforma entradas (os ingredientes) numa saída (um prato). Tal como as instruções da divisão por etapas aprendida na escola, ou os passos para montar um móvel em kit. A ideia precede largamente os computadores — a palavra vem do matemático do século IX al-Khwarizmi.</p>
+  <p>Uma receita de cozinha é um algoritmo: uma lista definida de passos (« picar as cebolas, aquecer o azeite, adicionar e mexer durante 5 minutos ») que transforma entradas (os ingredientes) numa saída (um prato). Tal como as instruções da divisão por etapas aprendida na escola, ou os passos para montar um móvel em kit. A ideia precede largamente os computadores - a palavra vem do matemático do século IX al-Khwarizmi.</p>
 
   <h2>As propriedades chave</h2>
   <ul>
-    <li><strong>Passos bem definidos</strong> — cada instrução é clara e sem ambiguidade.</li>
-    <li><strong>Finito</strong> — deve terminar após um número limitado de passos, e não correr indefinidamente.</li>
-    <li><strong>Entrada e saída definidas</strong> — recebe zero ou mais entradas e produz um resultado.</li>
-    <li><strong>Efetivo</strong> — cada passo é suficientemente elementar para ser realmente executado.</li>
+    <li><strong>Passos bem definidos</strong> - cada instrução é clara e sem ambiguidade.</li>
+    <li><strong>Finito</strong> - deve terminar após um número limitado de passos, e não correr indefinidamente.</li>
+    <li><strong>Entrada e saída definidas</strong> - recebe zero ou mais entradas e produz um resultado.</li>
+    <li><strong>Efetivo</strong> - cada passo é suficientemente elementar para ser realmente executado.</li>
   </ul>
   <p>Um algoritmo é também <em>independente da linguagem</em>: o mesmo algoritmo de ordenação pode ser escrito em Python, Haskell, Rust ou à mão em papel. O algoritmo é a <em>ideia</em>; o código é uma expressão dela.</p>
 
-  <figure><img src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=1200&q=80&auto=format&fit=crop" alt="Código-fonte colorido num monitor" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Código-fonte colorido num monitor — o código é uma expressão concreta de um algoritmo, a ideia subjacente passo a passo.</figcaption></figure>
+  <figure><img src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=1200&q=80&auto=format&fit=crop" alt="Código-fonte colorido num monitor" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Código-fonte colorido num monitor - o código é uma expressão concreta de um algoritmo, a ideia subjacente passo a passo.</figcaption></figure>
 
   <h2>Um exemplo concreto</h2>
   <p>Para encontrar o maior número numa lista, o algoritmo é:</p>
@@ -42,19 +42,19 @@ const description = 'Um algoritmo é um procedimento finito, passo a passo, que 
 2. Look at each remaining number in turn.
 3. If it is bigger than the largest so far, make it the new largest.
 4. After the last number, the largest so far is the answer.</code></pre>
-  <p>É um algoritmo completo — escrito em linguagem comum, sem código necessário. Traduzi-lo para uma linguagem é um passo separado e mecânico.</p>
+  <p>É um algoritmo completo - escrito em linguagem comum, sem código necessário. Traduzi-lo para uma linguagem é um passo separado e mecânico.</p>
 
   <h2>Porque é que a eficiência importa: Big-O</h2>
-  <p>Algoritmos diferentes podem resolver o mesmo problema com quantidades de trabalho muito diferentes. A <strong>notação Big-O</strong> descreve como o custo de um algoritmo cresce à medida que a entrada aumenta. Percorrer uma lista uma vez para encontrar o maior valor é <code>O(n)</code> — o trabalho cresce proporcionalmente ao número de elementos. Uma abordagem ingénua que comparasse cada par seria <code>O(n²)</code> — muito mais lenta para entradas grandes. Escolher um algoritmo melhor importa muitas vezes mais do que um computador mais rápido: uma ordenação em <code>O(n log n)</code> vencerá uma ordenação em <code>O(n²)</code> numa lista grande de cada vez.</p>
+  <p>Algoritmos diferentes podem resolver o mesmo problema com quantidades de trabalho muito diferentes. A <strong>notação Big-O</strong> descreve como o custo de um algoritmo cresce à medida que a entrada aumenta. Percorrer uma lista uma vez para encontrar o maior valor é <code>O(n)</code> - o trabalho cresce proporcionalmente ao número de elementos. Uma abordagem ingénua que comparasse cada par seria <code>O(n²)</code> - muito mais lenta para entradas grandes. Escolher um algoritmo melhor importa muitas vezes mais do que um computador mais rápido: uma ordenação em <code>O(n log n)</code> vencerá uma ordenação em <code>O(n²)</code> numa lista grande de cada vez.</p>
 
   <h2>Algoritmo vs programa</h2>
-  <p>Estão relacionados mas não são a mesma coisa. Um <strong>algoritmo</strong> é o método abstrato — os passos. Um <strong>programa</strong> é uma implementação concreta de um ou mais algoritmos numa linguagem precisa, com todos os detalhes do mundo real (tratamento de entradas, erros, memória) preenchidos. Concebe-se primeiro o algoritmo, depois implementa-se. O mesmo algoritmo pode alimentar muitos programas.</p>
+  <p>Estão relacionados mas não são a mesma coisa. Um <strong>algoritmo</strong> é o método abstrato - os passos. Um <strong>programa</strong> é uma implementação concreta de um ou mais algoritmos numa linguagem precisa, com todos os detalhes do mundo real (tratamento de entradas, erros, memória) preenchidos. Concebe-se primeiro o algoritmo, depois implementa-se. O mesmo algoritmo pode alimentar muitos programas.</p>
 
   <h2>FAQ</h2>
   <p><strong>Um algoritmo é a mesma coisa que código?</strong> Não. O algoritmo é o conjunto de passos independente da linguagem; o código é uma implementação dele. O mesmo algoritmo pode ser escrito em muitas linguagens.</p>
   <p><strong>O que torna um algoritmo « bom »?</strong> Primeiro a correção (produz a saída certa para cada entrada válida), depois a eficiência (usa uma quantidade aceitável de tempo e memória, descrita pelo Big-O), depois a clareza.</p>
-  <p><strong>O que é a notação Big-O?</strong> Uma forma de descrever como o tempo de execução ou a memória de um algoritmo crescem com o tamanho da entrada — por ex. <code>O(n)</code> linear, <code>O(n log n)</code>, <code>O(n²)</code> quadrático. Compara algoritmos independentemente da máquina exata.</p>
-  <p><strong>É preciso matemática para entender algoritmos?</strong> Uma lógica básica chega para começar. Os do quotidiano — pesquisa, ordenação, contagem — são intuitivos; a matemática torna-se útil quando se analisa e compara a sua eficiência.</p>
+  <p><strong>O que é a notação Big-O?</strong> Uma forma de descrever como o tempo de execução ou a memória de um algoritmo crescem com o tamanho da entrada - por ex. <code>O(n)</code> linear, <code>O(n log n)</code>, <code>O(n²)</code> quadrático. Compara algoritmos independentemente da máquina exata.</p>
+  <p><strong>É preciso matemática para entender algoritmos?</strong> Uma lógica básica chega para começar. Os do quotidiano - pesquisa, ordenação, contagem - são intuitivos; a matemática torna-se útil quando se analisa e compara a sua eficiência.</p>
 
   <p>Os algoritmos são o « o que fazer »; uma linguagem como Haskell ou os dados transportados por uma <a href="/pt/e/blog/2026-06-14-what-is-an-api.html">API</a> são o « como » e o « com quê ». Percorra outras explicações claras no nosso <a href="/pt/e/">índice de guias</a>.</p>
 

@@ -14,39 +14,39 @@ const description = 'Un database è una raccolta organizzata di dati, gestita da
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&q=80&auto=format&fit=crop" alt="Rack di server in un data center" width="1200" height="420" loading="eager" />
-    <figcaption>Rack di server in un data center — i database girano su server come questi, archiviando i dati dietro app e siti web.</figcaption>
+    <figcaption>Rack di server in un data center - i database girano su server come questi, archiviando i dati dietro app e siti web.</figcaption>
   </figure>
 
-  <p>Ogni app che usi — la tua banca, un negozio, un feed social — conserva le sue informazioni da qualche parte dove possono essere ritrovate, modificate e considerate affidabili. Quel «da qualche parte» è un <strong>database</strong>. È una delle idee fondanti del software. Questa guida spiega che cos’è un database, le grandi tipologie, i concetti che contano, esempi reali e il suo legame con <a href="/it/e/blog/2026-06-14-what-is-sql.html">SQL</a>.</p>
+  <p>Ogni app che usi - la tua banca, un negozio, un feed social - conserva le sue informazioni da qualche parte dove possono essere ritrovate, modificate e considerate affidabili. Quel «da qualche parte» è un <strong>database</strong>. È una delle idee fondanti del software. Questa guida spiega che cos’è un database, le grandi tipologie, i concetti che contano, esempi reali e il suo legame con <a href="/it/e/blog/2026-06-14-what-is-sql.html">SQL</a>.</p>
 
   <h2>La definizione breve</h2>
   <p><strong>Un database è una raccolta organizzata di dati, gestita da un software (un sistema di gestione di database, o DBMS) che permette di archiviare, recuperare, aggiornare e proteggere questi dati in modo affidabile.</strong> Anche un foglio di calcolo può contenere dati, ma un database aggiunge struttura, interrogazioni rapide su larga scala, accesso multiutente e la garanzia che i dati restino coerenti anche quando molte cose cambiano nello stesso momento.</p>
 
   <h2>Database vs DBMS</h2>
-  <p>Due parole usate spesso come sinonimi ma che indicano cose diverse. Il <strong>database</strong> sono i dati stessi e la loro organizzazione. Il <strong>DBMS</strong> — PostgreSQL, MySQL, SQLite, MongoDB — è il software che li archivia, esegue le tue interrogazioni, applica le regole e gestisce gli accessi concorrenti. Quando si chiede «quale database usare?», di solito si parla del DBMS.</p>
+  <p>Due parole usate spesso come sinonimi ma che indicano cose diverse. Il <strong>database</strong> sono i dati stessi e la loro organizzazione. Il <strong>DBMS</strong> - PostgreSQL, MySQL, SQLite, MongoDB - è il software che li archivia, esegue le tue interrogazioni, applica le regole e gestisce gli accessi concorrenti. Quando si chiede «quale database usare?», di solito si parla del DBMS.</p>
 
   <h2>Le due grandi famiglie</h2>
   <ul>
     <li><strong>Database relazionali (SQL)</strong>: organizzano i dati in <em>tabelle</em> di righe e colonne, con relazioni definite tra loro, e si interrogano con <a href="/it/e/blog/2026-06-14-what-is-sql.html">SQL</a>. Eccellono con dati strutturati e coerenza garantita. Esempi: PostgreSQL, MySQL, SQLite, SQL Server.</li>
     <li><strong>Database NoSQL</strong>: allentano la struttura rigida a tabelle per guadagnare flessibilità e scalabilità. Esistono in più forme: orientati ai documenti (MongoDB), chiave-valore (Redis), wide-column (Cassandra) e a grafo (Neo4j). Utili per grandi volumi, cache veloce o dati la cui forma cambia spesso.</li>
   </ul>
-  <p>La maggior parte dei sistemi reali ne usa diversi — per esempio un database relazionale per i record principali e un archivio chiave-valore per la cache.</p>
+  <p>La maggior parte dei sistemi reali ne usa diversi - per esempio un database relazionale per i record principali e un archivio chiave-valore per la cache.</p>
 
-  <figure><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=crop" alt="Un laptop che mostra una dashboard di dati con grafici" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Una dashboard di dati — i numeri e i grafici di un’app vengono letti da un database sottostante, di solito tramite un’interrogazione.</figcaption></figure>
+  <figure><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=crop" alt="Un laptop che mostra una dashboard di dati con grafici" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Una dashboard di dati - i numeri e i grafici di un’app vengono letti da un database sottostante, di solito tramite un’interrogazione.</figcaption></figure>
 
   <h2>I concetti chiave</h2>
   <ul>
-    <li><strong>Schema</strong> — la struttura definita: quali tabelle esistono, le loro colonne e tipi e le regole. I database relazionali sono schema-first; molti NoSQL sono flessibili.</li>
-    <li><strong>Interrogazione</strong> — una richiesta di dati precisi («tutti gli ordini della settimana scorsa»). Nei database relazionali si scrivono in SQL.</li>
-    <li><strong>Indice</strong> — una struttura di ricerca che rende rapide le interrogazioni evitando di scorrere ogni riga, come l’indice analitico in fondo a un libro.</li>
-    <li><strong>Transazione</strong> — un gruppo di modifiche che devono riuscire tutte o fallire tutte insieme (trasferire denaro tra due conti). I database relazionali lo garantiscono con le proprietà <strong>ACID</strong>.</li>
+    <li><strong>Schema</strong> - la struttura definita: quali tabelle esistono, le loro colonne e tipi e le regole. I database relazionali sono schema-first; molti NoSQL sono flessibili.</li>
+    <li><strong>Interrogazione</strong> - una richiesta di dati precisi («tutti gli ordini della settimana scorsa»). Nei database relazionali si scrivono in SQL.</li>
+    <li><strong>Indice</strong> - una struttura di ricerca che rende rapide le interrogazioni evitando di scorrere ogni riga, come l’indice analitico in fondo a un libro.</li>
+    <li><strong>Transazione</strong> - un gruppo di modifiche che devono riuscire tutte o fallire tutte insieme (trasferire denaro tra due conti). I database relazionali lo garantiscono con le proprietà <strong>ACID</strong>.</li>
   </ul>
 
   <h2>Che cosa significa ACID</h2>
   <p>ACID descrive le garanzie che un database affidabile offre a una transazione: <strong>Atomicità</strong> (tutto o niente), <strong>Coerenza</strong> (i dati rispettano le loro regole prima e dopo), <strong>Isolamento</strong> (le transazioni concorrenti non si corrompono a vicenda) e <strong>Durabilità</strong> (una volta confermata, la modifica sopravvive a un crash). Sono queste garanzie a far sì che si affidino denaro e record a un database invece che a un semplice file.</p>
 
   <h2>Perché i database contano</h2>
-  <p>Permettono al software di archiviare i dati una sola volta e di usarli ovunque, in sicurezza, su larga scala, con molti utenti contemporaneamente — e di ritrovarne qualunque porzione in pochi millisecondi. Quasi ogni programma non banale prima o poi ne ha bisogno. Saper scegliere il tipo giusto e interrogarlo bene è una delle competenze più durature in informatica.</p>
+  <p>Permettono al software di archiviare i dati una sola volta e di usarli ovunque, in sicurezza, su larga scala, con molti utenti contemporaneamente - e di ritrovarne qualunque porzione in pochi millisecondi. Quasi ogni programma non banale prima o poi ne ha bisogno. Saper scegliere il tipo giusto e interrogarlo bene è una delle competenze più durature in informatica.</p>
 
   <h2>I compromessi onesti</h2>
   <p>Non esiste un database universalmente «migliore». I database relazionali offrono forte coerenza e interrogazioni potenti ma richiedono uno schema definito; NoSQL offre flessibilità e scalabilità orizzontale ma spesso sacrifica alcune garanzie di coerenza. La scelta giusta dipende dalla forma dei tuoi dati, dalla tua scala e da quanta importanza dai alla coerenza stretta rispetto alla flessibilità. Molti team combinano entrambi.</p>
@@ -54,8 +54,8 @@ const description = 'Un database è una raccolta organizzata di dati, gestita da
   <h2>FAQ</h2>
   <p><strong>Un database è la stessa cosa di SQL?</strong> No. Un database archivia i dati; <a href="/it/e/blog/2026-06-14-what-is-sql.html">SQL</a> è il linguaggio usato per interrogare i database relazionali. I database NoSQL usano altri metodi di interrogazione.</p>
   <p><strong>Un foglio di calcolo è un database?</strong> In senso lato sì, ma non davvero. Un foglio di calcolo contiene dati, ma un database aggiunge struttura imposta, interrogazioni rapide su larga scala, sicurezza multiutente e garanzie transazionali che un foglio di calcolo non ha.</p>
-  <p><strong>Qual è la differenza tra SQL e NoSQL?</strong> I database SQL/relazionali usano tabelle strutturate e forte coerenza; i database NoSQL allentano la struttura per flessibilità e scalabilità. Nessuno sostituisce l’altro — si adattano a usi diversi. Per un confronto approfondito, vedi <a href="/it/e/blog/2026-06-18-sql-vs-nosql.html">SQL vs NoSQL: quale database, e quando</a>.</p>
-  <p><strong>Quale database imparare per primo?</strong> Uno relazionale — SQLite o PostgreSQL — perché il modello relazionale e SQL si trasferiscono ovunque e insegnano con chiarezza le idee di base.</p>
+  <p><strong>Qual è la differenza tra SQL e NoSQL?</strong> I database SQL/relazionali usano tabelle strutturate e forte coerenza; i database NoSQL allentano la struttura per flessibilità e scalabilità. Nessuno sostituisce l’altro - si adattano a usi diversi. Per un confronto approfondito, vedi <a href="/it/e/blog/2026-06-18-sql-vs-nosql.html">SQL vs NoSQL: quale database, e quando</a>.</p>
+  <p><strong>Quale database imparare per primo?</strong> Uno relazionale - SQLite o PostgreSQL - perché il modello relazionale e SQL si trasferiscono ovunque e insegnano con chiarezza le idee di base.</p>
 
   <p>Per interrogare un database relazionale userai <a href="/it/e/blog/2026-06-14-what-is-sql.html">SQL</a>; i dati che un database restituisce a un’app viaggiano spesso in <a href="/it/e/blog/2026-06-14-what-is-json.html">JSON</a>. Sfoglia altre spiegazioni chiare nel nostro <a href="/it/e/">indice delle guide</a>.</p>
 

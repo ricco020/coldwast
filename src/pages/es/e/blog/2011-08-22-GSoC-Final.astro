@@ -2,7 +2,7 @@
 import Base from '../../../../layouts/Base.astro';
 const path = '/es/e/blog/2011-08-22-GSoC-Final.html';
 const title = 'Paralelizar cabal-install: cómo las builds de Haskell usan tus núcleos (Actualizado)';
-const description = 'Una guía actualizada por la comunidad sobre las builds paralelas en cabal-install — el paralelismo del grafo de dependencias cuyos cimientos se sentaron en un proyecto del Google Summer of Code de 2011 — y cómo funcionan las builds con -j y los semáforos de GHC en el toolchain de 2026.';
+const description = 'Una guía actualizada por la comunidad sobre las builds paralelas en cabal-install - el paralelismo del grafo de dependencias cuyos cimientos se sentaron en un proyecto del Google Summer of Code de 2011 - y cómo funcionan las builds con -j y los semáforos de GHC en el toolchain de 2026.';
 ---
 <Base title={title} description={description} path={path} type="article" lang="es"
   image="https://coldwa.st/img/gsoc-parallel.svg" datePublished="2011-08-22" dateModified="2026-06-13">
@@ -14,15 +14,15 @@ const description = 'Una guía actualizada por la comunidad sobre las builds par
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="/img/gsoc-parallel.svg" alt="Carriles de compilación paralela que muestran paquetes Haskell independientes compilando de forma concurrente con cabal build -j" width="1200" height="420" />
-    <figcaption>Los paquetes independientes del plan de instalación se compilan de forma concurrente — la idea central detrás de las builds con <code>-j</code> de hoy.</figcaption>
+    <figcaption>Los paquetes independientes del plan de instalación se compilan de forma concurrente - la idea central detrás de las builds con <code>-j</code> de hoy.</figcaption>
   </figure>
 
   <div class="note">Reescritura actualizada y mantenida por la comunidad. El proyecto original del Google Summer of Code de 2011 "Parallelising cabal-install" lo realizó el anterior propietario del dominio; esta guía es <em>texto nuevo y original</em> sobre el tema y no reproduce ni reclama la autoría de aquel trabajo. Explica la idea y la pone al día con el toolchain de 2026.</div>
 
-  <p>En 2011, compilar un proyecto Haskell con un gran árbol de dependencias era una tarea secuencial y pesada: <code>cabal install</code> compilaba un paquete, luego el siguiente, y el siguiente — dejando ociosa la mayor parte de una máquina multinúcleo. Un proyecto del Google Summer of Code de aquel año abordó exactamente esto: enseñar a <code>cabal-install</code> a compilar paquetes independientes <strong>en paralelo</strong>. Esa idea está ahora integrada en toda build de Haskell. Aquí está cómo funciona y cómo sacarle el máximo partido hoy.</p>
+  <p>En 2011, compilar un proyecto Haskell con un gran árbol de dependencias era una tarea secuencial y pesada: <code>cabal install</code> compilaba un paquete, luego el siguiente, y el siguiente - dejando ociosa la mayor parte de una máquina multinúcleo. Un proyecto del Google Summer of Code de aquel año abordó exactamente esto: enseñar a <code>cabal-install</code> a compilar paquetes independientes <strong>en paralelo</strong>. Esa idea está ahora integrada en toda build de Haskell. Aquí está cómo funciona y cómo sacarle el máximo partido hoy.</p>
 
   <h2>La clave: una build es un DAG</h2>
-  <p>Un plan de instalación es un <strong>grafo acíclico dirigido</strong> de paquetes. Si <code>aeson</code> y <code>vector</code> dependen ambos solo de <code>base</code>, no dependen <em>entre sí</em> — así que no hay razón para compilarlos uno tras otro. Puedes compilar a la vez cada paquete cuyas dependencias ya estén compiladas, limitado únicamente por cuántos núcleos quieras usar.</p>
+  <p>Un plan de instalación es un <strong>grafo acíclico dirigido</strong> de paquetes. Si <code>aeson</code> y <code>vector</code> dependen ambos solo de <code>base</code>, no dependen <em>entre sí</em> - así que no hay razón para compilarlos uno tras otro. Puedes compilar a la vez cada paquete cuyas dependencias ya estén compiladas, limitado únicamente por cuántos núcleos quieras usar.</p>
   <p>Concretamente, el compilador:</p>
   <ol>
     <li>Ordena topológicamente el grafo de dependencias.</li>
@@ -50,24 +50,24 @@ jobs: 4</code></pre>
   <p>La trampa es multiplicarlos: 8 paquetes paralelos × 8 módulos paralelos cada uno = hasta 64 hilos de GHC concurrentes en una máquina de 8 núcleos, lo que provoca thrashing en lugar de ayudar.</p>
 
   <h3>La solución moderna: un semáforo de build</h3>
-  <p>Las versiones recientes de GHC y Cabal resuelven el problema de la sobrecarga con un <strong>semáforo de trabajos</strong> compartido. En lugar de que cada paquete genere de forma independiente <em>N</em> trabajos de módulo, Cabal le entrega a GHC un único semáforo para que la concurrencia total — entre <em>todos</em> los paquetes y <em>todos</em> los módulos — se mantenga limitada por un solo número:</p>
+  <p>Las versiones recientes de GHC y Cabal resuelven el problema de la sobrecarga con un <strong>semáforo de trabajos</strong> compartido. En lugar de que cada paquete genere de forma independiente <em>N</em> trabajos de módulo, Cabal le entrega a GHC un único semáforo para que la concurrencia total - entre <em>todos</em> los paquetes y <em>todos</em> los módulos - se mantenga limitada por un solo número:</p>
   <pre><code># cabal.project
 jobs: 8
 package *
   ghc-options: -jsem    # coordinate module + package parallelism
                         # via a shared semaphore</code></pre>
-  <p>Con un semáforo, "8 trabajos" significa como máximo 8 tareas de compilación de GHC ejecutándose a la vez en total, ya vengan de los módulos de un paquete grande o de ocho paquetes pequeños — exactamente el comportamiento correcto en una máquina de 8 núcleos.</p>
+  <p>Con un semáforo, "8 trabajos" significa como máximo 8 tareas de compilación de GHC ejecutándose a la vez en total, ya vengan de los módulos de un paquete grande o de ocho paquetes pequeños - exactamente el comportamiento correcto en una máquina de 8 núcleos.</p>
 
   <h2>Ajuste práctico</h2>
   <ul>
-    <li><strong>Builds en frío de CI:</strong> <code>cabal build -j</code> (todos los núcleos) es casi siempre lo más ventajoso — el grafo de dependencias es ancho y las máquinas de CI están ociosas de todos modos.</li>
+    <li><strong>Builds en frío de CI:</strong> <code>cabal build -j</code> (todos los núcleos) es casi siempre lo más ventajoso - el grafo de dependencias es ancho y las máquinas de CI están ociosas de todos modos.</li>
     <li><strong>Desarrollo interactivo:</strong> considera dejar uno o dos núcleos libres (<code>-j$(($(nproc)-2))</code>) para que tu editor/LSP siga respondiendo durante una recompilación.</li>
     <li><strong>El límite suele ser la memoria, no los núcleos.</strong> GHC puede usar mucha RAM por compilación; si una build paralela empieza a hacer swap, baja <code>-j</code>. Los núcleos son baratos; la presión sobre la RAM es lo que realmente atasca las builds grandes de Haskell.</li>
-    <li><strong>Mide una vez:</strong> cronometra una build limpia con <code>-j2</code>, <code>-j4</code>, <code>-j</code> en tu propio hardware y conjunto de dependencias — el punto óptimo depende de ambos.</li>
+    <li><strong>Mide una vez:</strong> cronometra una build limpia con <code>-j2</code>, <code>-j4</code>, <code>-j</code> en tu propio hardware y conjunto de dependencias - el punto óptimo depende de ambos.</li>
   </ul>
 
   <h2>La conclusión</h2>
-  <p>El trabajo del GSoC de 2011 respondió a una pregunta que todavía importa: una build es un grafo de dependencias, y los nodos independientes deberían compilarse de forma concurrente. Quince años después esa idea es la predeterminada, hecha segura por el almacenamiento direccionado por contenido y refinada por los semáforos de build. Si tus builds de Haskell aún se sienten secuenciales, casi con seguridad estás dejando núcleos sin aprovechar — empieza con <code>cabal build -j</code>.</p>
+  <p>El trabajo del GSoC de 2011 respondió a una pregunta que todavía importa: una build es un grafo de dependencias, y los nodos independientes deberían compilarse de forma concurrente. Quince años después esa idea es la predeterminada, hecha segura por el almacenamiento direccionado por contenido y refinada por los semáforos de build. Si tus builds de Haskell aún se sienten secuenciales, casi con seguridad estás dejando núcleos sin aprovechar - empieza con <code>cabal build -j</code>.</p>
 
   <hr />
   <p class="meta">Relacionado: <a href="/es/e/blog/2017-09-09-Cabal-2-0.html">Cabal 2.0 y las builds al estilo Nix</a> · <a href="/es/e/blog/2013-08-20-Cabal-sandbox.html">Los sandboxes de Cabal y lo que los reemplazó</a> · <a href="/es/e/">todas las guías</a></p>

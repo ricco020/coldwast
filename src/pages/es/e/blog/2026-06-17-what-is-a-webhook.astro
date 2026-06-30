@@ -2,11 +2,11 @@
 import Base from '../../../../layouts/Base.astro';
 const path = '/es/e/blog/2026-06-17-what-is-a-webhook.html';
 const title = '¿Qué es un webhook? Cómo funcionan, con ejemplos (2026)';
-const description = 'Un webhook es una petición HTTP automática que un servicio te envía cuando ocurre un evento — lo contrario de una llamada a una API que tú haces. Qué es un webhook, en qué se diferencia del sondeo de una API, cómo recibirlo de forma segura, y ejemplos reales.';
+const description = 'Un webhook es una petición HTTP automática que un servicio te envía cuando ocurre un evento - lo contrario de una llamada a una API que tú haces. Qué es un webhook, en qué se diferencia del sondeo de una API, cómo recibirlo de forma segura, y ejemplos reales.';
 const hero = '/img/what-is-a-webhook-2026.jpg';
 const faq = [
-  { q: '¿Qué es un webhook en términos simples?', a: 'Un webhook es un mensaje automático que un servicio envía a una URL que tú controlas en el momento en que ocurre algo — por ejemplo «un pago tuvo éxito» o «se subió un commit». En lugar de preguntar al servicio una y otra vez «¿algo nuevo?» (sondear su API), el servicio te llama con una petición HTTP POST en cuanto ocurre el evento. Suele describirse como una «API inversa»: con una API normal tú haces la petición; con un webhook el servicio te la hace a ti.' },
-  { q: '¿Cuál es la diferencia entre un webhook y una API?', a: 'Están relacionados pero apuntan en sentidos opuestos. Con una API (REST) normal envías una petición al proveedor cuando quieres datos, y responde. Con un webhook el proveedor envía una petición a tu servidor cuando ocurre un evento, así recibes los datos casi en tiempo real sin pedirlos. Un webhook usa la misma mecánica HTTP que una API — es el proveedor actuando como cliente y tu endpoint como servidor.' },
+  { q: '¿Qué es un webhook en términos simples?', a: 'Un webhook es un mensaje automático que un servicio envía a una URL que tú controlas en el momento en que ocurre algo - por ejemplo «un pago tuvo éxito» o «se subió un commit». En lugar de preguntar al servicio una y otra vez «¿algo nuevo?» (sondear su API), el servicio te llama con una petición HTTP POST en cuanto ocurre el evento. Suele describirse como una «API inversa»: con una API normal tú haces la petición; con un webhook el servicio te la hace a ti.' },
+  { q: '¿Cuál es la diferencia entre un webhook y una API?', a: 'Están relacionados pero apuntan en sentidos opuestos. Con una API (REST) normal envías una petición al proveedor cuando quieres datos, y responde. Con un webhook el proveedor envía una petición a tu servidor cuando ocurre un evento, así recibes los datos casi en tiempo real sin pedirlos. Un webhook usa la misma mecánica HTTP que una API - es el proveedor actuando como cliente y tu endpoint como servidor.' },
   { q: '¿Por qué usar un webhook en vez de sondeo?', a: 'El sondeo (polling) consiste en llamar a una API en un temporizador para comprobar cambios, lo que desperdicia peticiones y añade retraso entre el evento y tu reacción. Los webhooks te empujan el evento en el momento en que ocurre, así que son más eficientes y mucho más cercanos al tiempo real. La contrapartida es que debes tener un endpoint siempre en línea, y manejar reintentos y entregas duplicadas.' },
   { q: '¿Cómo recibo un webhook de forma segura?', a: 'Expón un endpoint HTTPS que acepte POST, devuelve rápido un estado 2xx para acusar recibo, y procesa el trabajo de forma asíncrona. Verifica la firma que envía el proveedor (un HMAC del cuerpo con un secreto compartido) para saber que la petición es auténtica, y haz el manejo idempotente porque un mismo evento puede entregarse más de una vez. Rechaza todo lo que falle la verificación de firma.' },
 ];
@@ -21,30 +21,30 @@ const faq = [
 
   <figure>
     <img class="hero" src={hero} alt="Un servidor y un conmutador de red conectados por un cable Ethernet naranja" width="1200" height="420" loading="eager" />
-    <figcaption>Un servidor conectado a un conmutador de red — un webhook es un mensaje automático que un servidor envía a otro en cuanto ocurre un evento.</figcaption>
+    <figcaption>Un servidor conectado a un conmutador de red - un webhook es un mensaje automático que un servidor envía a otro en cuanto ocurre un evento.</figcaption>
   </figure>
 
   <p>Configuras un pago y tu aplicación reacciona en el instante en que el dinero se cobra. Subes un commit y un build arranca solo. Detrás de esa inmediatez casi siempre hay un <strong>webhook</strong>. Esta guía explica, con claridad, qué es un webhook, en qué se diferencia de una llamada a una API normal, cómo recibirlo de forma segura, y dónde ya dependes de ellos.</p>
 
   <h2>La definición corta</h2>
   <p>Un <strong>webhook es una petición HTTP automática que un servicio envía a una URL que tú controlas cuando ocurre un evento.</strong> En lugar de pedir novedades a un servicio, es él quien <em>te</em> avisa en cuanto las hay.</p>
-  <p>Por eso se le llama <strong>«API inversa»</strong>. Con una <a href="/es/e/blog/2026-06-14-what-is-an-api.html">API</a> normal, tú eres el cliente: haces la petición y el servidor responde. Con un webhook los papeles se invierten — el proveedor pasa a ser el cliente y <em>tu</em> endpoint es el servidor al que llama.</p>
+  <p>Por eso se le llama <strong>«API inversa»</strong>. Con una <a href="/es/e/blog/2026-06-14-what-is-an-api.html">API</a> normal, tú eres el cliente: haces la petición y el servidor responde. Con un webhook los papeles se invierten - el proveedor pasa a ser el cliente y <em>tu</em> endpoint es el servidor al que llama.</p>
 
   <h2>Webhook vs sondear una API</h2>
-  <p>Antes de los webhooks, la forma habitual de estar al día era el <strong>sondeo</strong>: llamar a una API en un temporizador («¿algo nuevo?») una y otra vez. Es simple pero derrochador — la mayoría de las llamadas no devuelven nada, y siempre hay un desfase entre el evento y la siguiente comprobación.</p>
+  <p>Antes de los webhooks, la forma habitual de estar al día era el <strong>sondeo</strong>: llamar a una API en un temporizador («¿algo nuevo?») una y otra vez. Es simple pero derrochador - la mayoría de las llamadas no devuelven nada, y siempre hay un desfase entre el evento y la siguiente comprobación.</p>
   <ul>
-    <li><strong>Sondeo</strong> — preguntas en bucle. Muchas peticiones inútiles, reacción retrasada, fácil de construir.</li>
-    <li><strong>Webhook</strong> — el servicio te avisa una vez, de inmediato. Eficiente y casi en tiempo real, pero debes tener un endpoint para recibirlo.</li>
+    <li><strong>Sondeo</strong> - preguntas en bucle. Muchas peticiones inútiles, reacción retrasada, fácil de construir.</li>
+    <li><strong>Webhook</strong> - el servicio te avisa una vez, de inmediato. Eficiente y casi en tiempo real, pero debes tener un endpoint para recibirlo.</li>
   </ul>
 
-  <figure><img src="/img/what-is-a-webhook-2026-servers.jpg" alt="Tres torres de servidores negras con indicadores de flecha verdes brillantes" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Servidores que empujan datos hacia fuera — un webhook se dispara cuando un servicio hace POST de un evento al endpoint de otro servicio.</figcaption></figure>
+  <figure><img src="/img/what-is-a-webhook-2026-servers.jpg" alt="Tres torres de servidores negras con indicadores de flecha verdes brillantes" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Servidores que empujan datos hacia fuera - un webhook se dispara cuando un servicio hace POST de un evento al endpoint de otro servicio.</figcaption></figure>
 
   <h2>Cómo funciona, paso a paso</h2>
   <ol>
     <li>Registras una <strong>URL</strong> (tu endpoint) con el proveedor y eliges qué eventos te importan.</li>
     <li>Cuando ocurre tal evento, el proveedor envía un <strong>POST</strong> HTTP a tu URL con un cuerpo (normalmente JSON) que lo describe.</li>
     <li>Tu servidor lee el contenido, devuelve rápido un estado <strong>2xx</strong> para acusarlo, y hace el trabajo real después.</li>
-    <li>Si tu endpoint está caído o devuelve un error, la mayoría de los proveedores <strong>reintentan</strong> con backoff — de ahí los posibles duplicados.</li>
+    <li>Si tu endpoint está caído o devuelve un error, la mayoría de los proveedores <strong>reintentan</strong> con backoff - de ahí los posibles duplicados.</li>
   </ol>
   <p>Una entrega se parece a cualquier petición HTTP:</p>
   <pre><code>POST /webhooks/payments  HTTP/1.1
@@ -55,34 +55,34 @@ X-Signature: t=1718600000,v1=9f86d08...
 
   <h2>Ejemplos que ya has visto</h2>
   <ul>
-    <li><strong>Pagos</strong> — Stripe y PayPal envían un webhook cuando un cobro tiene éxito, falla o se reembolsa, para que tu app actualice el pedido sin sondeo.</li>
-    <li><strong>Hospedaje de código</strong> — GitHub y GitLab disparan un webhook en push, pull request o issue: así se activan builds de CI y bots.</li>
-    <li><strong>Mensajería</strong> — Slack, Discord y las plataformas de chat usan webhooks entrantes para publicar mensajes y notificar a tu app.</li>
+    <li><strong>Pagos</strong> - Stripe y PayPal envían un webhook cuando un cobro tiene éxito, falla o se reembolsa, para que tu app actualice el pedido sin sondeo.</li>
+    <li><strong>Hospedaje de código</strong> - GitHub y GitLab disparan un webhook en push, pull request o issue: así se activan builds de CI y bots.</li>
+    <li><strong>Mensajería</strong> - Slack, Discord y las plataformas de chat usan webhooks entrantes para publicar mensajes y notificar a tu app.</li>
   </ul>
 
   <h2>Recibirlo de forma segura</h2>
   <p>Un receptor robusto hace cuatro cosas:</p>
   <ul>
     <li><strong>Servir HTTPS</strong> y aceptar <strong>POST</strong>; responder rápido con un 2xx, luego procesar de forma asíncrona.</li>
-    <li><strong>Verificar la firma</strong> — los proveedores firman el cuerpo (un HMAC con un secreto compartido). Rechaza lo que falle.</li>
-    <li><strong>Ser idempotente</strong> — el mismo evento puede llegar más de una vez; usa el id del evento para que la reentrega sea inofensiva.</li>
-    <li><strong>Devolver errores con honestidad</strong> — si no puedes procesarlo, devuelve un no-2xx para que el proveedor reintente en vez de descartarlo.</li>
+    <li><strong>Verificar la firma</strong> - los proveedores firman el cuerpo (un HMAC con un secreto compartido). Rechaza lo que falle.</li>
+    <li><strong>Ser idempotente</strong> - el mismo evento puede llegar más de una vez; usa el id del evento para que la reentrega sea inofensiva.</li>
+    <li><strong>Devolver errores con honestidad</strong> - si no puedes procesarlo, devuelve un no-2xx para que el proveedor reintente en vez de descartarlo.</li>
   </ul>
-  <p>Los webhooks necesitan un <strong>endpoint siempre en línea</strong> con una URL HTTPS pública — por eso un pequeño servidor o instancia cloud es el hogar habitual de un receptor de webhooks, en lugar de una máquina que se duerme.</p>
+  <p>Los webhooks necesitan un <strong>endpoint siempre en línea</strong> con una URL HTTPS pública - por eso un pequeño servidor o instancia cloud es el hogar habitual de un receptor de webhooks, en lugar de una máquina que se duerme.</p>
 
   <div class="affbox" style="margin:28px 0;">
     <span class="tag">Recomendado</span>
     <h3>¿Necesitas dónde recibir tus webhooks?</h3>
-    <p>Un receptor de webhooks debe estar en línea 24/7 en una URL HTTPS pública. Un pequeño VPS o servidor cloud es el hogar más simple. Infomaniak — un proveedor suizo, respetuoso con la privacidad — ofrece VPS y servidores cloud que encajan.</p>
+    <p>Un receptor de webhooks debe estar en línea 24/7 en una URL HTTPS pública. Un pequeño VPS o servidor cloud es el hogar más simple. Infomaniak - un proveedor suizo, respetuoso con la privacidad - ofrece VPS y servidores cloud que encajan.</p>
     <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Ver el cloud de Infomaniak →</a>
-    <p class="disc">Enlace de afiliado — apoya estas guías gratuitas.</p>
+    <p class="disc">Enlace de afiliado - apoya estas guías gratuitas.</p>
   </div>
 
   <h2>Preguntas frecuentes</h2>
   {faq.map((f) => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}
 
   <h2>En resumen</h2>
-  <p>Un webhook es la forma que tiene la web de decir «no nos llames, ya te llamamos nosotros»: una petición HTTP automática que un servicio envía a tu endpoint en cuanto ocurre un evento. Es más eficiente y mucho más en tiempo real que sondear una API — a costa de mantener un endpoint fiable, que verifica firmas, para recibirlo. Una vez que los ves, notarás webhooks detrás de casi cada «se actualizó solo» del software moderno.</p>
+  <p>Un webhook es la forma que tiene la web de decir «no nos llames, ya te llamamos nosotros»: una petición HTTP automática que un servicio envía a tu endpoint en cuanto ocurre un evento. Es más eficiente y mucho más en tiempo real que sondear una API - a costa de mantener un endpoint fiable, que verifica firmas, para recibirlo. Una vez que los ves, notarás webhooks detrás de casi cada «se actualizó solo» del software moderno.</p>
   <p class="related-guides">Guías relacionadas: <a href="/es/e/blog/2026-06-17-rest-vs-graphql.html">REST vs GraphQL</a>.</p>
   </div>
 
