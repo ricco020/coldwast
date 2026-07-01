@@ -1,0 +1,121 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-07-01-concurrency-vs-parallelism.html';
+const title = "Concurrency vs Parallelism: What's the Difference? (2026)";
+const description = 'Concurrency is about structuring a program to deal with many tasks at once (interleaving); parallelism is about executing multiple tasks literally at the same time on several cores. The core distinction, Rob Pike\'s framing, threads vs async, Python and Haskell examples, when each matters, and common pitfalls.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&q=80&auto=format&fit=crop" datePublished="2026-07-01" dateModified="2026-07-01">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e/">Guides</a><span>/</span>Concurrency vs parallelism</nav>
+  <p class="kicker">Programming · concepts · performance</p>
+  <h1>Concurrency vs parallelism</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Jul 1, 2026</span><span>9 min read</span><span class="tag">#concurrency</span><span class="tag">#parallelism</span><span class="tag">#performance</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&q=80&auto=format&fit=crop" alt="A macro photograph of a printed circuit board" width="1200" height="420" loading="eager" />
+    <figcaption>A macro photograph of a printed circuit board. Modern chips carry multiple cores, and using them at the same time is what turns concurrency into real parallelism.</figcaption>
+  </figure>
+
+  <p>Concurrency and parallelism are two of the most confused words in programming, and the confusion is understandable: both are about "doing more than one thing", and in casual speech people use them interchangeably. But they answer different questions. <strong>Concurrency is about how you structure a program to handle many tasks that overlap in time; parallelism is about actually running multiple tasks at the same instant on multiple processors.</strong> One is a way of organising work, the other is a way of executing it. This guide draws the line clearly, shows how they relate, and works through real examples in Python and Haskell.</p>
+
+  <h2>The short definitions</h2>
+  <p><strong>Concurrency</strong> is the ability of a program to deal with many things at once by interleaving them: it starts a task, pauses it while it waits, switches to another, comes back later. The tasks make progress over overlapping periods of time, but not necessarily at the same instant. Concurrency is fundamentally about <em>structure</em> and <em>composition</em> - breaking a program into independently progressing pieces.</p>
+  <p><strong>Parallelism</strong> is doing many things at literally the same time, which requires hardware that can execute more than one instruction stream simultaneously: multiple CPU cores, multiple processors, or a GPU. Parallelism is about <em>execution</em> - putting several pieces of work onto several workers so they finish sooner.</p>
+
+  <h2>Rob Pike's framing</h2>
+  <p>The clearest widely-cited framing comes from Rob Pike, one of Go's designers, in his talk <em>"Concurrency Is Not Parallelism"</em>. His central point is that <strong>concurrency is about dealing with lots of things at once, while parallelism is about doing lots of things at once</strong> - concurrency is a way to structure software, and parallelism is a property of execution that a good concurrent structure can then exploit. In other words, concurrency is a design tool; parallelism is a runtime outcome. A well-structured concurrent program may run in parallel if the hardware allows, or it may run on a single core by interleaving - and it is still correct either way.</p>
+
+  <h2>A kitchen analogy</h2>
+  <p>Imagine one cook preparing three dishes. A <strong>concurrent</strong> cook does not stand and stare at the oven while a cake bakes: they put the cake in, start chopping vegetables for the next dish, stir a sauce, then check the cake. Only one pair of hands is ever moving, but three dishes are all "in progress". That is concurrency on a single worker - interleaving tasks so waiting time is never wasted.</p>
+  <p><strong>Parallelism</strong> is hiring three cooks who each make one dish at the same time. Now three things really are happening at the same instant, because there are three workers. Notice you can have concurrency with one cook (structure, no simultaneity) and parallelism with many cooks (simultaneity). The two ideas are independent, which is exactly why they need separate words.</p>
+
+  <h2>How they relate</h2>
+  <p>Because they are independent, all four combinations exist:</p>
+  <p><strong>Concurrency without parallelism.</strong> A single CPU core rapidly switching between tasks (time-slicing) runs many things "at once" from the user's point of view, but only one instruction stream executes at any given moment. This is how a single-core machine ran dozens of programs, and how an <code>async</code> event loop juggles thousands of network connections on one thread.</p>
+  <p><strong>Parallelism needs multiple cores.</strong> To genuinely execute two computations at the same instant, you need at least two hardware execution units. On a laptop that means multiple CPU cores; at scale it means many-core servers. Because parallel speedup scales with the number of cores you can throw at a workload, renting a bigger box is a practical lever - <a href="/go/cloud.html">multi-core cloud servers</a> such as high-CPU droplets give you the cores a parallel workload actually needs.</p>
+  <p><strong>Parallelism without (explicit) concurrency.</strong> A numeric library that splits a big matrix multiply across cores gives you parallel execution without you writing any concurrent control flow yourself. <strong>Both together</strong> is the common modern case: a concurrent design (many tasks) mapped onto parallel hardware (many cores).</p>
+
+  <figure><img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80&auto=format&fit=crop" alt="Colourful syntax-highlighted source code on a dark screen" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Source code on a screen. Whether that code runs concurrently, in parallel, or both depends on the constructs you choose and the hardware it runs on.</figcaption></figure>
+
+  <h2>Threads vs async</h2>
+  <p>These are two common ways to express concurrency, and the difference matters.</p>
+  <p><strong>Threads</strong> are independent lines of execution managed by the operating system, sharing the same memory. On a multi-core machine the OS can schedule different threads onto different cores, so threads can give you real parallelism. The cost is that shared mutable memory makes correctness hard (see race conditions below), and each thread carries some overhead.</p>
+  <p><strong>Async</strong> (an event loop with <code>async</code>/<code>await</code>) runs many tasks on a single thread by cooperative switching: a task voluntarily yields at an <code>await</code> point whenever it would otherwise wait - for a network reply, a disk read, a timer. While one task waits, the loop runs another. Async gives you concurrency with very low overhead, but on its own it does <em>not</em> give parallelism, because everything runs on one thread. It shines when tasks spend most of their time waiting rather than computing.</p>
+
+  <h2>Examples in Python</h2>
+  <p>Python's standard library offers both styles. Async with <code>asyncio</code> is ideal for many I/O-bound tasks on one thread:</p>
+  <pre><code>import asyncio
+
+async def fetch(name):
+    await asyncio.sleep(1)      # stands in for a slow network call
+    return name
+
+async def main():
+    # three tasks overlap; total wait is about 1s, not 3s
+    results = await asyncio.gather(fetch("a"), fetch("b"), fetch("c"))
+    print(results)
+
+asyncio.run(main())</code></pre>
+  <p>The three "fetches" overlap in time even though a single thread runs them, because each yields control while it waits. That is concurrency without parallelism.</p>
+  <p>Threads look similar but involve an important nuance. In the standard interpreter, <strong>CPython has a Global Interpreter Lock (GIL)</strong>: a mutex that lets only one thread execute Python bytecode at a time. So Python threads give real concurrency and real parallelism for I/O (the GIL is released while a thread waits on the OS), but they <strong>do not</strong> give parallel speedup for pure CPU-bound Python code, because the GIL serialises the bytecode. For CPU-bound parallelism the classic answer is <code>multiprocessing</code>, which runs separate processes each with its own interpreter and its own GIL, spread across cores:</p>
+  <pre><code>from concurrent.futures import ProcessPoolExecutor
+
+def heavy(n):
+    return sum(i * i for i in range(n))   # CPU-bound work
+
+with ProcessPoolExecutor() as pool:
+    print(list(pool.map(heavy, [10_000_000] * 4)))   # runs across cores</code></pre>
+  <p>Note the GIL is a CPython implementation detail, not part of the language spec; recent CPython releases have added an experimental optional build that can run without it, but the mainstream default still has the GIL, so treat CPU-bound thread parallelism in Python as limited unless you have verified your build.</p>
+
+  <h2>Examples in Haskell</h2>
+  <p><a href="/e/blog/2026-06-14-what-is-haskell.html">Haskell</a> is well known for strong support of both, and it keeps the two ideas cleanly separate. For <strong>concurrency</strong>, <code>forkIO</code> spawns a lightweight green thread; the runtime multiplexes huge numbers of them onto a small pool of OS threads and can spread them across cores:</p>
+  <pre><code>import Control.Concurrent (forkIO)
+
+main :: IO ()
+main = do
+  _ &lt;- forkIO (putStrLn "from another thread")
+  putStrLn "from main"</code></pre>
+  <p>For <strong>deterministic parallelism</strong>, Haskell offers a separate mechanism. Because pure functions have no side effects, evaluating two of them in parallel cannot change the result - so you can hint the runtime to do so without any locks. The <code>par</code> combinator creates a <em>spark</em>: a suggestion that a value may be evaluated in parallel, which the runtime can pick up on a spare core.</p>
+  <pre><code>import Control.Parallel (par, pseq)
+
+-- hint that 'a' may be evaluated in parallel with 'b'
+parAdd :: Int -&gt; Int -&gt; Int
+parAdd a b = a `par` (b `pseq` (a + b))</code></pre>
+  <p>The separation is the point: <code>forkIO</code> is a concurrency tool (structuring interacting threads, including for I/O), while <code>par</code>/sparks are a parallelism tool for speeding up pure computation. You compile with the threaded runtime and pass a flag such as <code>+RTS -N</code> to let the program use multiple cores.</p>
+
+  <h2>When each one matters</h2>
+  <p>A useful rule of thumb turns on whether your bottleneck is waiting or computing.</p>
+  <p><strong>I/O-bound work leans on concurrency.</strong> If tasks spend most of their time waiting on the network, disk, or a database, you do not need many cores - you need a structure that stops one waiting task from blocking the others. Async or a modest thread pool lets one core keep thousands of connections in flight. Adding cores barely helps, because the cores would just sit idle waiting too.</p>
+  <p><strong>CPU-bound work leans on parallelism.</strong> If tasks are busy computing - image processing, numeric simulation, compiling, cryptography - the way to finish sooner is to split the work across cores and run it at the same time. Here concurrency alone buys nothing; you need genuine parallel execution, and your speedup is capped by how many cores you have and how much of the work is parallelisable.</p>
+
+  <h2>Common pitfalls</h2>
+  <p>Both approaches share memory or state, and that is where bugs breed.</p>
+  <p><strong>Race conditions.</strong> When two threads read and write the same data without coordination, the result depends on unpredictable timing. The classic example is two threads each doing <code>count = count + 1</code>: the read, add, and write can interleave so one update is lost. Fixes include locks/mutexes, atomic operations, or avoiding shared mutable state entirely (message passing, immutable data).</p>
+  <p><strong>Deadlocks.</strong> When threads wait on each other in a cycle - thread A holds lock 1 and wants lock 2, thread B holds lock 2 and wants lock 1 - nobody can proceed and the program freezes. Acquiring locks in a consistent global order is a standard way to prevent it.</p>
+  <p><strong>Other hazards</strong> include starvation (a task never gets scheduled), and the false assumption that more threads always means more speed - past the core count, extra threads add scheduling overhead without extra parallelism. Immutable data and pure functions, as in functional style, sidestep whole categories of these bugs, which is a large part of why languages like Haskell make concurrency and parallelism feel safer.</p>
+
+  <p>Concurrency and parallelism are the runtime side of ideas that also shape how we design programs: expressing work as independent, composable steps is close to how <a href="/e/blog/2026-06-15-what-is-functional-programming.html">functional programming</a> avoids shared mutable state, and both build on the same foundations as any <a href="/e/blog/2026-06-14-what-is-an-algorithm.html">algorithm</a> and its use of <a href="/e/blog/2026-06-16-what-is-recursion.html">recursion</a> to break work into smaller pieces. Browse more clear explainers in our <a href="/e/">guides index</a>.</p>
+
+  <h2>Frequently asked questions</h2>
+  <details><summary>What is the difference between concurrency and parallelism?</summary><p>Concurrency is structuring a program to deal with many tasks that overlap in time by interleaving them; parallelism is executing multiple tasks at literally the same instant on multiple cores. Concurrency is about structure and composition, parallelism is about simultaneous execution. You can have concurrency without parallelism (one core time-slicing many tasks), and parallelism needs more than one hardware execution unit.</p></details>
+  <details><summary>Can you have concurrency without parallelism?</summary><p>Yes. A single CPU core can run many tasks concurrently by rapidly switching between them (time-slicing), or an async event loop can juggle thousands of connections on one thread. The tasks overlap in time and all make progress, but only one instruction stream executes at any given moment, so there is no parallel execution. Parallelism specifically requires multiple cores or processors running at the same instant.</p></details>
+  <details><summary>Does Python's GIL prevent parallelism?</summary><p>The GIL in CPython lets only one thread run Python bytecode at a time, so threads do not give parallel speedup for CPU-bound Python code. Threads still help I/O-bound work, because the GIL is released while a thread waits on the OS. For CPU-bound parallelism, use multiprocessing (separate processes, each with its own interpreter) or a C-extension that releases the GIL. The GIL is a CPython detail, not part of the language spec.</p></details>
+  <details><summary>Should I use threads or async?</summary><p>Use async for many I/O-bound tasks that spend most of their time waiting, because an event loop can handle thousands of them cheaply on one thread. Use threads (or processes) when you need work scheduled by the OS or spread across cores. For CPU-bound parallel work in Python specifically, prefer multiprocessing over threads because of the GIL. Match the tool to whether your bottleneck is waiting or computing.</p></details>
+  <details><summary>Is I/O-bound work concurrency and CPU-bound work parallelism?</summary><p>As a rule of thumb, yes. I/O-bound work benefits from concurrency: you want a structure that keeps other tasks progressing while one waits, and extra cores barely help. CPU-bound work benefits from parallelism: the way to finish sooner is to split the computation across multiple cores and run it simultaneously, so your speedup is bounded by core count and how parallelisable the work is.</p></details>
+
+  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about concurrency and parallelism. Language behaviour (the CPython GIL, Haskell's runtime, thread scheduling) evolves and varies by version; verify against your language's current documentation.</div>
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "What is the difference between concurrency and parallelism?", "acceptedAnswer": { "@type": "Answer", "text": "Concurrency is structuring a program to deal with many tasks that overlap in time by interleaving them; parallelism is executing multiple tasks at the same instant on multiple cores. Concurrency is about structure, parallelism is about execution. You can have concurrency without parallelism (one core time-slicing), and parallelism needs more than one hardware execution unit." } },
+      { "@type": "Question", "name": "Can you have concurrency without parallelism?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. A single core can run many tasks concurrently by switching between them, or an async event loop can juggle thousands of connections on one thread. The tasks overlap in time and all make progress, but only one instruction stream runs at any moment, so there is no parallel execution. Parallelism requires multiple cores or processors." } },
+      { "@type": "Question", "name": "Does Python's GIL prevent parallelism?", "acceptedAnswer": { "@type": "Answer", "text": "The GIL in CPython lets only one thread run Python bytecode at a time, so threads do not give parallel speedup for CPU-bound Python code. Threads still help I/O-bound work because the GIL is released while waiting on the OS. For CPU-bound parallelism, use multiprocessing or a C-extension that releases the GIL. The GIL is a CPython detail, not part of the language spec." } },
+      { "@type": "Question", "name": "Should I use threads or async?", "acceptedAnswer": { "@type": "Answer", "text": "Use async for many I/O-bound tasks that mostly wait, because one thread can handle thousands cheaply. Use threads or processes when you need OS scheduling or work spread across cores. For CPU-bound parallel work in Python, prefer multiprocessing over threads because of the GIL. Match the tool to whether the bottleneck is waiting or computing." } },
+      { "@type": "Question", "name": "Is I/O-bound work concurrency and CPU-bound work parallelism?", "acceptedAnswer": { "@type": "Answer", "text": "As a rule of thumb, yes. I/O-bound work benefits from concurrency: a structure that keeps other tasks progressing while one waits, where extra cores barely help. CPU-bound work benefits from parallelism: splitting the computation across cores to run simultaneously, with speedup bounded by core count and how parallelisable the work is." } }
+    ]
+  })} />
+</Base>
