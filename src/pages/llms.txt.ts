@@ -31,6 +31,10 @@ const FOOTER = `
 - [Performance](${SITE}/e/c/performance.html)
 - [Editor & HLS](${SITE}/e/c/editor.html)
 
+## Interactive tools
+
+- [Regex tester](${SITE}/regex-tester.html): free in-browser regular-expression tester using the browser's own JavaScript engine - live match highlighting and capture-group table. Available in six languages.
+
 ## More
 
 - [About coldwa.st](${SITE}/about.html)
