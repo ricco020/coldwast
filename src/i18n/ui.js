@@ -10,7 +10,7 @@ export function localized(path, lang) {
 
 export const ui = {
   en: {
-    nav_guides: 'Guides', nav_about: 'About', nav_rss: 'RSS',
+    nav_guides: 'Guides', nav_tools: 'Tools', nav_about: 'About', nav_rss: 'RSS',
     in_word: 'in', search_ph: 'Search guides…',
     search_h1: 'Search the guides', search_ph2: 'Search Haskell, Cabal, GHC…',
     wrote: 'wrote', read_more: 'Read more…', updated: 'Updated 2026',
@@ -32,7 +32,7 @@ export const ui = {
     no_result: 'No guide matches your search.', browse_all: 'Browse all guides →',
   },
   fr: {
-    nav_guides: 'Guides', nav_about: 'À propos', nav_rss: 'RSS',
+    nav_guides: 'Guides', nav_tools: 'Outils', nav_about: 'À propos', nav_rss: 'RSS',
     in_word: 'dans', search_ph: 'Rechercher un guide…',
     search_h1: 'Rechercher dans les guides', search_ph2: 'Rechercher Haskell, Cabal, GHC…',
     wrote: 'a écrit', read_more: 'Lire la suite…', updated: 'Mis à jour 2026',
@@ -54,7 +54,7 @@ export const ui = {
     no_result: 'Aucun guide ne correspond à votre recherche.', browse_all: 'Voir tous les guides →',
   },
   es: {
-    nav_guides: 'Guías', nav_about: 'Acerca de', nav_rss: 'RSS',
+    nav_guides: 'Guías', nav_tools: 'Herramientas', nav_about: 'Acerca de', nav_rss: 'RSS',
     in_word: 'en', search_ph: 'Buscar una guía…',
     search_h1: 'Buscar en las guías', search_ph2: 'Buscar Haskell, Cabal, GHC…',
     wrote: 'escribió', read_more: 'Leer más…', updated: 'Actualizado 2026',
@@ -76,7 +76,7 @@ export const ui = {
     no_result: 'Ninguna guía coincide con tu búsqueda.', browse_all: 'Ver todas las guías →',
   },
   de: {
-    nav_guides: 'Leitfäden', nav_about: 'Über uns', nav_rss: 'RSS',
+    nav_guides: 'Leitfäden', nav_tools: 'Tools', nav_about: 'Über uns', nav_rss: 'RSS',
     in_word: 'in', search_ph: 'Leitfäden durchsuchen…',
     search_h1: 'Leitfäden durchsuchen', search_ph2: 'Haskell, Cabal, GHC suchen…',
     wrote: 'schrieb', read_more: 'Weiterlesen…', updated: 'Aktualisiert 2026',
@@ -98,7 +98,7 @@ export const ui = {
     no_result: 'Kein Leitfaden passt zu Ihrer Suche.', browse_all: 'Alle Leitfäden ansehen →',
   },
   it: {
-    nav_guides: 'Guide', nav_about: 'Informazioni', nav_rss: 'RSS',
+    nav_guides: 'Guide', nav_tools: 'Strumenti', nav_about: 'Informazioni', nav_rss: 'RSS',
     in_word: 'in', search_ph: 'Cerca tra le guide…',
     search_h1: 'Cerca nelle guide', search_ph2: 'Cerca Haskell, Cabal, GHC…',
     wrote: 'ha scritto', read_more: 'Continua a leggere…', updated: 'Aggiornato 2026',
@@ -120,7 +120,7 @@ export const ui = {
     no_result: 'Nessuna guida corrisponde alla tua ricerca.', browse_all: 'Sfoglia tutte le guide →',
   },
   pt: {
-    nav_guides: 'Guias', nav_about: 'Sobre', nav_rss: 'RSS',
+    nav_guides: 'Guias', nav_tools: 'Ferramentas', nav_about: 'Sobre', nav_rss: 'RSS',
     in_word: 'em', search_ph: 'Pesquisar guias…',
     search_h1: 'Pesquisar nos guias', search_ph2: 'Pesquisar Haskell, Cabal, GHC…',
     wrote: 'escreveu', read_more: 'Ler mais…', updated: 'Atualizado 2026',

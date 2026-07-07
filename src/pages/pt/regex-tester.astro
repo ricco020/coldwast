@@ -1,0 +1,114 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+<Base title='Testador de Regex - Teste expressões regulares em tempo real no navegador' description='Testador de regex online gratuito. Escreva uma expressão regular e um texto de teste para ver correspondências e grupos de captura ao instante. Tudo acontece no navegador - nada é enviado.' path="/pt/regex-tester.html" lang="pt">
+  <div class="reading">
+  <p class="kicker" style="margin-top:30px">Coldwast</p>
+  <h1>Testador de regex</h1>
+  <p>Escreva uma expressão regular e um texto de teste para ver as correspondências e os grupos de captura a atualizar em tempo real. Usa o motor regex JavaScript do seu navegador, por isso nada é enviado para lado nenhum.</p>
+
+  <div id="rx" class="rxwrap"
+    data-invalid='Padrão inválido:' data-nomatch='Sem correspondência'
+    data-one='correspondência' data-many='correspondências' data-match='Correspondência' data-groups='Grupos'>
+    <div class="rxrow">
+      <div class="rxfield grow">
+        <label for="rx-pat">Padrão</label>
+        <input id="rx-pat" type="text" spellcheck="false" autocapitalize="off" autocomplete="off" value="\b\w+@\w+\.\w+\b" />
+      </div>
+      <div class="rxfield">
+        <label for="rx-flags">Flags</label>
+        <input id="rx-flags" type="text" spellcheck="false" autocapitalize="off" autocomplete="off" value="gi" />
+      </div>
+    </div>
+    <div class="rxfield">
+      <label for="rx-test">Texto de teste</label>
+      <textarea id="rx-test" spellcheck="false">Contact us at hello@coldwa.st or team@example.org for details.</textarea>
+    </div>
+    <p id="rx-info" class="rx-info"></p>
+    <div id="rx-out" class="rx-out"></div>
+    <div id="rx-groups"></div>
+  </div>
+
+  <h2>Flags comuns</h2>
+  <ul>
+    <li><code>g - global, encontra todas as correspondências</code></li>
+    <li><code>i - sem distinção de maiúsculas</code></li>
+    <li><code>m - multilinha (^ e $ nas quebras de linha)</code></li>
+    <li><code>s - dotall (. inclui quebras de linha)</code></li>
+    <li><code>u - unicode</code></li>
+    <li><code>y - sticky</code></li>
+  </ul>
+
+  <h2>Como funciona</h2>
+  <p>O testador compila o seu padrão com o motor RegExp do JavaScript e executa-o sobre o texto de teste. As correspondências são realçadas e cada grupo de captura é listado. Como corre no navegador, um texto grande ou privado nunca sai do seu dispositivo.</p>
+  <p class="meta">Usa a variante regex do JavaScript (ECMAScript). Algumas sintaxes de PCRE, Python ou outros motores podem comportar-se de forma diferente.</p>
+  </div>
+</Base>
+
+<style>
+  .rxwrap { margin: 26px 0; }
+  .rxrow { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
+  .rxfield { display:flex; flex-direction:column; gap:5px; }
+  .rxfield.grow { flex:1 1 320px; }
+  .rxfield label { font-weight:600; font-size:14px; }
+  .rxwrap input, .rxwrap textarea {
+    font-family:'JetBrains Mono',ui-monospace,monospace; font-size:14px;
+    padding:9px 11px; border:1px solid #cfd3da; border-radius:9px; background:#fff; color:#111;
+  }
+  .rxwrap input:focus, .rxwrap textarea:focus { outline:2px solid #6366f1; border-color:#6366f1; }
+  #rx-flags { width:110px; }
+  #rx-test { width:100%; min-height:120px; resize:vertical; }
+  .rx-info { min-height:20px; font-size:13.5px; font-weight:600; margin:4px 2px 10px; }
+  .rx-info.ok { color:#0d9488; }
+  .rx-info.err { color:#dc2626; }
+  .rx-out {
+    font-family:'JetBrains Mono',ui-monospace,monospace; font-size:14px; white-space:pre-wrap;
+    word-break:break-word; padding:12px; border:1px solid #d7dbe2; border-radius:9px; background:#fafbfc; min-height:48px;
+  }
+  .rx-out mark { background:#fde68a; color:#111; border-radius:3px; padding:0 1px; }
+  .rx-empty { color:#9aa1ac; }
+  .rx-groups { margin-top:14px; }
+  .rx-groups table { width:100%; border-collapse:collapse; font-size:13px; }
+  .rx-groups th, .rx-groups td { text-align:left; padding:5px 8px; border-bottom:1px solid #e6e8ee; font-family:'JetBrains Mono',ui-monospace,monospace; }
+  .rx-groups th { font-weight:700; }
+</style>
+
+<script is:inline>
+  (function(){
+    var el=document.getElementById('rx'); if(!el) return;
+    var d=el.dataset;
+    var pat=document.getElementById('rx-pat'), flg=document.getElementById('rx-flags'),
+        txt=document.getElementById('rx-test'), out=document.getElementById('rx-out'),
+        info=document.getElementById('rx-info'), gp=document.getElementById('rx-groups');
+    function esc(s){return s.replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
+    function run(){
+      var p=pat.value, f=flg.value;
+      if(!p){ out.innerHTML=''; info.textContent=''; info.className='rx-info'; gp.innerHTML=''; return; }
+      var re;
+      try{ re=new RegExp(p,f); }catch(e){ info.textContent=d.invalid+' '+e.message; info.className='rx-info err'; out.innerHTML=''; gp.innerHTML=''; return; }
+      var s=txt.value, global=f.indexOf('g')>-1, matches=[];
+      try{
+        if(global){ var m; var rr=new RegExp(p,f); while((m=rr.exec(s))!==null){ matches.push(m); if(m[0]===''){ rr.lastIndex++; } if(matches.length>500) break; } }
+        else { var mm=re.exec(s); if(mm) matches.push(mm); }
+      }catch(e){}
+      var html='', last=0;
+      for(var i=0;i<matches.length;i++){ var mi=matches[i], idx=mi.index; html+=esc(s.slice(last,idx))+'<mark>'+esc(mi[0])+'</mark>'; last=idx+mi[0].length; }
+      html+=esc(s.slice(last));
+      out.innerHTML = matches.length? html : '<span class="rx-empty">'+d.nomatch+'</span>';
+      if(matches.length===0){ info.textContent=d.nomatch; info.className='rx-info'; gp.innerHTML=''; return; }
+      var n=matches.length; info.textContent=n+' '+(n===1?d.one:d.many); info.className='rx-info ok';
+      var hasGroups=matches.some(function(m){return m.length>1;});
+      if(hasGroups){
+        var rows='<div class="rx-groups"><table><thead><tr><th>#</th><th>'+d.match+'</th><th>'+d.groups+'</th></tr></thead><tbody>';
+        matches.slice(0,50).forEach(function(m,k){
+          var groups=m.slice(1).map(function(g,gi){return (gi+1)+': '+(g===undefined?'-':esc(g));}).join('   ');
+          rows+='<tr><td>'+(k+1)+'</td><td>'+esc(m[0])+'</td><td>'+groups+'</td></tr>';
+        });
+        rows+='</tbody></table></div>';
+        gp.innerHTML=rows;
+      } else { gp.innerHTML=''; }
+    }
+    pat.addEventListener('input',run); flg.addEventListener('input',run); txt.addEventListener('input',run);
+    run();
+  })();
+</script>
