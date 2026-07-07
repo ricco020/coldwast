@@ -11,6 +11,9 @@ Static Astro site on an acquired expired domain (previously a Haskell blog). Goa
 
 Other archived legacy paths (Cabal-1-18, Cabal-1-24, GSocIntroduction, tags, cv.pdf, non-`/e/` `/blog/*`) → 301 to the nearest on-topic page (see `vercel.json`).
 
+## Interactive tools
+- [`/regex-tester.html`](https://coldwa.st/regex-tester.html) - free in-browser regular-expression tester (JavaScript RegExp engine): live match highlighting and a capture-group table, six languages, nothing uploaded.
+
 ## Rules (enforced)
 - ANTI-PBN: zero links to any other network site. Ever.
 - Honesty: no invented claims, no impersonation; original content only (Wayback used as topic reference, never copied).
