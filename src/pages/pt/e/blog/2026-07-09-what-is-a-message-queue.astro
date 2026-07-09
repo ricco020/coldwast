@@ -1,0 +1,64 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/pt/e/blog/2026-07-09-what-is-a-message-queue.html';
+const title = 'O que é uma fila de mensagens? Producers, consumers e brokers (2026)';
+const description = 'Uma fila de mensagens é um buffer entre serviços: uma parte da sua app deixa uma tarefa e outra recolhe-a mais tarde. O que é uma fila de mensagens, producers vs consumers, pub/sub, garantias de entrega, e RabbitMQ vs Kafka vs Redis.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://images.pexels.com/photos/18631424/pexels-photo-18631424.jpeg?auto=compress&cs=tinysrgb&w=1200" datePublished="2026-07-09" dateModified="2026-07-09">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/pt/">Home</a><span>/</span><a href="/pt/e/">Guides</a><span>/</span>Fila de mensagens</nav>
+  <p class="kicker">Programação · Arquitetura · Backend</p>
+  <h1>O que é uma fila de mensagens?</h1>
+  <div class="artmeta"><span>Por Coldwast</span><span>Atualizado a 9 jul 2026</span><span>8 min de leitura</span><span class="tag">#filademensagens</span><span class="tag">#arquitetura</span><span class="tag">#backend</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.pexels.com/photos/18631424/pexels-photo-18631424.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Uma esteira transportadora automatizada a levar artigos por uma fábrica" width="1200" height="420" loading="eager" />
+    <figcaption>Uma esteira transportadora automatizada a levar artigos por uma fábrica - uma fila faz o trabalho avançar por ordem, um elemento de cada vez, tal como uma fila de mensagens.</figcaption>
+  </figure>
+
+  <p>Quando uma parte da sua app precisa de passar trabalho a outra - enviar um email, redimensionar uma imagem, cobrar um cartão - fazê-lo em linha faz o utilizador esperar e liga fortemente as duas partes. Uma <strong>fila de mensagens</strong> é a solução padrão: um buffer no meio onde um serviço deixa uma tarefa e outro a recolhe mais tarde. Este guia explica o que é uma fila de mensagens, como producers e consumers a usam, e quando precisa mesmo de uma.</p>
+
+  <h2>A ideia central: producer, fila, consumer</h2>
+  <p>Uma fila de mensagens fica entre o código que cria o trabalho e o que o executa. Um <strong>producer</strong> coloca uma <em>mensagem</em> - uma pequena unidade de dados que descreve uma tarefa - na fila. Um <strong>consumer</strong> retira as mensagens e processa-as. A fila guarda cada mensagem até ser tratada, normalmente por ordem de chegada. O ponto-chave: o producer não espera pelo consumer e nem precisa de saber quem ele é.</p>
+
+  <figure>
+    <img src="https://images.pexels.com/photos/18631424/pexels-photo-18631424.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Uma esteira transportadora automatizada com packs de garrafas de água numa fábrica" width="1200" height="627" loading="lazy" style="width:100%;height:auto;border-radius:12px" />
+    <figcaption>Uma esteira transportadora automatizada a levar artigos por uma fábrica - uma fila faz o trabalho avançar por ordem, um elemento de cada vez, tal como uma fila de mensagens.</figcaption>
+  </figure>
+
+  <h2>Porquê usar uma: desacoplamento, buffer, resiliência</h2>
+  <p>Uma fila traz várias coisas ao mesmo tempo. <strong>Desacopla</strong> producer e consumer, para os construir, implementar e escalar em separado. <strong>Amortece</strong> picos: se chegarem 10.000 registos de uma vez, fazem fila em vez de sobrecarregar o worker. Acrescenta <strong>resiliência</strong>, porque se um consumer estiver em baixo as mensagens esperam em vez de se perderem. E torna o trabalho <strong>assíncrono</strong> - devolve o controlo ao utilizador de imediato e faz a parte lenta em segundo plano.</p>
+
+  <h2>Fila vs publicação/subscrição</h2>
+  <p>Há dois padrões comuns. Numa simples <strong>fila de trabalho</strong>, cada mensagem é entregue a exatamente um consumer - ideal para distribuir tarefas por um conjunto de workers. Na <strong>publicação/subscrição</strong> (pub/sub), uma mensagem é difundida a cada subscritor interessado - ideal para eventos a que várias partes do sistema reagem. Muitos brokers suportam ambos, usando a ideia de exchanges ou topics para decidir quem recebe uma cópia.</p>
+
+  <figure>
+    <img src="https://images.pexels.com/photos/7937292/pexels-photo-7937292.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Uma fila de tubos brancos com medidores de caudal num coletor industrial" width="1000" height="523" loading="lazy" style="width:100%;height:auto;border-radius:12px" />
+    <figcaption>Um coletor de tubos com medidores de caudal - um broker encaminha cada mensagem pelo canal certo, como as válvulas dirigem o fluxo.</figcaption>
+  </figure>
+
+  <h2>As garantias de entrega, com honestidade</h2>
+  <p>As filas descrevem o esforço que fazem para entregar uma mensagem: <strong>no máximo uma vez</strong> (rápido, pode perder), <strong>pelo menos uma vez</strong> (pode entregar duas vezes) e <strong>exatamente uma vez</strong> (a mais difícil, muitas vezes matizada na prática). A maioria dos sistemas reais oferece pelo-menos-uma-vez, o que significa que os seus consumers devem ser <strong>idempotentes</strong> - processar a mesma mensagem duas vezes não deve causar dano. Os consumers costumam <em>confirmar</em> uma mensagem só depois de a terminarem; se um falhar antes de confirmar, a mensagem é reentregue. As mensagens que falham repetidamente vão para uma <strong>fila de mensagens mortas</strong> para inspeção.</p>
+
+  <h2>Brokers comuns: RabbitMQ, Kafka, Redis</h2>
+  <p>Poucas ferramentas dominam. O <strong>RabbitMQ</strong> é um broker clássico com encaminhamento flexível (fala AMQP). O <strong>Apache Kafka</strong> é um log durável de alto débito: retém as mensagens para que os consumers possam reproduzir um fluxo, o que se adequa a pipelines de eventos e analítica. O <strong>Redis</strong> oferece filas e streams leves e muito rápidos, embora menos duráveis por omissão. Na cloud, opções geridas como AWS SQS e Google Pub/Sub retiram o peso operacional. Escolha pela necessidade: RabbitMQ para encaminhamento, Kafka para fluxos reproduzíveis de grande volume, Redis para o simples e rápido.</p>
+
+  <h2>Quando não precisa de uma</h2>
+  <p>Uma fila é uma peça móvel que tem de correr e monitorizar. Se o trabalho é rápido e quem chama precisa mesmo do resultado de imediato, uma chamada de função direta ou uma escrita em <a href="/pt/e/blog/2026-06-14-what-is-an-api.html">base de dados</a> é mais simples. Recorra a uma fila de mensagens quando precisar de jobs em segundo plano assíncronos, quiser absorver picos de carga, ou precisar de desacoplar serviços que não deveriam depender diretamente um do outro - as mesmas razões pelas quais talvez já ponha serviços atrás de um <a href="/pt/e/blog/2026-06-26-what-is-a-reverse-proxy.html">proxy reverso</a> ou de um <a href="/pt/e/blog/2026-06-26-what-is-a-load-balancer.html">balanceador de carga</a>.</p>
+
+  <h2>Conclusão</h2>
+  <p>Uma fila de mensagens é um buffer entre serviços: os producers deixam trabalho, os consumers recolhem-no, e os dois ficam desacoplados enquanto a carga é suavizada. Use uma simples fila de trabalho para distribuir tarefas, pub/sub para difundir eventos, conte com entrega pelo-menos-uma-vez (torne os consumers idempotentes), e recorra a RabbitMQ, Kafka, Redis ou uma fila cloud gerida quando precisar de processamento assíncrono fiável.</p>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "O que é uma fila de mensagens em termos simples?", "acceptedAnswer": { "@type": "Answer", "text": "Uma fila de mensagens é um buffer entre duas partes de um programa. Uma parte (o producer) deixa uma tarefa como mensagem, e outra (o consumer) recolhe-a e faz o trabalho mais tarde. Permite ao emissor seguir de imediato em vez de esperar, e evita que as duas partes dependam diretamente uma da outra." } },
+      { "@type": "Question", "name": "Diferença entre uma fila e publicação/subscrição?", "acceptedAnswer": { "@type": "Answer", "text": "Numa simples fila de trabalho, cada mensagem vai para exatamente um consumer, o que serve para distribuir tarefas por workers. Na publicação/subscrição, uma mensagem é difundida a cada subscritor interessado, o que serve para propagar eventos. Muitos brokers suportam ambos." } },
+      { "@type": "Question", "name": "O que significa entrega pelo menos uma vez?", "acceptedAnswer": { "@type": "Answer", "text": "Significa que a fila garante que uma mensagem será entregue, mas talvez mais do que uma vez - por exemplo se um consumer processar uma mensagem mas falhar antes de a confirmar. Por isso os consumers devem ser idempotentes, para que processar a mesma mensagem duas vezes não cause dano." } },
+      { "@type": "Question", "name": "RabbitMQ vs Kafka vs Redis - qual usar?", "acceptedAnswer": { "@type": "Answer", "text": "O RabbitMQ é um broker clássico com encaminhamento flexível. O Kafka é um log durável de alto débito que retém mensagens para reproduzir um fluxo, ideal para pipelines de eventos. O Redis oferece filas e streams rápidos e leves mas menos duráveis por omissão. Escolha RabbitMQ para encaminhamento, Kafka para fluxos reproduzíveis de grande volume, e Redis para o simples e rápido." } }
+    ]
+  })} />
+  </div>
+</Base>

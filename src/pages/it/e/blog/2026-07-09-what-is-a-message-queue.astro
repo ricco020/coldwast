@@ -1,0 +1,64 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/it/e/blog/2026-07-09-what-is-a-message-queue.html';
+const title = 'Cos’è una coda di messaggi? Producer, consumer e broker spiegati (2026)';
+const description = 'Una coda di messaggi è un buffer tra servizi: una parte della tua app deposita un compito e un’altra lo preleva più tardi. Cos’è una coda di messaggi, producer vs consumer, pub/sub, garanzie di consegna, e RabbitMQ vs Kafka vs Redis.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://images.pexels.com/photos/18631424/pexels-photo-18631424.jpeg?auto=compress&cs=tinysrgb&w=1200" datePublished="2026-07-09" dateModified="2026-07-09">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/it/">Home</a><span>/</span><a href="/it/e/">Guides</a><span>/</span>Coda di messaggi</nav>
+  <p class="kicker">Programmazione · Architettura · Backend</p>
+  <h1>Cos’è una coda di messaggi?</h1>
+  <div class="artmeta"><span>Di Coldwast</span><span>Aggiornato il 9 lug 2026</span><span>8 min di lettura</span><span class="tag">#codadimessaggi</span><span class="tag">#architettura</span><span class="tag">#backend</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.pexels.com/photos/18631424/pexels-photo-18631424.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Un nastro trasportatore automatizzato che porta articoli in una fabbrica" width="1200" height="420" loading="eager" />
+    <figcaption>Un nastro trasportatore automatizzato che porta articoli in una fabbrica - una coda fa avanzare il lavoro in ordine, un elemento alla volta, proprio come una coda di messaggi.</figcaption>
+  </figure>
+
+  <p>Quando una parte della tua app deve passare lavoro a un’altra - inviare un’email, ridimensionare un’immagine, addebitare una carta - farlo in linea fa attendere l’utente e lega strettamente le due parti. Una <strong>coda di messaggi</strong> è la soluzione standard: un buffer nel mezzo dove un servizio deposita un compito e un altro lo preleva più tardi. Questa guida spiega cos’è una coda di messaggi, come la usano producer e consumer, e quando ti serve davvero.</p>
+
+  <h2>L’idea centrale: producer, coda, consumer</h2>
+  <p>Una coda di messaggi si colloca tra il codice che crea il lavoro e quello che lo esegue. Un <strong>producer</strong> mette un <em>messaggio</em> - una piccola unità di dati che descrive un compito - nella coda. Un <strong>consumer</strong> preleva i messaggi e li elabora. La coda conserva ogni messaggio finché non viene gestito, di solito in ordine primo entrato, primo uscito. Il punto chiave: il producer non attende il consumer e non ha nemmeno bisogno di sapere chi sia.</p>
+
+  <figure>
+    <img src="https://images.pexels.com/photos/18631424/pexels-photo-18631424.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Un nastro trasportatore automatizzato con confezioni di bottiglie d’acqua in una fabbrica" width="1200" height="627" loading="lazy" style="width:100%;height:auto;border-radius:12px" />
+    <figcaption>Un nastro trasportatore automatizzato che porta articoli in una fabbrica - una coda fa avanzare il lavoro in ordine, un elemento alla volta, proprio come una coda di messaggi.</figcaption>
+  </figure>
+
+  <h2>Perché usarne una: disaccoppiamento, buffer, resilienza</h2>
+  <p>Una coda offre più cose insieme. <strong>Disaccoppia</strong> producer e consumer, così li costruisci, distribuisci e scali separatamente. <strong>Assorbe</strong> i picchi: se arrivano 10.000 iscrizioni in una volta, si mettono in fila invece di sovraccaricare il worker. Aggiunge <strong>resilienza</strong>, perché se un consumer è giù i messaggi attendono invece di perdersi. E rende il lavoro <strong>asincrono</strong> - restituisci subito il controllo all’utente e fai la parte lenta in background.</p>
+
+  <h2>Coda vs pubblicazione/sottoscrizione</h2>
+  <p>Ci sono due schemi comuni. In una semplice <strong>coda di lavoro</strong>, ogni messaggio è consegnato a esattamente un consumer - ideale per distribuire compiti su un pool di worker. Nella <strong>pubblicazione/sottoscrizione</strong> (pub/sub), un messaggio è trasmesso a ogni sottoscrittore interessato - ideale per eventi a cui reagiscono più parti del sistema. Molti broker supportano entrambi, con l’idea di exchange o topic per decidere chi riceve una copia.</p>
+
+  <figure>
+    <img src="https://images.pexels.com/photos/7937292/pexels-photo-7937292.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Una fila di tubi bianchi con misuratori di portata in un collettore industriale" width="1000" height="523" loading="lazy" style="width:100%;height:auto;border-radius:12px" />
+    <figcaption>Un collettore di tubi con misuratori di portata - un broker instrada ogni messaggio nel canale giusto, come le valvole dirigono il flusso.</figcaption>
+  </figure>
+
+  <h2>Le garanzie di consegna, onestamente</h2>
+  <p>Le code descrivono quanto si impegnano a consegnare un messaggio: <strong>al massimo una volta</strong> (veloce, può perdere), <strong>almeno una volta</strong> (può consegnare due volte) ed <strong>esattamente una volta</strong> (la più difficile, spesso ridimensionata in pratica). La maggior parte dei sistemi reali offre l’almeno-una-volta, il che significa che i tuoi consumer dovrebbero essere <strong>idempotenti</strong> - elaborare due volte lo stesso messaggio non deve causare danni. I consumer di solito <em>confermano</em> un messaggio solo dopo averlo finito; se uno va in crash prima della conferma, il messaggio viene riconsegnato. I messaggi che falliscono di continuo finiscono in una <strong>coda di messaggi non recapitati</strong> per l’ispezione.</p>
+
+  <h2>Broker comuni: RabbitMQ, Kafka, Redis</h2>
+  <p>Pochi strumenti dominano. <strong>RabbitMQ</strong> è un broker classico con routing flessibile (parla AMQP). <strong>Apache Kafka</strong> è un log durevole ad alto throughput: conserva i messaggi così che i consumer possano rigiocare un flusso, il che si adatta a pipeline di eventi e analitica. <strong>Redis</strong> offre code e stream leggeri e molto veloci, ma meno durevoli per impostazione predefinita. Nel cloud, opzioni gestite come AWS SQS e Google Pub/Sub tolgono il peso operativo. Scegli in base al bisogno: RabbitMQ per il routing, Kafka per flussi rigiocabili ad alto volume, Redis per il semplice e veloce.</p>
+
+  <h2>Quando non ti serve</h2>
+  <p>Una coda è un pezzo mobile da far girare e monitorare. Se il lavoro è rapido e chi chiama ha davvero bisogno del risultato subito, una chiamata di funzione diretta o una scrittura su <a href="/it/e/blog/2026-06-14-what-is-an-api.html">database</a> è più semplice. Ricorri a una coda di messaggi quando ti servono job in background asincroni, vuoi assorbire picchi di carico, o devi disaccoppiare servizi che non dovrebbero dipendere direttamente l’uno dall’altro - le stesse ragioni per cui forse metti già i servizi dietro un <a href="/it/e/blog/2026-06-26-what-is-a-reverse-proxy.html">reverse proxy</a> o un <a href="/it/e/blog/2026-06-26-what-is-a-load-balancer.html">load balancer</a>.</p>
+
+  <h2>In sintesi</h2>
+  <p>Una coda di messaggi è un buffer tra servizi: i producer depositano lavoro, i consumer lo prelevano, e i due restano disaccoppiati mentre il carico viene livellato. Usa una semplice coda di lavoro per distribuire compiti, il pub/sub per trasmettere eventi, aspettati una consegna almeno-una-volta (rendi quindi idempotenti i consumer), e ricorri a RabbitMQ, Kafka, Redis o una coda cloud gestita quando ti serve un’elaborazione asincrona affidabile.</p>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "Cos’è una coda di messaggi in parole semplici?", "acceptedAnswer": { "@type": "Answer", "text": "Una coda di messaggi è un buffer tra due parti di un programma. Una parte (il producer) deposita un compito come messaggio, e un’altra (il consumer) lo preleva e fa il lavoro più tardi. Permette al mittente di proseguire subito invece di attendere, ed evita che le due parti dipendano direttamente l’una dall’altra." } },
+      { "@type": "Question", "name": "Differenza tra coda e pubblicazione/sottoscrizione?", "acceptedAnswer": { "@type": "Answer", "text": "In una semplice coda di lavoro, ogni messaggio va a esattamente un consumer, il che serve a distribuire compiti tra worker. Nella pubblicazione/sottoscrizione, un messaggio è trasmesso a ogni sottoscrittore interessato, il che serve a propagare eventi. Molti broker supportano entrambi." } },
+      { "@type": "Question", "name": "Cosa significa consegna almeno una volta?", "acceptedAnswer": { "@type": "Answer", "text": "Significa che la coda garantisce che un messaggio sarà consegnato, ma forse più di una volta - per esempio se un consumer elabora un messaggio ma va in crash prima di confermarlo. Per questo i consumer dovrebbero essere idempotenti, così elaborare due volte lo stesso messaggio non causa danni." } },
+      { "@type": "Question", "name": "RabbitMQ vs Kafka vs Redis - quale usare?", "acceptedAnswer": { "@type": "Answer", "text": "RabbitMQ è un broker classico con routing flessibile. Kafka è un log durevole ad alto throughput che conserva i messaggi per rigiocare un flusso, ideale per pipeline di eventi. Redis offre code e stream veloci e leggeri ma meno durevoli per impostazione predefinita. Scegli RabbitMQ per il routing, Kafka per flussi rigiocabili ad alto volume, e Redis per il semplice e veloce." } }
+    ]
+  })} />
+  </div>
+</Base>

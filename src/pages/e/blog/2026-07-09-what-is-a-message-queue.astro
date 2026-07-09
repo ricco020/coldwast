@@ -1,0 +1,64 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-07-09-what-is-a-message-queue.html';
+const title = 'What Is a Message Queue? Producers, Consumers & Brokers Explained (2026)';
+const description = 'A message queue is a buffer between services: one part of your app drops off a task and another picks it up later. What a message queue is, producers vs consumers, pub/sub, delivery guarantees, and RabbitMQ vs Kafka vs Redis.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://images.pexels.com/photos/18631424/pexels-photo-18631424.jpeg?auto=compress&cs=tinysrgb&w=1200" datePublished="2026-07-09" dateModified="2026-07-09">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e/">Guides</a><span>/</span>What is a message queue</nav>
+  <p class="kicker">Programming · Architecture · Backend</p>
+  <h1>What is a message queue?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Jul 9, 2026</span><span>8 min read</span><span class="tag">#messagequeue</span><span class="tag">#architecture</span><span class="tag">#backend</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.pexels.com/photos/18631424/pexels-photo-18631424.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="An automated conveyor belt carrying items through a factory" width="1200" height="420" loading="eager" />
+    <figcaption>An automated conveyor belt carrying items through a factory - a queue moves work along in order, one item at a time, much like a message queue.</figcaption>
+  </figure>
+
+  <p>When one part of your app needs to hand work to another - send an email, resize an image, charge a card - doing it inline makes the user wait and ties the two parts tightly together. A <strong>message queue</strong> is the standard fix: a buffer in the middle where one service drops off a task and another picks it up later. This guide explains what a message queue is, how producers and consumers use it, and when you actually need one.</p>
+
+  <h2>The core idea: producer, queue, consumer</h2>
+  <p>A message queue sits between the code that creates work and the code that does it. A <strong>producer</strong> puts a <em>message</em> - a small unit of data describing a task - onto the queue. A <strong>consumer</strong> takes messages off and processes them. The queue holds each message until it is handled, usually in first-in, first-out order. Crucially, the producer does not wait for the consumer and does not even need to know who the consumer is.</p>
+
+  <figure>
+    <img src="https://images.pexels.com/photos/18631424/pexels-photo-18631424.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="An automated conveyor belt carrying packs of bottled water in a factory" width="1200" height="627" loading="lazy" style="width:100%;height:auto;border-radius:12px" />
+    <figcaption>An automated conveyor belt carrying items through a factory - a queue moves work along in order, one item at a time, much like a message queue.</figcaption>
+  </figure>
+
+  <h2>Why use one: decoupling, buffering, resilience</h2>
+  <p>A queue buys you several things at once. It <strong>decouples</strong> producer and consumer, so you can build, deploy and scale them independently. It <strong>buffers</strong> spikes: if 10,000 sign-ups arrive at once, they line up instead of overwhelming the worker. It adds <strong>resilience</strong>, because if a consumer is down the messages simply wait rather than being lost. And it makes work <strong>asynchronous</strong> - you can return to the user instantly and do the slow part in the background.</p>
+
+  <h2>Queue vs publish/subscribe</h2>
+  <p>There are two common patterns. In a plain <strong>work queue</strong>, each message is delivered to exactly one consumer - ideal for distributing tasks across a pool of workers. In <strong>publish/subscribe</strong> (pub/sub), a message is broadcast to every interested subscriber - ideal for events that several parts of the system react to. Many brokers support both, using the idea of exchanges or topics to decide who gets a copy.</p>
+
+  <figure>
+    <img src="https://images.pexels.com/photos/7937292/pexels-photo-7937292.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="A row of white pipes fitted with flow gauges in an industrial manifold" width="1000" height="523" loading="lazy" style="width:100%;height:auto;border-radius:12px" />
+    <figcaption>A manifold of pipes with flow gauges - a broker routes each message down the right channel, the way valves direct flow.</figcaption>
+  </figure>
+
+  <h2>Delivery guarantees, honestly</h2>
+  <p>Queues describe how hard they try to deliver a message: <strong>at-most-once</strong> (fast, may drop), <strong>at-least-once</strong> (may deliver twice), and <strong>exactly-once</strong> (hardest, and often qualified in practice). Most real systems give at-least-once, which means your consumers should be <strong>idempotent</strong> - processing the same message twice must not cause harm. Consumers usually <em>acknowledge</em> a message only after they finish; if one crashes before acking, the message is redelivered. Messages that keep failing are shunted to a <strong>dead-letter queue</strong> for inspection.</p>
+
+  <h2>Common brokers: RabbitMQ, Kafka, Redis</h2>
+  <p>A few tools dominate. <strong>RabbitMQ</strong> is a classic broker with flexible routing (it speaks AMQP). <strong>Apache Kafka</strong> is a durable, high-throughput log: it retains messages so consumers can replay a stream, which suits event pipelines and analytics. <strong>Redis</strong> offers lightweight queues and streams that are very fast, though less durable by default. In the cloud, managed options like AWS SQS and Google Pub/Sub remove the operational burden. Pick by need: RabbitMQ for routing, Kafka for high-volume replayable streams, Redis for simple and fast.</p>
+
+  <h2>When you do not need one</h2>
+  <p>A queue is a moving part you have to run and monitor. If the work is quick and the caller genuinely needs the result right away, a direct function call or a plain <a href="/e/blog/2026-06-14-what-is-an-api.html">database</a> write is simpler. Reach for a message queue when you need asynchronous background jobs, want to absorb load spikes, or need to decouple services that should not depend on each other directly - the same reasons you might already sit services behind a <a href="/e/blog/2026-06-26-what-is-a-reverse-proxy.html">reverse proxy</a> or a <a href="/e/blog/2026-06-26-what-is-a-load-balancer.html">load balancer</a>.</p>
+
+  <h2>The bottom line</h2>
+  <p>A message queue is a buffer between services: producers drop off work, consumers pick it up, and the two are decoupled while load is smoothed out. Use a plain work queue to distribute tasks, pub/sub to broadcast events, expect at-least-once delivery (so make consumers idempotent), and reach for RabbitMQ, Kafka, Redis or a managed cloud queue when you need reliable asynchronous processing.</p>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "What is a message queue in simple terms?", "acceptedAnswer": { "@type": "Answer", "text": "A message queue is a buffer between two parts of a program. One part (the producer) drops off a task as a message, and another part (the consumer) picks it up and does the work later. It lets the sender move on immediately instead of waiting, and it keeps the two parts from depending directly on each other." } },
+      { "@type": "Question", "name": "What is the difference between a queue and publish/subscribe?", "acceptedAnswer": { "@type": "Answer", "text": "In a plain work queue, each message goes to exactly one consumer, which is how you distribute tasks across workers. In publish/subscribe, a message is broadcast to every subscriber that is interested, which is how you fan out events. Many message brokers can do both." } },
+      { "@type": "Question", "name": "What does at-least-once delivery mean?", "acceptedAnswer": { "@type": "Answer", "text": "It means the queue guarantees a message will be delivered, but it may be delivered more than once - for example if a consumer processes a message but crashes before confirming it. Because of this, consumers should be idempotent, so that handling the same message twice does no harm." } },
+      { "@type": "Question", "name": "RabbitMQ vs Kafka vs Redis - which should I use?", "acceptedAnswer": { "@type": "Answer", "text": "RabbitMQ is a classic broker with flexible routing. Kafka is a durable, high-throughput log that retains messages so consumers can replay a stream, which suits event pipelines. Redis gives fast, lightweight queues and streams but is less durable by default. Choose RabbitMQ for routing, Kafka for high-volume replayable streams, and Redis for simple and fast." } }
+    ]
+  })} />
+  </div>
+</Base>

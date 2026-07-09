@@ -1,0 +1,64 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/es/e/blog/2026-07-09-what-is-a-message-queue.html';
+const title = '¿Qué es una cola de mensajes? Productores, consumidores y brokers (2026)';
+const description = 'Una cola de mensajes es un búfer entre servicios: una parte de tu app deja una tarea y otra la recoge más tarde. Qué es una cola de mensajes, productores vs consumidores, pub/sub, garantías de entrega, y RabbitMQ vs Kafka vs Redis.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://images.pexels.com/photos/18631424/pexels-photo-18631424.jpeg?auto=compress&cs=tinysrgb&w=1200" datePublished="2026-07-09" dateModified="2026-07-09">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/es/">Home</a><span>/</span><a href="/es/e/">Guides</a><span>/</span>Cola de mensajes</nav>
+  <p class="kicker">Programación · Arquitectura · Backend</p>
+  <h1>¿Qué es una cola de mensajes?</h1>
+  <div class="artmeta"><span>Por Coldwast</span><span>Actualizado el 9 jul 2026</span><span>8 min de lectura</span><span class="tag">#colademensajes</span><span class="tag">#arquitectura</span><span class="tag">#backend</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.pexels.com/photos/18631424/pexels-photo-18631424.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Una cinta transportadora automatizada llevando artículos por una fábrica" width="1200" height="420" loading="eager" />
+    <figcaption>Una cinta transportadora automatizada llevando artículos por una fábrica - una cola hace avanzar el trabajo en orden, un elemento a la vez, como una cola de mensajes.</figcaption>
+  </figure>
+
+  <p>Cuando una parte de tu app necesita pasar trabajo a otra - enviar un correo, redimensionar una imagen, cobrar una tarjeta - hacerlo en línea hace esperar al usuario y liga con fuerza las dos partes. Una <strong>cola de mensajes</strong> es la solución estándar: un búfer en medio donde un servicio deja una tarea y otro la recoge más tarde. Esta guía explica qué es una cola de mensajes, cómo la usan productores y consumidores, y cuándo la necesitas de verdad.</p>
+
+  <h2>La idea central: productor, cola, consumidor</h2>
+  <p>Una cola de mensajes se sitúa entre el código que crea el trabajo y el que lo ejecuta. Un <strong>productor</strong> pone un <em>mensaje</em> - una pequeña unidad de datos que describe una tarea - en la cola. Un <strong>consumidor</strong> retira los mensajes y los procesa. La cola guarda cada mensaje hasta que se atiende, normalmente en orden primero en entrar, primero en salir. Lo clave: el productor no espera al consumidor y ni siquiera necesita saber quién es.</p>
+
+  <figure>
+    <img src="https://images.pexels.com/photos/18631424/pexels-photo-18631424.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Una cinta transportadora automatizada con packs de botellas de agua en una fábrica" width="1200" height="627" loading="lazy" style="width:100%;height:auto;border-radius:12px" />
+    <figcaption>Una cinta transportadora automatizada llevando artículos por una fábrica - una cola hace avanzar el trabajo en orden, un elemento a la vez, como una cola de mensajes.</figcaption>
+  </figure>
+
+  <h2>Por qué usar una: desacople, amortiguación, resiliencia</h2>
+  <p>Una cola aporta varias cosas a la vez. <strong>Desacopla</strong> productor y consumidor, así los construyes, despliegas y escalas por separado. <strong>Amortigua</strong> los picos: si llegan 10.000 registros de golpe, hacen cola en vez de saturar al worker. Añade <strong>resiliencia</strong>, porque si un consumidor está caído los mensajes esperan en lugar de perderse. Y hace el trabajo <strong>asíncrono</strong> - devuelves el control al usuario al instante y haces la parte lenta en segundo plano.</p>
+
+  <h2>Cola vs publicación/suscripción</h2>
+  <p>Hay dos patrones comunes. En una simple <strong>cola de trabajo</strong>, cada mensaje se entrega a exactamente un consumidor - ideal para repartir tareas entre un grupo de workers. En <strong>publicación/suscripción</strong> (pub/sub), un mensaje se difunde a cada suscriptor interesado - ideal para eventos a los que reaccionan varias partes del sistema. Muchos brokers admiten ambos, usando la idea de exchanges o topics para decidir quién recibe una copia.</p>
+
+  <figure>
+    <img src="https://images.pexels.com/photos/7937292/pexels-photo-7937292.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Una fila de tuberías blancas con caudalímetros en un colector industrial" width="1000" height="523" loading="lazy" style="width:100%;height:auto;border-radius:12px" />
+    <figcaption>Un colector de tuberías con caudalímetros - un broker enruta cada mensaje por el canal correcto, como las válvulas dirigen el flujo.</figcaption>
+  </figure>
+
+  <h2>Las garantías de entrega, con honestidad</h2>
+  <p>Las colas describen cuánto se esfuerzan por entregar un mensaje: <strong>como máximo una vez</strong> (rápido, puede perder), <strong>al menos una vez</strong> (puede entregar dos veces) y <strong>exactamente una vez</strong> (lo más difícil, a menudo matizado en la práctica). La mayoría de los sistemas reales ofrecen al-menos-una-vez, lo que significa que tus consumidores deben ser <strong>idempotentes</strong> - procesar el mismo mensaje dos veces no debe causar daño. Los consumidores suelen <em>confirmar</em> un mensaje solo tras terminarlo; si uno se cae antes de confirmar, el mensaje se reentrega. Los mensajes que fallan una y otra vez van a una <strong>cola de mensajes muertos</strong> para inspección.</p>
+
+  <h2>Brokers comunes: RabbitMQ, Kafka, Redis</h2>
+  <p>Unas pocas herramientas dominan. <strong>RabbitMQ</strong> es un broker clásico con enrutamiento flexible (habla AMQP). <strong>Apache Kafka</strong> es un log durable de alto rendimiento: retiene los mensajes para que los consumidores puedan reproducir un flujo, lo que encaja con pipelines de eventos y analítica. <strong>Redis</strong> ofrece colas y streams ligeros y muy rápidos, aunque menos durables por defecto. En la nube, opciones gestionadas como AWS SQS y Google Pub/Sub quitan la carga operativa. Elige por necesidad: RabbitMQ para enrutamiento, Kafka para flujos reproducibles de gran volumen, Redis para lo simple y rápido.</p>
+
+  <h2>Cuándo no la necesitas</h2>
+  <p>Una cola es una pieza móvil que hay que ejecutar y vigilar. Si el trabajo es rápido y quien llama necesita el resultado de inmediato, una llamada de función directa o una escritura en <a href="/es/e/blog/2026-06-14-what-is-an-api.html">base de datos</a> es más simple. Recurre a una cola de mensajes cuando necesites trabajos en segundo plano asíncronos, quieras absorber picos de carga, o necesites desacoplar servicios que no deberían depender directamente entre sí - las mismas razones por las que quizá ya pones servicios tras un <a href="/es/e/blog/2026-06-26-what-is-a-reverse-proxy.html">proxy inverso</a> o un <a href="/es/e/blog/2026-06-26-what-is-a-load-balancer.html">balanceador de carga</a>.</p>
+
+  <h2>En resumen</h2>
+  <p>Una cola de mensajes es un búfer entre servicios: los productores dejan trabajo, los consumidores lo recogen, y ambos quedan desacoplados mientras se suaviza la carga. Usa una simple cola de trabajo para repartir tareas, pub/sub para difundir eventos, cuenta con entrega al-menos-una-vez (haz idempotentes a tus consumidores), y recurre a RabbitMQ, Kafka, Redis o una cola gestionada en la nube cuando necesites procesamiento asíncrono fiable.</p>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "¿Qué es una cola de mensajes en términos simples?", "acceptedAnswer": { "@type": "Answer", "text": "Una cola de mensajes es un búfer entre dos partes de un programa. Una parte (el productor) deja una tarea como mensaje, y otra (el consumidor) la recoge y hace el trabajo más tarde. Permite que el emisor siga de inmediato en vez de esperar, y evita que las dos partes dependan directamente entre sí." } },
+      { "@type": "Question", "name": "¿Diferencia entre una cola y publicación/suscripción?", "acceptedAnswer": { "@type": "Answer", "text": "En una simple cola de trabajo, cada mensaje va a exactamente un consumidor, lo que sirve para repartir tareas entre workers. En publicación/suscripción, un mensaje se difunde a cada suscriptor interesado, lo que sirve para propagar eventos. Muchos brokers admiten ambos." } },
+      { "@type": "Question", "name": "¿Qué significa entrega al menos una vez?", "acceptedAnswer": { "@type": "Answer", "text": "Significa que la cola garantiza que un mensaje se entregará, pero puede que más de una vez - por ejemplo si un consumidor procesa un mensaje pero se cae antes de confirmarlo. Por eso los consumidores deben ser idempotentes, para que procesar el mismo mensaje dos veces no haga daño." } },
+      { "@type": "Question", "name": "RabbitMQ vs Kafka vs Redis, ¿cuál usar?", "acceptedAnswer": { "@type": "Answer", "text": "RabbitMQ es un broker clásico con enrutamiento flexible. Kafka es un log durable de alto rendimiento que retiene los mensajes para reproducir un flujo, ideal para pipelines de eventos. Redis ofrece colas y streams rápidos y ligeros pero menos durables por defecto. Elige RabbitMQ para enrutamiento, Kafka para flujos reproducibles de gran volumen, y Redis para lo simple y rápido." } }
+    ]
+  })} />
+  </div>
+</Base>
