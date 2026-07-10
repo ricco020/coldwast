@@ -1,0 +1,58 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/de/e/blog/2026-07-10-open-source-single-maintainer-risk.html';
+const title = 'Die Open-Source-Bibliothek, die euren Stack trägt, hat vielleicht nur einen Maintainer';
+const description = 'Ein Großteil des modernen Software-Stacks ruht auf kleinen Open-Source-Projekten, die von ein bis zwei unbezahlten Personen betrieben werden. Was xkcd 2347, Heartbleed, Log4Shell und die xz-utils-Hintertür über das Risiko des einzelnen Maintainers lehren, und was Teams wirklich dagegen tun können.';
+---
+<Base title={title} description={description} path={path} type="article" lang="de"
+  image="/img/2026-07-10-open-source-single-maintainer-risk-hero.jpg" datePublished="2026-07-10" dateModified="2026-07-10">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/de/">Startseite</a><span>/</span><a href="/de/e/">Leitfäden</a><span>/</span>Risiko des einzelnen Maintainers</nav>
+  <p class="kicker">Open Source · Lieferkette · Maintainer</p>
+  <h1>Die Open-Source-Bibliothek, die euren Stack trägt, hat vielleicht nur einen Maintainer</h1>
+  <div class="artmeta"><span>Von Coldwast</span><span>Aktualisiert am 10. Juli 2026</span><span>7 Min. Lesezeit</span><span class="tag">#opensource</span><span class="tag">#lieferkette</span><span class="tag">#sicherheit</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/2026-07-10-open-source-single-maintainer-risk-hero.jpg" alt="Quellcode mit Syntaxhervorhebung auf einem dunklen Bildschirm" width="1200" height="420" loading="eager" />
+    <figcaption>Quellcode mit Syntaxhervorhebung auf einem Bildschirm. Hinter einer Abhängigkeitsliste halten bei manchen der meistgenutzten Projekte nur sehr wenige Personen alles am Leben.</figcaption>
+  </figure>
+
+  <p>Fast jede Anwendung, die ihr ausführt, hängt von Open-Source-Bibliotheken ab, und diese Bibliotheken hängen von weiteren ab, mehrere Schichten tief. Was leicht vergessen wird, ist, wie viele dieser Schichten von <strong>ein bis zwei unbezahlten Freiwilligen</strong> gepflegt werden. Wenn ein solches Projekt kritisch und unterversorgt ist, wird es zu einem einzelnen Ausfallpunkt - für die Zuverlässigkeit und, wie die jüngere Geschichte zeigt, für die Sicherheit.</p>
+
+  <h2>Das Bild, das xkcd genau richtig traf</h2>
+  <p>2020 zeichnete der xkcd-Comic 2347 mit dem Titel „Dependency" die moderne digitale Infrastruktur als einen prekären Turm aus Blöcken, wobei die gesamte Struktur auf einem kleinen Stück ruht, das als ein Projekt beschriftet ist, das „irgendeine zufällige Person in Nebraska seit 2003 undankbar pflegt". Er wurde zum sofortigen Klassiker unter Entwicklern, weil er weniger ein Witz als ein exaktes Diagramm ist. Der Abhängigkeitsbaum eines typischen Projekts läuft an manchen Stellen tatsächlich auf die Freizeitarbeit einer einzigen Person hinaus.</p>
+
+  <h2>Als der Turm wirklich wankte</h2>
+  <p>Das sind keine hypothetischen Risiken. Einige gut dokumentierte Vorfälle machen das Muster konkret:</p>
+  <ul>
+    <li><strong>Heartbleed (2014).</strong> Ein schwerwiegender Fehler in OpenSSL, der Bibliothek, die einen Großteil des HTTPS-Verkehrs des Webs absichert, legte Speicher offen, der Schlüssel und Passwörter durchsickern lassen konnte. Damals wurde OpenSSL von einer winzigen Gruppe mit minimaler Finanzierung gepflegt. Der Schrecken löste direkt Finanzierungsbemühungen der Industrie für kritische Open-Source-Infrastruktur aus.</li>
+    <li><strong>Log4Shell (Dezember 2021).</strong> Ein kritischer Fehler zur Remote-Code-Ausführung in Log4j, einer Logging-Bibliothek, die in unzählige Java-Anwendungen eingebettet ist, wurde mit der höchsten Schweregradstufe bewertet. Log4j wurde von einem kleinen Team von Freiwilligen gepflegt, das dann eine erschöpfende Zeit damit verbrachte, ein Problem zu beheben, das einen riesigen Anteil der Unternehmenssoftware betraf.</li>
+    <li><strong>Die xz-utils-Hintertür (2024).</strong> Das ist die deutlichste Warnung von allen. Laut öffentlichem Bericht (CVE-2024-3094, bewertet mit CVSS 10.0) verbrachte ein Mitwirkender unter dem Namen „Jia Tan" rund zwei Jahre damit, Vertrauen im xz-Komprimierungsprojekt aufzubauen, erlangte Commit- und dann Release-Manager-Rechte, während der langjährige alleinige Maintainer, Lasse Collin, unter Druck stand und Berichten zufolge ausgebrannt war. Schädlicher Code wurde in xz 5.6.0 und 5.6.1 eingeschleust, der die von SSH auf einigen Linux-Distributionen genutzte Bibliothek mit einer Hintertür versah. Er wurde fast zufällig entdeckt, vor einer breiten Verteilung, von einem Ingenieur, der untersuchte, warum Anmeldungen etwas langsam waren.</li>
+  </ul>
+
+  <figure><img src="/img/2026-07-10-open-source-single-maintainer-risk-body.jpg" alt="Ein einzelner Entwickler an einem Schreibtisch in einem dunklen Raum mit Code auf den Bildschirmen" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Ein einzelner Entwickler bei der Arbeit. Viel kritische Open-Source-Software hängt davon ab, dass ein bis zwei Personen sie in ihrer Freizeit pflegen.</figcaption></figure>
+
+  <h2>Warum ein einzelner Maintainer ein strukturelles Risiko ist</h2>
+  <p>Ein Projekt mit einem einzigen Maintainer bündelt mehrere Risiken an einem Ort. Wenn der Maintainer das Interesse verliert, krank wird oder einfach ausbrennt, bleiben Updates und Sicherheitskorrekturen aus - das „Abandonware"-Problem. Ist er überlastet, schafft der Druck, die Kontrolle abzugeben, eine Öffnung für einen böswilligen Akteur, was genau der Fall xz-utils ausnutzte. Und da so viele nachgelagerte Projekte die Bibliothek transitiv einziehen, breitet sich ein Problem an der Wurzel auf alles darüber Gebaute aus, oft ohne dass diese nachgelagerten Teams überhaupt wissen, dass die Abhängigkeit vorhanden war.</p>
+  <p>Die unbequeme Wahrheit ist, dass die Nachhaltigkeit von Open Source ein wirtschaftliches Problem in technischem Gewand ist. Der Code ist kostenlos; die menschliche Aufmerksamkeit, die ihn sicher hält, ist es nicht, und sie ist häufig unbezahlt.</p>
+
+  <h2>Was Teams wirklich tun können</h2>
+  <p>Ihr könnt nicht jede Abhängigkeit persönlich pflegen, aber ihr könnt aufhören, sie als kostenlose Infrastruktur zu behandeln, die sich selbst wartet:</p>
+  <ul>
+    <li><strong>Kennt euren Abhängigkeitsbaum.</strong> Erstellt eine Software-Stückliste (SBOM), damit ihr wirklich wisst, was ihr ausliefert, einschließlich der transitiven Abhängigkeiten, die ihr nie direkt gewählt habt.</li>
+    <li><strong>Achtet auf den Bus-Faktor.</strong> Prüft bei den Bibliotheken, auf die ihr euch am meisten verlasst, wie viele aktive Maintainer es gibt. Eine kritische Abhängigkeit mit einem einzigen Mitwirkenden ist ein Risiko, das zu protokollieren, nicht zu ignorieren ist.</li>
+    <li><strong>Pinnt und prüft Updates.</strong> Pinnt Versionen und prüft Änderungen, statt blind die neueste Version zu ziehen; die xz-Hintertür kam in einer normal aussehenden Version.</li>
+    <li><strong>Gebt dort zurück, wo es zählt.</strong> Projekte, von denen ihr abhängt, zu sponsern, zu finanzieren oder Wartungszeit beizusteuern, ist keine Wohltätigkeit - es senkt euer eigenes Risiko. Branchenfonds und Stiftungen existieren nun teils aus diesem Grund.</li>
+  </ul>
+  <p>Nichts davon beseitigt das Risiko vollständig, aber es verwandelt eine unsichtbare Abhängigkeit in eine verwaltete. Die Projekte, die euren Stack tragen, sind es wert, beim Namen gekannt zu werden.</p>
+
+  <h2>FAQ</h2>
+  <p><strong>Ist Open Source unsicherer als Closed Source?</strong> Nicht von Natur aus - offener Code kann von jedem geprüft werden, was ein echter Vorteil ist. Das hier besprochene Risiko betrifft Ressourcen und Wartung, nicht die Offenheit selbst. Unterfinanzierte Software jeder Art ist ein Risiko.</p>
+  <p><strong>Was ist der „Bus-Faktor"?</strong> Es ist die Anzahl der Personen, die von einem Bus erfasst werden müssten (oder einfach gehen), bevor ein Projekt in ernste Schwierigkeiten gerät. Ein Bus-Faktor von eins bedeutet, dass eine einzelne Person das Projekt ist.</p>
+  <p><strong>Was war die xz-utils-Hintertür?</strong> Eine absichtlich platzierte Hintertür (CVE-2024-3094), eingefügt von einem Mitwirkenden, der sich mit der Zeit Maintainer-Vertrauen erarbeitet hatte, 2024 entdeckt, bevor sie die meisten Produktionssysteme erreichte. Sie ist das Referenzbeispiel für Social Engineering an einem Projekt mit einem einzigen Maintainer.</p>
+  <p><strong>Wie finde ich Abhängigkeiten mit einem einzigen Maintainer?</strong> Beginnt mit einer SBOM eures Projekts, schaut euch dann die Repositories eurer kritischsten Bibliotheken an: die jüngste Commit-Aktivität und die Zahl der aktiven Maintainer sagen viel aus.</p>
+
+  <div class="note">Unabhängiger, von der Community gepflegter Leitfaden. <strong>coldwa.st</strong> ist eine Website für Programmierressourcen; dieser Artikel ist ein Originaltext, der öffentlich dokumentierte Vorfälle (Heartbleed, Log4Shell, die xz-utils-Hintertür / CVE-2024-3094) und den xkcd-2347-Comic zusammenfasst. Er ist mit keinem dieser Projekte verbunden, und es werden keine Zahlen oder Ereignisse erfunden - prüft die Primärquellen für alle Details.</div>
+  <p class="related-guides">Verwandte Leitfäden: <a href="/de/e/blog/2026-06-23-what-is-a-compiler.html">wie ein Compiler funktioniert</a>, <a href="/de/e/blog/2026-06-14-what-is-git.html">was Git ist</a>.</p>
+  </div>
+</Base>

@@ -1,0 +1,58 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-07-10-open-source-single-maintainer-risk.html';
+const title = 'The open-source library holding up your stack might have one maintainer';
+const description = 'Much of the modern software stack rests on small open-source projects run by one or two unpaid people. What xkcd 2347, Heartbleed, Log4Shell and the xz-utils backdoor teach about single-maintainer risk, and what teams can actually do about it.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="/img/2026-07-10-open-source-single-maintainer-risk-hero.jpg" datePublished="2026-07-10" dateModified="2026-07-10">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e/">Guides</a><span>/</span>Single-maintainer risk</nav>
+  <p class="kicker">open source · supply chain · maintainers</p>
+  <h1>The open-source library holding up your stack might have one maintainer</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Jul 10, 2026</span><span>7 min read</span><span class="tag">#opensource</span><span class="tag">#supplychain</span><span class="tag">#security</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/2026-07-10-open-source-single-maintainer-risk-hero.jpg" alt="Syntax-highlighted source code on a dark screen" width="1200" height="420" loading="eager" />
+    <figcaption>Syntax-highlighted source code on a screen. Behind a dependency list, some of the most-used projects have very few people keeping them alive.</figcaption>
+  </figure>
+
+  <p>Almost every application you run depends on open-source libraries, and those libraries depend on others, several layers deep. What is easy to forget is how many of those layers are maintained by <strong>one or two unpaid volunteers</strong>. When a project like that is critical and under-resourced, it becomes a single point of failure - for reliability and, as recent history shows, for security.</p>
+
+  <h2>The picture xkcd got exactly right</h2>
+  <p>In 2020, xkcd comic 2347, titled "Dependency", drew modern digital infrastructure as a precarious tower of blocks, with the whole structure resting on one small piece labelled as a project "some random person in Nebraska has been thanklessly maintaining since 2003". It became an instant classic among developers because it is not a joke so much as an accurate diagram. The dependency tree of a typical project really does narrow down, in places, to a single person's spare-time effort.</p>
+
+  <h2>When the tower actually wobbled</h2>
+  <p>These are not hypothetical risks. A few widely documented incidents make the pattern concrete:</p>
+  <ul>
+    <li><strong>Heartbleed (2014).</strong> A serious flaw in OpenSSL, the library securing much of the web's HTTPS traffic, exposed memory that could leak keys and passwords. At the time, OpenSSL was maintained by a tiny group with minimal funding. The scare directly prompted industry funding efforts for critical open-source infrastructure.</li>
+    <li><strong>Log4Shell (December 2021).</strong> A critical remote-code-execution flaw in Log4j, a logging library embedded in countless Java applications, was rated the maximum severity. Log4j was maintained by a small team of volunteers, who then spent an exhausting period patching a problem that affected a huge share of enterprise software.</li>
+    <li><strong>The xz-utils backdoor (2024).</strong> This is the clearest warning of all. According to the public record (CVE-2024-3094, rated CVSS 10.0), a contributor using the name "Jia Tan" spent roughly two years building trust on the xz compression project, gaining commit and then release-manager rights, while the long-time solo maintainer, Lasse Collin, was under pressure and reportedly burned out. Malicious code was slipped into xz 5.6.0 and 5.6.1 that backdoored the library used by SSH on some Linux distributions. It was caught almost by accident, before wide deployment, by an engineer investigating why logins were slightly slow.</li>
+  </ul>
+
+  <figure><img src="/img/2026-07-10-open-source-single-maintainer-risk-body.jpg" alt="A lone developer working at a desk in a dark room with code on the screens" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>A lone developer at work. Much critical open-source software depends on one or two people maintaining it in their spare time.</figcaption></figure>
+
+  <h2>Why one maintainer is a structural risk</h2>
+  <p>A single-maintainer project concentrates several risks in one place. If the maintainer loses interest, gets ill, or simply burns out, updates and security fixes stall - the "abandonware" problem. If they are overworked, pressure to hand over control creates an opening for a bad actor, which is exactly what the xz-utils case exploited. And because so many downstream projects pull the library in transitively, a problem at the root propagates to everything built on top, often without those downstream teams even knowing the dependency was there.</p>
+  <p>The uncomfortable truth is that open-source sustainability is an economic problem wearing a technical costume. The code is free; the human attention that keeps it safe is not, and it is frequently unpaid.</p>
+
+  <h2>What teams can actually do</h2>
+  <p>You cannot personally maintain every dependency, but you can stop treating them as free infrastructure that maintains itself:</p>
+  <ul>
+    <li><strong>Know your dependency tree.</strong> Generate a software bill of materials (SBOM) so you actually know what you ship, including the transitive dependencies you never chose directly.</li>
+    <li><strong>Watch the bus factor.</strong> For the libraries you rely on most, check how many active maintainers there are. A critical dependency with one contributor is a risk to log, not to ignore.</li>
+    <li><strong>Pin and review updates.</strong> Pin versions and review changes rather than auto-pulling the latest release blindly; the xz backdoor arrived in a normal-looking release.</li>
+    <li><strong>Give back where it counts.</strong> Sponsoring, funding or contributing maintenance time to the projects you depend on is not charity - it is buying down your own risk. Industry funds and foundations now exist partly for this reason.</li>
+  </ul>
+  <p>None of this removes the risk entirely, but it turns an invisible dependency into a managed one. The projects holding up your stack are worth knowing by name.</p>
+
+  <h2>FAQ</h2>
+  <p><strong>Is open source less secure than closed source?</strong> Not inherently - open code can be audited by anyone, which is a genuine advantage. The risk discussed here is about resourcing and maintenance, not openness itself. Under-funded software of any kind is a risk.</p>
+  <p><strong>What is the "bus factor"?</strong> It is the number of people who would have to be hit by a bus (or just leave) before a project is in serious trouble. A bus factor of one means a single person is the project.</p>
+  <p><strong>What was the xz-utils backdoor?</strong> A deliberately planted backdoor (CVE-2024-3094) inserted by a contributor who had earned maintainer trust over time, caught in 2024 before it reached most production systems. It is the reference example of social-engineering a single-maintainer project.</p>
+  <p><strong>How do I find single-maintainer dependencies?</strong> Start with an SBOM of your project, then look at the repositories of your most critical libraries: recent commit activity and the number of active maintainers tell you a lot.</p>
+
+  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is original writing that summarises publicly documented incidents (Heartbleed, Log4Shell, the xz-utils backdoor / CVE-2024-3094) and the xkcd 2347 comic. It is not affiliated with those projects, and no figures or events are fabricated - check the primary sources for full detail.</div>
+  <p class="related-guides">Related guides: <a href="/e/blog/2026-06-23-what-is-a-compiler.html">how a compiler works</a>, <a href="/e/blog/2026-06-14-what-is-git.html">what Git is</a>.</p>
+  </div>
+</Base>

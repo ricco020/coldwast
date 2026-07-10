@@ -1,0 +1,58 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/es/e/blog/2026-07-10-open-source-single-maintainer-risk.html';
+const title = 'La biblioteca de código abierto que sostiene tu stack quizá tenga un solo mantenedor';
+const description = 'Buena parte del stack de software moderno se apoya en pequeños proyectos de código abierto llevados por una o dos personas sin remuneración. Lo que xkcd 2347, Heartbleed, Log4Shell y la puerta trasera de xz-utils enseñan sobre el riesgo del mantenedor único, y lo que los equipos pueden hacer realmente al respecto.';
+---
+<Base title={title} description={description} path={path} type="article" lang="es"
+  image="/img/2026-07-10-open-source-single-maintainer-risk-hero.jpg" datePublished="2026-07-10" dateModified="2026-07-10">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/es/">Inicio</a><span>/</span><a href="/es/e/">Guías</a><span>/</span>Riesgo del mantenedor único</nav>
+  <p class="kicker">código abierto · cadena de suministro · mantenedores</p>
+  <h1>La biblioteca de código abierto que sostiene tu stack quizá tenga un solo mantenedor</h1>
+  <div class="artmeta"><span>Por Coldwast</span><span>Actualizado el 10 jul. 2026</span><span>7 min de lectura</span><span class="tag">#codigoabierto</span><span class="tag">#cadenadesuministro</span><span class="tag">#seguridad</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/2026-07-10-open-source-single-maintainer-risk-hero.jpg" alt="Código fuente con resaltado de sintaxis en una pantalla oscura" width="1200" height="420" loading="eager" />
+    <figcaption>Código fuente con resaltado de sintaxis en una pantalla. Detrás de una lista de dependencias, algunos de los proyectos más usados tienen muy pocas personas manteniéndolos con vida.</figcaption>
+  </figure>
+
+  <p>Casi todas las aplicaciones que ejecutas dependen de bibliotecas de código abierto, y esas bibliotecas dependen de otras, varias capas más abajo. Lo que es fácil de olvidar es cuántas de esas capas están mantenidas por <strong>uno o dos voluntarios no remunerados</strong>. Cuando un proyecto así es crítico y carece de recursos, se convierte en un punto único de fallo - para la fiabilidad y, como muestra la historia reciente, para la seguridad.</p>
+
+  <h2>La imagen que xkcd acertó exactamente</h2>
+  <p>En 2020, la tira cómica de xkcd 2347, titulada «Dependency», dibujaba la infraestructura digital moderna como una torre precaria de bloques, con toda la estructura apoyada en una pequeña pieza señalada como un proyecto «que alguna persona al azar en Nebraska ha mantenido sin reconocimiento desde 2003». Se convirtió en un clásico instantáneo entre los desarrolladores porque no es tanto un chiste como un diagrama exacto. El árbol de dependencias de un proyecto típico realmente se reduce, en algunos puntos, al esfuerzo de una sola persona en su tiempo libre.</p>
+
+  <h2>Cuando la torre realmente se tambaleó</h2>
+  <p>Estos no son riesgos hipotéticos. Unos cuantos incidentes ampliamente documentados hacen concreto el patrón:</p>
+  <ul>
+    <li><strong>Heartbleed (2014).</strong> Un fallo grave en OpenSSL, la biblioteca que asegura buena parte del tráfico HTTPS de la web, exponía memoria que podía filtrar claves y contraseñas. En aquel momento, OpenSSL estaba mantenida por un grupo diminuto con financiación mínima. El susto impulsó directamente esfuerzos de financiación de la industria para la infraestructura de código abierto crítica.</li>
+    <li><strong>Log4Shell (diciembre de 2021).</strong> Un fallo crítico de ejecución remota de código en Log4j, una biblioteca de registro incrustada en incontables aplicaciones Java, fue calificado con la máxima severidad. Log4j estaba mantenida por un pequeño equipo de voluntarios, que luego pasó un periodo agotador parcheando un problema que afectaba a una enorme parte del software empresarial.</li>
+    <li><strong>La puerta trasera de xz-utils (2024).</strong> Es la advertencia más clara de todas. Según el registro público (CVE-2024-3094, calificado con CVSS 10.0), un colaborador que usaba el nombre «Jia Tan» pasó aproximadamente dos años ganándose la confianza en el proyecto de compresión xz, obteniendo derechos de commit y luego de gestor de versiones, mientras el mantenedor en solitario de larga trayectoria, Lasse Collin, estaba bajo presión y, según se informó, quemado. Se coló código malicioso en xz 5.6.0 y 5.6.1 que introdujo una puerta trasera en la biblioteca usada por SSH en algunas distribuciones Linux. Se detectó casi por accidente, antes de un despliegue amplio, por un ingeniero que investigaba por qué los inicios de sesión eran algo lentos.</li>
+  </ul>
+
+  <figure><img src="/img/2026-07-10-open-source-single-maintainer-risk-body.jpg" alt="Un desarrollador solitario trabajando en un escritorio en una sala oscura con código en las pantallas" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Un desarrollador solitario trabajando. Mucho software de código abierto crítico depende de una o dos personas que lo mantienen en su tiempo libre.</figcaption></figure>
+
+  <h2>Por qué un solo mantenedor es un riesgo estructural</h2>
+  <p>Un proyecto de mantenedor único concentra varios riesgos en un mismo lugar. Si el mantenedor pierde el interés, enferma o simplemente se quema, las actualizaciones y correcciones de seguridad se detienen - el problema del «abandonware». Si está sobrecargado, la presión por ceder el control crea una apertura para un actor malicioso, que es exactamente lo que explotó el caso xz-utils. Y como tantos proyectos aguas abajo incorporan la biblioteca de forma transitiva, un problema en la raíz se propaga a todo lo construido encima, a menudo sin que esos equipos aguas abajo sepan siquiera que la dependencia estaba ahí.</p>
+  <p>La verdad incómoda es que la sostenibilidad del código abierto es un problema económico disfrazado de problema técnico. El código es gratis; la atención humana que lo mantiene seguro no lo es, y con frecuencia no está remunerada.</p>
+
+  <h2>Lo que los equipos pueden hacer realmente</h2>
+  <p>No puedes mantener personalmente cada dependencia, pero puedes dejar de tratarlas como infraestructura gratuita que se mantiene sola:</p>
+  <ul>
+    <li><strong>Conoce tu árbol de dependencias.</strong> Genera una lista de materiales de software (SBOM) para saber realmente qué distribuyes, incluidas las dependencias transitivas que nunca elegiste directamente.</li>
+    <li><strong>Vigila el bus factor.</strong> Para las bibliotecas de las que más dependes, comprueba cuántos mantenedores activos hay. Una dependencia crítica con un solo colaborador es un riesgo que registrar, no que ignorar.</li>
+    <li><strong>Fija y revisa las actualizaciones.</strong> Fija las versiones y revisa los cambios en lugar de descargar a ciegas la última versión; la puerta trasera de xz llegó en una versión de apariencia normal.</li>
+    <li><strong>Devuelve donde importa.</strong> Patrocinar, financiar o aportar tiempo de mantenimiento a los proyectos de los que dependes no es caridad - es reducir tu propio riesgo. Fondos de la industria y fundaciones existen ahora en parte por esta razón.</li>
+  </ul>
+  <p>Nada de esto elimina el riesgo por completo, pero convierte una dependencia invisible en una gestionada. Los proyectos que sostienen tu stack merecen conocerse por su nombre.</p>
+
+  <h2>FAQ</h2>
+  <p><strong>¿El código abierto es menos seguro que el código cerrado?</strong> No de forma inherente - el código abierto puede ser auditado por cualquiera, lo que es una ventaja genuina. El riesgo del que se habla aquí es sobre recursos y mantenimiento, no sobre la apertura en sí. El software con poca financiación, de cualquier tipo, es un riesgo.</p>
+  <p><strong>¿Qué es el «bus factor»?</strong> Es el número de personas que tendrían que ser atropelladas por un autobús (o simplemente marcharse) antes de que un proyecto tenga serios problemas. Un bus factor de uno significa que una sola persona es el proyecto.</p>
+  <p><strong>¿Qué fue la puerta trasera de xz-utils?</strong> Una puerta trasera colocada deliberadamente (CVE-2024-3094) insertada por un colaborador que había ganado la confianza de mantenedor con el tiempo, detectada en 2024 antes de llegar a la mayoría de los sistemas en producción. Es el ejemplo de referencia de ingeniería social sobre un proyecto de mantenedor único.</p>
+  <p><strong>¿Cómo encuentro dependencias de mantenedor único?</strong> Empieza con un SBOM de tu proyecto, luego mira los repositorios de tus bibliotecas más críticas: la actividad reciente de commits y el número de mantenedores activos dicen mucho.</p>
+
+  <div class="note">Guía independiente, mantenida por la comunidad. <strong>coldwa.st</strong> es un sitio de recursos de programación; este artículo es un texto original que resume incidentes documentados públicamente (Heartbleed, Log4Shell, la puerta trasera de xz-utils / CVE-2024-3094) y la tira cómica xkcd 2347. No está afiliado a ninguno de esos proyectos, y no se fabrican cifras ni eventos - consulta las fuentes primarias para el detalle completo.</div>
+  <p class="related-guides">Guías relacionadas: <a href="/es/e/blog/2026-06-23-what-is-a-compiler.html">cómo funciona un compilador</a>, <a href="/es/e/blog/2026-06-14-what-is-git.html">qué es Git</a>.</p>
+  </div>
+</Base>

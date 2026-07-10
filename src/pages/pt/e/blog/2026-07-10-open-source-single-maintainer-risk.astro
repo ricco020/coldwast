@@ -1,0 +1,58 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/pt/e/blog/2026-07-10-open-source-single-maintainer-risk.html';
+const title = 'A biblioteca de código aberto que sustenta a sua stack pode ter um único mantenedor';
+const description = 'Grande parte da stack de software moderna assenta em pequenos projetos de código aberto tocados por uma ou duas pessoas não remuneradas. O que xkcd 2347, Heartbleed, Log4Shell e a porta dos fundos do xz-utils ensinam sobre o risco do mantenedor único, e o que as equipas podem realmente fazer a respeito.';
+---
+<Base title={title} description={description} path={path} type="article" lang="pt"
+  image="/img/2026-07-10-open-source-single-maintainer-risk-hero.jpg" datePublished="2026-07-10" dateModified="2026-07-10">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/pt/">Início</a><span>/</span><a href="/pt/e/">Guias</a><span>/</span>Risco do mantenedor único</nav>
+  <p class="kicker">código aberto · cadeia de fornecimento · mantenedores</p>
+  <h1>A biblioteca de código aberto que sustenta a sua stack pode ter um único mantenedor</h1>
+  <div class="artmeta"><span>Por Coldwast</span><span>Atualizado em 10 jul. 2026</span><span>7 min de leitura</span><span class="tag">#codigoaberto</span><span class="tag">#cadeiadefornecimento</span><span class="tag">#seguranca</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/2026-07-10-open-source-single-maintainer-risk-hero.jpg" alt="Código-fonte com realce de sintaxe num ecrã escuro" width="1200" height="420" loading="eager" />
+    <figcaption>Código-fonte com realce de sintaxe num ecrã. Por trás de uma lista de dependências, alguns dos projetos mais usados têm muito poucas pessoas a mantê-los vivos.</figcaption>
+  </figure>
+
+  <p>Quase toda aplicação que executa depende de bibliotecas de código aberto, e essas bibliotecas dependem de outras, várias camadas abaixo. O que é fácil esquecer é quantas dessas camadas são mantidas por <strong>um ou dois voluntários não remunerados</strong>. Quando um projeto assim é crítico e carente de recursos, torna-se um ponto único de falha - para a fiabilidade e, como mostra a história recente, para a segurança.</p>
+
+  <h2>A imagem que o xkcd acertou exatamente</h2>
+  <p>Em 2020, a tira do xkcd 2347, intitulada «Dependency», desenhava a infraestrutura digital moderna como uma torre precária de blocos, com toda a estrutura assente numa pequena peça rotulada como um projeto «que alguma pessoa aleatória no Nebraska mantém sem reconhecimento desde 2003». Tornou-se um clássico instantâneo entre os programadores porque não é tanto uma piada como um diagrama exato. A árvore de dependências de um projeto típico realmente se reduz, em alguns pontos, ao esforço de uma única pessoa no seu tempo livre.</p>
+
+  <h2>Quando a torre realmente balançou</h2>
+  <p>Estes não são riscos hipotéticos. Alguns incidentes amplamente documentados tornam o padrão concreto:</p>
+  <ul>
+    <li><strong>Heartbleed (2014).</strong> Uma falha grave no OpenSSL, a biblioteca que protege grande parte do tráfego HTTPS da web, expunha memória que podia vazar chaves e palavras-passe. Na altura, o OpenSSL era mantido por um grupo minúsculo com financiamento mínimo. O susto impulsionou diretamente esforços de financiamento da indústria para a infraestrutura de código aberto crítica.</li>
+    <li><strong>Log4Shell (dezembro de 2021).</strong> Uma falha crítica de execução remota de código no Log4j, uma biblioteca de registo incorporada em incontáveis aplicações Java, foi classificada com a severidade máxima. O Log4j era mantido por uma pequena equipa de voluntários, que depois passou um período exaustivo a corrigir um problema que afetava uma enorme fatia do software empresarial.</li>
+    <li><strong>A porta dos fundos do xz-utils (2024).</strong> É o aviso mais claro de todos. Segundo o registo público (CVE-2024-3094, classificado com CVSS 10.0), um contribuidor a usar o nome «Jia Tan» passou cerca de dois anos a construir confiança no projeto de compressão xz, obtendo direitos de commit e depois de gestor de versões, enquanto o mantenedor solitário de longa data, Lasse Collin, estava sob pressão e, segundo relatado, em burnout. Código malicioso foi introduzido no xz 5.6.0 e 5.6.1, que colocou uma porta dos fundos na biblioteca usada pelo SSH em algumas distribuições Linux. Foi detetado quase por acaso, antes de uma ampla implantação, por um engenheiro que investigava por que os inícios de sessão estavam ligeiramente lentos.</li>
+  </ul>
+
+  <figure><img src="/img/2026-07-10-open-source-single-maintainer-risk-body.jpg" alt="Um programador solitário a trabalhar numa secretária numa sala escura com código nos ecrãs" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Um programador solitário a trabalhar. Muito software de código aberto crítico depende de uma ou duas pessoas que o mantêm no seu tempo livre.</figcaption></figure>
+
+  <h2>Por que um único mantenedor é um risco estrutural</h2>
+  <p>Um projeto de mantenedor único concentra vários riscos num só lugar. Se o mantenedor perde o interesse, adoece ou simplesmente entra em burnout, as atualizações e correções de segurança param - o problema do «abandonware». Se estiver sobrecarregado, a pressão para ceder o controlo cria uma abertura para um agente malicioso, que é exatamente o que o caso xz-utils explorou. E como tantos projetos a jusante puxam a biblioteca de forma transitiva, um problema na raiz propaga-se a tudo o que é construído por cima, muitas vezes sem que essas equipas a jusante saibam sequer que a dependência estava lá.</p>
+  <p>A verdade incómoda é que a sustentabilidade do código aberto é um problema económico disfarçado de problema técnico. O código é gratuito; a atenção humana que o mantém seguro não é, e é frequentemente não remunerada.</p>
+
+  <h2>O que as equipas podem realmente fazer</h2>
+  <p>Não pode manter pessoalmente cada dependência, mas pode deixar de tratá-las como infraestrutura gratuita que se mantém sozinha:</p>
+  <ul>
+    <li><strong>Conheça a sua árvore de dependências.</strong> Gere uma lista de materiais de software (SBOM) para saber realmente o que distribui, incluindo as dependências transitivas que nunca escolheu diretamente.</li>
+    <li><strong>Vigie o bus factor.</strong> Para as bibliotecas das quais mais depende, verifique quantos mantenedores ativos existem. Uma dependência crítica com um único contribuidor é um risco a registar, não a ignorar.</li>
+    <li><strong>Fixe e reveja as atualizações.</strong> Fixe as versões e reveja as alterações em vez de puxar às cegas a versão mais recente; a porta dos fundos do xz chegou numa versão de aparência normal.</li>
+    <li><strong>Retribua onde importa.</strong> Patrocinar, financiar ou contribuir tempo de manutenção aos projetos dos quais depende não é caridade - é reduzir o seu próprio risco. Fundos da indústria e fundações existem agora em parte por esta razão.</li>
+  </ul>
+  <p>Nada disto elimina o risco por completo, mas transforma uma dependência invisível numa gerida. Os projetos que sustentam a sua stack merecem ser conhecidos pelo nome.</p>
+
+  <h2>FAQ</h2>
+  <p><strong>O código aberto é menos seguro do que o código fechado?</strong> Não inerentemente - o código aberto pode ser auditado por qualquer pessoa, o que é uma vantagem genuína. O risco discutido aqui é sobre recursos e manutenção, não sobre a abertura em si. Software subfinanciado, de qualquer tipo, é um risco.</p>
+  <p><strong>O que é o «bus factor»?</strong> É o número de pessoas que teriam de ser atropeladas por um autocarro (ou simplesmente sair) antes de um projeto ficar em sérios apuros. Um bus factor de um significa que uma única pessoa é o projeto.</p>
+  <p><strong>O que foi a porta dos fundos do xz-utils?</strong> Uma porta dos fundos deliberadamente colocada (CVE-2024-3094) inserida por um contribuidor que tinha ganho a confiança de mantenedor ao longo do tempo, detetada em 2024 antes de chegar à maioria dos sistemas em produção. É o exemplo de referência de engenharia social sobre um projeto de mantenedor único.</p>
+  <p><strong>Como encontro dependências de mantenedor único?</strong> Comece com um SBOM do seu projeto, depois olhe para os repositórios das suas bibliotecas mais críticas: a atividade recente de commits e o número de mantenedores ativos dizem muito.</p>
+
+  <div class="note">Guia independente, mantido pela comunidade. <strong>coldwa.st</strong> é um site de recursos de programação; este artigo é um texto original que resume incidentes documentados publicamente (Heartbleed, Log4Shell, a porta dos fundos do xz-utils / CVE-2024-3094) e a tira xkcd 2347. Não está afiliado a nenhum desses projetos, e nenhum número ou evento é fabricado - consulte as fontes primárias para todos os detalhes.</div>
+  <p class="related-guides">Guias relacionados: <a href="/pt/e/blog/2026-06-23-what-is-a-compiler.html">como funciona um compilador</a>, <a href="/pt/e/blog/2026-06-14-what-is-git.html">o que é o Git</a>.</p>
+  </div>
+</Base>
