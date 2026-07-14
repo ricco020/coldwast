@@ -1,0 +1,71 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/pt/e/blog/2026-07-14-what-is-big-o-notation.html';
+const title = 'O que e a notacao Big O? Complexidade de tempo, explicada de forma simples (2026)';
+const description = 'A notacao Big O descreve como um algoritmo fica mais lento a medida que a entrada cresce. As complexidades comuns de O(1) a O(n!), porque as constantes sao descartadas, exemplos reais e como raciocinar sobre o desempenho do seu proprio codigo.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="/img/2026-07-14-what-is-big-o-notation-hero.jpg" datePublished="2026-07-14" dateModified="2026-07-14">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/pt/">Inicio</a><span>/</span><a href="/pt/e/">Guias</a><span>/</span>O que e a notacao Big O</nav>
+  <p class="kicker">Programacao · conceitos · algoritmos</p>
+  <h1>O que e a notacao Big O?</h1>
+  <div class="artmeta"><span>Por Coldwast</span><span>Atualizado a 14 jul. 2026</span><span>8 min de leitura</span><span class="tag">#algorithms</span><span class="tag">#complexity</span><span class="tag">#concepts</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/2026-07-14-what-is-big-o-notation-hero.jpg" alt="Grande plano de codigo de programacao colorido num ecra" width="1200" height="420" loading="eager" />
+    <figcaption>Big O nao se refere a rapidez com que uma maquina executa o seu codigo - refere-se a forma como o tempo de execucao cresce a medida que a entrada aumenta.</figcaption>
+  </figure>
+
+  <p><strong>A notacao Big O</strong> e uma forma de descrever como o tempo de execucao de um algoritmo (ou o uso de memoria) cresce a medida que a sua entrada aumenta. Responde a uma pergunta: quando a quantidade de dados duplica, ou cresce mil vezes, o seu codigo continua rapido, abranda um pouco, ou fica completamente travado? Ignora deliberadamente os segundos exatos e a velocidade da maquina, e foca-se na forma do crescimento - porque e isso que decide se o codigo que funciona com 100 itens ainda funciona com 100 milhoes.</p>
+
+  <h2>Porque nao medir simplesmente o tempo?</h2>
+  <p>Porque os segundos dependem da maquina, da linguagem, do compilador e do que mais estiver a correr. Execute o mesmo codigo num portatil e num servidor e obtera numeros diferentes. O Big O deita fora tudo isso e mede algo mais duravel: como o trabalho escala com o tamanho da entrada, geralmente chamado de <code>n</code>. Dois algoritmos podem ambos demorar "alguns milissegundos" com entradas pequenas, mas um mantem-se rapido em escala enquanto o outro se torna inutilizavel. O Big O e a forma de os distinguir antes de chegarmos a esse limite.</p>
+
+  <h2>As complexidades comuns, da melhor a pior</h2>
+  <p>Estes sao os ritmos de crescimento que vai encontrar com mais frequencia, do que escala melhor ao mais perigoso:</p>
+  <table>
+    <thead><tr><th>Notacao</th><th>Nome</th><th>Ideia geral</th></tr></thead>
+    <tbody>
+      <tr><td><strong>O(1)</strong></td><td>Constante</td><td>O mesmo trabalho independentemente do tamanho da entrada - por exemplo, ler <code>array[5]</code>.</td></tr>
+      <tr><td><strong>O(log n)</strong></td><td>Logaritmica</td><td>Reduz o problema a metade em cada passo - por exemplo, a pesquisa binaria.</td></tr>
+      <tr><td><strong>O(n)</strong></td><td>Linear</td><td>O trabalho cresce em conjunto com a entrada - por exemplo, percorrer uma lista uma vez.</td></tr>
+      <tr><td><strong>O(n log n)</strong></td><td>Linearitmica</td><td>O melhor que se consegue para ordenacao geral - por exemplo, o mergesort.</td></tr>
+      <tr><td><strong>O(n&sup2;)</strong></td><td>Quadratica</td><td>Um ciclo dentro de um ciclo - aceitavel para 100 itens, doloroso para um milhao.</td></tr>
+      <tr><td><strong>O(2&#8319;)</strong></td><td>Exponencial</td><td>Duplica a cada elemento adicionado - apenas utilizavel para entradas minusculas.</td></tr>
+      <tr><td><strong>O(n!)</strong></td><td>Fatorial</td><td>Todas as ordenacoes possiveis da entrada - pratico apenas para <code>n</code> muito pequeno.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Porque as constantes e os termos pequenos sao descartados</h2>
+  <p>O Big O preocupa-se com o crescimento, nao com contagens exatas, por isso simplifica. Se um algoritmo faz <code>2n + 3</code> passos, escreve-se <strong>O(n)</strong>: o <code>2</code> e o <code>3</code> nao alteram a forma da curva a medida que <code>n</code> cresce. Da mesma forma, <code>n&sup2; + n</code> torna-se <strong>O(n&sup2;)</strong>, porque o termo quadratico domina assim que <code>n</code> e grande. E por isso que o Big O se refere ao <em>termo dominante</em> - a parte que decide o comportamento em escala - e nao a uma leitura precisa de cronometro.</p>
+
+  <figure><img src="/img/2026-07-14-what-is-big-o-notation-body.jpg" alt="Um cronometro mecanico antigo com mostrador preto" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>O Big O ignora o cronometro. Mede como o trabalho cresce com a entrada, nao quantos segundos demora uma execucao.</figcaption></figure>
+
+  <h2>Um exemplo concreto</h2>
+  <p>Suponha que quer verificar se uma lista contem um duplicado. Uma abordagem compara cada item com todos os outros - dois ciclos aninhados, aproximadamente <code>n &times; n</code> comparacoes, ou seja <strong>O(n&sup2;)</strong>. Outra abordagem adiciona cada item a um hash set e verifica a pertenca a medida que avanca - uma unica passagem, ou seja <strong>O(n)</strong>. Com 1.000 itens, a versao quadratica faz cerca de um milhao de comparacoes; com 100.000 itens faz dez mil milhoes, enquanto a versao linear faz 100.000. A mesma tarefa, destinos radicalmente diferentes em escala. Essa diferenca e exatamente o que o Big O foi construido para expor.</p>
+
+  <h2>Pior caso, caso medio e melhor caso</h2>
+  <p>A rigor, o Big O descreve um <strong>limite superior</strong> - geralmente o pior caso, o maximo de trabalho que o algoritmo poderia fazer. Vai tambem encontrar dois familiares: <strong>Big Omega</strong> (&Omega;) para o melhor caso, um limite inferior, e <strong>Big Theta</strong> (&Theta;) quando o melhor e o pior crescem ao mesmo ritmo, dando um limite estreito. No dia a dia, as pessoas dizem "Big O" de forma solta para significar o crescimento no pior caso, porque e em torno disso que se planeia: quer saber quao mau pode ficar, nao a sorte que ocasionalmente pode ter.</p>
+
+  <h2>Complexidade de espaco, tambem</h2>
+  <p>A mesma notacao descreve a <strong>memoria</strong>, nao apenas o tempo. Um algoritmo que copia toda a entrada para uma nova estrutura usa <strong>O(n)</strong> de espaco extra; um que reorganiza a entrada no lugar usa <strong>O(1)</strong> de espaco extra. Com grandes volumes de dados, a memoria pode ser o verdadeiro limite, por isso vale a pena perguntar tanto "como cresce o tempo?" como "como cresce a memoria?".</p>
+
+  <h2>Como raciocinar sobre o seu proprio codigo</h2>
+  <ul>
+    <li><strong>Conte os ciclos sobre a entrada.</strong> Uma unica passagem e geralmente O(n); um ciclo dentro de um ciclo sobre os mesmos dados e geralmente O(n&sup2;).</li>
+    <li><strong>Reduzir a metade e um logaritmo.</strong> Se cada passo descarta metade dos dados restantes (como a pesquisa binaria), isso e O(log n).</li>
+    <li><strong>As consultas num hash map/set sao ~O(1).</strong> Substituir uma varredura aninhada por uma consulta hash e a forma classica de transformar O(n&sup2;) em O(n).</li>
+    <li><strong>Descarte as constantes.</strong> Tres passagens unicas separadas continuam a ser O(n), nao O(3n) - o que importa e a forma.</li>
+  </ul>
+
+  <h2>FAQ</h2>
+  <p><strong>Um Big O mais baixo e sempre mais rapido?</strong> Em escala, sim - mas nem sempre para entradas pequenas. As constantes e a sobrecarga que o Big O ignora podem fazer um metodo O(n&sup2;) superar um O(n log n) num punhado de itens. O Big O diz-lhe quem ganha a medida que os dados crescem, o que e geralmente o que importa.</p>
+  <p><strong>Qual e a melhor complexidade possivel?</strong> O(1), tempo constante - o trabalho nao cresce de todo com a entrada. A seguir vem O(log n). Para problemas que tem de olhar para cada item pelo menos uma vez, O(n) e o minimo.</p>
+  <p><strong>Porque e que O(n log n) e especial para ordenacao?</strong> E o limite inferior comprovado para a ordenacao geral baseada em comparacoes, por isso o mergesort, o heapsort e boas implementacoes de quicksort visam-no todas. Nao e possivel, em geral, ordenar dados arbitrarios mais depressa apenas por comparacoes.</p>
+  <p><strong>Preciso de Big O para programar no dia a dia?</strong> Nao precisa da matematica formal, mas a intuicao e inestimavel: reconhecer quando um ciclo aninhado vai explodir com uma entrada grande, ou quando uma consulta hash o salva, evita classes inteiras de bugs de desempenho.</p>
+
+  <div class="note">Guia independente, mantido pela comunidade. <strong>coldwa.st</strong> e um site de recursos de programacao; este explicativo cobre a notacao Big O a nivel introdutorio. As complexidades e os exemplos sao resultados padrao das ciencias da computacao.</div>
+  <p class="related-guides">Guias relacionados: <a href="/pt/e/blog/2026-06-14-what-is-an-algorithm.html">o que e um algoritmo</a>, <a href="/pt/e/blog/2026-06-16-what-is-recursion.html">o que e a recursao</a>.</p>
+  </div>
+</Base>

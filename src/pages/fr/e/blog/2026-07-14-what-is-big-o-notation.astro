@@ -1,0 +1,71 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/fr/e/blog/2026-07-14-what-is-big-o-notation.html';
+const title = 'Qu\'est-ce que la notation Big O ? La complexité temporelle expliquée simplement (2026)';
+const description = 'La notation Big O décrit comment un algorithme ralentit à mesure que l\'entrée grandit. Les complexités courantes de O(1) à O(n!), pourquoi on abandonne les constantes, des exemples concrets et comment raisonner sur les performances de votre propre code.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="/img/2026-07-14-what-is-big-o-notation-hero.jpg" datePublished="2026-07-14" dateModified="2026-07-14">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/fr/">Accueil</a><span>/</span><a href="/fr/e/">Guides</a><span>/</span>Qu'est-ce que la notation Big O</nav>
+  <p class="kicker">Programmation · concepts · algorithmes</p>
+  <h1>Qu'est-ce que la notation Big O ?</h1>
+  <div class="artmeta"><span>Par Coldwast</span><span>Mis à jour le 14 juil. 2026</span><span>8 min de lecture</span><span class="tag">#algorithms</span><span class="tag">#complexity</span><span class="tag">#concepts</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/2026-07-14-what-is-big-o-notation-hero.jpg" alt="Gros plan de code de programmation coloré sur un écran" width="1200" height="420" loading="eager" />
+    <figcaption>Le Big O ne mesure pas la vitesse d'une machine donnée à exécuter votre code : il mesure comment le temps d'exécution croît à mesure que l'entrée grandit.</figcaption>
+  </figure>
+
+  <p>La <strong>notation Big O</strong> est une façon de décrire comment le temps d'exécution (ou l'utilisation mémoire) d'un algorithme croît à mesure que son entrée grandit. Elle répond à une question : quand la quantité de données double, ou grandit mille fois, est-ce que votre code reste rapide, ralentit un peu, ou se bloque complètement ? Elle ignore délibérément les secondes exactes et la vitesse de la machine, et se concentre sur la forme de la croissance, parce que c'est ce qui décide si un code qui fonctionne sur 100 éléments fonctionne encore sur 100 millions.</p>
+
+  <h2>Pourquoi ne pas simplement mesurer le temps ?</h2>
+  <p>Parce que les secondes dépendent de la machine, du langage, du compilateur et de ce qui tourne par ailleurs. Exécutez le même code sur un ordinateur portable et sur un serveur et vous obtenez des chiffres différents. Le Big O met tout cela de côté et mesure quelque chose de plus durable : comment le travail évolue avec la taille de l'entrée, généralement appelée <code>n</code>. Deux algorithmes peuvent tous deux prendre « quelques millisecondes » sur une petite entrée, et pourtant l'un reste rapide à grande échelle tandis que l'autre devient inutilisable. Le Big O est la façon dont on les distingue avant de heurter ce mur.</p>
+
+  <h2>Les complexités courantes, de la meilleure à la pire</h2>
+  <p>Voici les taux de croissance que vous rencontrerez le plus souvent, du plus rapide à l'échelle au plus dangereux :</p>
+  <table>
+    <thead><tr><th>Notation</th><th>Nom</th><th>Idée générale</th></tr></thead>
+    <tbody>
+      <tr><td><strong>O(1)</strong></td><td>Constant</td><td>Le même travail quelle que soit la taille de l'entrée - par exemple lire <code>array[5]</code>.</td></tr>
+      <tr><td><strong>O(log n)</strong></td><td>Logarithmique</td><td>Divise le problème par deux à chaque étape - par exemple la recherche binaire.</td></tr>
+      <tr><td><strong>O(n)</strong></td><td>Linéaire</td><td>Le travail croît au même rythme que l'entrée - par exemple parcourir une liste une fois.</td></tr>
+      <tr><td><strong>O(n log n)</strong></td><td>Linéarithmique</td><td>Le mieux possible pour un tri général - par exemple mergesort.</td></tr>
+      <tr><td><strong>O(n&sup2;)</strong></td><td>Quadratique</td><td>Une boucle dans une boucle - correct pour 100 éléments, pénible pour un million.</td></tr>
+      <tr><td><strong>O(2&#8319;)</strong></td><td>Exponentielle</td><td>Double à chaque élément ajouté - utilisable uniquement pour de toutes petites entrées.</td></tr>
+      <tr><td><strong>O(n!)</strong></td><td>Factorielle</td><td>Chaque ordre possible de l'entrée - praticable seulement pour un très petit <code>n</code>.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Pourquoi on abandonne les constantes et les petits termes</h2>
+  <p>Le Big O s'intéresse à la croissance, pas aux comptes exacts, il simplifie donc. Si un algorithme effectue <code>2n + 3</code> étapes, cela s'écrit <strong>O(n)</strong> : le <code>2</code> et le <code>3</code> ne changent pas la forme de la courbe quand <code>n</code> devient grand. De même <code>n&sup2; + n</code> devient <strong>O(n&sup2;)</strong>, parce que le terme quadratique domine dès que <code>n</code> est grand. C'est pourquoi le Big O concerne le <em>terme dominant</em> - la partie qui décide du comportement à grande échelle - et non une lecture précise au chronomètre.</p>
+
+  <figure><img src="/img/2026-07-14-what-is-big-o-notation-body.jpg" alt="Un chronomètre mécanique ancien avec un cadran noir" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Le Big O ignore le chronomètre. Il mesure comment le travail croît avec l'entrée, pas combien de secondes prend une exécution.</figcaption></figure>
+
+  <h2>Un exemple concret</h2>
+  <p>Supposons que vous vouliez vérifier si une liste contient un doublon. Une approche compare chaque élément avec tous les autres - deux boucles imbriquées, à peu près <code>n &times; n</code> comparaisons, donc <strong>O(n&sup2;)</strong>. Une autre approche ajoute chaque élément à un hash set et vérifie l'appartenance au fur et à mesure - un seul passage, donc <strong>O(n)</strong>. Sur 1 000 éléments, la version quadratique effectue environ un million de comparaisons ; sur 100 000 éléments elle en effectue dix milliards, tandis que la version linéaire en effectue 100 000. Même tâche, destin radicalement différent à grande échelle. Cet écart est exactement ce que le Big O est conçu pour révéler.</p>
+
+  <h2>Pire cas, cas moyen et meilleur cas</h2>
+  <p>À proprement parler, le Big O décrit une <strong>borne supérieure</strong> - généralement le pire cas, le maximum de travail que l'algorithme pourrait effectuer. Vous verrez aussi deux notions apparentées : <strong>Big Omega</strong> (&Omega;) pour le meilleur cas, une borne inférieure, et <strong>Big Theta</strong> (&Theta;) quand le meilleur et le pire cas croissent au même rythme, donnant une borne serrée. Dans l'usage courant, on dit « Big O » de façon lâche pour désigner la croissance dans le pire cas, parce que c'est ce autour de quoi on planifie : on veut savoir à quel point ça peut mal tourner, pas à quel point on pourrait parfois avoir de la chance.</p>
+
+  <h2>La complexité en espace aussi</h2>
+  <p>La même notation décrit la <strong>mémoire</strong>, pas seulement le temps. Un algorithme qui copie toute l'entrée dans une nouvelle structure utilise <strong>O(n)</strong> d'espace supplémentaire ; un algorithme qui réarrange l'entrée sur place utilise <strong>O(1)</strong> d'espace supplémentaire. Sur de grandes données, la mémoire peut être la vraie limite, il vaut donc la peine de se demander à la fois « comment le temps croît-il ? » et « comment la mémoire croît-elle ? »</p>
+
+  <h2>Comment raisonner sur votre propre code</h2>
+  <ul>
+    <li><strong>Comptez les boucles sur l'entrée.</strong> Un seul passage est généralement O(n) ; une boucle dans une boucle sur les mêmes données est généralement O(n&sup2;).</li>
+    <li><strong>Diviser par deux, c'est un logarithme.</strong> Si chaque étape écarte la moitié des données restantes (comme la recherche binaire), c'est O(log n).</li>
+    <li><strong>Les recherches dans un hash map/set sont ~O(1).</strong> Remplacer un parcours imbriqué par une recherche par hachage est la façon classique de transformer un O(n&sup2;) en O(n).</li>
+    <li><strong>Abandonnez les constantes.</strong> Trois passages simples séparés restent O(n), pas O(3n) - c'est la forme qui compte.</li>
+  </ul>
+
+  <h2>FAQ</h2>
+  <p><strong>Un Big O plus faible est-il toujours plus rapide ?</strong> À grande échelle, oui - mais pas toujours pour de petites entrées. Les constantes et le surcoût que le Big O ignore peuvent faire qu'une méthode O(n&sup2;) batte une méthode O(n log n) sur une poignée d'éléments. Le Big O vous dit qui l'emporte à mesure que les données grandissent, ce qui est généralement ce qui compte.</p>
+  <p><strong>Quelle est la meilleure complexité possible ?</strong> O(1), le temps constant - le travail ne croît pas du tout avec l'entrée. Ensuite vient O(log n). Pour les problèmes qui doivent examiner chaque élément au moins une fois, O(n) est le plancher.</p>
+  <p><strong>Pourquoi O(n log n) est-il spécial pour le tri ?</strong> C'est la borne inférieure prouvée pour le tri général par comparaisons, donc mergesort, heapsort et les bonnes implémentations de quicksort visent toutes cette borne. On ne peut généralement pas trier des données arbitraires plus vite par des comparaisons seules.</p>
+  <p><strong>Ai-je besoin du Big O pour coder au quotidien ?</strong> Vous n'avez pas besoin des maths formelles, mais l'intuition est précieuse : reconnaître quand une boucle imbriquée va exploser sur une grande entrée, ou quand une recherche par hachage vous sauve, évite des classes entières de bugs de performance.</p>
+
+  <div class="note">Guide indépendant, maintenu par la communauté. <strong>coldwa.st</strong> est un site de ressources pour la programmation ; cet article couvre la notation Big O à un niveau introductif. Les complexités et les exemples sont des résultats standards d'informatique.</div>
+  <p class="related-guides">Guides associés : <a href="/fr/e/blog/2026-06-14-what-is-an-algorithm.html">ce qu'est un algorithme</a>, <a href="/fr/e/blog/2026-06-16-what-is-recursion.html">ce qu'est la récursivité</a>.</p>
+  </div>
+</Base>

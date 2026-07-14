@@ -1,0 +1,71 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-07-14-what-is-big-o-notation.html';
+const title = 'What Is Big O Notation? Time Complexity, Explained Simply (2026)';
+const description = 'Big O notation describes how an algorithm slows down as the input grows. The common complexities from O(1) to O(n!), why constants are dropped, real examples, and how to reason about the performance of your own code.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="/img/2026-07-14-what-is-big-o-notation-hero.jpg" datePublished="2026-07-14" dateModified="2026-07-14">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e/">Guides</a><span>/</span>What is Big O notation</nav>
+  <p class="kicker">Programming · concepts · algorithms</p>
+  <h1>What is Big O notation?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Jul 14, 2026</span><span>8 min read</span><span class="tag">#algorithms</span><span class="tag">#complexity</span><span class="tag">#concepts</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/2026-07-14-what-is-big-o-notation-hero.jpg" alt="Close-up of colorful programming code on a screen" width="1200" height="420" loading="eager" />
+    <figcaption>Big O is not about how fast one machine runs your code - it is about how the running time grows as the input gets bigger.</figcaption>
+  </figure>
+
+  <p><strong>Big O notation</strong> is a way to describe how an algorithm's running time (or memory use) grows as its input gets larger. It answers one question: when the amount of data doubles, or grows a thousandfold, does your code stay fast, slow down a little, or grind to a halt? It deliberately ignores exact seconds and machine speed, and focuses on the shape of the growth - because that is what decides whether code that works on 100 items still works on 100 million.</p>
+
+  <h2>Why not just measure the time?</h2>
+  <p>Because seconds depend on the machine, the language, the compiler and what else is running. Run the same code on a laptop and a server and you get different numbers. Big O throws all of that away and measures something more durable: how the work scales with the input size, usually called <code>n</code>. Two algorithms can both take "a few milliseconds" on small input, yet one stays quick at scale while the other becomes unusable. Big O is how we tell them apart before we hit that wall.</p>
+
+  <h2>The common complexities, best to worst</h2>
+  <p>These are the growth rates you will meet most often, from the fastest-scaling to the most dangerous:</p>
+  <table>
+    <thead><tr><th>Notation</th><th>Name</th><th>Rough idea</th></tr></thead>
+    <tbody>
+      <tr><td><strong>O(1)</strong></td><td>Constant</td><td>Same work no matter the input size - e.g. reading <code>array[5]</code>.</td></tr>
+      <tr><td><strong>O(log n)</strong></td><td>Logarithmic</td><td>Halves the problem each step - e.g. binary search.</td></tr>
+      <tr><td><strong>O(n)</strong></td><td>Linear</td><td>Work grows in step with the input - e.g. scanning a list once.</td></tr>
+      <tr><td><strong>O(n log n)</strong></td><td>Linearithmic</td><td>The best you can do for general sorting - e.g. mergesort.</td></tr>
+      <tr><td><strong>O(n&sup2;)</strong></td><td>Quadratic</td><td>A loop inside a loop - fine for 100 items, painful for a million.</td></tr>
+      <tr><td><strong>O(2&#8319;)</strong></td><td>Exponential</td><td>Doubles with each added element - only usable for tiny inputs.</td></tr>
+      <tr><td><strong>O(n!)</strong></td><td>Factorial</td><td>Every ordering of the input - practical only for very small <code>n</code>.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Why constants and small terms are dropped</h2>
+  <p>Big O cares about growth, not exact counts, so it simplifies. If an algorithm does <code>2n + 3</code> steps, that is written <strong>O(n)</strong>: the <code>2</code> and the <code>3</code> do not change the shape of the curve as <code>n</code> gets large. Likewise <code>n&sup2; + n</code> becomes <strong>O(n&sup2;)</strong>, because the quadratic term dominates once <code>n</code> is big. This is why Big O is about the <em>dominant term</em> - the part that decides behaviour at scale - and not a precise stopwatch reading.</p>
+
+  <figure><img src="/img/2026-07-14-what-is-big-o-notation-body.jpg" alt="A vintage mechanical stopwatch with a black dial" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Big O ignores the stopwatch. It measures how the work grows with the input, not how many seconds one run takes.</figcaption></figure>
+
+  <h2>A concrete example</h2>
+  <p>Say you want to check whether a list contains a duplicate. One approach compares every item with every other item - two nested loops, roughly <code>n &times; n</code> comparisons, so <strong>O(n&sup2;)</strong>. Another approach adds each item to a hash set and checks membership as it goes - one pass, so <strong>O(n)</strong>. On 1,000 items the quadratic version does about a million comparisons; on 100,000 items it does ten billion, while the linear version does 100,000. Same task, wildly different fate at scale. That gap is exactly what Big O is built to expose.</p>
+
+  <h2>Worst, average and best case</h2>
+  <p>Strictly, Big O describes an <strong>upper bound</strong> - usually the worst case, the most work the algorithm could do. You will also see two relatives: <strong>Big Omega</strong> (&Omega;) for the best case, a lower bound, and <strong>Big Theta</strong> (&Theta;) when the best and worst grow at the same rate, giving a tight bound. In everyday use people say "Big O" loosely to mean the worst-case growth, because that is what you plan around: you want to know how bad it can get, not how lucky you might occasionally be.</p>
+
+  <h2>Space complexity, too</h2>
+  <p>The same notation describes <strong>memory</strong>, not just time. An algorithm that copies the whole input into a new structure uses <strong>O(n)</strong> extra space; one that rearranges the input in place uses <strong>O(1)</strong> extra space. On large data, memory can be the real limit, so it is worth asking both "how does the time grow?" and "how does the memory grow?"</p>
+
+  <h2>How to reason about your own code</h2>
+  <ul>
+    <li><strong>Count the loops over the input.</strong> One pass is usually O(n); a loop inside a loop over the same data is usually O(n&sup2;).</li>
+    <li><strong>Halving is a logarithm.</strong> If each step throws away half the remaining data (like binary search), that is O(log n).</li>
+    <li><strong>Lookups in a hash map/set are ~O(1).</strong> Replacing a nested scan with a hash lookup is the classic way to turn O(n&sup2;) into O(n).</li>
+    <li><strong>Drop the constants.</strong> Three separate single passes is still O(n), not O(3n) - the shape is what matters.</li>
+  </ul>
+
+  <h2>FAQ</h2>
+  <p><strong>Is a lower Big O always faster?</strong> At scale, yes - but not always for small inputs. Constants and overhead that Big O ignores can make an O(n&sup2;) method beat an O(n log n) one on a handful of items. Big O tells you who wins as the data grows, which is usually what matters.</p>
+  <p><strong>What is the best possible complexity?</strong> O(1), constant time - the work does not grow with the input at all. Next best is O(log n). For problems that must look at every item at least once, O(n) is the floor.</p>
+  <p><strong>Why is O(n log n) special for sorting?</strong> It is the proven lower bound for general comparison-based sorting, so mergesort, heapsort and good quicksort implementations all aim for it. You cannot generally sort arbitrary data faster by comparisons alone.</p>
+  <p><strong>Do I need Big O for everyday coding?</strong> You do not need the formal maths, but the intuition is invaluable: recognising when a nested loop will explode on large input, or when a hash lookup saves you, prevents whole classes of performance bugs.</p>
+
+  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this explainer covers Big O notation at an introductory level. Complexities and examples are standard computer-science results.</div>
+  <p class="related-guides">Related guides: <a href="/e/blog/2026-06-14-what-is-an-algorithm.html">what an algorithm is</a>, <a href="/e/blog/2026-06-16-what-is-recursion.html">what recursion is</a>.</p>
+  </div>
+</Base>

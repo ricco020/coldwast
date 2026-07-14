@@ -1,0 +1,71 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/de/e/blog/2026-07-14-what-is-big-o-notation.html';
+const title = 'Was ist die Big-O-Notation? Zeitkomplexitaet einfach erklaert (2026)';
+const description = 'Die Big-O-Notation beschreibt, wie stark ein Algorithmus langsamer wird, wenn die Eingabe waechst. Die gaengigen Komplexitaeten von O(1) bis O(n!), warum Konstanten weggelassen werden, echte Beispiele und wie du die Performance deines eigenen Codes einschaetzt.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="/img/2026-07-14-what-is-big-o-notation-hero.jpg" datePublished="2026-07-14" dateModified="2026-07-14">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/de/">Startseite</a><span>/</span><a href="/de/e/">Ratgeber</a><span>/</span>Was ist die Big-O-Notation</nav>
+  <p class="kicker">Programmierung · Konzepte · Algorithmen</p>
+  <h1>Was ist die Big-O-Notation?</h1>
+  <div class="artmeta"><span>Von Coldwast</span><span>Aktualisiert am 14. Juli 2026</span><span>8 Min. Lesezeit</span><span class="tag">#algorithms</span><span class="tag">#complexity</span><span class="tag">#concepts</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/2026-07-14-what-is-big-o-notation-hero.jpg" alt="Nahaufnahme von buntem Programmcode auf einem Bildschirm" width="1200" height="420" loading="eager" />
+    <figcaption>Bei Big O geht es nicht darum, wie schnell eine bestimmte Maschine deinen Code ausfuehrt - es geht darum, wie die Laufzeit waechst, wenn die Eingabe groesser wird.</figcaption>
+  </figure>
+
+  <p><strong>Die Big-O-Notation</strong> ist eine Moeglichkeit zu beschreiben, wie die Laufzeit (oder der Speicherverbrauch) eines Algorithmus waechst, wenn seine Eingabe groesser wird. Sie beantwortet eine Frage: Wenn sich die Datenmenge verdoppelt oder vertausendfacht, bleibt dein Code schnell, wird er ein wenig langsamer oder kommt er ganz zum Stillstand? Sie ignoriert bewusst genaue Sekunden und Maschinengeschwindigkeit und konzentriert sich auf die Form des Wachstums - denn das entscheidet, ob Code, der bei 100 Elementen funktioniert, auch bei 100 Millionen noch funktioniert.</p>
+
+  <h2>Warum nicht einfach die Zeit messen?</h2>
+  <p>Weil Sekunden von der Maschine, der Sprache, dem Compiler und davon abhaengen, was sonst noch laeuft. Fuehre denselben Code auf einem Laptop und auf einem Server aus, und du erhaeltst unterschiedliche Zahlen. Big O wirft all das weg und misst etwas Bestaendigeres: wie die Arbeit mit der Eingabegroesse skaliert, die ueblicherweise <code>n</code> genannt wird. Zwei Algorithmen koennen beide "ein paar Millisekunden" bei kleiner Eingabe brauchen, doch der eine bleibt bei grossen Datenmengen schnell, waehrend der andere unbrauchbar wird. Big O ist die Art, wie wir sie unterscheiden, bevor wir gegen diese Wand laufen.</p>
+
+  <h2>Die gaengigen Komplexitaeten, von der besten zur schlechtesten</h2>
+  <p>Das sind die Wachstumsraten, denen du am haeufigsten begegnest, von der am besten skalierenden bis zur gefaehrlichsten:</p>
+  <table>
+    <thead><tr><th>Notation</th><th>Name</th><th>Grobe Idee</th></tr></thead>
+    <tbody>
+      <tr><td><strong>O(1)</strong></td><td>Konstant</td><td>Gleiche Arbeit unabhaengig von der Eingabegroesse - z. B. das Lesen von <code>array[5]</code>.</td></tr>
+      <tr><td><strong>O(log n)</strong></td><td>Logarithmisch</td><td>Halbiert das Problem bei jedem Schritt - z. B. die binaere Suche.</td></tr>
+      <tr><td><strong>O(n)</strong></td><td>Linear</td><td>Die Arbeit waechst im Gleichschritt mit der Eingabe - z. B. das einmalige Durchgehen einer Liste.</td></tr>
+      <tr><td><strong>O(n log n)</strong></td><td>Linearithmisch</td><td>Das Beste, was fuer allgemeines Sortieren moeglich ist - z. B. mergesort.</td></tr>
+      <tr><td><strong>O(n&sup2;)</strong></td><td>Quadratisch</td><td>Eine Schleife in einer Schleife - in Ordnung bei 100 Elementen, schmerzhaft bei einer Million.</td></tr>
+      <tr><td><strong>O(2&#8319;)</strong></td><td>Exponentiell</td><td>Verdoppelt sich mit jedem hinzugefuegten Element - nur bei winzigen Eingaben nutzbar.</td></tr>
+      <tr><td><strong>O(n!)</strong></td><td>Faktoriell</td><td>Jede Anordnung der Eingabe - praktikabel nur fuer sehr kleines <code>n</code>.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Warum Konstanten und kleine Terme weggelassen werden</h2>
+  <p>Big O kuemmert sich um das Wachstum, nicht um genaue Anzahlen, also vereinfacht es. Wenn ein Algorithmus <code>2n + 3</code> Schritte ausfuehrt, wird das als <strong>O(n)</strong> geschrieben: Die <code>2</code> und die <code>3</code> aendern die Form der Kurve nicht, wenn <code>n</code> gross wird. Ebenso wird <code>n&sup2; + n</code> zu <strong>O(n&sup2;)</strong>, weil der quadratische Term dominiert, sobald <code>n</code> gross ist. Deshalb geht es bei Big O um den <em>dominanten Term</em> - den Teil, der das Verhalten bei grossen Datenmengen bestimmt - und nicht um eine genaue Stoppuhr-Anzeige.</p>
+
+  <figure><img src="/img/2026-07-14-what-is-big-o-notation-body.jpg" alt="Eine mechanische Vintage-Stoppuhr mit schwarzem Zifferblatt" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Big O ignoriert die Stoppuhr. Es misst, wie die Arbeit mit der Eingabe waechst, nicht wie viele Sekunden ein einzelner Durchlauf dauert.</figcaption></figure>
+
+  <h2>Ein konkretes Beispiel</h2>
+  <p>Angenommen, du willst pruefen, ob eine Liste ein Duplikat enthaelt. Ein Ansatz vergleicht jedes Element mit jedem anderen Element - zwei verschachtelte Schleifen, ungefaehr <code>n &times; n</code> Vergleiche, also <strong>O(n&sup2;)</strong>. Ein anderer Ansatz fuegt jedes Element einem hash set hinzu und prueft dabei die Mitgliedschaft - ein Durchlauf, also <strong>O(n)</strong>. Bei 1.000 Elementen macht die quadratische Variante etwa eine Million Vergleiche; bei 100.000 Elementen macht sie zehn Milliarden, waehrend die lineare Variante 100.000 macht. Dieselbe Aufgabe, voellig unterschiedliches Schicksal bei grossen Datenmengen. Genau diese Luecke soll Big O sichtbar machen.</p>
+
+  <h2>Schlechtester, durchschnittlicher und bester Fall</h2>
+  <p>Streng genommen beschreibt Big O eine <strong>obere Schranke</strong> - meist den schlechtesten Fall, die meiste Arbeit, die der Algorithmus leisten koennte. Du wirst auch zwei Verwandte sehen: <strong>Big Omega</strong> (&Omega;) fuer den besten Fall, eine untere Schranke, und <strong>Big Theta</strong> (&Theta;), wenn der beste und der schlechteste Fall gleich schnell wachsen und damit eine enge Schranke ergeben. Im Alltag sagen die Leute locker "Big O" und meinen damit das Wachstum im schlechtesten Fall, denn das ist es, worauf man plant: Du willst wissen, wie schlimm es werden kann, nicht wie viel Glueck du gelegentlich haben koenntest.</p>
+
+  <h2>Auch die Speicherkomplexitaet</h2>
+  <p>Dieselbe Notation beschreibt <strong>Speicher</strong>, nicht nur Zeit. Ein Algorithmus, der die gesamte Eingabe in eine neue Struktur kopiert, verbraucht <strong>O(n)</strong> zusaetzlichen Speicher; einer, der die Eingabe an Ort und Stelle umordnet, verbraucht <strong>O(1)</strong> zusaetzlichen Speicher. Bei grossen Datenmengen kann der Speicher die eigentliche Grenze sein, daher lohnt es sich, beides zu fragen: "Wie waechst die Zeit?" und "Wie waechst der Speicher?"</p>
+
+  <h2>Wie du deinen eigenen Code einschaetzt</h2>
+  <ul>
+    <li><strong>Zaehle die Schleifen ueber die Eingabe.</strong> Ein Durchlauf ist meist O(n); eine Schleife in einer Schleife ueber dieselben Daten ist meist O(n&sup2;).</li>
+    <li><strong>Halbieren ist ein Logarithmus.</strong> Wenn jeder Schritt die Haelfte der verbleibenden Daten verwirft (wie die binaere Suche), ist das O(log n).</li>
+    <li><strong>Nachschlagen in einer hash map/einem hash set ist ~O(1).</strong> Eine verschachtelte Durchsuchung durch ein hash lookup zu ersetzen ist der klassische Weg, um O(n&sup2;) in O(n) zu verwandeln.</li>
+    <li><strong>Lass die Konstanten weg.</strong> Drei getrennte einzelne Durchlaeufe sind immer noch O(n), nicht O(3n) - auf die Form kommt es an.</li>
+  </ul>
+
+  <h2>FAQ</h2>
+  <p><strong>Ist ein niedrigeres Big O immer schneller?</strong> Bei grossen Datenmengen ja - aber nicht immer bei kleinen Eingaben. Konstanten und Overhead, die Big O ignoriert, koennen dazu fuehren, dass eine O(n&sup2;)-Methode eine O(n log n)-Methode bei einer Handvoll Elemente schlaegt. Big O sagt dir, wer gewinnt, wenn die Daten waechsen, und das ist meist das, worauf es ankommt.</p>
+  <p><strong>Was ist die bestmoegliche Komplexitaet?</strong> O(1), konstante Zeit - die Arbeit waechst ueberhaupt nicht mit der Eingabe. Am zweitbesten ist O(log n). Fuer Probleme, die jedes Element mindestens einmal ansehen muessen, ist O(n) die Untergrenze.</p>
+  <p><strong>Warum ist O(n log n) beim Sortieren besonders?</strong> Es ist die bewiesene untere Schranke fuer allgemeines vergleichsbasiertes Sortieren, daher zielen mergesort, heapsort und gute quicksort-Implementierungen alle darauf ab. Beliebige Daten lassen sich mit Vergleichen allein im Allgemeinen nicht schneller sortieren.</p>
+  <p><strong>Brauche ich Big O fuer die alltaegliche Programmierung?</strong> Du brauchst nicht die formale Mathematik, aber die Intuition ist unbezahlbar: zu erkennen, wann eine verschachtelte Schleife bei grosser Eingabe explodiert oder wann ein hash lookup dich rettet, verhindert ganze Klassen von Performance-Bugs.</p>
+
+  <div class="note">Unabhaengiger, von der Community gepflegter Ratgeber. <strong>coldwa.st</strong> ist eine Website mit Programmier-Ressourcen; diese Erklaerung behandelt die Big-O-Notation auf Einsteigerniveau. Komplexitaeten und Beispiele sind Standardergebnisse der Informatik.</div>
+  <p class="related-guides">Verwandte Ratgeber: <a href="/de/e/blog/2026-06-14-what-is-an-algorithm.html">was ein Algorithmus ist</a>, <a href="/de/e/blog/2026-06-16-what-is-recursion.html">was Rekursion ist</a>.</p>
+  </div>
+</Base>
