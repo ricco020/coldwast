@@ -1,0 +1,62 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/de/e/blog/2026-07-16-what-is-a-hash-table.html';
+const title = 'Was ist eine Hash Table? Schnelle Key-Value-Suche, erklärt (2026)';
+const description = 'Eine Hash Table speichert Key-Value-Paare und findet jeden Wert anhand seines Schlüssels in nahezu konstanter Zeit. Wie die Hash-Funktion und Buckets funktionieren, wie Kollisionen behandelt werden, die echte Komplexität und warum Dictionaries darauf aufbauen.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="/img/2026-07-16-what-is-a-hash-table-hero.jpg" datePublished="2026-07-16" dateModified="2026-07-16">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/de/">Startseite</a><span>/</span><a href="/de/e/">Ratgeber</a><span>/</span>Was ist eine Hash Table</nav>
+  <p class="kicker">Programmierung · Konzepte · Datenstrukturen</p>
+  <h1>Was ist eine Hash Table?</h1>
+  <div class="artmeta"><span>Von Coldwast</span><span>Aktualisiert am 16. Juli 2026</span><span>8 Min. Lesezeit</span><span class="tag">#data-structures</span><span class="tag">#hash-table</span><span class="tag">#concepts</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/2026-07-16-what-is-a-hash-table-hero.jpg" alt="Bunter Programmiercode auf einem Bildschirm" width="1200" height="420" loading="eager" />
+    <figcaption>Eine Hash Table ist die Struktur hinter den Dictionaries und Maps, die Sie täglich nutzen - sie verwandelt einen Schlüssel direkt in einen Speicherort.</figcaption>
+  </figure>
+
+  <p>Eine <strong>Hash Table</strong> (auch Hash Map genannt) ist eine Datenstruktur, die <strong>Key-Value-Paare</strong> speichert und Sie jeden Wert anhand seines Schlüssels im Durchschnitt in <strong>konstanter Zeit</strong> finden lässt - egal, wie viele Daten sie enthält. Sie ist eine der nützlichsten Strukturen in der gesamten Programmierung und bildet die Grundlage für die Dictionaries und Maps, die in nahezu jeder Sprache eingebaut sind. Sobald Sie verstehen, wie sie funktioniert, ergeben viele "Wie kann das so schnell sein?"-Momente plötzlich einen Sinn.</p>
+
+  <h2>Das Problem, das sie löst</h2>
+  <p>Stellen Sie sich vor, Sie speichern ein Telefonbuch als einfache Liste. Um eine Person zu finden, müssten Sie womöglich jeden Eintrag durchsuchen - eine langsame Arbeit, die immer langsamer wird, je größer das Buch wird, eine <code>O(n)</code>-Operation. Das Versprechen einer Hash Table ist ein anderes: Geben Sie ihr den Schlüssel, und sie springt mehr oder weniger <em>direkt</em> zum Wert, ohne zu durchsuchen. Das ist der Unterschied zwischen dem Prüfen jedes einzelnen Eintrags und dem genauen Wissen, wo man nachschauen muss.</p>
+
+  <h2>Wie sie funktioniert: die Hash-Funktion und Buckets</h2>
+  <p>Im Kern wird eine Hash Table von einem Array aus Slots getragen, die man <strong>Buckets</strong> nennt. Die magische Zutat ist die <strong>Hash-Funktion</strong>: Sie nimmt Ihren Schlüssel und verwandelt ihn in eine Zahl, die auf einen Index in diesem Array abgebildet wird.</p>
+  <pre><code>{`index = hash(key) % number_of_buckets`}</code></pre>
+  <p>Um einen Wert zu speichern, hashen Sie den Schlüssel, um einen Index zu erhalten, und legen den Wert in diesem Bucket ab. Um ihn wieder auszulesen, hashen Sie denselben Schlüssel erneut, landen auf demselben Index und holen den Wert ab. Weil das Berechnen des Hashs und das Indizieren eines Arrays beide schnelle Schritte mit festen Kosten sind, werden Lookups nicht langsamer, wenn die Table wächst. Das ist der ganze Trick.</p>
+
+  <h2>Kollisionen und wie sie behandelt werden</h2>
+  <p>Zwei verschiedene Schlüssel können zum selben Bucket hashen. Das nennt man eine <strong>Kollision</strong>, und jede echte Hash Table muss damit umgehen. Es gibt zwei gängige Strategien:</p>
+  <ul>
+    <li><strong>Chaining:</strong> Jeder Bucket enthält eine kleine Liste, und kollidierende Einträge werden gemeinsam in dieser Liste gespeichert. Lookups prüfen dann die (meist sehr kurze) Liste im richtigen Bucket.</li>
+    <li><strong>Open addressing:</strong> Ist ein Bucket belegt, sucht die Table nach einer festen Regel den nächsten freien Slot, und Suchvorgänge folgen derselben Regel.</li>
+  </ul>
+  <p>Mit einer guten Hash-Funktion und genügend Buckets bleiben Kollisionen selten und diese Listen winzig, sodass Lookups schnell bleiben.</p>
+
+  <figure><img src="/img/2026-07-16-what-is-a-hash-table-body.jpg" alt="Lebendiger Programmiercode auf einem Computerbildschirm" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Die Hash-Funktion ist das, was einen Schlüssel auf einen Bucket abbildet; eine gute verteilt die Schlüssel gleichmäßig und hält Kollisionen selten.</figcaption></figure>
+
+  <h2>Wie steht es um die Performance?</h2>
+  <p>Hier glänzen Hash Tables, und hier liegt auch der ehrliche Vorbehalt. Im <strong>Durchschnitt</strong> sind Einfügen, Lookup und Löschen allesamt <strong>O(1)</strong> - konstante Zeit. Im <strong>schlimmsten Fall</strong>, wenn eine schlechte Hash-Funktion oder feindliche Eingaben jeden Schlüssel in einen einzigen Bucket kippen, verschlechtern sich diese Operationen auf <strong>O(n)</strong>, weil Sie wieder eine einzelne lange Liste durchsuchen. Gute Implementierungen vermeiden das durch solide Hash-Funktionen und durch <strong>Resizing</strong> (Rehashing in ein größeres Array), wenn die Table zu voll wird, was die Performance bei amortisiert <code>O(1)</code> hält. Wenn Sie eine Auffrischung zu dieser Notation möchten, lesen Sie unseren Ratgeber zur <a href="/de/e/blog/2026-07-14-what-is-big-o-notation.html">Big O notation</a>.</p>
+
+  <h2>Wo Sie bereits eine nutzen</h2>
+  <p>Sie nutzen Hash Tables ständig, oft ohne sie zu benennen. Die Dictionary- und Map-Typen in den meisten Sprachen sind unter der Haube Hash Tables: <strong>Python dict</strong>, <strong>Java HashMap</strong>, <strong>JavaScript Map</strong> und Objekte, <strong>Ruby Hash</strong>, <strong>Go map</strong>. Sie sind außerdem das Mittel der Wahl für Caches, das Entfernen von Duplikaten und das Zählen von Vorkommen. Die klassische Optimierung, eine langsame Suche mit verschachtelten Schleifen in eine schnelle zu verwandeln - von <code>O(n&sup2;)</code> auf <code>O(n)</code> herunter -, wird fast immer erreicht, indem wiederholte Durchsuchungen durch einen Hash-Table-Lookup ersetzt werden.</p>
+
+  <h2>Die Kompromisse</h2>
+  <ul>
+    <li><strong>Schnell, aber ungeordnet.</strong> Eine grundlegende Hash Table hält die Schlüssel in keiner sortierten oder Einfügereihenfolge (obwohl einige Sprachversionen eine Ordnung obendrauf ergänzen).</li>
+    <li><strong>Benötigt zusätzlichen Speicher.</strong> Kollisionen selten zu halten bedeutet, freie Buckets vorzuhalten, sodass eine Hash Table etwas Speicher gegen ihre Geschwindigkeit eintauscht.</li>
+    <li><strong>Der schlimmste Fall ist real.</strong> Das O(1) ist ein Durchschnitt; feindliche Eingaben können den langsamen Pfad erzwingen, was für sicherheitskritischen Code eine Rolle spielt.</li>
+  </ul>
+
+  <h2>FAQ</h2>
+  <p><strong>Ist eine Hash Table dasselbe wie ein Dictionary?</strong> Im Alltagssinn ja - ein Dictionary oder eine Map ist die allgemeine Idee (Schlüssel zu Wert), und eine Hash Table ist die häufigste Art, sie umzusetzen. Wenn jemand von Python "dict" oder Java "HashMap" spricht, verwendet er eine Hash Table.</p>
+  <p><strong>Warum ist Lookup im Durchschnitt O(1)?</strong> Weil Sie den Hash des Schlüssels berechnen und direkt in ein Array indizieren, anstatt Einträge zu durchsuchen. Beide Schritte brauchen konstante Zeit, unabhängig davon, wie viele Elemente gespeichert sind, sodass die durchschnittlichen Kosten nicht mit den Daten wachsen.</p>
+  <p><strong>Was ist eine Kollision?</strong> Wenn zwei verschiedene Schlüssel zum selben Bucket hashen. Das ist normal und zu erwarten; Hash Tables behandeln es mit Chaining oder Open addressing und halten es mit einer guten Hash-Funktion und Resizing selten.</p>
+  <p><strong>Wann sollte ich keine Hash Table verwenden?</strong> Wenn Sie Schlüssel in sortierter Reihenfolge oder geordnete Bereichsabfragen benötigen - eine baumbasierte Struktur passt dann besser. Auch wenn der Speicher extrem knapp ist, da Hash Tables freien Platz vorhalten, um schnell zu bleiben.</p>
+
+  <div class="note">Unabhängiger, von der Community gepflegter Ratgeber. <strong>coldwa.st</strong> ist eine Website mit Programmier-Ressourcen; dieser Erklärtext behandelt Hash Tables auf Einführungsniveau. Die beschriebenen Komplexitäten und Verhaltensweisen sind standardmäßige Ergebnisse der Informatik.</div>
+  <p class="related-guides">Verwandte Ratgeber: <a href="/de/e/blog/2026-07-14-what-is-big-o-notation.html">Big O notation</a>, <a href="/de/e/blog/2026-06-14-what-is-an-algorithm.html">was ein Algorithmus ist</a>.</p>
+  </div>
+</Base>

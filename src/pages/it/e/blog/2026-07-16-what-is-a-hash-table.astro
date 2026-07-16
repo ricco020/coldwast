@@ -1,0 +1,62 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/it/e/blog/2026-07-16-what-is-a-hash-table.html';
+const title = 'Cos\'è una hash table? Ricerca chiave-valore veloce, spiegata (2026)';
+const description = 'Una hash table memorizza coppie chiave-valore e trova qualsiasi valore tramite la sua chiave in tempo pressoché costante. Come funzionano la hash function e i bucket, come si gestiscono le collisioni, la complessità reale e perché i dizionari si basano su di essa.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="/img/2026-07-16-what-is-a-hash-table-hero.jpg" datePublished="2026-07-16" dateModified="2026-07-16">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/it/">Home</a><span>/</span><a href="/it/e/">Guide</a><span>/</span>Cos'è una hash table</nav>
+  <p class="kicker">Programmazione · concetti · strutture dati</p>
+  <h1>Cos'è una hash table?</h1>
+  <div class="artmeta"><span>Di Coldwast</span><span>Aggiornato il 16 lug. 2026</span><span>8 min di lettura</span><span class="tag">#data-structures</span><span class="tag">#hash-table</span><span class="tag">#concepts</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/2026-07-16-what-is-a-hash-table-hero.jpg" alt="Codice di programmazione colorato su uno schermo" width="1200" height="420" loading="eager" />
+    <figcaption>Una hash table è la struttura dietro i dizionari e le map che usi ogni giorno - trasforma una chiave direttamente in una posizione.</figcaption>
+  </figure>
+
+  <p>Una <strong>hash table</strong> (chiamata anche hash map) è una struttura dati che memorizza <strong>coppie chiave-valore</strong> e ti permette di trovare qualsiasi valore tramite la sua chiave in, mediamente, <strong>tempo costante</strong> - indipendentemente da quanti dati contiene. È una delle strutture più utili in tutta la programmazione ed è ciò che alimenta i dizionari e le map integrati in quasi ogni linguaggio. Una volta capito come funziona, molti momenti del tipo "come fa a essere così veloce?" trovano una spiegazione.</p>
+
+  <h2>Il problema che risolve</h2>
+  <p>Immagina di memorizzare una rubrica telefonica come un semplice elenco. Per trovare una persona, potresti dover scorrere ogni voce - un lavoro lento che diventa più lento man mano che la rubrica cresce, un'operazione <code>O(n)</code>. La promessa di una hash table è diversa: dagli la chiave e salta più o meno <em>direttamente</em> al valore, senza scorrere. Questa è la differenza tra controllare ogni voce e sapere esattamente dove cercare.</p>
+
+  <h2>Come funziona: la hash function e i bucket</h2>
+  <p>Sotto il cofano, una hash table è supportata da un array di slot chiamati <strong>bucket</strong>. L'ingrediente magico è la <strong>hash function</strong>: prende la tua chiave e la trasforma in un numero, che viene mappato a un indice in quell'array.</p>
+  <pre><code>{`index = hash(key) % number_of_buckets`}</code></pre>
+  <p>Per memorizzare un valore, fai l'hash della chiave per ottenere un indice e collochi il valore in quel bucket. Per rileggerlo, fai di nuovo l'hash della stessa chiave, atterri sullo stesso indice e prendi il valore. Poiché calcolare l'hash e indicizzare un array sono entrambi passaggi veloci e a costo fisso, le ricerche non diventano più lente man mano che la table cresce. Questo è tutto il trucco.</p>
+
+  <h2>Collisioni e come si gestiscono</h2>
+  <p>Due chiavi diverse possono avere lo stesso hash e finire nello stesso bucket. Questo si chiama <strong>collisione</strong>, e ogni hash table reale deve gestirla. Ci sono due strategie comuni:</p>
+  <ul>
+    <li><strong>Chaining:</strong> ogni bucket contiene una piccola lista, e le voci in collisione vengono memorizzate insieme in quella lista. Le ricerche controllano poi la lista (di solito molto corta) nel bucket giusto.</li>
+    <li><strong>Open addressing:</strong> se un bucket è occupato, la table cerca lo slot libero successivo secondo una regola fissa, e le ricerche seguono la stessa regola.</li>
+  </ul>
+  <p>Con una buona hash function e abbastanza bucket, le collisioni restano rare e quelle liste restano minuscole, così le ricerche rimangono veloci.</p>
+
+  <figure><img src="/img/2026-07-16-what-is-a-hash-table-body.jpg" alt="Codice di programmazione vivace mostrato su uno schermo di computer" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>La hash function è ciò che fa mappare una chiave a un bucket; una buona funzione distribuisce le chiavi in modo uniforme e mantiene rare le collisioni.</figcaption></figure>
+
+  <h2>E le prestazioni?</h2>
+  <p>È qui che le hash table brillano, ed è qui che sta l'onesta avvertenza. In <strong>media</strong>, inserimento, ricerca ed eliminazione sono tutti <strong>O(1)</strong> - tempo costante. Nel <strong>caso peggiore</strong>, se una cattiva hash function o un input ostile scarica ogni chiave in un solo bucket, quelle operazioni degradano a <strong>O(n)</strong>, perché torni a scorrere una singola lista lunga. Le buone implementazioni evitano questo usando hash function solide e facendo il <strong>ridimensionamento</strong> (rehashing in un array più grande) quando la table diventa troppo piena, il che mantiene le prestazioni a un <code>O(1)</code> ammortizzato. Se vuoi un ripasso su questa notazione, vedi la nostra guida alla <a href="/it/e/blog/2026-07-14-what-is-big-o-notation.html">notazione Big O</a>.</p>
+
+  <h2>Dove ne usi già una</h2>
+  <p>Usi le hash table di continuo, spesso senza nominarle. I tipi dizionario e map nella maggior parte dei linguaggi sono hash table sotto il cofano: <strong>il dict di Python</strong>, <strong>la HashMap di Java</strong>, <strong>la Map di JavaScript</strong> e gli oggetti, <strong>l'Hash di Ruby</strong>, <strong>la map di Go</strong>. Sono anche lo strumento di riferimento per le cache, per la de-duplicazione degli elementi e per il conteggio delle occorrenze. La classica ottimizzazione che trasforma una ricerca lenta con cicli annidati in una veloce - passando da <code>O(n&sup2;)</code> a <code>O(n)</code> - viene quasi sempre fatta sostituendo scansioni ripetute con una ricerca in una hash table.</p>
+
+  <h2>I compromessi</h2>
+  <ul>
+    <li><strong>Veloce, ma non ordinata.</strong> Una hash table di base non mantiene le chiavi in alcun ordine, né ordinato né di inserimento (anche se alcune versioni dei linguaggi aggiungono un ordinamento in cima).</li>
+    <li><strong>Usa memoria extra.</strong> Mantenere rare le collisioni significa mantenere bucket di riserva, quindi una hash table baratta un po' di memoria in cambio della sua velocità.</li>
+    <li><strong>Il caso peggiore è reale.</strong> L'O(1) è una media; un input avversario può forzare il percorso lento, il che conta per il codice sensibile alla sicurezza.</li>
+  </ul>
+
+  <h2>FAQ</h2>
+  <p><strong>Una hash table è la stessa cosa di un dizionario?</strong> In termini quotidiani, sì - un dizionario o una map è l'idea generale (chiave a valore), e una hash table è il modo più comune per implementarla. Quando qualcuno dice "dict" di Python o "HashMap" di Java, sta usando una hash table.</p>
+  <p><strong>Perché la ricerca è O(1) in media?</strong> Perché calcoli l'hash della chiave e indicizzi direttamente in un array, invece di scorrere le voci. Entrambi i passaggi richiedono tempo costante indipendentemente da quanti elementi sono memorizzati, quindi il costo medio non cresce con i dati.</p>
+  <p><strong>Cos'è una collisione?</strong> Quando due chiavi diverse hanno lo stesso hash e finiscono nello stesso bucket. È normale e prevista; le hash table la gestiscono con chaining o open addressing, e la mantengono rara con una buona hash function e il ridimensionamento.</p>
+  <p><strong>Quando non dovrei usare una hash table?</strong> Quando hai bisogno che le chiavi siano tenute in ordine, o per query ordinate su intervalli - una struttura basata su albero si adatta meglio. Anche quando la memoria è estremamente limitata, poiché le hash table mantengono spazio di riserva per restare veloci.</p>
+
+  <div class="note">Guida indipendente, mantenuta dalla community. <strong>coldwa.st</strong> è un sito di risorse per la programmazione; questa spiegazione tratta le hash table a livello introduttivo. Le complessità e i comportamenti descritti sono risultati standard dell'informatica.</div>
+  <p class="related-guides">Guide correlate: <a href="/it/e/blog/2026-07-14-what-is-big-o-notation.html">notazione Big O</a>, <a href="/it/e/blog/2026-06-14-what-is-an-algorithm.html">cos'è un algoritmo</a>.</p>
+  </div>
+</Base>

@@ -1,0 +1,62 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-07-16-what-is-a-hash-table.html';
+const title = 'What Is a Hash Table? Fast Key-Value Lookup, Explained (2026)';
+const description = 'A hash table stores key-value pairs and finds any value by its key in roughly constant time. How the hash function and buckets work, how collisions are handled, the real complexity, and why dictionaries are built on it.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="/img/2026-07-16-what-is-a-hash-table-hero.jpg" datePublished="2026-07-16" dateModified="2026-07-16">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e/">Guides</a><span>/</span>What is a hash table</nav>
+  <p class="kicker">Programming · concepts · data structures</p>
+  <h1>What is a hash table?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Jul 16, 2026</span><span>8 min read</span><span class="tag">#data-structures</span><span class="tag">#hash-table</span><span class="tag">#concepts</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/2026-07-16-what-is-a-hash-table-hero.jpg" alt="Colorful programming code on a screen" width="1200" height="420" loading="eager" />
+    <figcaption>A hash table is the structure behind the dictionaries and maps you use every day - it turns a key straight into a location.</figcaption>
+  </figure>
+
+  <p>A <strong>hash table</strong> (also called a hash map) is a data structure that stores <strong>key-value pairs</strong> and lets you find any value by its key in, on average, <strong>constant time</strong> - no matter how much data it holds. It is one of the most useful structures in all of programming, and it is what powers the dictionaries and maps built into nearly every language. Once you see how it works, a lot of "how is this so fast?" moments make sense.</p>
+
+  <h2>The problem it solves</h2>
+  <p>Imagine storing a phone book as a plain list. To find one person, you might have to scan every entry - slow work that gets slower as the book grows, an <code>O(n)</code> operation. A hash table's promise is different: give it the key and it jumps more or less <em>directly</em> to the value, without scanning. That is the difference between checking every entry and knowing exactly where to look.</p>
+
+  <h2>How it works: the hash function and buckets</h2>
+  <p>Underneath, a hash table is backed by an array of slots called <strong>buckets</strong>. The magic ingredient is the <strong>hash function</strong>: it takes your key and turns it into a number, which is mapped to an index in that array.</p>
+  <pre><code>{`index = hash(key) % number_of_buckets`}</code></pre>
+  <p>To store a value, you hash the key to get an index and place the value in that bucket. To read it back, you hash the same key again, land on the same index, and pick the value up. Because computing the hash and indexing an array are both fast, fixed-cost steps, lookups do not get slower as the table grows. That is the whole trick.</p>
+
+  <h2>Collisions, and how they are handled</h2>
+  <p>Two different keys can hash to the same bucket. That is called a <strong>collision</strong>, and every real hash table has to deal with it. There are two common strategies:</p>
+  <ul>
+    <li><strong>Chaining:</strong> each bucket holds a small list, and colliding entries are stored together in that list. Lookups then check the (usually very short) list in the right bucket.</li>
+    <li><strong>Open addressing:</strong> if a bucket is taken, the table probes for the next free slot according to a fixed rule, and searches follow the same rule.</li>
+  </ul>
+  <p>With a good hash function and enough buckets, collisions stay rare and those lists stay tiny, so lookups remain fast.</p>
+
+  <figure><img src="/img/2026-07-16-what-is-a-hash-table-body.jpg" alt="Vibrant programming code displayed on a computer screen" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>The hash function is what makes a key map to a bucket; a good one spreads keys evenly and keeps collisions rare.</figcaption></figure>
+
+  <h2>What about performance?</h2>
+  <p>This is where hash tables shine, and where the honest caveat lives. On <strong>average</strong>, insert, lookup and delete are all <strong>O(1)</strong> - constant time. In the <strong>worst case</strong>, if a bad hash function or hostile input dumps every key into one bucket, those operations degrade to <strong>O(n)</strong>, because you are back to scanning a single long list. Good implementations avoid this by using solid hash functions and by <strong>resizing</strong> (rehashing into a bigger array) when the table gets too full, which keeps performance at amortised <code>O(1)</code>. If you want a refresher on this notation, see our guide to <a href="/e/blog/2026-07-14-what-is-big-o-notation.html">Big O notation</a>.</p>
+
+  <h2>Where you already use one</h2>
+  <p>You use hash tables constantly, often without naming them. The dictionary and map types in most languages are hash tables under the hood: <strong>Python's dict</strong>, <strong>Java's HashMap</strong>, <strong>JavaScript's Map</strong> and object, <strong>Ruby's Hash</strong>, <strong>Go's map</strong>. They are also the go-to tool for caches, de-duplicating items, and counting occurrences. The classic optimisation of turning a slow, nested-loop search into a fast one - dropping from <code>O(n&sup2;)</code> to <code>O(n)</code> - is almost always done by replacing repeated scans with a hash-table lookup.</p>
+
+  <h2>The trade-offs</h2>
+  <ul>
+    <li><strong>Fast, but unordered.</strong> A basic hash table does not keep keys in any sorted or insertion order (though some language versions add ordering on top).</li>
+    <li><strong>Uses extra memory.</strong> Keeping collisions rare means keeping spare buckets, so a hash table trades some memory for its speed.</li>
+    <li><strong>Worst case is real.</strong> The O(1) is an average; adversarial input can force the slow path, which matters for security-sensitive code.</li>
+  </ul>
+
+  <h2>FAQ</h2>
+  <p><strong>Is a hash table the same as a dictionary?</strong> In everyday terms, yes - a dictionary or map is the general idea (key to value), and a hash table is the most common way to implement it. When someone says Python "dict" or Java "HashMap", they are using a hash table.</p>
+  <p><strong>Why is lookup O(1) on average?</strong> Because you compute the key's hash and index straight into an array, rather than scanning entries. Both steps take constant time regardless of how many items are stored, so the average cost does not grow with the data.</p>
+  <p><strong>What is a collision?</strong> When two different keys hash to the same bucket. It is normal and expected; hash tables handle it with chaining or open addressing, and keep it rare with a good hash function and resizing.</p>
+  <p><strong>When should I not use a hash table?</strong> When you need keys kept in sorted order, or ordered-range queries - a tree-based structure fits better. Also when memory is extremely tight, since hash tables keep spare space to stay fast.</p>
+
+  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this explainer covers hash tables at an introductory level. Complexities and behaviours described are standard computer-science results.</div>
+  <p class="related-guides">Related guides: <a href="/e/blog/2026-07-14-what-is-big-o-notation.html">Big O notation</a>, <a href="/e/blog/2026-06-14-what-is-an-algorithm.html">what an algorithm is</a>.</p>
+  </div>
+</Base>

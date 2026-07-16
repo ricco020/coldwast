@@ -1,0 +1,62 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/fr/e/blog/2026-07-16-what-is-a-hash-table.html';
+const title = "Qu'est-ce qu'une table de hachage ? La recherche cle-valeur rapide, expliquee (2026)";
+const description = "Une table de hachage stocke des paires cle-valeur et retrouve n'importe quelle valeur par sa cle en temps a peu pres constant. Comment fonctionnent la fonction de hachage et les buckets, comment les collisions sont gerees, la vraie complexite, et pourquoi les dictionnaires reposent dessus.";
+---
+<Base title={title} description={description} path={path} type="article"
+  image="/img/2026-07-16-what-is-a-hash-table-hero.jpg" datePublished="2026-07-16" dateModified="2026-07-16">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/fr/">Accueil</a><span>/</span><a href="/fr/e/">Guides</a><span>/</span>Qu'est-ce qu'une table de hachage</nav>
+  <p class="kicker">Programmation · concepts · structures de donnees</p>
+  <h1>Qu'est-ce qu'une table de hachage ?</h1>
+  <div class="artmeta"><span>Par Coldwast</span><span>Mis a jour le 16 juil. 2026</span><span>8 min de lecture</span><span class="tag">#data-structures</span><span class="tag">#hash-table</span><span class="tag">#concepts</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/2026-07-16-what-is-a-hash-table-hero.jpg" alt="Code de programmation colore sur un ecran" width="1200" height="420" loading="eager" />
+    <figcaption>Une table de hachage est la structure derriere les dictionnaires et les maps que vous utilisez chaque jour - elle transforme une cle directement en un emplacement.</figcaption>
+  </figure>
+
+  <p>Une <strong>table de hachage</strong> (aussi appelee hash table ou hash map) est une structure de donnees qui stocke des <strong>paires cle-valeur</strong> et vous permet de retrouver n'importe quelle valeur par sa cle en, en moyenne, <strong>temps constant</strong> - quelle que soit la quantite de donnees qu'elle contient. C'est l'une des structures les plus utiles de toute la programmation, et c'est elle qui alimente les dictionnaires et les maps integres dans presque tous les langages. Une fois que vous comprenez son fonctionnement, beaucoup de moments "comment est-ce si rapide ?" prennent tout leur sens.</p>
+
+  <h2>Le probleme qu'elle resout</h2>
+  <p>Imaginez stocker un annuaire telephonique sous forme de simple liste. Pour trouver une personne, vous devriez peut-etre parcourir chaque entree - un travail lent qui ralentit a mesure que l'annuaire grandit, une operation <code>O(n)</code>. La promesse d'une table de hachage est differente : donnez-lui la cle et elle saute plus ou moins <em>directement</em> a la valeur, sans parcourir quoi que ce soit. C'est la difference entre verifier chaque entree et savoir exactement ou regarder.</p>
+
+  <h2>Comment ca marche : la fonction de hachage et les buckets</h2>
+  <p>En dessous, une table de hachage repose sur un tableau d'emplacements appeles <strong>buckets</strong>. L'ingredient magique est la <strong>fonction de hachage</strong> (hash function) : elle prend votre cle et la transforme en un nombre, qui est associe a un index dans ce tableau.</p>
+  <pre><code>{`index = hash(key) % number_of_buckets`}</code></pre>
+  <p>Pour stocker une valeur, vous hachez la cle pour obtenir un index et placez la valeur dans ce bucket. Pour la relire, vous hachez de nouveau la meme cle, tombez sur le meme index, et recuperez la valeur. Comme calculer le hash et indexer un tableau sont deux etapes rapides a cout fixe, les recherches ne ralentissent pas a mesure que la table grandit. C'est toute l'astuce.</p>
+
+  <h2>Les collisions, et comment elles sont gerees</h2>
+  <p>Deux cles differentes peuvent produire le meme bucket. C'est ce qu'on appelle une <strong>collision</strong>, et toute vraie table de hachage doit la gerer. Il existe deux strategies courantes :</p>
+  <ul>
+    <li><strong>Chaining :</strong> chaque bucket contient une petite liste, et les entrees en collision y sont stockees ensemble. Les recherches parcourent alors la liste (generalement tres courte) du bon bucket.</li>
+    <li><strong>Open addressing :</strong> si un bucket est occupe, la table sonde l'emplacement libre suivant selon une regle fixe, et les recherches suivent la meme regle.</li>
+  </ul>
+  <p>Avec une bonne fonction de hachage et suffisamment de buckets, les collisions restent rares et ces listes restent minuscules, si bien que les recherches restent rapides.</p>
+
+  <figure><img src="/img/2026-07-16-what-is-a-hash-table-body.jpg" alt="Code de programmation vif affiche sur un ecran d'ordinateur" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>La fonction de hachage est ce qui fait correspondre une cle a un bucket ; une bonne fonction repartit les cles uniformement et garde les collisions rares.</figcaption></figure>
+
+  <h2>Et les performances ?</h2>
+  <p>C'est ici que les tables de hachage brillent, et c'est ici que se cache la mise en garde honnete. En <strong>moyenne</strong>, l'insertion, la recherche et la suppression sont toutes en <strong>O(1)</strong> - temps constant. Dans le <strong>pire des cas</strong>, si une mauvaise fonction de hachage ou une entree hostile entasse chaque cle dans un seul bucket, ces operations se degradent en <strong>O(n)</strong>, parce que vous revenez a parcourir une seule longue liste. Les bonnes implementations evitent cela en utilisant des fonctions de hachage solides et en <strong>redimensionnant</strong> (rehachage dans un tableau plus grand) quand la table devient trop pleine, ce qui maintient la performance a un <code>O(1)</code> amorti. Si vous voulez une piqure de rappel sur cette notation, consultez notre guide sur la <a href="/fr/e/blog/2026-07-14-what-is-big-o-notation.html">notation Big O</a>.</p>
+
+  <h2>Ou vous en utilisez deja une</h2>
+  <p>Vous utilisez des tables de hachage en permanence, souvent sans les nommer. Les types dictionnaire et map de la plupart des langages sont des tables de hachage sous le capot : <strong>le dict de Python</strong>, <strong>le HashMap de Java</strong>, <strong>le Map de JavaScript</strong> et l'objet, <strong>le Hash de Ruby</strong>, <strong>le map de Go</strong>. Ce sont aussi l'outil de reference pour les caches, la de-duplication d'elements et le comptage d'occurrences. L'optimisation classique qui transforme une recherche lente a boucles imbriquees en une recherche rapide - passer de <code>O(n&sup2;)</code> a <code>O(n)</code> - se fait presque toujours en remplacant des parcours repetes par une recherche dans une table de hachage.</p>
+
+  <h2>Les compromis</h2>
+  <ul>
+    <li><strong>Rapide, mais non ordonnee.</strong> Une table de hachage de base ne conserve pas les cles dans un ordre trie ou d'insertion (meme si certaines versions de langages ajoutent un ordre par-dessus).</li>
+    <li><strong>Utilise de la memoire supplementaire.</strong> Garder les collisions rares signifie garder des buckets libres, donc une table de hachage echange un peu de memoire contre sa vitesse.</li>
+    <li><strong>Le pire des cas est reel.</strong> Le O(1) est une moyenne ; une entree adverse peut forcer le chemin lent, ce qui compte pour du code sensible a la securite.</li>
+  </ul>
+
+  <h2>FAQ</h2>
+  <p><strong>Une table de hachage est-elle la meme chose qu'un dictionnaire ?</strong> Au quotidien, oui - un dictionnaire ou une map est l'idee generale (cle vers valeur), et une table de hachage est la maniere la plus courante de l'implementer. Quand quelqu'un parle du "dict" de Python ou du "HashMap" de Java, il utilise une table de hachage.</p>
+  <p><strong>Pourquoi la recherche est-elle en O(1) en moyenne ?</strong> Parce que vous calculez le hash de la cle et indexez directement dans un tableau, plutot que de parcourir les entrees. Les deux etapes prennent un temps constant quel que soit le nombre d'elements stockes, donc le cout moyen n'augmente pas avec les donnees.</p>
+  <p><strong>Qu'est-ce qu'une collision ?</strong> Quand deux cles differentes produisent le meme bucket. C'est normal et attendu ; les tables de hachage la gerent avec le chaining ou l'open addressing, et la gardent rare grace a une bonne fonction de hachage et au redimensionnement.</p>
+  <p><strong>Quand ne devrais-je pas utiliser une table de hachage ?</strong> Quand vous avez besoin de garder les cles dans un ordre trie, ou pour des requetes ordonnees par plage - une structure a base d'arbre convient mieux. Egalement quand la memoire est extremement limitee, puisque les tables de hachage gardent de l'espace libre pour rester rapides.</p>
+
+  <div class="note">Guide independant, maintenu par la communaute. <strong>coldwa.st</strong> est un site de ressources de programmation ; cet article couvre les tables de hachage a un niveau introductif. Les complexites et comportements decrits sont des resultats standard de l'informatique.</div>
+  <p class="related-guides">Guides associes : <a href="/fr/e/blog/2026-07-14-what-is-big-o-notation.html">notation Big O</a>, <a href="/fr/e/blog/2026-06-14-what-is-an-algorithm.html">ce qu'est un algorithme</a>.</p>
+  </div>
+</Base>
