@@ -1,0 +1,82 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-07-18-what-is-a-cdn.html';
+const title = 'What Is a CDN? Content Delivery Networks, Explained (2026)';
+const description = 'A CDN caches your static content on servers spread around the world so visitors get it from a nearby machine. How the edge, cache hit and miss, TTL and invalidation work, static vs dynamic, and where a CDN fits with your host.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="/img/2026-07-18-what-is-a-cdn-hero.jpg" datePublished="2026-07-18" dateModified="2026-07-18">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e/">Guides</a><span>/</span>What is a CDN</nav>
+  <p class="kicker">Programming · web · performance</p>
+  <h1>What is a CDN?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Jul 18, 2026</span><span>8 min read</span><span class="tag">#cdn</span><span class="tag">#performance</span><span class="tag">#web</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/2026-07-18-what-is-a-cdn-hero.jpg" alt="A world map with connected network nodes representing a global delivery network" width="1200" height="420" loading="eager" />
+    <figcaption>A CDN keeps copies of your content on servers around the world, so each visitor is served from a machine close to them.</figcaption>
+  </figure>
+
+  <p>A <strong>CDN</strong> (content delivery network) is a group of servers spread across many locations that keep <strong>copies of your static content</strong> - images, CSS, JavaScript, fonts, videos - and serve each visitor from a server that is geographically close to them. The goal is simple: shorten the distance a request has to travel, so pages load faster and your main server does less work. If your site is hosted in one city, a visitor on the other side of the planet no longer has to reach across the world for every file.</p>
+
+  <h2>The problem it solves</h2>
+  <p>When your site lives on a single server, every request - from every country - has to reach that one machine and come back. Distance costs time: the further away the visitor, the more <strong>latency</strong> creeps in, and the busier your server gets as traffic grows. A CDN answers both problems by putting copies of your files closer to people and by taking most of the request load off your origin.</p>
+
+  <h2>Edge servers and points of presence</h2>
+  <p>The servers a CDN uses to cache and serve content are often called <strong>edge servers</strong>, sitting at the "edge" of the network, near users, rather than at your central origin. Groups of these are placed in data centres worldwide, sometimes called <strong>points of presence (PoPs)</strong>. When someone requests a file, the CDN routes them to a nearby edge server instead of your origin. Because that server is close, the round trip is shorter and delivery is quicker.</p>
+
+  <h2>Cache hit, cache miss, and the origin</h2>
+  <p>The core mechanic of a CDN is the <strong>cache</strong>. The first time an edge server is asked for a file it does not have, that is a <strong>cache miss</strong>: the edge fetches the file from your <strong>origin</strong> server, sends it to the visitor, and stores a copy. The next visitor to that same edge gets a <strong>cache hit</strong> - the file is already there and served immediately, without touching the origin at all.</p>
+  <pre><code>{`request -> nearest edge server
+  cache HIT  -> serve the stored copy (fast, origin untouched)
+  cache MISS -> fetch from origin, serve, then store for next time`}</code></pre>
+  <p>This is why a CDN both speeds up delivery and <strong>offloads the origin</strong>: once content is cached at the edge, most requests are answered without ever reaching your server. Under a traffic spike, the edge network absorbs the bulk of the load.</p>
+
+  <figure><img src="/img/2026-07-18-what-is-a-cdn-body.jpg" alt="A server and an orange network cable with streaming binary data" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Edge servers in data centres around the world hold cached copies of your content, close to the people requesting it.</figcaption></figure>
+
+  <h2>TTL and invalidation: keeping the cache fresh</h2>
+  <p>A cached copy cannot live forever, or visitors would keep seeing an old version after you update a file. Two mechanisms handle this:</p>
+  <ul>
+    <li><strong>TTL (time to live):</strong> each cached item is given a lifetime, usually driven by HTTP caching headers such as <code>Cache-Control</code>. When the TTL expires, the edge treats the item as stale and re-checks the origin before serving it again.</li>
+    <li><strong>Invalidation (purge):</strong> when you deploy a change and cannot wait for the TTL, you tell the CDN to drop specific cached files so the next request fetches the fresh version from the origin. A common trick that avoids purging at all is <strong>cache busting</strong> - changing the file name or adding a version query, for example <code>style.abc123.css</code>, so a new URL is fetched fresh.</li>
+  </ul>
+
+  <h2>Static content vs dynamic content</h2>
+  <p>CDNs shine with <strong>static content</strong>: files that are the same for everyone and change rarely, like images, stylesheets, scripts and downloads. These cache cleanly and can be served from the edge for a long time. <strong>Dynamic content</strong> - a personalised dashboard, or a response that depends on who is logged in - is harder to cache, because the answer differs per request. Modern CDNs still help here with features like connection reuse and running small bits of logic at the edge, but the classic, biggest win is caching static assets close to users.</p>
+
+  <h2>What else a CDN commonly does</h2>
+  <p>Beyond caching, most CDNs bundle useful extras. They typically terminate <strong>TLS</strong> (HTTPS) at the edge and apply <strong>compression</strong> so files travel smaller and encrypted. Many also add protection against traffic floods and absorb <a href="/e/blog/2026-06-26-what-is-a-load-balancer.html">load</a> that would otherwise hit your origin. Real, widely used CDNs include <strong>Cloudflare</strong>, <strong>Fastly</strong> and <strong>Akamai</strong>; for open-source libraries, public CDNs such as <strong>jsDelivr</strong> serve packages straight from a global edge network.</p>
+
+  <h2>Where a CDN fits with your host</h2>
+  <p>A CDN does not replace your hosting - it sits in front of it. Your <a href="/e/blog/2026-06-19-what-is-a-vps.html">server or VPS</a> remains the <strong>origin</strong> that holds the real files and runs your application; the CDN caches and delivers copies of the cacheable parts. It also pairs naturally with a <a href="/e/blog/2026-06-26-what-is-a-reverse-proxy.html">reverse proxy</a> in front of your app: the proxy routes and terminates TLS at your origin, while the CDN handles the global edge layer. You still need a solid origin host underneath it all.</p>
+
+  <h2>FAQ</h2>
+  <p><strong>Does a CDN replace my web host?</strong> No. Your host is the origin that stores the real files and runs your app. A CDN caches and serves copies of the static, cacheable parts from servers near your visitors. You need both: a reliable origin plus the edge layer in front of it.</p>
+  <p><strong>What is the difference between a cache hit and a cache miss?</strong> A hit means the edge server already has the requested file cached and serves it immediately. A miss means it does not, so it fetches the file from your origin, serves it, and stores a copy so the next request is a hit.</p>
+  <p><strong>What is TTL?</strong> Time to live: how long a cached item is considered fresh, usually set by HTTP caching headers. When the TTL expires, the edge re-checks the origin before serving the item again, so updates eventually reach everyone.</p>
+  <p><strong>Can a CDN cache dynamic content?</strong> Partly. Content that differs per user is hard to cache directly, but CDNs still speed it up with connection reuse, compression and edge logic. The biggest, simplest win remains caching static assets like images, CSS and JavaScript close to users.</p>
+
+  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is original explanatory writing about CDNs at an introductory level. The mechanisms described (edge caching, cache hit and miss, TTL, invalidation) are standard web-delivery concepts; the named products are well-known CDNs mentioned for illustration.</div>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Recommended</span>
+    <h3>The origin server behind your CDN</h3>
+    <p>A CDN caches copies of your content, but it still needs a real origin server holding the source files and running your app. Infomaniak - a Swiss, privacy-respecting provider - offers VPS and cloud servers you can use as that origin, then put a CDN in front to serve static assets from the edge.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">See Infomaniak Cloud →</a>
+    <p class="disc">Affiliate link - it supports these free guides.</p>
+  </div>
+
+  <p class="related-guides">Related guides: <a href="/e/blog/2026-06-26-what-is-a-reverse-proxy.html">what a reverse proxy is</a>, <a href="/e/blog/2026-06-26-what-is-a-load-balancer.html">what a load balancer is</a>, <a href="/e/blog/2026-06-19-what-is-a-vps.html">what a VPS is</a>.</p>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "Does a CDN replace my web host?", "acceptedAnswer": { "@type": "Answer", "text": "No. Your host is the origin that stores the real files and runs your app. A CDN caches and serves copies of the static, cacheable parts from servers near your visitors. You need both: a reliable origin plus the edge layer in front of it." } },
+      { "@type": "Question", "name": "What is the difference between a cache hit and a cache miss?", "acceptedAnswer": { "@type": "Answer", "text": "A hit means the edge server already has the requested file cached and serves it immediately. A miss means it does not, so it fetches the file from your origin, serves it, and stores a copy so the next request is a hit." } },
+      { "@type": "Question", "name": "What is TTL?", "acceptedAnswer": { "@type": "Answer", "text": "Time to live: how long a cached item is considered fresh, usually set by HTTP caching headers. When the TTL expires, the edge re-checks the origin before serving the item again, so updates eventually reach everyone." } },
+      { "@type": "Question", "name": "Can a CDN cache dynamic content?", "acceptedAnswer": { "@type": "Answer", "text": "Partly. Content that differs per user is hard to cache directly, but CDNs still speed it up with connection reuse, compression and edge logic. The biggest, simplest win remains caching static assets like images, CSS and JavaScript close to users." } }
+    ]
+  })} />
+  </div>
+</Base>

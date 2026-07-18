@@ -1,0 +1,82 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/it/e/blog/2026-07-18-what-is-a-cdn.html';
+const title = "Cos'e una CDN? Le content delivery network, spiegate (2026)";
+const description = "Una CDN mette in cache il tuo contenuto statico su server sparsi per il mondo, cosi ogni visitatore lo riceve da una macchina vicina. Come funzionano l'edge, il cache hit e miss, il TTL e l'invalidazione, statico vs dinamico, e dove si colloca una CDN rispetto al tuo hosting.";
+---
+<Base title={title} description={description} path={path} type="article"
+  image="/img/2026-07-18-what-is-a-cdn-hero.jpg" datePublished="2026-07-18" dateModified="2026-07-18">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/it/">Home</a><span>/</span><a href="/it/e/">Guide</a><span>/</span>Cos'e una CDN</nav>
+  <p class="kicker">Programmazione · web · prestazioni</p>
+  <h1>Cos'e una CDN?</h1>
+  <div class="artmeta"><span>Di Coldwast</span><span>Aggiornato 18 lug. 2026</span><span>8 min di lettura</span><span class="tag">#cdn</span><span class="tag">#performance</span><span class="tag">#web</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/2026-07-18-what-is-a-cdn-hero.jpg" alt="Una mappa del mondo con nodi di rete collegati che rappresentano una rete di distribuzione globale" width="1200" height="420" loading="eager" />
+    <figcaption>Una CDN conserva copie del tuo contenuto su server in tutto il mondo, cosi ogni visitatore viene servito da una macchina vicina a lui.</figcaption>
+  </figure>
+
+  <p>Una <strong>CDN</strong> (content delivery network, rete di distribuzione dei contenuti) e un insieme di server distribuiti in molte posizioni che conservano <strong>copie del tuo contenuto statico</strong> - immagini, CSS, JavaScript, font, video - e servono ogni visitatore da un server geograficamente vicino. L'obiettivo e semplice: accorciare la distanza che una richiesta deve percorrere, cosi le pagine caricano piu in fretta e il tuo server principale lavora di meno. Se il tuo sito e ospitato in una sola citta, un visitatore dall'altra parte del pianeta non deve piu attraversare il mondo per ogni file.</p>
+
+  <h2>Il problema che risolve</h2>
+  <p>Quando il tuo sito vive su un solo server, ogni richiesta - da ogni paese - deve raggiungere quella singola macchina e tornare. La distanza costa tempo: piu il visitatore e lontano, piu <strong>latenza</strong> si accumula, e piu il tuo server si carica man mano che il traffico cresce. Una CDN risponde a entrambi i problemi mettendo copie dei tuoi file piu vicino alle persone e togliendo gran parte del carico di richieste dalla tua origine.</p>
+
+  <h2>Server edge e punti di presenza</h2>
+  <p>I server che una CDN usa per mettere in cache e servire il contenuto sono spesso chiamati <strong>server edge</strong>, posti al "bordo" (edge) della rete, vicino agli utenti, anziche alla tua origine centrale. Gruppi di questi sono collocati in data center in tutto il mondo, a volte chiamati <strong>punti di presenza (PoP)</strong>. Quando qualcuno richiede un file, la CDN lo indirizza a un server edge vicino anziche alla tua origine. Poiche quel server e vicino, il viaggio di andata e ritorno e piu corto e la consegna piu rapida.</p>
+
+  <h2>Cache hit, cache miss e l'origine</h2>
+  <p>Il meccanismo centrale di una CDN e la <strong>cache</strong>. La prima volta che a un server edge viene chiesto un file che non ha, e un <strong>cache miss</strong>: l'edge recupera il file dal tuo server di <strong>origine</strong>, lo invia al visitatore e ne conserva una copia. Il visitatore successivo su quello stesso edge ottiene un <strong>cache hit</strong> - il file e gia li e viene servito subito, senza toccare affatto l'origine.</p>
+  <pre><code>{`richiesta -> server edge piu vicino
+  cache HIT  -> serve la copia conservata (veloce, origine intatta)
+  cache MISS -> recupera dall'origine, serve, poi conserva per la volta dopo`}</code></pre>
+  <p>Ecco perche una CDN accelera la consegna e <strong>scarica l'origine</strong>: una volta che il contenuto e in cache all'edge, la maggior parte delle richieste viene servita senza mai raggiungere il tuo server. Durante un picco di traffico, la rete edge assorbe il grosso del carico.</p>
+
+  <figure><img src="/img/2026-07-18-what-is-a-cdn-body.jpg" alt="Un server e un cavo di rete arancione con dati binari" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Server edge in data center di tutto il mondo conservano copie in cache del tuo contenuto, vicino alle persone che lo richiedono.</figcaption></figure>
+
+  <h2>TTL e invalidazione: mantenere fresca la cache</h2>
+  <p>Una copia in cache non puo vivere per sempre, altrimenti i visitatori continuerebbero a vedere una vecchia versione dopo l'aggiornamento di un file. Due meccanismi gestiscono questo:</p>
+  <ul>
+    <li><strong>TTL (time to live):</strong> a ogni elemento in cache viene data una durata di vita, di solito guidata dagli header di cache HTTP come <code>Cache-Control</code>. Quando il TTL scade, l'edge tratta l'elemento come obsoleto e ricontrolla l'origine prima di servirlo di nuovo.</li>
+    <li><strong>Invalidazione (purge):</strong> quando distribuisci una modifica e non puoi aspettare il TTL, dici alla CDN di eliminare file specifici dalla cache, cosi la richiesta successiva recupera la versione fresca dall'origine. Un trucco comune che evita del tutto il purge e il <strong>cache busting</strong> - cambiare il nome del file o aggiungere una versione come parametro, ad esempio <code>style.abc123.css</code>, cosi da recuperare una nuova URL fresca.</li>
+  </ul>
+
+  <h2>Contenuto statico vs contenuto dinamico</h2>
+  <p>Le CDN brillano con il <strong>contenuto statico</strong>: file uguali per tutti e che cambiano di rado, come immagini, fogli di stile, script e download. Si mettono in cache in modo pulito e possono essere serviti dall'edge a lungo. Il <strong>contenuto dinamico</strong> - una dashboard personalizzata, o una risposta che dipende da chi ha effettuato l'accesso - e piu difficile da mettere in cache, perche la risposta cambia a ogni richiesta. Le CDN moderne aiutano comunque qui con funzioni come il riutilizzo della connessione e l'esecuzione di piccoli pezzi di logica all'edge, ma il guadagno classico e maggiore resta mettere in cache le risorse statiche vicino agli utenti.</p>
+
+  <h2>Cos'altro fa comunemente una CDN</h2>
+  <p>Oltre alla cache, la maggior parte delle CDN include extra utili. Di solito terminano il <strong>TLS</strong> (HTTPS) all'edge e applicano la <strong>compressione</strong> cosi i file viaggiano piu piccoli e cifrati. Molte aggiungono anche protezione contro le ondate di traffico e assorbono il <a href="/it/e/blog/2026-06-26-what-is-a-load-balancer.html">carico</a> che altrimenti colpirebbe la tua origine. Tra le CDN reali e molto usate ci sono <strong>Cloudflare</strong>, <strong>Fastly</strong> e <strong>Akamai</strong>; per le librerie open source, CDN pubbliche come <strong>jsDelivr</strong> servono i pacchetti direttamente da una rete edge globale.</p>
+
+  <h2>Dove si colloca una CDN rispetto al tuo hosting</h2>
+  <p>Una CDN non sostituisce il tuo hosting - si mette davanti a esso. Il tuo <a href="/it/e/blog/2026-06-19-what-is-a-vps.html">server o VPS</a> resta l'<strong>origine</strong> che detiene i file reali ed esegue la tua applicazione; la CDN mette in cache e distribuisce copie delle parti memorizzabili. Si abbina anche naturalmente a un <a href="/it/e/blog/2026-06-26-what-is-a-reverse-proxy.html">reverse proxy</a> davanti alla tua app: il proxy instrada e termina il TLS alla tua origine, mentre la CDN gestisce lo strato edge globale. Ti serve comunque un solido hosting di origine sotto il tutto.</p>
+
+  <h2>FAQ</h2>
+  <p><strong>Una CDN sostituisce il mio hosting?</strong> No. Il tuo hosting e l'origine che memorizza i file reali ed esegue la tua app. Una CDN mette in cache e serve copie delle parti statiche memorizzabili da server vicini ai tuoi visitatori. Ti servono entrambi: un'origine affidabile piu lo strato edge davanti a essa.</p>
+  <p><strong>Qual e la differenza tra cache hit e cache miss?</strong> Un hit significa che il server edge ha gia il file richiesto in cache e lo serve subito. Un miss significa che non ce l'ha, quindi recupera il file dalla tua origine, lo serve e ne conserva una copia cosi che la richiesta successiva sia un hit.</p>
+  <p><strong>Cos'e il TTL?</strong> Time to live: per quanto tempo un elemento in cache e considerato fresco, di solito impostato dagli header di cache HTTP. Quando il TTL scade, l'edge ricontrolla l'origine prima di servire di nuovo l'elemento, cosi gli aggiornamenti alla fine raggiungono tutti.</p>
+  <p><strong>Una CDN puo mettere in cache contenuto dinamico?</strong> In parte. Il contenuto che cambia in base all'utente e difficile da mettere in cache direttamente, ma le CDN lo accelerano comunque con riutilizzo della connessione, compressione e logica all'edge. Il guadagno maggiore e piu semplice resta mettere in cache risorse statiche come immagini, CSS e JavaScript vicino agli utenti.</p>
+
+  <div class="note">Guida indipendente, mantenuta dalla comunita. <strong>coldwa.st</strong> e un sito di risorse di programmazione; questo articolo e un testo esplicativo originale sulle CDN a livello introduttivo. I meccanismi descritti (caching all'edge, cache hit e miss, TTL, invalidazione) sono concetti standard della distribuzione web; i prodotti nominati sono CDN ben note citate a titolo illustrativo.</div>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Consigliato</span>
+    <h3>Il server di origine dietro la tua CDN</h3>
+    <p>Una CDN mette in cache copie del tuo contenuto, ma le serve comunque un vero server di origine che detiene i file sorgente ed esegue la tua app. Infomaniak - un provider svizzero rispettoso della privacy - offre VPS e server cloud da usare come origine, e poi metti una CDN davanti per servire le risorse statiche dall'edge.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Vedi Infomaniak Cloud →</a>
+    <p class="disc">Link di affiliazione - aiuta a mantenere gratuite queste guide.</p>
+  </div>
+
+  <p class="related-guides">Guide correlate: <a href="/it/e/blog/2026-06-26-what-is-a-reverse-proxy.html">cos'e un reverse proxy</a>, <a href="/it/e/blog/2026-06-26-what-is-a-load-balancer.html">cos'e un load balancer</a>, <a href="/it/e/blog/2026-06-19-what-is-a-vps.html">cos'e un VPS</a>.</p>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "Una CDN sostituisce il mio hosting?", "acceptedAnswer": { "@type": "Answer", "text": "No. Il tuo hosting e l'origine che memorizza i file reali ed esegue la tua app. Una CDN mette in cache e serve copie delle parti statiche memorizzabili da server vicini ai tuoi visitatori. Ti servono entrambi: un'origine affidabile piu lo strato edge davanti a essa." } },
+      { "@type": "Question", "name": "Qual e la differenza tra cache hit e cache miss?", "acceptedAnswer": { "@type": "Answer", "text": "Un hit significa che il server edge ha gia il file richiesto in cache e lo serve subito. Un miss significa che non ce l'ha, quindi recupera il file dalla tua origine, lo serve e ne conserva una copia cosi che la richiesta successiva sia un hit." } },
+      { "@type": "Question", "name": "Cos'e il TTL?", "acceptedAnswer": { "@type": "Answer", "text": "Time to live: per quanto tempo un elemento in cache e considerato fresco, di solito impostato dagli header di cache HTTP. Quando il TTL scade, l'edge ricontrolla l'origine prima di servire di nuovo l'elemento, cosi gli aggiornamenti alla fine raggiungono tutti." } },
+      { "@type": "Question", "name": "Una CDN puo mettere in cache contenuto dinamico?", "acceptedAnswer": { "@type": "Answer", "text": "In parte. Il contenuto che cambia in base all'utente e difficile da mettere in cache direttamente, ma le CDN lo accelerano comunque con riutilizzo della connessione, compressione e logica all'edge. Il guadagno maggiore e piu semplice resta mettere in cache risorse statiche come immagini, CSS e JavaScript vicino agli utenti." } }
+    ]
+  })} />
+  </div>
+</Base>

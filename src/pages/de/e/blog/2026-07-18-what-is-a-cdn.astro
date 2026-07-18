@@ -1,0 +1,82 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/de/e/blog/2026-07-18-what-is-a-cdn.html';
+const title = "Was ist ein CDN? Content Delivery Networks, erklart (2026)";
+const description = "Ein CDN speichert deinen statischen Inhalt in Servern rund um die Welt zwischen, sodass jeder Besucher ihn von einer nahen Maschine erhalt. Wie Edge, Cache Hit und Miss, TTL und Invalidierung funktionieren, statisch vs dynamisch, und wo ein CDN zu deinem Hoster passt.";
+---
+<Base title={title} description={description} path={path} type="article"
+  image="/img/2026-07-18-what-is-a-cdn-hero.jpg" datePublished="2026-07-18" dateModified="2026-07-18">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/de/">Startseite</a><span>/</span><a href="/de/e/">Guides</a><span>/</span>Was ist ein CDN</nav>
+  <p class="kicker">Programmierung · Web · Performance</p>
+  <h1>Was ist ein CDN?</h1>
+  <div class="artmeta"><span>Von Coldwast</span><span>Aktualisiert 18. Juli 2026</span><span>8 Min. Lesezeit</span><span class="tag">#cdn</span><span class="tag">#performance</span><span class="tag">#web</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/2026-07-18-what-is-a-cdn-hero.jpg" alt="Eine Weltkarte mit verbundenen Netzwerkknoten, die ein globales Auslieferungsnetz darstellen" width="1200" height="420" loading="eager" />
+    <figcaption>Ein CDN halt Kopien deines Inhalts auf Servern rund um die Welt, sodass jeder Besucher von einer Maschine in seiner Nahe bedient wird.</figcaption>
+  </figure>
+
+  <p>Ein <strong>CDN</strong> (Content Delivery Network, Netz zur Inhaltsauslieferung) ist eine Gruppe von Servern an vielen Standorten, die <strong>Kopien deines statischen Inhalts</strong> - Bilder, CSS, JavaScript, Schriften, Videos - halten und jeden Besucher von einem geografisch nahen Server bedienen. Das Ziel ist einfach: die Strecke verkurzen, die eine Anfrage zurucklegen muss, damit Seiten schneller laden und dein Hauptserver weniger arbeitet. Wenn deine Website in einer einzigen Stadt gehostet ist, muss ein Besucher auf der anderen Seite des Planeten nicht mehr fur jede Datei um die Welt reichen.</p>
+
+  <h2>Das Problem, das es lost</h2>
+  <p>Wenn deine Website auf einem einzigen Server liegt, muss jede Anfrage - aus jedem Land - diese eine Maschine erreichen und zuruckkommen. Distanz kostet Zeit: je weiter der Besucher entfernt ist, desto mehr <strong>Latenz</strong> schleicht sich ein, und desto ausgelasteter wird dein Server, wenn der Traffic wachst. Ein CDN lost beide Probleme, indem es Kopien deiner Dateien naher an die Menschen bringt und den Grossteil der Anfragelast von deinem Origin nimmt.</p>
+
+  <h2>Edge-Server und Points of Presence</h2>
+  <p>Die Server, die ein CDN zum Zwischenspeichern und Ausliefern von Inhalten nutzt, heissen oft <strong>Edge-Server</strong>, sie sitzen am "Rand" (Edge) des Netzwerks, nahe an den Nutzern, statt an deinem zentralen Origin. Gruppen davon stehen in Rechenzentren weltweit, manchmal <strong>Points of Presence (PoPs)</strong> genannt. Wenn jemand eine Datei anfordert, leitet das CDN ihn zu einem nahen Edge-Server statt zu deinem Origin. Weil dieser Server nah ist, ist der Roundtrip kurzer und die Auslieferung schneller.</p>
+
+  <h2>Cache Hit, Cache Miss und der Origin</h2>
+  <p>Der Kernmechanismus eines CDN ist der <strong>Cache</strong>. Wird ein Edge-Server das erste Mal nach einer Datei gefragt, die er nicht hat, ist das ein <strong>Cache Miss</strong>: der Edge holt die Datei von deinem <strong>Origin</strong>-Server, schickt sie an den Besucher und speichert eine Kopie. Der nachste Besucher an demselben Edge bekommt einen <strong>Cache Hit</strong> - die Datei ist schon da und wird sofort ausgeliefert, ohne den Origin uberhaupt zu beruhren.</p>
+  <pre><code>{`Anfrage -> nachster Edge-Server
+  Cache HIT  -> liefert die gespeicherte Kopie (schnell, Origin unberuhrt)
+  Cache MISS -> holt vom Origin, liefert, speichert dann fur das nachste Mal`}</code></pre>
+  <p>Deshalb beschleunigt ein CDN die Auslieferung und <strong>entlastet den Origin</strong>: sobald Inhalte am Edge zwischengespeichert sind, werden die meisten Anfragen beantwortet, ohne je deinen Server zu erreichen. Bei einer Traffic-Spitze fangt das Edge-Netz den Grossteil der Last ab.</p>
+
+  <figure><img src="/img/2026-07-18-what-is-a-cdn-body.jpg" alt="Ein Server und ein orangefarbenes Netzwerkkabel mit binären Daten" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Edge-Server in Rechenzentren rund um die Welt halten zwischengespeicherte Kopien deines Inhalts, nahe an den Menschen, die ihn anfordern.</figcaption></figure>
+
+  <h2>TTL und Invalidierung: den Cache frisch halten</h2>
+  <p>Eine Cache-Kopie kann nicht ewig leben, sonst wurden Besucher nach dem Update einer Datei weiter eine alte Version sehen. Zwei Mechanismen regeln das:</p>
+  <ul>
+    <li><strong>TTL (Time to Live):</strong> jedem zwischengespeicherten Element wird eine Lebensdauer gegeben, meist gesteuert durch HTTP-Cache-Header wie <code>Cache-Control</code>. Lauft die TTL ab, behandelt der Edge das Element als veraltet und pruft den Origin erneut, bevor er es wieder ausliefert.</li>
+    <li><strong>Invalidierung (Purge):</strong> wenn du eine Anderung ausrollst und nicht auf die TTL warten kannst, sagst du dem CDN, bestimmte Cache-Dateien zu verwerfen, sodass die nachste Anfrage die frische Version vom Origin holt. Ein gangiger Trick, der ein Purge ganz vermeidet, ist <strong>Cache Busting</strong> - den Dateinamen andern oder eine Version als Parameter anhangen, etwa <code>style.abc123.css</code>, damit eine neue URL frisch geholt wird.</li>
+  </ul>
+
+  <h2>Statischer Inhalt vs dynamischer Inhalt</h2>
+  <p>CDNs glanzen mit <strong>statischem Inhalt</strong>: Dateien, die fur alle gleich sind und sich selten andern, wie Bilder, Stylesheets, Skripte und Downloads. Diese lassen sich sauber cachen und konnen lange vom Edge ausgeliefert werden. <strong>Dynamischer Inhalt</strong> - ein personalisiertes Dashboard oder eine Antwort, die davon abhangt, wer angemeldet ist - ist schwerer zu cachen, weil die Antwort pro Anfrage anders ist. Moderne CDNs helfen auch hier mit Funktionen wie Verbindungswiederverwendung und dem Ausfuhren kleiner Logikteile am Edge, aber der klassische, grosste Gewinn bleibt das Cachen statischer Assets nahe an den Nutzern.</p>
+
+  <h2>Was ein CDN sonst noch haufig tut</h2>
+  <p>Neben dem Cachen bundeln die meisten CDNs nutzliche Extras. Sie terminieren typischerweise <strong>TLS</strong> (HTTPS) am Edge und wenden <strong>Kompression</strong> an, damit Dateien kleiner und verschlusselt reisen. Viele fugen zudem Schutz gegen Traffic-Fluten hinzu und fangen <a href="/de/e/blog/2026-06-26-what-is-a-load-balancer.html">Last</a> ab, die sonst deinen Origin treffen wurde. Zu den realen, weit verbreiteten CDNs zahlen <strong>Cloudflare</strong>, <strong>Fastly</strong> und <strong>Akamai</strong>; fur Open-Source-Bibliotheken liefern offentliche CDNs wie <strong>jsDelivr</strong> Pakete direkt aus einem globalen Edge-Netz.</p>
+
+  <h2>Wo ein CDN zu deinem Hoster passt</h2>
+  <p>Ein CDN ersetzt dein Hosting nicht - es sitzt davor. Dein <a href="/de/e/blog/2026-06-19-what-is-a-vps.html">Server oder VPS</a> bleibt der <strong>Origin</strong>, der die echten Dateien halt und deine Anwendung ausfuhrt; das CDN cacht und liefert Kopien der cachebaren Teile. Es passt auch naturlich zu einem <a href="/de/e/blog/2026-06-26-what-is-a-reverse-proxy.html">Reverse Proxy</a> vor deiner App: der Proxy routet und terminiert TLS an deinem Origin, wahrend das CDN die globale Edge-Schicht ubernimmt. Du brauchst trotzdem einen soliden Origin-Hoster unter dem Ganzen.</p>
+
+  <h2>FAQ</h2>
+  <p><strong>Ersetzt ein CDN meinen Webhoster?</strong> Nein. Dein Hoster ist der Origin, der die echten Dateien speichert und deine App ausfuhrt. Ein CDN cacht und liefert Kopien der statischen, cachebaren Teile von Servern nahe deinen Besuchern. Du brauchst beides: einen zuverlassigen Origin plus die Edge-Schicht davor.</p>
+  <p><strong>Was ist der Unterschied zwischen Cache Hit und Cache Miss?</strong> Ein Hit heisst, der Edge-Server hat die angeforderte Datei bereits im Cache und liefert sie sofort. Ein Miss heisst, er hat sie nicht, also holt er die Datei vom Origin, liefert sie und speichert eine Kopie, damit die nachste Anfrage ein Hit ist.</p>
+  <p><strong>Was ist TTL?</strong> Time to Live: wie lange ein zwischengespeichertes Element als frisch gilt, meist durch HTTP-Cache-Header gesetzt. Lauft die TTL ab, pruft der Edge den Origin erneut, bevor er das Element wieder ausliefert, sodass Updates schliesslich alle erreichen.</p>
+  <p><strong>Kann ein CDN dynamischen Inhalt cachen?</strong> Teilweise. Inhalt, der pro Nutzer unterschiedlich ist, lasst sich schwer direkt cachen, aber CDNs beschleunigen ihn dennoch mit Verbindungswiederverwendung, Kompression und Edge-Logik. Der grosste, einfachste Gewinn bleibt das Cachen statischer Assets wie Bilder, CSS und JavaScript nahe an den Nutzern.</p>
+
+  <div class="note">Unabhangiger, von der Community gepflegter Guide. <strong>coldwa.st</strong> ist eine Programmier-Ressourcen-Website; dieser Artikel ist ein origineller erklarender Text uber CDNs auf Einsteigerniveau. Die beschriebenen Mechanismen (Edge-Caching, Cache Hit und Miss, TTL, Invalidierung) sind Standardkonzepte der Web-Auslieferung; die genannten Produkte sind bekannte CDNs, zur Veranschaulichung erwahnt.</div>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Empfohlen</span>
+    <h3>Der Origin-Server hinter deinem CDN</h3>
+    <p>Ein CDN cacht Kopien deines Inhalts, braucht aber weiterhin einen echten Origin-Server, der die Quelldateien halt und deine App ausfuhrt. Infomaniak - ein schweizerischer, datenschutzfreundlicher Anbieter - bietet VPS und Cloud-Server, die du als diesen Origin nutzen kannst, und setzt dann ein CDN davor, um statische Assets vom Edge auszuliefern.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Infomaniak Cloud ansehen →</a>
+    <p class="disc">Affiliate-Link - er unterstutzt diese kostenlosen Guides.</p>
+  </div>
+
+  <p class="related-guides">Verwandte Guides: <a href="/de/e/blog/2026-06-26-what-is-a-reverse-proxy.html">was ein Reverse Proxy ist</a>, <a href="/de/e/blog/2026-06-26-what-is-a-load-balancer.html">was ein Load Balancer ist</a>, <a href="/de/e/blog/2026-06-19-what-is-a-vps.html">was ein VPS ist</a>.</p>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "Ersetzt ein CDN meinen Webhoster?", "acceptedAnswer": { "@type": "Answer", "text": "Nein. Dein Hoster ist der Origin, der die echten Dateien speichert und deine App ausfuhrt. Ein CDN cacht und liefert Kopien der statischen, cachebaren Teile von Servern nahe deinen Besuchern. Du brauchst beides: einen zuverlassigen Origin plus die Edge-Schicht davor." } },
+      { "@type": "Question", "name": "Was ist der Unterschied zwischen Cache Hit und Cache Miss?", "acceptedAnswer": { "@type": "Answer", "text": "Ein Hit heisst, der Edge-Server hat die angeforderte Datei bereits im Cache und liefert sie sofort. Ein Miss heisst, er hat sie nicht, also holt er die Datei vom Origin, liefert sie und speichert eine Kopie, damit die nachste Anfrage ein Hit ist." } },
+      { "@type": "Question", "name": "Was ist TTL?", "acceptedAnswer": { "@type": "Answer", "text": "Time to Live: wie lange ein zwischengespeichertes Element als frisch gilt, meist durch HTTP-Cache-Header gesetzt. Lauft die TTL ab, pruft der Edge den Origin erneut, bevor er das Element wieder ausliefert, sodass Updates schliesslich alle erreichen." } },
+      { "@type": "Question", "name": "Kann ein CDN dynamischen Inhalt cachen?", "acceptedAnswer": { "@type": "Answer", "text": "Teilweise. Inhalt, der pro Nutzer unterschiedlich ist, lasst sich schwer direkt cachen, aber CDNs beschleunigen ihn dennoch mit Verbindungswiederverwendung, Kompression und Edge-Logik. Der grosste, einfachste Gewinn bleibt das Cachen statischer Assets wie Bilder, CSS und JavaScript nahe an den Nutzern." } }
+    ]
+  })} />
+  </div>
+</Base>
