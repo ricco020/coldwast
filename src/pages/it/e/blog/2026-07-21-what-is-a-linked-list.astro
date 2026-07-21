@@ -1,0 +1,81 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/it/e/blog/2026-07-21-what-is-a-linked-list.html';
+const title = "Cos'è una lista concatenata (linked list)? Nodi, puntatori e compromessi, spiegati (2026)";
+const description = "Una lista concatenata memorizza una sequenza come una catena di nodi, dove ogni nodo contiene un valore e un puntatore al successivo. Come funzionano le liste concatenate semplici e doppie, come si confrontano con gli array, le complessità reali e quando ricorrervi.";
+---
+<Base title={title} description={description} path={path} type="article"
+  image="/img/2026-07-21-what-is-a-linked-list-hero.jpg" datePublished="2026-07-21" dateModified="2026-07-21">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/it/">Home</a><span>/</span><a href="/it/e/">Guide</a><span>/</span>Cos'è una lista concatenata</nav>
+  <p class="kicker">Programmazione · concetti · strutture dati</p>
+  <h1>Cos'è una lista concatenata?</h1>
+  <div class="artmeta"><span>Di Coldwast</span><span>Aggiornato il 21 lug. 2026</span><span>8 min di lettura</span><span class="tag">#data-structures</span><span class="tag">#linked-list</span><span class="tag">#concepts</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/2026-07-21-what-is-a-linked-list-hero.jpg" alt="Codice di programmazione su uno schermo" width="1200" height="420" loading="eager" />
+    <figcaption>Una lista concatenata è una catena di nodi: ognuno porta un valore e un collegamento al successivo, così la sequenza può crescere e restringersi senza spostare nulla.</figcaption>
+  </figure>
+
+  <p>Una <strong>lista concatenata</strong> (linked list) è una struttura dati che memorizza una sequenza di valori come una catena di <strong>nodi</strong>. Ogni nodo contiene due cose: un <strong>valore</strong> e un <strong>puntatore</strong> (un riferimento) al nodo successivo della catena. I nodi non sono disposti uno accanto all'altro in un unico blocco di memoria come lo sono gli elementi di un array; invece ognuno punta semplicemente a dove si trova il successivo. Segui i puntatori dal primo nodo, la <strong>testa</strong>, e potrai percorrere l'intera sequenza un anello alla volta.</p>
+
+  <h2>Come è costruita la catena</h2>
+  <p>Pensala come una caccia al tesoro in cui ogni indizio ti dice dove trovare l'indizio successivo. La lista mantiene un riferimento al nodo di testa. Il puntatore di quel nodo porta al secondo nodo, il cui puntatore porta al terzo, e così via finché il puntatore di un nodo è vuoto (spesso chiamato <code>null</code> o <code>None</code>), il che segna la fine della lista.</p>
+  <pre><code>{`[ valore | successivo ] -> [ valore | successivo ] -> [ valore | null ]`}</code></pre>
+  <p>Poiché le connessioni sono solo puntatori, i nodi possono trovarsi ovunque in memoria. Per far crescere la lista, allochi un nuovo nodo e imposti un puntatore verso di esso; nient'altro deve spostarsi.</p>
+
+  <h2>Semplice vs doppiamente concatenata</h2>
+  <p>Esistono due forme comuni, e la differenza sta in quanti puntatori porta ogni nodo:</p>
+  <ul>
+    <li><strong>Lista concatenata semplice:</strong> ogni nodo punta solo al nodo <em>successivo</em>. Puoi andare avanti nella lista ma non indietro, e paghi un solo puntatore per nodo.</li>
+    <li><strong>Lista doppiamente concatenata:</strong> ogni nodo punta sia al nodo <em>successivo</em> sia a quello <em>precedente</em>. Questo permette di percorrerla in entrambe le direzioni e rende più facili alcune eliminazioni, al costo di un puntatore aggiuntivo per nodo.</li>
+  </ul>
+
+  <figure><img src="/img/2026-07-21-what-is-a-linked-list-body.jpg" alt="Anelli di una catena metallica uniti tra loro" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Il nome è letterale: come gli anelli di una catena, ogni nodo è unito al successivo, e segui questi collegamenti per muoverti nella sequenza.</figcaption></figure>
+
+  <h2>Lista concatenata vs array</h2>
+  <p>Il modo più chiaro per capire una lista concatenata è metterla accanto a un <strong>array</strong>, perché fanno compromessi opposti. Un array memorizza i suoi elementi in un blocco contiguo con un indice, quindi può saltare a qualsiasi posizione all'istante. Una lista concatenata vi rinuncia in cambio di modifiche poco costose alle estremità.</p>
+  <ul>
+    <li><strong>Accesso casuale.</strong> Un array legge qualsiasi elemento tramite il suo indice in <code>O(1)</code>. Una lista concatenata non ha indice: per raggiungere il decimo nodo devi partire dalla testa e seguire nove puntatori, quindi l'accesso è <code>O(n)</code>.</li>
+    <li><strong>Inserimento e cancellazione.</strong> Se hai già un riferimento al nodo giusto, una lista concatenata può inserire o rimuovere lì ricollegando un paio di puntatori, un'operazione <code>O(1)</code> - senza spostare gli altri elementi. In un array, inserire o cancellare in mezzo significa spostare gli elementi successivi, il che è <code>O(n)</code>.</li>
+    <li><strong>Memoria e cache.</strong> Un array raggruppa i suoi valori, il che è favorevole alla cache della CPU. Una lista concatenata disperde i suoi nodi e memorizza un puntatore aggiuntivo per nodo, quindi usa più memoria per elemento e tende ad avere una localit&agrave; della cache peggiore.</li>
+  </ul>
+  <p>Nessuna delle due è "migliore"; si adattano a lavori diversi. Se hai bisogno di accessi rapidi per posizione, di solito vince un array (o un array dinamico come una list o un vector). Se i tuoi dati cambiano molto di dimensione e soprattutto aggiungi o rimuovi alle estremità, una lista concatenata può andare bene. Per un ripasso su come questi costi vengono descritti, vedi la nostra guida alla <a href="/it/e/blog/2026-07-14-what-is-big-o-notation.html">notazione Big O</a>.</p>
+
+  <h2>Le complessità, onestamente</h2>
+  <p>Ecco i costi standard per una lista concatenata, con l'avvertenza che conta sempre:</p>
+  <ul>
+    <li><strong>Accesso e ricerca:</strong> <code>O(n)</code>. Non c'è un indice, quindi trovare un valore significa percorrere la catena dalla testa.</li>
+    <li><strong>Inserimento e cancellazione:</strong> <code>O(1)</code> <em>quando hai già un riferimento al nodo</em> (per esempio, proprio in testa). Se devi prima <em>trovare</em> il punto, quella ricerca è <code>O(n)</code>, e il totale riflette entrambe le parti.</li>
+  </ul>
+  <p>Quella condizione "quando hai il nodo" è la parte che spesso viene tralasciata. Inserire in testa a una lista concatenata semplice è davvero tempo costante; inserire dopo un valore che devi ancora localizzare non lo è.</p>
+
+  <h2>Dove si usano le liste concatenate</h2>
+  <p>Le liste concatenate sono più un mattone di base che un contenitore di tutti i giorni. Sono un modo naturale per implementare una <strong>pila</strong> (stack) o una <strong>coda</strong> (queue), poiché queste aggiungono e rimuovono solo alle estremità. Si adattano a situazioni in cui la dimensione della collezione cambia molto e non hai bisogno di un accesso rapido per posizione. Alcune strutture usano nodi concatenati internamente; per esempio, un modo comune di gestire le collisioni in una <a href="/it/e/blog/2026-07-16-what-is-a-hash-table.html">hash table</a> è concatenare insieme le voci in collisione in una piccola lista concatenata per bucket.</p>
+
+  <h2>I compromessi</h2>
+  <ul>
+    <li><strong>Nessun accesso casuale.</strong> Raggiungere una posizione arbitraria costa <code>O(n)</code> perché segui i puntatori dalla testa; non c'è un indice con cui saltare.</li>
+    <li><strong>Memoria aggiuntiva per elemento.</strong> Ogni nodo memorizza almeno un puntatore (due per una lista doppiamente concatenata) oltre al suo valore.</li>
+    <li><strong>Localit&agrave; della cache più debole.</strong> Nodi dispersi sono meno favorevoli alla cache di un array contiguo, il che può rendere l'attraversamento più lento nella pratica anche quando il Big O è lo stesso.</li>
+    <li><strong>Modifiche poco costose a un nodo noto.</strong> Il vantaggio: inserire o rimuovere a un nodo che già possiedi è <code>O(1)</code>, senza spostare il resto dei dati.</li>
+  </ul>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Consigliato</span>
+    <h3>Un posto dove costruire ed eseguire il tuo codice</h3>
+    <p>Imparare le strutture dati è una cosa; distribuire i programmi che le usano è un'altra. Un VPS o server cloud ti dà un ambiente reale per compilare, eseguire e ospitare i tuoi progetti. Infomaniak - un provider svizzero rispettoso della privacy - offre VPS e server cloud proprio per questo.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Vedi Infomaniak Cloud →</a>
+    <p class="disc">Link di affiliazione - sostiene queste guide gratuite.</p>
+  </div>
+
+  <h2>FAQ</h2>
+  <p><strong>Qual è la differenza tra una lista concatenata e un array?</strong> Un array memorizza gli elementi in un blocco contiguo con un indice, quindi legge qualsiasi posizione in <code>O(1)</code> ma spostare elementi per inserire o cancellare in mezzo costa <code>O(n)</code>. Una lista concatenata memorizza nodi separati uniti da puntatori, quindi non ha accesso casuale (<code>O(n)</code> per raggiungere una posizione) ma può inserire o cancellare a un nodo noto in <code>O(1)</code>.</p>
+  <p><strong>Perché accedere a un elemento è O(n)?</strong> Perché una lista concatenata non ha indice. Per raggiungere l'n-esimo nodo parti dalla testa e segui la catena di puntatori n volte, quindi il costo cresce con la posizione che vuoi.</p>
+  <p><strong>Qual è la differenza tra semplice e doppiamente concatenata?</strong> In una lista concatenata semplice ogni nodo punta solo al nodo successivo, quindi puoi muoverti solo in avanti. In una lista doppiamente concatenata ogni nodo punta anche al nodo precedente, quindi puoi muoverti in entrambe le direzioni, al costo di un puntatore aggiuntivo per nodo.</p>
+  <p><strong>Quando dovrei usare una lista concatenata?</strong> Quando la dimensione della collezione cambia molto e aggiungi o rimuovi soprattutto alle estremità, o come struttura portante di una pila o di una coda. Se hai bisogno di un accesso rapido per posizione, un array è di solito la scelta migliore.</p>
+
+  <div class="note">Guida indipendente, mantenuta dalla comunità. <strong>coldwa.st</strong> è un sito di risorse di programmazione; questo articolo tratta le liste concatenate a livello introduttivo. Le complessità e i comportamenti descritti sono risultati standard dell'informatica.</div>
+  <p class="related-guides">Guide correlate: <a href="/it/e/blog/2026-07-16-what-is-a-hash-table.html">hash table</a>, <a href="/it/e/blog/2026-07-14-what-is-big-o-notation.html">notazione Big O</a>, <a href="/it/e/blog/2026-06-16-what-is-recursion.html">ricorsione</a>.</p>
+  </div>
+</Base>

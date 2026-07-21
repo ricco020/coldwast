@@ -1,0 +1,81 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/es/e/blog/2026-07-21-what-is-a-linked-list.html';
+const title = "¿Qué es una lista enlazada (linked list)? Nodos, punteros y compromisos, explicados (2026)";
+const description = "Una lista enlazada almacena una secuencia como una cadena de nodos, donde cada nodo contiene un valor y un puntero al siguiente. Cómo funcionan las listas simple y doblemente enlazadas, cómo se comparan con los arrays, las complejidades reales y cuándo recurrir a ellas.";
+---
+<Base title={title} description={description} path={path} type="article"
+  image="/img/2026-07-21-what-is-a-linked-list-hero.jpg" datePublished="2026-07-21" dateModified="2026-07-21">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/es/">Inicio</a><span>/</span><a href="/es/e/">Guías</a><span>/</span>Qué es una lista enlazada</nav>
+  <p class="kicker">Programación · conceptos · estructuras de datos</p>
+  <h1>¿Qué es una lista enlazada?</h1>
+  <div class="artmeta"><span>Por Coldwast</span><span>Actualizado el 21 jul. 2026</span><span>8 min de lectura</span><span class="tag">#data-structures</span><span class="tag">#linked-list</span><span class="tag">#concepts</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/2026-07-21-what-is-a-linked-list-hero.jpg" alt="Código de programación en una pantalla" width="1200" height="420" loading="eager" />
+    <figcaption>Una lista enlazada es una cadena de nodos: cada uno lleva un valor y un enlace al siguiente, de modo que la secuencia puede crecer y encogerse sin mover nada.</figcaption>
+  </figure>
+
+  <p>Una <strong>lista enlazada</strong> (linked list) es una estructura de datos que almacena una secuencia de valores como una cadena de <strong>nodos</strong>. Cada nodo contiene dos cosas: un <strong>valor</strong> y un <strong>puntero</strong> (una referencia) al siguiente nodo de la cadena. Los nodos no están dispuestos uno junto a otro en un solo bloque de memoria como lo están los elementos de un array; en cambio, cada uno simplemente apunta a donde vive el siguiente. Sigue los punteros desde el primer nodo, la <strong>cabeza</strong>, y podrás recorrer toda la secuencia un eslabón a la vez.</p>
+
+  <h2>Cómo se construye la cadena</h2>
+  <p>Piénsalo como una búsqueda del tesoro donde cada pista te dice dónde encontrar la siguiente pista. La lista guarda una referencia al nodo cabeza. El puntero de ese nodo lleva al segundo nodo, cuyo puntero lleva al tercero, y así sucesivamente hasta que el puntero de un nodo esté vacío (a menudo llamado <code>null</code> o <code>None</code>), lo que marca el final de la lista.</p>
+  <pre><code>{`[ valor | siguiente ] -> [ valor | siguiente ] -> [ valor | null ]`}</code></pre>
+  <p>Como las conexiones son solo punteros, los nodos pueden estar en cualquier lugar de la memoria. Para hacer crecer la lista, reservas un nodo nuevo y ajustas un puntero hacia él; nada más tiene que moverse.</p>
+
+  <h2>Simple vs doblemente enlazada</h2>
+  <p>Hay dos formas comunes, y la diferencia está en cuántos punteros lleva cada nodo:</p>
+  <ul>
+    <li><strong>Lista simplemente enlazada:</strong> cada nodo apunta solo al nodo <em>siguiente</em>. Puedes avanzar por la lista pero no retroceder, y solo pagas un puntero por nodo.</li>
+    <li><strong>Lista doblemente enlazada:</strong> cada nodo apunta tanto al nodo <em>siguiente</em> como al <em>anterior</em>. Eso te permite recorrerla en ambas direcciones y facilita algunas eliminaciones, a costa de un puntero adicional por nodo.</li>
+  </ul>
+
+  <figure><img src="/img/2026-07-21-what-is-a-linked-list-body.jpg" alt="Eslabones de una cadena metálica unidos entre sí" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>El nombre es literal: como los eslabones de una cadena, cada nodo está unido al siguiente, y sigues esos enlaces para moverte por la secuencia.</figcaption></figure>
+
+  <h2>Lista enlazada vs array</h2>
+  <p>La forma más clara de entender una lista enlazada es ponerla junto a un <strong>array</strong>, porque hacen compromisos opuestos. Un array almacena sus elementos en un bloque contiguo con un índice, así que puede saltar a cualquier posición al instante. Una lista enlazada renuncia a eso a cambio de cambios baratos en los extremos.</p>
+  <ul>
+    <li><strong>Acceso aleatorio.</strong> Un array lee cualquier elemento por su índice en <code>O(1)</code>. Una lista enlazada no tiene índice: para llegar al décimo nodo debes empezar en la cabeza y seguir nueve punteros, así que el acceso es <code>O(n)</code>.</li>
+    <li><strong>Insertar y eliminar.</strong> Si ya tienes una referencia al nodo correcto, una lista enlazada puede insertar o eliminar ahí recableando un par de punteros, una operación <code>O(1)</code> - sin desplazar los demás elementos. En un array, insertar o eliminar en el medio implica desplazar los elementos siguientes, lo que es <code>O(n)</code>.</li>
+    <li><strong>Memoria y caché.</strong> Un array empaqueta sus valores juntos, lo que es amigable con la caché de la CPU. Una lista enlazada dispersa sus nodos y almacena un puntero adicional por nodo, así que usa más memoria por elemento y suele tener peor localidad de caché.</li>
+  </ul>
+  <p>Ninguna es "mejor"; sirven para trabajos distintos. Si necesitas búsquedas rápidas por posición, un array (o un array dinámico como una list o un vector) suele ganar. Si tus datos cambian mucho de tamaño y sobre todo añades o quitas en los extremos, una lista enlazada puede encajar bien. Para un repaso de cómo se describen estos costes, consulta nuestra guía sobre la <a href="/es/e/blog/2026-07-14-what-is-big-o-notation.html">notación Big O</a>.</p>
+
+  <h2>Las complejidades, con honestidad</h2>
+  <p>Estos son los costes estándar de una lista enlazada, con la advertencia que siempre importa:</p>
+  <ul>
+    <li><strong>Acceso y búsqueda:</strong> <code>O(n)</code>. No hay índice, así que encontrar un valor significa recorrer la cadena desde la cabeza.</li>
+    <li><strong>Inserción y eliminación:</strong> <code>O(1)</code> <em>cuando ya tienes una referencia al nodo</em> (por ejemplo, justo en la cabeza). Si primero tienes que <em>encontrar</em> el sitio, esa búsqueda es <code>O(n)</code>, y el total refleja ambas partes.</li>
+  </ul>
+  <p>Esa condición de "cuando tienes el nodo" es la parte que la gente suele omitir. Insertar en la cabeza de una lista simplemente enlazada es realmente tiempo constante; insertar después de algún valor que aún tienes que localizar no lo es.</p>
+
+  <h2>Dónde se usan las listas enlazadas</h2>
+  <p>Las listas enlazadas son un bloque de construcción más que un contenedor de uso diario. Son una forma natural de implementar una <strong>pila</strong> (stack) o una <strong>cola</strong> (queue), ya que estas solo añaden y quitan en los extremos. Encajan en situaciones donde el tamaño de la colección cambia mucho y no necesitas acceso rápido por posición. Algunas estructuras usan nodos enlazados internamente; por ejemplo, una forma común de gestionar las colisiones en una <a href="/es/e/blog/2026-07-16-what-is-a-hash-table.html">tabla hash</a> es encadenar las entradas en colisión en una pequeña lista enlazada por bucket.</p>
+
+  <h2>Los compromisos</h2>
+  <ul>
+    <li><strong>Sin acceso aleatorio.</strong> Llegar a una posición arbitraria cuesta <code>O(n)</code> porque sigues los punteros desde la cabeza; no hay índice con el que saltar.</li>
+    <li><strong>Memoria adicional por elemento.</strong> Cada nodo almacena al menos un puntero (dos en una lista doblemente enlazada) además de su valor.</li>
+    <li><strong>Peor localidad de caché.</strong> Los nodos dispersos son menos amigables con la caché que un array contiguo, lo que puede hacer el recorrido más lento en la práctica aunque el Big O sea el mismo.</li>
+    <li><strong>Ediciones baratas en un nodo conocido.</strong> La ventaja: insertar o quitar en un nodo que ya tienes es <code>O(1)</code>, sin desplazar el resto de los datos.</li>
+  </ul>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Recomendado</span>
+    <h3>Un lugar para construir y ejecutar tu código</h3>
+    <p>Aprender estructuras de datos es una cosa; desplegar los programas que las usan es otra. Un VPS o servidor cloud te da un entorno real para compilar, ejecutar y alojar tus proyectos. Infomaniak - un proveedor suizo respetuoso con la privacidad - ofrece VPS y servidores cloud para exactamente esto.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Ver Infomaniak Cloud →</a>
+    <p class="disc">Enlace de afiliado - ayuda a mantener estas guías gratuitas.</p>
+  </div>
+
+  <h2>FAQ</h2>
+  <p><strong>¿Cuál es la diferencia entre una lista enlazada y un array?</strong> Un array almacena los elementos en un bloque contiguo con un índice, así que lee cualquier posición en <code>O(1)</code> pero desplazar elementos para insertar o eliminar en el medio cuesta <code>O(n)</code>. Una lista enlazada almacena nodos separados unidos por punteros, así que no tiene acceso aleatorio (<code>O(n)</code> para llegar a una posición) pero puede insertar o eliminar en un nodo conocido en <code>O(1)</code>.</p>
+  <p><strong>¿Por qué acceder a un elemento es O(n)?</strong> Porque una lista enlazada no tiene índice. Para llegar al nodo n empiezas en la cabeza y sigues la cadena de punteros n veces, así que el coste crece con la posición que quieres.</p>
+  <p><strong>¿Cuál es la diferencia entre simple y doblemente enlazada?</strong> En una lista simplemente enlazada cada nodo apunta solo al nodo siguiente, así que solo puedes avanzar hacia adelante. En una lista doblemente enlazada cada nodo también apunta al nodo anterior, así que puedes moverte en ambas direcciones, a costa de un puntero adicional por nodo.</p>
+  <p><strong>¿Cuándo debería usar una lista enlazada?</strong> Cuando la colección cambia mucho de tamaño y sobre todo añades o quitas en los extremos, o como base de una pila o una cola. Si necesitas acceso rápido por posición, un array suele ser la mejor opción.</p>
+
+  <div class="note">Guía independiente, mantenida por la comunidad. <strong>coldwa.st</strong> es un sitio de recursos de programación; este artículo cubre las listas enlazadas a un nivel introductorio. Las complejidades y comportamientos descritos son resultados estándar de la informática.</div>
+  <p class="related-guides">Guías relacionadas: <a href="/es/e/blog/2026-07-16-what-is-a-hash-table.html">tablas hash</a>, <a href="/es/e/blog/2026-07-14-what-is-big-o-notation.html">notación Big O</a>, <a href="/es/e/blog/2026-06-16-what-is-recursion.html">recursividad</a>.</p>
+  </div>
+</Base>

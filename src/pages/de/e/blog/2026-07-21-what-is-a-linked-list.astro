@@ -1,0 +1,81 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/de/e/blog/2026-07-21-what-is-a-linked-list.html';
+const title = "Was ist eine verkettete Liste (Linked List)? Knoten, Zeiger und Kompromisse, erklärt (2026)";
+const description = "Eine verkettete Liste speichert eine Sequenz als Kette von Knoten, wobei jeder Knoten einen Wert und einen Zeiger auf den nächsten enthält. Wie einfach und doppelt verkettete Listen funktionieren, wie sie sich mit Arrays vergleichen, die echten Komplexitäten und wann man zu ihnen greift.";
+---
+<Base title={title} description={description} path={path} type="article"
+  image="/img/2026-07-21-what-is-a-linked-list-hero.jpg" datePublished="2026-07-21" dateModified="2026-07-21">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/de/">Startseite</a><span>/</span><a href="/de/e/">Guides</a><span>/</span>Was ist eine verkettete Liste</nav>
+  <p class="kicker">Programmierung · Konzepte · Datenstrukturen</p>
+  <h1>Was ist eine verkettete Liste?</h1>
+  <div class="artmeta"><span>Von Coldwast</span><span>Aktualisiert am 21. Juli 2026</span><span>8 Min. Lesezeit</span><span class="tag">#data-structures</span><span class="tag">#linked-list</span><span class="tag">#concepts</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/2026-07-21-what-is-a-linked-list-hero.jpg" alt="Programmiercode auf einem Bildschirm" width="1200" height="420" loading="eager" />
+    <figcaption>Eine verkettete Liste ist eine Kette von Knoten: jeder trägt einen Wert und einen Verweis auf den nächsten, sodass die Sequenz wachsen und schrumpfen kann, ohne dass etwas verschoben wird.</figcaption>
+  </figure>
+
+  <p>Eine <strong>verkettete Liste</strong> (Linked List) ist eine Datenstruktur, die eine Folge von Werten als Kette von <strong>Knoten</strong> speichert. Jeder Knoten enthält zwei Dinge: einen <strong>Wert</strong> und einen <strong>Zeiger</strong> (eine Referenz) auf den nächsten Knoten der Kette. Die Knoten liegen nicht Seite an Seite in einem einzigen Speicherblock wie die Elemente eines Arrays; stattdessen zeigt jeder einfach dorthin, wo der nächste liegt. Folge den Zeigern vom ersten Knoten, dem <strong>Kopf</strong> (Head), und du kannst die ganze Sequenz Glied für Glied durchlaufen.</p>
+
+  <h2>Wie die Kette aufgebaut ist</h2>
+  <p>Stell es dir wie eine Schatzsuche vor, bei der jeder Hinweis dir sagt, wo der nächste Hinweis zu finden ist. Die Liste hält eine Referenz auf den Kopfknoten. Der Zeiger dieses Knotens führt zum zweiten Knoten, dessen Zeiger zum dritten führt, und so weiter, bis der Zeiger eines Knotens leer ist (oft <code>null</code> oder <code>None</code> genannt), was das Ende der Liste markiert.</p>
+  <pre><code>{`[ Wert | nächster ] -> [ Wert | nächster ] -> [ Wert | null ]`}</code></pre>
+  <p>Da die Verbindungen nur Zeiger sind, können die Knoten irgendwo im Speicher liegen. Um die Liste zu vergrößern, reservierst du einen neuen Knoten und setzt einen Zeiger auf ihn; nichts anderes muss verschoben werden.</p>
+
+  <h2>Einfach vs doppelt verkettet</h2>
+  <p>Es gibt zwei gängige Formen, und der Unterschied liegt darin, wie viele Zeiger jeder Knoten trägt:</p>
+  <ul>
+    <li><strong>Einfach verkettete Liste:</strong> jeder Knoten zeigt nur auf den <em>nächsten</em> Knoten. Du kannst in der Liste vorwärts gehen, aber nicht rückwärts, und du zahlst nur einen Zeiger pro Knoten.</li>
+    <li><strong>Doppelt verkettete Liste:</strong> jeder Knoten zeigt sowohl auf den <em>nächsten</em> als auch auf den <em>vorherigen</em> Knoten. Das erlaubt das Durchlaufen in beide Richtungen und erleichtert manche Löschungen, auf Kosten eines zusätzlichen Zeigers pro Knoten.</li>
+  </ul>
+
+  <figure><img src="/img/2026-07-21-what-is-a-linked-list-body.jpg" alt="Zusammengefügte Glieder einer Metallkette" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Der Name ist wörtlich: wie die Glieder einer Kette ist jeder Knoten mit dem nächsten verbunden, und du folgst diesen Verweisen, um dich durch die Sequenz zu bewegen.</figcaption></figure>
+
+  <h2>Verkettete Liste vs Array</h2>
+  <p>Am klarsten versteht man eine verkettete Liste im Vergleich zu einem <strong>Array</strong>, denn sie treffen gegensätzliche Kompromisse. Ein Array speichert seine Elemente in einem zusammenhängenden Block mit einem Index, sodass es sofort zu jeder Position springen kann. Eine verkettete Liste gibt das auf, im Austausch für günstige Änderungen an den Enden.</p>
+  <ul>
+    <li><strong>Wahlfreier Zugriff.</strong> Ein Array liest jedes Element per Index in <code>O(1)</code>. Eine verkettete Liste hat keinen Index: um den zehnten Knoten zu erreichen, musst du beim Kopf beginnen und neun Zeigern folgen, also ist der Zugriff <code>O(n)</code>.</li>
+    <li><strong>Einfügen und Löschen.</strong> Wenn du bereits eine Referenz auf den richtigen Knoten hältst, kann eine verkettete Liste dort einfügen oder löschen, indem sie ein paar Zeiger umverdrahtet, eine <code>O(1)</code>-Operation - ohne andere Elemente zu verschieben. In einem Array bedeutet Einfügen oder Löschen in der Mitte, die nachfolgenden Elemente zu verschieben, was <code>O(n)</code> ist.</li>
+    <li><strong>Speicher und Cache.</strong> Ein Array packt seine Werte zusammen, was dem CPU-Cache entgegenkommt. Eine verkettete Liste verstreut ihre Knoten und speichert einen zusätzlichen Zeiger pro Knoten, also verbraucht sie mehr Speicher pro Element und hat tendenziell eine schlechtere Cache-Lokalität.</li>
+  </ul>
+  <p>Keine ist "besser"; sie passen zu unterschiedlichen Aufgaben. Wenn du schnelle Zugriffe per Position brauchst, gewinnt meist ein Array (oder ein dynamisches Array wie eine list oder ein vector). Wenn deine Daten stark in der Größe schwanken und du vor allem an den Enden hinzufügst oder entfernst, kann eine verkettete Liste gut passen. Für eine Auffrischung, wie diese Kosten beschrieben werden, siehe unseren Leitfaden zur <a href="/de/e/blog/2026-07-14-what-is-big-o-notation.html">Big-O-Notation</a>.</p>
+
+  <h2>Die Komplexitäten, ehrlich</h2>
+  <p>Hier sind die Standardkosten für eine verkettete Liste, mit dem Vorbehalt, der immer wichtig ist:</p>
+  <ul>
+    <li><strong>Zugriff und Suche:</strong> <code>O(n)</code>. Es gibt keinen Index, also bedeutet einen Wert zu finden, die Kette vom Kopf aus zu durchlaufen.</li>
+    <li><strong>Einfügen und Löschen:</strong> <code>O(1)</code> <em>wenn du bereits eine Referenz auf den Knoten hast</em> (zum Beispiel direkt am Kopf). Wenn du die Stelle erst <em>finden</em> musst, ist diese Suche <code>O(n)</code>, und die Gesamtsumme spiegelt beide Teile wider.</li>
+  </ul>
+  <p>Diese Bedingung "wenn du den Knoten hast" ist der Teil, den Leute oft weglassen. Am Kopf einer einfach verketteten Liste einzufügen, ist wirklich konstante Zeit; nach einem Wert einzufügen, den du erst lokalisieren musst, ist es nicht.</p>
+
+  <h2>Wo verkettete Listen verwendet werden</h2>
+  <p>Verkettete Listen sind eher ein Baustein als ein alltäglicher Container. Sie sind eine natürliche Art, einen <strong>Stack</strong> oder eine <strong>Queue</strong> zu implementieren, da diese nur an den Enden hinzufügen und entfernen. Sie passen zu Situationen, in denen sich die Größe der Sammlung stark ändert und du keinen schnellen Zugriff per Position brauchst. Manche Strukturen verwenden intern verkettete Knoten; zum Beispiel ist eine gängige Art, Kollisionen in einer <a href="/de/e/blog/2026-07-16-what-is-a-hash-table.html">Hash Table</a> zu behandeln, die kollidierenden Einträge in einer kleinen verketteten Liste pro Bucket zusammenzuketten.</p>
+
+  <h2>Die Kompromisse</h2>
+  <ul>
+    <li><strong>Kein wahlfreier Zugriff.</strong> Eine beliebige Position zu erreichen kostet <code>O(n)</code>, weil du den Zeigern vom Kopf aus folgst; es gibt keinen Index, mit dem man springen könnte.</li>
+    <li><strong>Zusätzlicher Speicher pro Element.</strong> Jeder Knoten speichert mindestens einen Zeiger (zwei bei einer doppelt verketteten Liste) zusätzlich zu seinem Wert.</li>
+    <li><strong>Schwächere Cache-Lokalität.</strong> Verstreute Knoten sind weniger cache-freundlich als ein zusammenhängendes Array, was das Durchlaufen in der Praxis langsamer machen kann, selbst wenn das Big O gleich ist.</li>
+    <li><strong>Günstige Änderungen an einem bekannten Knoten.</strong> Der Vorteil: an einem Knoten, den du bereits hältst, einzufügen oder zu entfernen, ist <code>O(1)</code>, ohne den Rest der Daten zu verschieben.</li>
+  </ul>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Empfohlen</span>
+    <h3>Ein Ort, um deinen Code zu bauen und auszuführen</h3>
+    <p>Datenstrukturen zu lernen ist eine Sache; die Programme zu deployen, die sie nutzen, eine andere. Ein VPS oder Cloud-Server gibt dir eine echte Umgebung zum Kompilieren, Ausführen und Hosten deiner Projekte. Infomaniak - ein schweizerischer, datenschutzfreundlicher Anbieter - bietet VPS und Cloud-Server für genau das.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Infomaniak Cloud ansehen →</a>
+    <p class="disc">Affiliate-Link - er unterstützt diese kostenlosen Guides.</p>
+  </div>
+
+  <h2>FAQ</h2>
+  <p><strong>Was ist der Unterschied zwischen einer verketteten Liste und einem Array?</strong> Ein Array speichert Elemente in einem zusammenhängenden Block mit einem Index, liest also jede Position in <code>O(1)</code>, aber Elemente zu verschieben, um in der Mitte einzufügen oder zu löschen, kostet <code>O(n)</code>. Eine verkettete Liste speichert separate Knoten, die durch Zeiger verbunden sind, hat also keinen wahlfreien Zugriff (<code>O(n)</code>, um eine Position zu erreichen), kann aber an einem bekannten Knoten in <code>O(1)</code> einfügen oder löschen.</p>
+  <p><strong>Warum ist der Zugriff auf ein Element O(n)?</strong> Weil eine verkettete Liste keinen Index hat. Um den n-ten Knoten zu erreichen, beginnst du beim Kopf und folgst der Zeigerkette n-mal, also wächst der Aufwand mit der gewünschten Position.</p>
+  <p><strong>Was ist der Unterschied zwischen einfach und doppelt verkettet?</strong> In einer einfach verketteten Liste zeigt jeder Knoten nur auf den nächsten Knoten, du kannst dich also nur vorwärts bewegen. In einer doppelt verketteten Liste zeigt jeder Knoten auch auf den vorherigen Knoten, du kannst dich also in beide Richtungen bewegen, auf Kosten eines zusätzlichen Zeigers pro Knoten.</p>
+  <p><strong>Wann sollte ich eine verkettete Liste verwenden?</strong> Wenn sich die Größe der Sammlung stark ändert und du vor allem an den Enden hinzufügst oder entfernst, oder als Rückgrat eines Stacks oder einer Queue. Wenn du schnellen Zugriff per Position brauchst, ist ein Array meist die bessere Wahl.</p>
+
+  <div class="note">Unabhängiger, von der Community gepflegter Leitfaden. <strong>coldwa.st</strong> ist eine Website mit Programmierressourcen; dieser Artikel behandelt verkettete Listen auf Einsteigerniveau. Die beschriebenen Komplexitäten und Verhaltensweisen sind Standardergebnisse der Informatik.</div>
+  <p class="related-guides">Verwandte Guides: <a href="/de/e/blog/2026-07-16-what-is-a-hash-table.html">Hash Tables</a>, <a href="/de/e/blog/2026-07-14-what-is-big-o-notation.html">Big-O-Notation</a>, <a href="/de/e/blog/2026-06-16-what-is-recursion.html">Rekursion</a>.</p>
+  </div>
+</Base>

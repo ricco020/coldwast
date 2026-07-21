@@ -1,0 +1,81 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-07-21-what-is-a-linked-list.html';
+const title = 'What Is a Linked List? Nodes, Pointers and Trade-offs, Explained (2026)';
+const description = 'A linked list stores a sequence as a chain of nodes, where each node holds a value and a pointer to the next one. How singly and doubly linked lists work, how they compare to arrays, the real complexities, and when to reach for one.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="/img/2026-07-21-what-is-a-linked-list-hero.jpg" datePublished="2026-07-21" dateModified="2026-07-21">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e/">Guides</a><span>/</span>What is a linked list</nav>
+  <p class="kicker">Programming · concepts · data structures</p>
+  <h1>What is a linked list?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Jul 21, 2026</span><span>8 min read</span><span class="tag">#data-structures</span><span class="tag">#linked-list</span><span class="tag">#concepts</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/2026-07-21-what-is-a-linked-list-hero.jpg" alt="Programming code on a screen" width="1200" height="420" loading="eager" />
+    <figcaption>A linked list is a chain of nodes: each one carries a value and a link to the next, so the sequence can grow and shrink without moving anything.</figcaption>
+  </figure>
+
+  <p>A <strong>linked list</strong> is a data structure that stores a sequence of values as a chain of <strong>nodes</strong>. Each node holds two things: a <strong>value</strong>, and a <strong>pointer</strong> (a reference) to the next node in the chain. The nodes are not laid out side by side in one block of memory the way an array's items are; instead each one simply points to where the next one lives. Follow the pointers from the first node, the <strong>head</strong>, and you can walk the whole sequence one link at a time.</p>
+
+  <h2>How the chain is built</h2>
+  <p>Think of it like a treasure hunt where each clue tells you where to find the next clue. The list keeps a reference to the head node. That node's pointer leads to the second node, whose pointer leads to the third, and so on until a node's pointer is empty (often called <code>null</code> or <code>None</code>), which marks the end of the list.</p>
+  <pre><code>{`[ value | next ] -> [ value | next ] -> [ value | null ]`}</code></pre>
+  <p>Because the connections are just pointers, the nodes can sit anywhere in memory. To grow the list you allocate a new node and set a pointer to it; nothing else has to move.</p>
+
+  <h2>Singly vs doubly linked</h2>
+  <p>There are two common shapes, and the difference is how many pointers each node carries:</p>
+  <ul>
+    <li><strong>Singly linked list:</strong> each node points only to the <em>next</em> node. You can move forward through the list but not backward, and you only pay for one pointer per node.</li>
+    <li><strong>Doubly linked list:</strong> each node points to both the <em>next</em> and the <em>previous</em> node. That lets you walk in either direction and makes some deletions easier, at the cost of an extra pointer per node.</li>
+  </ul>
+
+  <figure><img src="/img/2026-07-21-what-is-a-linked-list-body.jpg" alt="Metal chain links joined together" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>The name is literal: like the links of a chain, each node is joined to the next, and you follow those links to move through the sequence.</figcaption></figure>
+
+  <h2>Linked list vs array</h2>
+  <p>The clearest way to understand a linked list is next to an <strong>array</strong>, because they make opposite trade-offs. An array stores its items in one contiguous block with an index, so it can jump to any position instantly. A linked list gives that up in exchange for cheap changes at the ends.</p>
+  <ul>
+    <li><strong>Random access.</strong> An array reads any element by index in <code>O(1)</code>. A linked list has no index: to reach the tenth node you must start at the head and follow nine pointers, so access is <code>O(n)</code>.</li>
+    <li><strong>Insert and delete.</strong> If you already hold a reference to the right node, a linked list can insert or remove there by rewiring a couple of pointers, an <code>O(1)</code> operation - no shifting of other elements. In an array, inserting or deleting in the middle means shifting the elements after it, which is <code>O(n)</code>.</li>
+    <li><strong>Memory and cache.</strong> An array packs its values together, which is friendly to the CPU cache. A linked list scatters its nodes and stores an extra pointer per node, so it uses more memory per item and tends to have poorer cache locality.</li>
+  </ul>
+  <p>Neither is "better"; they suit different jobs. If you need fast lookups by position, an array (or a dynamic array like a list or vector) usually wins. If your data changes size a lot and you mostly add or remove at the ends, a linked list can be a good fit. For a refresher on how these costs are described, see our guide to <a href="/e/blog/2026-07-14-what-is-big-o-notation.html">Big O notation</a>.</p>
+
+  <h2>The complexities, honestly</h2>
+  <p>Here are the standard costs for a linked list, with the caveat that always matters:</p>
+  <ul>
+    <li><strong>Access and search:</strong> <code>O(n)</code>. There is no index, so finding a value means walking the chain from the head.</li>
+    <li><strong>Insertion and deletion:</strong> <code>O(1)</code> <em>when you already have a reference to the node</em> (for example, right at the head). If you first have to <em>find</em> the spot, that search is <code>O(n)</code>, and the total reflects both parts.</li>
+  </ul>
+  <p>That "when you have the node" condition is the part people often drop. Inserting at the head of a singly linked list is genuinely constant time; inserting after some value you still have to locate is not.</p>
+
+  <h2>Where linked lists are used</h2>
+  <p>Linked lists are a building block more than an everyday container. They are a natural way to implement a <strong>stack</strong> or a <strong>queue</strong>, since those only add and remove at the ends. They suit situations where the collection's size changes a great deal and you do not need fast access by position. Some structures use linked nodes internally; for example, one common way to handle collisions in a <a href="/e/blog/2026-07-16-what-is-a-hash-table.html">hash table</a> is to chain colliding entries together in a small linked list per bucket.</p>
+
+  <h2>The trade-offs</h2>
+  <ul>
+    <li><strong>No random access.</strong> Reaching an arbitrary position costs <code>O(n)</code> because you follow pointers from the head; there is no index to jump with.</li>
+    <li><strong>Extra memory per item.</strong> Every node stores at least one pointer (two for a doubly linked list) on top of its value.</li>
+    <li><strong>Weaker cache locality.</strong> Scattered nodes are less cache-friendly than a contiguous array, which can make traversal slower in practice even when the Big O is the same.</li>
+    <li><strong>Cheap edits at a known node.</strong> The upside: inserting or removing at a node you already hold is <code>O(1)</code>, with no shifting of the rest of the data.</li>
+  </ul>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Recommended</span>
+    <h3>A place to build and run your code</h3>
+    <p>Learning data structures is one thing; deploying the programs that use them is another. A VPS or cloud server gives you a real environment to compile, run and host your projects. Infomaniak - a Swiss, privacy-respecting provider - offers VPS and cloud servers for exactly this.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">See Infomaniak Cloud →</a>
+    <p class="disc">Affiliate link - it supports these free guides.</p>
+  </div>
+
+  <h2>FAQ</h2>
+  <p><strong>What is the difference between a linked list and an array?</strong> An array stores items in one contiguous block with an index, so it reads any position in <code>O(1)</code> but shifting elements to insert or delete in the middle costs <code>O(n)</code>. A linked list stores separate nodes joined by pointers, so it has no random access (<code>O(n)</code> to reach a position) but can insert or delete at a known node in <code>O(1)</code>.</p>
+  <p><strong>Why is accessing an element O(n)?</strong> Because a linked list has no index. To reach the nth node you start at the head and follow the pointer chain n times, so the cost grows with the position you want.</p>
+  <p><strong>What is the difference between singly and doubly linked?</strong> In a singly linked list each node points only to the next node, so you can move forward only. In a doubly linked list each node also points to the previous node, so you can move in both directions, at the cost of one extra pointer per node.</p>
+  <p><strong>When should I use a linked list?</strong> When the collection changes size a lot and you mostly add or remove at the ends, or as the backbone of a stack or queue. If you need fast access by position, an array is usually the better choice.</p>
+
+  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this explainer covers linked lists at an introductory level. Complexities and behaviours described are standard computer-science results.</div>
+  <p class="related-guides">Related guides: <a href="/e/blog/2026-07-16-what-is-a-hash-table.html">hash tables</a>, <a href="/e/blog/2026-07-14-what-is-big-o-notation.html">Big O notation</a>, <a href="/e/blog/2026-06-16-what-is-recursion.html">recursion</a>.</p>
+  </div>
+</Base>

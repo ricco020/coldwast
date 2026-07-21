@@ -1,0 +1,81 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/fr/e/blog/2026-07-21-what-is-a-linked-list.html';
+const title = "Qu'est-ce qu'une liste chainee (linked list) ? Noeuds, pointeurs et compromis, expliques (2026)";
+const description = "Une liste chainee stocke une sequence sous forme de chaine de noeuds, ou chaque noeud contient une valeur et un pointeur vers le suivant. Comment fonctionnent les listes simplement et doublement chainees, comment elles se comparent aux tableaux, les vraies complexites, et quand y recourir.";
+---
+<Base title={title} description={description} path={path} type="article"
+  image="/img/2026-07-21-what-is-a-linked-list-hero.jpg" datePublished="2026-07-21" dateModified="2026-07-21">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/fr/">Accueil</a><span>/</span><a href="/fr/e/">Guides</a><span>/</span>Qu'est-ce qu'une liste chainee</nav>
+  <p class="kicker">Programmation · concepts · structures de donnees</p>
+  <h1>Qu'est-ce qu'une liste chainee ?</h1>
+  <div class="artmeta"><span>Par Coldwast</span><span>Mis a jour le 21 juil. 2026</span><span>8 min de lecture</span><span class="tag">#data-structures</span><span class="tag">#linked-list</span><span class="tag">#concepts</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/2026-07-21-what-is-a-linked-list-hero.jpg" alt="Code de programmation sur un ecran" width="1200" height="420" loading="eager" />
+    <figcaption>Une liste chainee est une chaine de noeuds : chacun porte une valeur et un lien vers le suivant, si bien que la sequence peut grandir et retrecir sans rien deplacer.</figcaption>
+  </figure>
+
+  <p>Une <strong>liste chainee</strong> (linked list) est une structure de donnees qui stocke une sequence de valeurs sous forme de chaine de <strong>noeuds</strong>. Chaque noeud contient deux choses : une <strong>valeur</strong>, et un <strong>pointeur</strong> (une reference) vers le noeud suivant de la chaine. Les noeuds ne sont pas disposes cote a cote dans un seul bloc de memoire comme le sont les elements d'un tableau ; a la place, chacun pointe simplement vers l'endroit ou vit le suivant. Suivez les pointeurs depuis le premier noeud, la <strong>tete</strong>, et vous pouvez parcourir toute la sequence un maillon a la fois.</p>
+
+  <h2>Comment la chaine est construite</h2>
+  <p>Voyez cela comme une chasse au tresor ou chaque indice vous dit ou trouver l'indice suivant. La liste garde une reference vers le noeud de tete. Le pointeur de ce noeud mene au deuxieme noeud, dont le pointeur mene au troisieme, et ainsi de suite jusqu'a ce que le pointeur d'un noeud soit vide (souvent appele <code>null</code> ou <code>None</code>), ce qui marque la fin de la liste.</p>
+  <pre><code>{`[ valeur | suivant ] -> [ valeur | suivant ] -> [ valeur | null ]`}</code></pre>
+  <p>Comme les connexions ne sont que des pointeurs, les noeuds peuvent se trouver n'importe ou en memoire. Pour agrandir la liste, vous allouez un nouveau noeud et reglez un pointeur vers lui ; rien d'autre n'a besoin de bouger.</p>
+
+  <h2>Simplement vs doublement chainee</h2>
+  <p>Il existe deux formes courantes, et la difference tient au nombre de pointeurs que porte chaque noeud :</p>
+  <ul>
+    <li><strong>Liste simplement chainee :</strong> chaque noeud pointe uniquement vers le noeud <em>suivant</em>. Vous pouvez avancer dans la liste mais pas reculer, et vous ne payez qu'un seul pointeur par noeud.</li>
+    <li><strong>Liste doublement chainee :</strong> chaque noeud pointe a la fois vers le noeud <em>suivant</em> et le <em>precedent</em>. Cela permet de parcourir dans les deux sens et facilite certaines suppressions, au prix d'un pointeur supplementaire par noeud.</li>
+  </ul>
+
+  <figure><img src="/img/2026-07-21-what-is-a-linked-list-body.jpg" alt="Maillons de chaine metallique assembles" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Le nom est litteral : comme les maillons d'une chaine, chaque noeud est relie au suivant, et vous suivez ces liens pour vous deplacer dans la sequence.</figcaption></figure>
+
+  <h2>Liste chainee vs tableau</h2>
+  <p>La facon la plus claire de comprendre une liste chainee est de la placer a cote d'un <strong>tableau</strong> (array), car ils font des compromis opposes. Un tableau stocke ses elements dans un bloc contigu avec un index, si bien qu'il peut sauter a n'importe quelle position instantanement. Une liste chainee y renonce en echange de modifications peu couteuses aux extremites.</p>
+  <ul>
+    <li><strong>Acces aleatoire.</strong> Un tableau lit n'importe quel element par son index en <code>O(1)</code>. Une liste chainee n'a pas d'index : pour atteindre le dixieme noeud, vous devez partir de la tete et suivre neuf pointeurs, donc l'acces est en <code>O(n)</code>.</li>
+    <li><strong>Insertion et suppression.</strong> Si vous detenez deja une reference vers le bon noeud, une liste chainee peut inserer ou supprimer la en re-cablant quelques pointeurs, une operation en <code>O(1)</code> - sans decaler les autres elements. Dans un tableau, inserer ou supprimer au milieu implique de decaler les elements suivants, ce qui est en <code>O(n)</code>.</li>
+    <li><strong>Memoire et cache.</strong> Un tableau regroupe ses valeurs, ce qui est favorable au cache du CPU. Une liste chainee disperse ses noeuds et stocke un pointeur supplementaire par noeud, elle utilise donc plus de memoire par element et tend a avoir une moins bonne localite de cache.</li>
+  </ul>
+  <p>Aucune n'est "meilleure" ; elles conviennent a des taches differentes. Si vous avez besoin de recherches rapides par position, un tableau (ou un tableau dynamique comme une list ou un vector) l'emporte generalement. Si vos donnees changent beaucoup de taille et que vous ajoutez ou retirez surtout aux extremites, une liste chainee peut convenir. Pour une piqure de rappel sur la facon dont ces couts sont decrits, consultez notre guide sur la <a href="/fr/e/blog/2026-07-14-what-is-big-o-notation.html">notation Big O</a>.</p>
+
+  <h2>Les complexites, honnetement</h2>
+  <p>Voici les couts standard pour une liste chainee, avec la mise en garde qui compte toujours :</p>
+  <ul>
+    <li><strong>Acces et recherche :</strong> <code>O(n)</code>. Il n'y a pas d'index, donc trouver une valeur signifie parcourir la chaine depuis la tete.</li>
+    <li><strong>Insertion et suppression :</strong> <code>O(1)</code> <em>quand vous avez deja une reference vers le noeud</em> (par exemple, juste a la tete). Si vous devez d'abord <em>trouver</em> l'emplacement, cette recherche est en <code>O(n)</code>, et le total reflete les deux parties.</li>
+  </ul>
+  <p>Cette condition "quand vous avez le noeud" est la partie que l'on oublie souvent. Inserer en tete d'une liste simplement chainee est vraiment en temps constant ; inserer apres une valeur que vous devez encore localiser ne l'est pas.</p>
+
+  <h2>Ou les listes chainees sont utilisees</h2>
+  <p>Les listes chainees sont un element de construction plus qu'un conteneur du quotidien. Elles sont une facon naturelle d'implementer une <strong>pile</strong> (stack) ou une <strong>file</strong> (queue), puisque celles-ci n'ajoutent et ne retirent qu'aux extremites. Elles conviennent aux situations ou la taille de la collection change beaucoup et ou vous n'avez pas besoin d'un acces rapide par position. Certaines structures utilisent des noeuds chaines en interne ; par exemple, une facon courante de gerer les collisions dans une <a href="/fr/e/blog/2026-07-16-what-is-a-hash-table.html">table de hachage</a> est de chainer ensemble les entrees en collision dans une petite liste chainee par bucket.</p>
+
+  <h2>Les compromis</h2>
+  <ul>
+    <li><strong>Pas d'acces aleatoire.</strong> Atteindre une position arbitraire coute <code>O(n)</code> car vous suivez les pointeurs depuis la tete ; il n'y a pas d'index pour sauter directement.</li>
+    <li><strong>Memoire supplementaire par element.</strong> Chaque noeud stocke au moins un pointeur (deux pour une liste doublement chainee) en plus de sa valeur.</li>
+    <li><strong>Localite de cache plus faible.</strong> Des noeuds disperses sont moins favorables au cache qu'un tableau contigu, ce qui peut rendre le parcours plus lent en pratique meme quand le Big O est le meme.</li>
+    <li><strong>Modifications peu couteuses a un noeud connu.</strong> L'avantage : inserer ou retirer a un noeud que vous detenez deja est en <code>O(1)</code>, sans decaler le reste des donnees.</li>
+  </ul>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Recommande</span>
+    <h3>Un endroit pour construire et executer votre code</h3>
+    <p>Apprendre les structures de donnees est une chose ; deployer les programmes qui les utilisent en est une autre. Un VPS ou un serveur cloud vous donne un vrai environnement pour compiler, executer et heberger vos projets. Infomaniak - un fournisseur suisse respectueux de la vie privee - propose des VPS et serveurs cloud pour exactement cela.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Voir Infomaniak Cloud →</a>
+    <p class="disc">Lien affilie - il soutient ces guides gratuits.</p>
+  </div>
+
+  <h2>FAQ</h2>
+  <p><strong>Quelle est la difference entre une liste chainee et un tableau ?</strong> Un tableau stocke les elements dans un bloc contigu avec un index, il lit donc n'importe quelle position en <code>O(1)</code> mais decaler des elements pour inserer ou supprimer au milieu coute <code>O(n)</code>. Une liste chainee stocke des noeuds separes relies par des pointeurs, elle n'a donc pas d'acces aleatoire (<code>O(n)</code> pour atteindre une position) mais peut inserer ou supprimer a un noeud connu en <code>O(1)</code>.</p>
+  <p><strong>Pourquoi l'acces a un element est-il en O(n) ?</strong> Parce qu'une liste chainee n'a pas d'index. Pour atteindre le nieme noeud, vous partez de la tete et suivez la chaine de pointeurs n fois, donc le cout croit avec la position voulue.</p>
+  <p><strong>Quelle est la difference entre simplement et doublement chainee ?</strong> Dans une liste simplement chainee, chaque noeud pointe uniquement vers le noeud suivant, vous ne pouvez donc avancer que vers l'avant. Dans une liste doublement chainee, chaque noeud pointe aussi vers le noeud precedent, vous pouvez donc vous deplacer dans les deux sens, au prix d'un pointeur supplementaire par noeud.</p>
+  <p><strong>Quand devrais-je utiliser une liste chainee ?</strong> Quand la collection change beaucoup de taille et que vous ajoutez ou retirez surtout aux extremites, ou comme ossature d'une pile ou d'une file. Si vous avez besoin d'un acces rapide par position, un tableau est generalement le meilleur choix.</p>
+
+  <div class="note">Guide independant, maintenu par la communaute. <strong>coldwa.st</strong> est un site de ressources de programmation ; cet article couvre les listes chainees a un niveau introductif. Les complexites et comportements decrits sont des resultats standard de l'informatique.</div>
+  <p class="related-guides">Guides associes : <a href="/fr/e/blog/2026-07-16-what-is-a-hash-table.html">tables de hachage</a>, <a href="/fr/e/blog/2026-07-14-what-is-big-o-notation.html">notation Big O</a>, <a href="/fr/e/blog/2026-06-16-what-is-recursion.html">recursivite</a>.</p>
+  </div>
+</Base>

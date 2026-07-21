@@ -1,0 +1,81 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/pt/e/blog/2026-07-21-what-is-a-linked-list.html';
+const title = "O que é uma lista ligada (linked list)? Nós, ponteiros e compromissos, explicados (2026)";
+const description = "Uma lista ligada guarda uma sequência como uma cadeia de nós, onde cada nó contém um valor e um ponteiro para o seguinte. Como funcionam as listas simplesmente e duplamente ligadas, como se comparam com os arrays, as complexidades reais e quando recorrer a elas.";
+---
+<Base title={title} description={description} path={path} type="article"
+  image="/img/2026-07-21-what-is-a-linked-list-hero.jpg" datePublished="2026-07-21" dateModified="2026-07-21">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/pt/">Início</a><span>/</span><a href="/pt/e/">Guias</a><span>/</span>O que é uma lista ligada</nav>
+  <p class="kicker">Programação · conceitos · estruturas de dados</p>
+  <h1>O que é uma lista ligada?</h1>
+  <div class="artmeta"><span>Por Coldwast</span><span>Atualizado a 21 jul. 2026</span><span>8 min de leitura</span><span class="tag">#data-structures</span><span class="tag">#linked-list</span><span class="tag">#concepts</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="/img/2026-07-21-what-is-a-linked-list-hero.jpg" alt="Código de programação num ecrã" width="1200" height="420" loading="eager" />
+    <figcaption>Uma lista ligada é uma cadeia de nós: cada um transporta um valor e uma ligação para o seguinte, de modo que a sequência pode crescer e encolher sem mover nada.</figcaption>
+  </figure>
+
+  <p>Uma <strong>lista ligada</strong> (linked list) é uma estrutura de dados que guarda uma sequência de valores como uma cadeia de <strong>nós</strong>. Cada nó contém duas coisas: um <strong>valor</strong> e um <strong>ponteiro</strong> (uma referência) para o nó seguinte da cadeia. Os nós não estão dispostos lado a lado num único bloco de memória como estão os elementos de um array; em vez disso, cada um simplesmente aponta para onde o seguinte se encontra. Segue os ponteiros a partir do primeiro nó, a <strong>cabeça</strong>, e podes percorrer toda a sequência um elo de cada vez.</p>
+
+  <h2>Como a cadeia é construída</h2>
+  <p>Pensa nela como uma caça ao tesouro onde cada pista te diz onde encontrar a pista seguinte. A lista mantém uma referência ao nó cabeça. O ponteiro desse nó leva ao segundo nó, cujo ponteiro leva ao terceiro, e assim sucessivamente até que o ponteiro de um nó esteja vazio (muitas vezes chamado <code>null</code> ou <code>None</code>), o que marca o fim da lista.</p>
+  <pre><code>{`[ valor | seguinte ] -> [ valor | seguinte ] -> [ valor | null ]`}</code></pre>
+  <p>Como as ligações são apenas ponteiros, os nós podem estar em qualquer lugar da memória. Para fazer crescer a lista, alocas um novo nó e defines um ponteiro para ele; nada mais precisa de se mover.</p>
+
+  <h2>Simplesmente vs duplamente ligada</h2>
+  <p>Existem duas formas comuns, e a diferença está em quantos ponteiros cada nó transporta:</p>
+  <ul>
+    <li><strong>Lista simplesmente ligada:</strong> cada nó aponta apenas para o nó <em>seguinte</em>. Podes avançar na lista mas não recuar, e pagas apenas um ponteiro por nó.</li>
+    <li><strong>Lista duplamente ligada:</strong> cada nó aponta tanto para o nó <em>seguinte</em> como para o <em>anterior</em>. Isso permite percorrê-la em ambas as direções e facilita algumas eliminações, ao custo de um ponteiro adicional por nó.</li>
+  </ul>
+
+  <figure><img src="/img/2026-07-21-what-is-a-linked-list-body.jpg" alt="Elos de uma corrente metálica unidos entre si" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>O nome é literal: como os elos de uma corrente, cada nó está unido ao seguinte, e segues essas ligações para te mover pela sequência.</figcaption></figure>
+
+  <h2>Lista ligada vs array</h2>
+  <p>A forma mais clara de entender uma lista ligada é colocá-la ao lado de um <strong>array</strong>, porque fazem compromissos opostos. Um array guarda os seus elementos num bloco contíguo com um índice, por isso pode saltar para qualquer posição instantaneamente. Uma lista ligada abdica disso em troca de alterações baratas nas extremidades.</p>
+  <ul>
+    <li><strong>Acesso aleatório.</strong> Um array lê qualquer elemento pelo seu índice em <code>O(1)</code>. Uma lista ligada não tem índice: para chegar ao décimo nó tens de partir da cabeça e seguir nove ponteiros, por isso o acesso é <code>O(n)</code>.</li>
+    <li><strong>Inserir e eliminar.</strong> Se já tens uma referência ao nó certo, uma lista ligada pode inserir ou remover aí religando um par de ponteiros, uma operação <code>O(1)</code> - sem deslocar os outros elementos. Num array, inserir ou eliminar no meio implica deslocar os elementos seguintes, o que é <code>O(n)</code>.</li>
+    <li><strong>Memória e cache.</strong> Um array agrupa os seus valores, o que é favorável à cache da CPU. Uma lista ligada dispersa os seus nós e guarda um ponteiro adicional por nó, por isso usa mais memória por elemento e tende a ter pior localidade de cache.</li>
+  </ul>
+  <p>Nenhuma é "melhor"; servem para trabalhos diferentes. Se precisas de pesquisas rápidas por posição, um array (ou um array dinâmico como uma list ou um vector) costuma vencer. Se os teus dados mudam muito de tamanho e sobretudo adicionas ou retiras nas extremidades, uma lista ligada pode encaixar bem. Para uma revisão de como estes custos são descritos, vê o nosso guia sobre a <a href="/pt/e/blog/2026-07-14-what-is-big-o-notation.html">notação Big O</a>.</p>
+
+  <h2>As complexidades, com honestidade</h2>
+  <p>Eis os custos padrão de uma lista ligada, com a ressalva que sempre importa:</p>
+  <ul>
+    <li><strong>Acesso e pesquisa:</strong> <code>O(n)</code>. Não há índice, por isso encontrar um valor significa percorrer a cadeia a partir da cabeça.</li>
+    <li><strong>Inserção e eliminação:</strong> <code>O(1)</code> <em>quando já tens uma referência ao nó</em> (por exemplo, mesmo na cabeça). Se primeiro tens de <em>encontrar</em> o sítio, essa pesquisa é <code>O(n)</code>, e o total reflete ambas as partes.</li>
+  </ul>
+  <p>Essa condição "quando tens o nó" é a parte que as pessoas costumam omitir. Inserir na cabeça de uma lista simplesmente ligada é genuinamente tempo constante; inserir depois de algum valor que ainda tens de localizar não é.</p>
+
+  <h2>Onde as listas ligadas são usadas</h2>
+  <p>As listas ligadas são mais um bloco de construção do que um contentor do dia a dia. São uma forma natural de implementar uma <strong>pilha</strong> (stack) ou uma <strong>fila</strong> (queue), já que estas só adicionam e retiram nas extremidades. Encaixam em situações onde o tamanho da coleção muda muito e não precisas de acesso rápido por posição. Algumas estruturas usam nós ligados internamente; por exemplo, uma forma comum de tratar as colisões numa <a href="/pt/e/blog/2026-07-16-what-is-a-hash-table.html">hash table</a> é encadear as entradas em colisão numa pequena lista ligada por bucket.</p>
+
+  <h2>Os compromissos</h2>
+  <ul>
+    <li><strong>Sem acesso aleatório.</strong> Chegar a uma posição arbitrária custa <code>O(n)</code> porque segues os ponteiros a partir da cabeça; não há índice com que saltar.</li>
+    <li><strong>Memória adicional por elemento.</strong> Cada nó guarda pelo menos um ponteiro (dois numa lista duplamente ligada) além do seu valor.</li>
+    <li><strong>Localidade de cache mais fraca.</strong> Nós dispersos são menos favoráveis à cache do que um array contíguo, o que pode tornar o percurso mais lento na prática mesmo quando o Big O é o mesmo.</li>
+    <li><strong>Edições baratas num nó conhecido.</strong> A vantagem: inserir ou remover num nó que já deténs é <code>O(1)</code>, sem deslocar o resto dos dados.</li>
+  </ul>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Recomendado</span>
+    <h3>Um lugar para construir e executar o teu código</h3>
+    <p>Aprender estruturas de dados é uma coisa; implantar os programas que as usam é outra. Um VPS ou servidor cloud dá-te um ambiente real para compilar, executar e alojar os teus projetos. A Infomaniak - um fornecedor suíço que respeita a privacidade - oferece VPS e servidores cloud exatamente para isto.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Ver Infomaniak Cloud →</a>
+    <p class="disc">Link de afiliado - ajuda a manter estes guias gratuitos.</p>
+  </div>
+
+  <h2>FAQ</h2>
+  <p><strong>Qual é a diferença entre uma lista ligada e um array?</strong> Um array guarda os elementos num bloco contíguo com um índice, por isso lê qualquer posição em <code>O(1)</code> mas deslocar elementos para inserir ou eliminar no meio custa <code>O(n)</code>. Uma lista ligada guarda nós separados unidos por ponteiros, por isso não tem acesso aleatório (<code>O(n)</code> para chegar a uma posição) mas pode inserir ou eliminar num nó conhecido em <code>O(1)</code>.</p>
+  <p><strong>Porque é que aceder a um elemento é O(n)?</strong> Porque uma lista ligada não tem índice. Para chegar ao n-ésimo nó partes da cabeça e segues a cadeia de ponteiros n vezes, por isso o custo cresce com a posição que queres.</p>
+  <p><strong>Qual é a diferença entre simplesmente e duplamente ligada?</strong> Numa lista simplesmente ligada cada nó aponta apenas para o nó seguinte, por isso só te podes mover para a frente. Numa lista duplamente ligada cada nó aponta também para o nó anterior, por isso podes mover-te em ambas as direções, ao custo de um ponteiro adicional por nó.</p>
+  <p><strong>Quando devo usar uma lista ligada?</strong> Quando o tamanho da coleção muda muito e adicionas ou retiras sobretudo nas extremidades, ou como base de uma pilha ou de uma fila. Se precisas de acesso rápido por posição, um array costuma ser a melhor escolha.</p>
+
+  <div class="note">Guia independente, mantido pela comunidade. <strong>coldwa.st</strong> é um site de recursos de programação; este artigo cobre as listas ligadas a um nível introdutório. As complexidades e comportamentos descritos são resultados padrão da informática.</div>
+  <p class="related-guides">Guias relacionados: <a href="/pt/e/blog/2026-07-16-what-is-a-hash-table.html">hash tables</a>, <a href="/pt/e/blog/2026-07-14-what-is-big-o-notation.html">notação Big O</a>, <a href="/pt/e/blog/2026-06-16-what-is-recursion.html">recursão</a>.</p>
+  </div>
+</Base>
