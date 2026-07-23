@@ -5,10 +5,10 @@ const title = 'SQL vs. NoSQL: Welche Datenbank und wann (2026)';
 const description = 'SQL vs. NoSQL in 2026: SQL-Datenbanken speichern strukturierte Daten in verknüpften Tabellen, mit festem Schema und starker Konsistenz; NoSQL tauscht einen Teil davon gegen flexible Schemata und horizontale Skalierung. Die echten Unterschiede, Konsistenz, Skalierbarkeit und welche Sie wählen sollten.';
 const hero = '/img/sql-vs-nosql-2026.jpg';
 const faq = [
-  { q: 'Was ist der Unterschied zwischen SQL und NoSQL?', a: 'SQL-Datenbanken (relational) speichern Daten in Tabellen aus Zeilen und Spalten, mit einem festen, vordefinierten Schema, und man fragt sie in SQL über verknüpfte Tabellen ab – etwa PostgreSQL, MySQL und SQLite. NoSQL ist ein Sammelbegriff für nicht-relationale Datenbanken mit flexiblen Modellen (Dokument, Schlüssel-Wert, Wide-Column, Graph), die oft strikte Schemata und Joins zugunsten von Flexibilität und Skalierung lockern – etwa MongoDB, Redis, Cassandra und DynamoDB. Kurz gesagt: SQL bevorzugt Struktur und Konsistenz; NoSQL Flexibilität und horizontale Skalierung.' },
-  { q: 'Ist NoSQL schneller als SQL?', a: 'Nicht von Natur aus. NoSQL kann für die Zugriffsmuster, auf die es ausgelegt ist, schneller sein – einfache Schlüsselsuchen, hoher Schreibdurchsatz, Daten, die in ein einziges Dokument passen – und es skaliert leichter horizontal über viele Knoten. SQL ist oft schneller und einfacher für komplexe Abfragen, die verknüpfte Daten joinen, und moderne relationale Datenbanken sind hochgradig optimiert. Die Geschwindigkeit hängt weit mehr von Ihrem Datenmodell, Ihren Indizes und Ihren Abfragen ab als vom Etikett SQL/NoSQL.' },
+  { q: 'Was ist der Unterschied zwischen SQL und NoSQL?', a: 'SQL-Datenbanken (relational) speichern Daten in Tabellen aus Zeilen und Spalten, mit einem festen, vordefinierten Schema, und man fragt sie in SQL über verknüpfte Tabellen ab - etwa PostgreSQL, MySQL und SQLite. NoSQL ist ein Sammelbegriff für nicht-relationale Datenbanken mit flexiblen Modellen (Dokument, Schlüssel-Wert, Wide-Column, Graph), die oft strikte Schemata und Joins zugunsten von Flexibilität und Skalierung lockern - etwa MongoDB, Redis, Cassandra und DynamoDB. Kurz gesagt: SQL bevorzugt Struktur und Konsistenz; NoSQL Flexibilität und horizontale Skalierung.' },
+  { q: 'Ist NoSQL schneller als SQL?', a: 'Nicht von Natur aus. NoSQL kann für die Zugriffsmuster, auf die es ausgelegt ist, schneller sein - einfache Schlüsselsuchen, hoher Schreibdurchsatz, Daten, die in ein einziges Dokument passen - und es skaliert leichter horizontal über viele Knoten. SQL ist oft schneller und einfacher für komplexe Abfragen, die verknüpfte Daten joinen, und moderne relationale Datenbanken sind hochgradig optimiert. Die Geschwindigkeit hängt weit mehr von Ihrem Datenmodell, Ihren Indizes und Ihren Abfragen ab als vom Etikett SQL/NoSQL.' },
   { q: 'Wann sollte man NoSQL statt SQL nutzen?', a: 'Wählen Sie NoSQL, wenn Ihre Daten von Natur aus schemalos sind oder sich schnell ändern, wenn Sie Schreibvorgänge horizontal über viele Server skalieren müssen oder wenn der Zugriff hauptsächlich über Schlüssel erfolgt (Cache, Sitzungen, Ereignisprotokolle, große Kataloge). Wählen Sie SQL, wenn die Daten stark relational sind, wenn Transaktionen und starke Konsistenz nötig sind (Zahlungen, Bestände, alles, wo Korrektheit zählt) und wenn Sie vielfältige Ad-hoc-Abfragen stellen werden.' },
-  { q: 'Kann man SQL und NoSQL zusammen verwenden?', a: 'Ja, und viele Systeme tun es – man spricht von Polyglot Persistence. Ein verbreitetes Muster: eine relationale Datenbank als Quelle der Wahrheit für zentrale, konsistente Daten (Nutzer, Bestellungen) plus ein NoSQL-Speicher für eine bestimmte Rolle: Redis für Cache und Sitzungen, ein Dokumentenspeicher für flexible Inhalte oder eine Suchmaschine für Volltext. Nutzen Sie jedes Werkzeug dort, wo es passt, statt alles in ein einziges Modell zu zwingen.' },
+  { q: 'Kann man SQL und NoSQL zusammen verwenden?', a: 'Ja, und viele Systeme tun es - man spricht von Polyglot Persistence. Ein verbreitetes Muster: eine relationale Datenbank als Quelle der Wahrheit für zentrale, konsistente Daten (Nutzer, Bestellungen) plus ein NoSQL-Speicher für eine bestimmte Rolle: Redis für Cache und Sitzungen, ein Dokumentenspeicher für flexible Inhalte oder eine Suchmaschine für Volltext. Nutzen Sie jedes Werkzeug dort, wo es passt, statt alles in ein einziges Modell zu zwingen.' },
 ];
 ---
 <Base title={title} description={description} path={path} type="article" lang="de"
@@ -21,15 +21,15 @@ const faq = [
 
   <figure>
     <img class="hero" src={hero} alt="Reihen von Geräten in einem Rechenzentrum" width="1200" height="420" loading="eager" />
-    <figcaption>Zwei Wege, die Daten einer Anwendung zu speichern – SQL optimiert auf Struktur und Konsistenz, NoSQL auf Flexibilität und horizontale Skalierung.</figcaption>
+    <figcaption>Zwei Wege, die Daten einer Anwendung zu speichern - SQL optimiert auf Struktur und Konsistenz, NoSQL auf Flexibilität und horizontale Skalierung.</figcaption>
   </figure>
 
-  <p>Wenn Sie entscheiden, wie die Daten einer Anwendung gespeichert werden, ist die klassische Weggabelung <strong>SQL</strong> vs. <strong>NoSQL</strong>. Beide bewahren Ihre Daten auf und geben sie zurück, setzen aber auf gegensätzliche Wetten: SQL bevorzugt <em>strukturierte, konsistente, verknüpfte</em> Daten; NoSQL <em>flexible, skalierbare, denormalisierte</em> Daten. Dieser Leitfaden vergleicht sie ehrlich nach Datenmodell, Konsistenz, Skalierbarkeit und Abfrage – und wann man welches wählt. (Neu bei Datenbanken? Beginnen Sie mit <a href="/de/e/blog/2026-06-15-what-is-a-database.html">Was ist eine Datenbank</a>.)</p>
+  <p>Wenn Sie entscheiden, wie die Daten einer Anwendung gespeichert werden, ist die klassische Weggabelung <strong>SQL</strong> vs. <strong>NoSQL</strong>. Beide bewahren Ihre Daten auf und geben sie zurück, setzen aber auf gegensätzliche Wetten: SQL bevorzugt <em>strukturierte, konsistente, verknüpfte</em> Daten; NoSQL <em>flexible, skalierbare, denormalisierte</em> Daten. Dieser Leitfaden vergleicht sie ehrlich nach Datenmodell, Konsistenz, Skalierbarkeit und Abfrage - und wann man welches wählt. (Neu bei Datenbanken? Beginnen Sie mit <a href="/de/e/blog/2026-06-15-what-is-a-database.html">Was ist eine Datenbank</a>.)</p>
 
   <h2>Der grundlegende Unterschied</h2>
   <ul>
-    <li><strong>SQL (relational)</strong> – Daten leben in <em>Tabellen</em> aus Zeilen und Spalten, mit <strong>festem Schema</strong>; Beziehungen sind explizit und man fragt in <a href="/de/e/blog/2026-06-14-what-is-sql.html">SQL</a> ab. Beispiele: PostgreSQL, MySQL, SQLite.</li>
-    <li><strong>NoSQL (nicht-relational)</strong> – ein Sammelbegriff für <em>flexible</em> Modelle: Dokument (MongoDB), Schlüssel-Wert (Redis), Wide-Column (Cassandra), Graph (Neo4j). Lockere Schemata, oft denormalisierte Daten.</li>
+    <li><strong>SQL (relational)</strong> - Daten leben in <em>Tabellen</em> aus Zeilen und Spalten, mit <strong>festem Schema</strong>; Beziehungen sind explizit und man fragt in <a href="/de/e/blog/2026-06-14-what-is-sql.html">SQL</a> ab. Beispiele: PostgreSQL, MySQL, SQLite.</li>
+    <li><strong>NoSQL (nicht-relational)</strong> - ein Sammelbegriff für <em>flexible</em> Modelle: Dokument (MongoDB), Schlüssel-Wert (Redis), Wide-Column (Cassandra), Graph (Neo4j). Lockere Schemata, oft denormalisierte Daten.</li>
   </ul>
   <p>SQL ist <strong>Struktur zuerst</strong> („definiere die Form, dann speichere“); NoSQL ist <strong>Flexibilität zuerst</strong> („speichere jetzt, die Form variiert“).</p>
 
@@ -39,31 +39,31 @@ const faq = [
   <figure><img src="/img/sql-vs-nosql-2026-servers.jpg" alt="Rack-Server in einem Rechenzentrum, eine Hand greift nach einer Einheit" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>NoSQL-Speicher sind dafür ausgelegt, sich über viele Server zu verteilen; relationale Datenbanken skalieren traditionell zuerst auf stärkerer Hardware.</figcaption></figure>
 
   <h2>Skalierbarkeit</h2>
-  <p>Traditionelle SQL-Datenbanken skalieren <strong>vertikal</strong> – ein leistungsstärkerer Server – und das Verteilen von Schreibvorgängen auf mehrere Maschinen ist schwieriger (auch wenn Read-Replicas und modernes verteiltes SQL helfen). NoSQL wurde entworfen, um <strong>horizontal</strong> zu skalieren: Standard-Knoten hinzufügen und Daten shardden, was zu sehr hohem Schreibdurchsatz und riesigen Volumina passt. Wenn Sie Schreibdurchsatz auf Internet-Skala erwarten, ist das Scale-out-Modell von NoSQL ein echter Vorteil; für die meisten Apps reicht eine einzige gut abgestimmte relationale Datenbank bemerkenswert weit.</p>
+  <p>Traditionelle SQL-Datenbanken skalieren <strong>vertikal</strong> - ein leistungsstärkerer Server - und das Verteilen von Schreibvorgängen auf mehrere Maschinen ist schwieriger (auch wenn Read-Replicas und modernes verteiltes SQL helfen). NoSQL wurde entworfen, um <strong>horizontal</strong> zu skalieren: Standard-Knoten hinzufügen und Daten shardden, was zu sehr hohem Schreibdurchsatz und riesigen Volumina passt. Wenn Sie Schreibdurchsatz auf Internet-Skala erwarten, ist das Scale-out-Modell von NoSQL ein echter Vorteil; für die meisten Apps reicht eine einzige gut abgestimmte relationale Datenbank bemerkenswert weit.</p>
 
   <h2>Abfrage und Flexibilität</h2>
-  <p>Die große Stärke von SQL ist die <strong>Ad-hoc-Abfrage</strong>: Joins, Aggregationen und beliebige Filter über verknüpfte Tabellen, mit jahrzehntelangem Tooling. NoSQL opfert einen Teil davon – Joins sind oft begrenzt oder werden im Code erledigt – für die Freiheit, vielfältige, verschachtelte oder sich ändernde Daten ohne Migrationen zu speichern. Wenn Ihr Zugriffsmuster bekannt und einfach ist (Suche per Schlüssel, Lesen eines Dokuments), passt NoSQL natürlich; braucht man flexibles Reporting über Beziehungen, gewinnt SQL.</p>
+  <p>Die große Stärke von SQL ist die <strong>Ad-hoc-Abfrage</strong>: Joins, Aggregationen und beliebige Filter über verknüpfte Tabellen, mit jahrzehntelangem Tooling. NoSQL opfert einen Teil davon - Joins sind oft begrenzt oder werden im Code erledigt - für die Freiheit, vielfältige, verschachtelte oder sich ändernde Daten ohne Migrationen zu speichern. Wenn Ihr Zugriffsmuster bekannt und einfach ist (Suche per Schlüssel, Lesen eines Dokuments), passt NoSQL natürlich; braucht man flexibles Reporting über Beziehungen, gewinnt SQL.</p>
 
   <h2>Wie man wählt</h2>
   <ul>
     <li><strong>Nehmen Sie SQL</strong> für relationale Daten, Transaktionen und starke Konsistenz sowie vielfältige Ad-hoc-Abfragen (Zahlungen, Bestände, die meisten Geschäftsanwendungen).</li>
     <li><strong>Nehmen Sie NoSQL</strong> für schemalose oder sich ändernde Daten, horizontale Skalierung beim Schreiben und einfachen Zugriff per Schlüssel (Cache, Sitzungen, Ereignisprotokolle, große Kataloge).</li>
-    <li><strong>Beides</strong> – Polyglot Persistence: eine relationale Quelle der Wahrheit plus ein NoSQL-Speicher (z. B. Redis-Cache) für eine bestimmte Rolle. Sehr verbreitet.</li>
+    <li><strong>Beides</strong> - Polyglot Persistence: eine relationale Quelle der Wahrheit plus ein NoSQL-Speicher (z. B. Redis-Cache) für eine bestimmte Rolle. Sehr verbreitet.</li>
   </ul>
 
   <div class="affbox" style="margin:28px 0;">
     <span class="tag">Empfohlen</span>
     <h3>Ein Ort, um Ihre Datenbank zu betreiben</h3>
-    <p>Ob SQL oder NoSQL – Ihre Datenbank braucht ein zuverlässiges Hosting mit voller Kontrolle über Laufzeit, Speicher und Netzwerk – und planbare Backups. Ein VPS oder Cloud-Server eignet sich. Infomaniak – ein Schweizer, datenschutzfreundlicher Hoster – bietet VPS und Cloud-Server, um PostgreSQL, MongoDB oder Redis selbst zu betreiben.</p>
+    <p>Ob SQL oder NoSQL - Ihre Datenbank braucht ein zuverlässiges Hosting mit voller Kontrolle über Laufzeit, Speicher und Netzwerk - und planbare Backups. Ein VPS oder Cloud-Server eignet sich. Infomaniak - ein Schweizer, datenschutzfreundlicher Hoster - bietet VPS und Cloud-Server, um PostgreSQL, MongoDB oder Redis selbst zu betreiben.</p>
     <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Infomaniak Cloud ansehen →</a>
-    <p class="disc">Affiliate-Link – er unterstützt diese kostenlosen Leitfäden.</p>
+    <p class="disc">Affiliate-Link - er unterstützt diese kostenlosen Leitfäden.</p>
   </div>
 
   <h2>Häufige Fragen</h2>
   {faq.map((f) => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}
 
   <h2>Fazit</h2>
-  <p>SQL und NoSQL sind weniger Rivalen als Werkzeuge für unterschiedliche Datenformen. <strong>SQL</strong> gewinnt bei Struktur, Konsistenz und reichhaltiger Abfrage – die richtige Voreinstellung für relationale und kritische Daten. <strong>NoSQL</strong> gewinnt bei Flexibilität und horizontaler Skalierung – die richtige Voreinstellung für schemalose Daten und Schreibvorgänge auf Internet-Skala. Wählen Sie nach Ihren Daten und Zugriffsmustern, und scheuen Sie sich nicht, beides zu nutzen.</p>
+  <p>SQL und NoSQL sind weniger Rivalen als Werkzeuge für unterschiedliche Datenformen. <strong>SQL</strong> gewinnt bei Struktur, Konsistenz und reichhaltiger Abfrage - die richtige Voreinstellung für relationale und kritische Daten. <strong>NoSQL</strong> gewinnt bei Flexibilität und horizontaler Skalierung - die richtige Voreinstellung für schemalose Daten und Schreibvorgänge auf Internet-Skala. Wählen Sie nach Ihren Daten und Zugriffsmustern, und scheuen Sie sich nicht, beides zu nutzen.</p>
   </div>
 
   <script type="application/ld+json" set:html={JSON.stringify({

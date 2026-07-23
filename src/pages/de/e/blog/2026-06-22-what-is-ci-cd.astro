@@ -14,44 +14,44 @@ const description = 'CI/CD automatisiert den Weg von einer Code-Änderung zu ein
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="/img/ci-cd-hero.jpg" alt="Ein industrieller Roboterarm an einer automatisierten Fertigungslinie" width="1200" height="420" loading="eager" />
-    <figcaption>CI/CD ist ein Fließband für Software – jede Code-Änderung wird automatisch gebaut, getestet und ausgeliefert, so wie eine Roboterlinie ein Teil durch jede Stufe bewegt.</figcaption>
+    <figcaption>CI/CD ist ein Fließband für Software - jede Code-Änderung wird automatisch gebaut, getestet und ausgeliefert, so wie eine Roboterlinie ein Teil durch jede Stufe bewegt.</figcaption>
   </figure>
 
   <p>Sobald ein Team regelmäßig Software ausliefert, entscheidet eine Frage darüber, wie schnell und wie sicher es vorankommt: Wie gelangt eine Code-Änderung vom Laptop eines Entwicklers in die Produktion, wo sie live läuft? Die moderne Antwort heißt <strong>CI/CD</strong>. Dieser Leitfaden erklärt, was CI/CD bedeutet, wie eine Pipeline funktioniert, welche Tools beteiligt sind und warum es zum Standard geworden ist.</p>
 
   <h2>Die kurze Definition</h2>
-  <p><strong>CI/CD automatisiert den Weg von einer Code-Änderung zu einer getesteten, ausgelieferten Anwendung.</strong> Es steht für <strong>Continuous Integration</strong> und <strong>Continuous Delivery</strong> (oder Deployment). Zusammen ersetzen sie langsame, fehleranfällige manuelle Schritte – Bauen, Testen, Ausliefern – durch eine automatisierte <em>Pipeline</em>, die bei jeder Code-Änderung läuft. Weniger Handarbeit, weniger Fehler, schnellere Releases.</p>
+  <p><strong>CI/CD automatisiert den Weg von einer Code-Änderung zu einer getesteten, ausgelieferten Anwendung.</strong> Es steht für <strong>Continuous Integration</strong> und <strong>Continuous Delivery</strong> (oder Deployment). Zusammen ersetzen sie langsame, fehleranfällige manuelle Schritte - Bauen, Testen, Ausliefern - durch eine automatisierte <em>Pipeline</em>, die bei jeder Code-Änderung läuft. Weniger Handarbeit, weniger Fehler, schnellere Releases.</p>
 
   <h2>CI: Continuous Integration</h2>
-  <p><strong>Continuous Integration</strong> ist die Praxis, Code-Änderungen häufig in ein gemeinsames Repository zusammenzuführen – viele Male am Tag – und jede Änderung automatisch zu bauen und zu testen. Sobald Sie pushen, kompiliert die Pipeline den Code und führt die Testsuite aus. Wenn etwas kaputtgeht, erfahren Sie es in Minuten, nicht in Wochen. CI fängt Konflikte und Fehler früh ab, solange sie klein und günstig zu beheben sind, statt sie anwachsen zu lassen.</p>
+  <p><strong>Continuous Integration</strong> ist die Praxis, Code-Änderungen häufig in ein gemeinsames Repository zusammenzuführen - viele Male am Tag - und jede Änderung automatisch zu bauen und zu testen. Sobald Sie pushen, kompiliert die Pipeline den Code und führt die Testsuite aus. Wenn etwas kaputtgeht, erfahren Sie es in Minuten, nicht in Wochen. CI fängt Konflikte und Fehler früh ab, solange sie klein und günstig zu beheben sind, statt sie anwachsen zu lassen.</p>
 
   <figure><img src="/img/ci-cd-body.jpg" alt="Quellcode auf einem Bildschirm" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>Jeder <a href="/de/e/blog/2026-06-14-what-is-git.html">Git</a>-Push löst die Pipeline aus: Sie baut den Code und führt die Tests automatisch aus, bevor etwas ausgeliefert wird.</figcaption></figure>
 
   <h2>CD: Continuous Delivery und Deployment</h2>
-  <p>Die zweite Hälfte ist der Punkt, an dem die Änderung tatsächlich ausgeliefert wird. <strong>Continuous Delivery</strong> bedeutet, dass jede Änderung, die die Tests besteht, automatisch für das Release vorbereitet wird, sodass das Deployment ein einziger Klick ist, wann immer Sie wollen. <strong>Continuous Deployment</strong> geht einen Schritt weiter: Jede Änderung, die besteht, wird automatisch in die Produktion ausgeliefert, ganz ohne manuelle Freigabe. Dieselbe Abkürzung „CD“, ein wichtiger Unterschied – ob ein Mensch den Knopf drückt.</p>
+  <p>Die zweite Hälfte ist der Punkt, an dem die Änderung tatsächlich ausgeliefert wird. <strong>Continuous Delivery</strong> bedeutet, dass jede Änderung, die die Tests besteht, automatisch für das Release vorbereitet wird, sodass das Deployment ein einziger Klick ist, wann immer Sie wollen. <strong>Continuous Deployment</strong> geht einen Schritt weiter: Jede Änderung, die besteht, wird automatisch in die Produktion ausgeliefert, ganz ohne manuelle Freigabe. Dieselbe Abkürzung „CD“, ein wichtiger Unterschied - ob ein Mensch den Knopf drückt.</p>
 
   <h2>Wie eine Pipeline funktioniert</h2>
   <p>Eine CI/CD-Pipeline ist eine Reihe automatisierter Stufen, die von einer Code-Änderung ausgelöst werden:</p>
   <ul>
-    <li><strong>Source</strong> – ein Push in das Git-Repository startet die Pipeline.</li>
-    <li><strong>Build</strong> – der Code wird kompiliert und verpackt, oft in einen <a href="/de/e/blog/2026-06-19-what-is-docker.html">Container</a>.</li>
-    <li><strong>Test</strong> – automatisierte Tests laufen; ein Fehler stoppt die Pipeline.</li>
-    <li><strong>Deploy</strong> – wenn alles besteht, wird die App auf einen Server ausgeliefert, oft <a href="/de/e/blog/2026-06-22-what-is-ssh.html">über SSH</a> auf einen <a href="/de/e/blog/2026-06-19-what-is-a-vps.html">VPS</a> oder Cloud-Host.</li>
+    <li><strong>Source</strong> - ein Push in das Git-Repository startet die Pipeline.</li>
+    <li><strong>Build</strong> - der Code wird kompiliert und verpackt, oft in einen <a href="/de/e/blog/2026-06-19-what-is-docker.html">Container</a>.</li>
+    <li><strong>Test</strong> - automatisierte Tests laufen; ein Fehler stoppt die Pipeline.</li>
+    <li><strong>Deploy</strong> - wenn alles besteht, wird die App auf einen Server ausgeliefert, oft <a href="/de/e/blog/2026-06-22-what-is-ssh.html">über SSH</a> auf einen <a href="/de/e/blog/2026-06-19-what-is-a-vps.html">VPS</a> oder Cloud-Host.</li>
   </ul>
 
   <h2>Die üblichen Tools</h2>
   <p>Sie bauen das nicht von Grund auf selbst. <strong>GitHub Actions</strong> und <strong>GitLab CI/CD</strong> sind beliebt, weil sie direkt neben Ihrem Code leben; <strong>Jenkins</strong> ist eine etablierte, selbst gehostete Option; und Dienste wie CircleCI und andere übernehmen dieselbe Rolle. Sie alle erledigen denselben Job: das Repository beobachten, die in einer Konfigurationsdatei definierten Stufen ausführen und zurückmelden. Sie beschreiben die Pipeline einmal in einer Datei in Ihrem Repository, und sie läuft bei jeder Änderung.</p>
 
   <h2>Warum Teams es nutzen</h2>
-  <p>Der Gewinn ist Geschwindigkeit <em>und</em> Sicherheit, die sich sonst meist gegenseitig ausschließen, hier aber nicht. Automatisierung beseitigt die langsamen, manuellen Release-Schritte und die menschlichen Fehler, die damit einhergehen. Fehler werden früh durch die Teststufe abgefangen. Releases werden klein, häufig und Routine statt selten und riskant. Und weil der gesamte Prozess in Code definiert ist, ist er konsistent und wiederholbar – jedes Mal gleich, für jeden Entwickler.</p>
+  <p>Der Gewinn ist Geschwindigkeit <em>und</em> Sicherheit, die sich sonst meist gegenseitig ausschließen, hier aber nicht. Automatisierung beseitigt die langsamen, manuellen Release-Schritte und die menschlichen Fehler, die damit einhergehen. Fehler werden früh durch die Teststufe abgefangen. Releases werden klein, häufig und Routine statt selten und riskant. Und weil der gesamte Prozess in Code definiert ist, ist er konsistent und wiederholbar - jedes Mal gleich, für jeden Entwickler.</p>
 
   <h2>Die ehrlichen Kompromisse</h2>
-  <p>CI/CD ist nicht umsonst. Eine gute Pipeline einzurichten kostet Aufwand, und sie ist nur so gut wie Ihre Tests – das Deployment ungetesteten Codes zu automatisieren liefert Fehler nur schneller aus. Es gibt eine Lernkurve, und kleine oder Solo-Projekte brauchen vielleicht nicht die volle Maschinerie. Aber für jedes Team, das regelmäßig ausliefert, zahlen sich die gesparte Zeit und die vermiedenen Fehler schnell aus – deshalb ist es heute die übliche Art, wie professionelle Software gebaut wird.</p>
+  <p>CI/CD ist nicht umsonst. Eine gute Pipeline einzurichten kostet Aufwand, und sie ist nur so gut wie Ihre Tests - das Deployment ungetesteten Codes zu automatisieren liefert Fehler nur schneller aus. Es gibt eine Lernkurve, und kleine oder Solo-Projekte brauchen vielleicht nicht die volle Maschinerie. Aber für jedes Team, das regelmäßig ausliefert, zahlen sich die gesparte Zeit und die vermiedenen Fehler schnell aus - deshalb ist es heute die übliche Art, wie professionelle Software gebaut wird.</p>
 
   <h2>Häufige Fragen</h2>
-  <details><summary>Wofür steht CI/CD?</summary><p>CI steht für Continuous Integration – das häufige Zusammenführen und automatische Testen von Code-Änderungen. CD steht für Continuous Delivery oder Continuous Deployment – das automatische Vorbereiten oder Ausliefern dieser getesteten Änderungen. Zusammen beschreibt CI/CD eine automatisierte Pipeline, die eine Code-Änderung vom Commit bis zur getesteten, ausgelieferten Anwendung bringt.</p></details>
+  <details><summary>Wofür steht CI/CD?</summary><p>CI steht für Continuous Integration - das häufige Zusammenführen und automatische Testen von Code-Änderungen. CD steht für Continuous Delivery oder Continuous Deployment - das automatische Vorbereiten oder Ausliefern dieser getesteten Änderungen. Zusammen beschreibt CI/CD eine automatisierte Pipeline, die eine Code-Änderung vom Commit bis zur getesteten, ausgelieferten Anwendung bringt.</p></details>
   <details><summary>Was ist der Unterschied zwischen Continuous Delivery und Continuous Deployment?</summary><p>Beide automatisieren den Release-Prozess, und beide verwenden „CD“. Bei Continuous Delivery wird jede bestandene Änderung bereit zum Release gemacht, aber ein Mensch entscheidet, wann sie live geht. Bei Continuous Deployment wird jede bestandene Änderung automatisch in die Produktion ausgeliefert, ohne manuellen Schritt. Der Unterschied ist, ob ein Mensch den letzten Knopf drückt.</p></details>
-  <details><summary>Was ist eine CI/CD-Pipeline?</summary><p>Eine CI/CD-Pipeline ist eine automatisierte Abfolge von Stufen – typischerweise Source, Build, Test und Deploy –, die bei jeder Code-Änderung läuft. Ein Push in das Repository löst sie aus: Der Code wird gebaut, die Tests laufen, und wenn alles besteht, wird die Anwendung ausgeliefert. Die Stufen definieren Sie in einer Konfigurationsdatei, die in Ihrem Repository liegt.</p></details>
+  <details><summary>Was ist eine CI/CD-Pipeline?</summary><p>Eine CI/CD-Pipeline ist eine automatisierte Abfolge von Stufen - typischerweise Source, Build, Test und Deploy -, die bei jeder Code-Änderung läuft. Ein Push in das Repository löst sie aus: Der Code wird gebaut, die Tests laufen, und wenn alles besteht, wird die Anwendung ausgeliefert. Die Stufen definieren Sie in einer Konfigurationsdatei, die in Ihrem Repository liegt.</p></details>
   <details><summary>Brauche ich CI/CD für ein kleines Projekt?</summary><p>Nicht immer. Ein Solo- oder sehr kleines Projekt braucht vielleicht keine vollständige Pipeline, und eine einzurichten kostet Aufwand. Aber schon ein einfacher CI-Schritt, der bei jedem Push Ihre Tests ausführt, fängt Fehler früh ab und lohnt sich meist. Je größer und je häufiger das Projekt ausgeliefert wird, desto mehr zahlt sich CI/CD aus.</p></details>
 
   <div class="note">Unabhängiger, von der Community gepflegter Leitfaden. <strong>coldwa.st</strong> ist eine Programmier-Ressourcenseite; dieser Artikel ist ein neuer und origineller erklärender Text über CI/CD. Die genannten Tool-Namen stehen für weit verbreitete Plattformen; prüfen Sie die Dokumentation des jeweiligen Tools für Details.</div>
@@ -59,9 +59,9 @@ const description = 'CI/CD automatisiert den Weg von einer Code-Änderung zu ein
   <div class="affbox" style="margin:28px 0;">
     <span class="tag">Empfohlen</span>
     <h3>Ein Server, auf den Sie Ihre Pipeline deployen können</h3>
-    <p>Eine CI/CD-Pipeline braucht ein Ziel zum Deployen. Ein VPS oder Cloud-Server gibt Ihnen volle Kontrolle, um Ihre Build-Artefakte, Container oder Apps als letzte Stufe der Pipeline auszuführen. Infomaniak – ein Schweizer, datenschutzfreundlicher Anbieter – bietet VPS und Cloud-Server, auf die Sie automatisch deployen können.</p>
+    <p>Eine CI/CD-Pipeline braucht ein Ziel zum Deployen. Ein VPS oder Cloud-Server gibt Ihnen volle Kontrolle, um Ihre Build-Artefakte, Container oder Apps als letzte Stufe der Pipeline auszuführen. Infomaniak - ein Schweizer, datenschutzfreundlicher Anbieter - bietet VPS und Cloud-Server, auf die Sie automatisch deployen können.</p>
     <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Infomaniak Cloud ansehen →</a>
-    <p class="disc">Affiliate-Link – er unterstützt diese kostenlosen Leitfäden.</p>
+    <p class="disc">Affiliate-Link - er unterstützt diese kostenlosen Leitfäden.</p>
   </div>
 
   <p>Stöbern Sie in weiteren klaren Erklärungen in unserem <a href="/de/e/">Leitfaden-Index</a>.</p>
@@ -70,9 +70,9 @@ const description = 'CI/CD automatisiert den Weg von einer Code-Änderung zu ein
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
-      { "@type": "Question", "name": "Wofür steht CI/CD?", "acceptedAnswer": { "@type": "Answer", "text": "CI steht für Continuous Integration – das häufige Zusammenführen und automatische Testen von Code-Änderungen. CD steht für Continuous Delivery oder Continuous Deployment – das automatische Vorbereiten oder Ausliefern dieser getesteten Änderungen. Zusammen beschreiben sie eine automatisierte Pipeline vom Commit bis zur getesteten, ausgelieferten Anwendung." } },
+      { "@type": "Question", "name": "Wofür steht CI/CD?", "acceptedAnswer": { "@type": "Answer", "text": "CI steht für Continuous Integration - das häufige Zusammenführen und automatische Testen von Code-Änderungen. CD steht für Continuous Delivery oder Continuous Deployment - das automatische Vorbereiten oder Ausliefern dieser getesteten Änderungen. Zusammen beschreiben sie eine automatisierte Pipeline vom Commit bis zur getesteten, ausgelieferten Anwendung." } },
       { "@type": "Question", "name": "Was ist der Unterschied zwischen Continuous Delivery und Continuous Deployment?", "acceptedAnswer": { "@type": "Answer", "text": "Bei Continuous Delivery wird jede bestandene Änderung bereit zum Release gemacht, aber ein Mensch entscheidet, wann sie live geht. Bei Continuous Deployment wird jede bestandene Änderung automatisch in die Produktion ausgeliefert, ohne manuellen Schritt. Der Unterschied ist, ob ein Mensch den letzten Knopf drückt." } },
-      { "@type": "Question", "name": "Was ist eine CI/CD-Pipeline?", "acceptedAnswer": { "@type": "Answer", "text": "Eine automatisierte Abfolge von Stufen – Source, Build, Test und Deploy –, die bei jeder Code-Änderung läuft. Ein Push löst sie aus: Der Code wird gebaut, die Tests laufen, und wenn alles besteht, wird die App ausgeliefert. Die Stufen werden in einer Konfigurationsdatei in Ihrem Repository definiert." } },
+      { "@type": "Question", "name": "Was ist eine CI/CD-Pipeline?", "acceptedAnswer": { "@type": "Answer", "text": "Eine automatisierte Abfolge von Stufen - Source, Build, Test und Deploy -, die bei jeder Code-Änderung läuft. Ein Push löst sie aus: Der Code wird gebaut, die Tests laufen, und wenn alles besteht, wird die App ausgeliefert. Die Stufen werden in einer Konfigurationsdatei in Ihrem Repository definiert." } },
       { "@type": "Question", "name": "Brauche ich CI/CD für ein kleines Projekt?", "acceptedAnswer": { "@type": "Answer", "text": "Nicht immer. Ein Solo- oder sehr kleines Projekt braucht vielleicht keine vollständige Pipeline. Aber schon ein einfacher CI-Schritt, der bei jedem Push Ihre Tests ausführt, fängt Fehler früh ab und lohnt sich meist. Je größer und je häufiger das Projekt ausgeliefert wird, desto mehr zahlt sich CI/CD aus." } }
     ]
   })} />

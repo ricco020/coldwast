@@ -14,38 +14,38 @@ const description = 'Um VPS (servidor privado virtual) é a sua fatia isolada de
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="/img/what-is-a-vps-2026.jpg" alt="Grande plano de uma placa de circuito impresso verde com componentes eletrónicos" width="1200" height="420" loading="eager" />
-    <figcaption>Uma placa de circuito impresso – um VPS é uma fatia virtual de hardware de servidor real como este, dividido e alugado com os seus próprios recursos dedicados.</figcaption>
+    <figcaption>Uma placa de circuito impresso - um VPS é uma fatia virtual de hardware de servidor real como este, dividido e alugado com os seus próprios recursos dedicados.</figcaption>
   </figure>
 
-  <p>Uma vez construído algo – um site, uma <a href="/pt/e/blog/2026-06-14-what-is-an-api.html">API</a>, um bot, ou uma app <a href="/pt/e/blog/2026-06-19-what-is-docker.html">em contentor</a> – é preciso um lugar onde correr que você controle. Para a maioria dos programadores, a resposta é um <strong>VPS</strong>. Este guia explica o que é um VPS, como funciona, como se compara com os outros alojamentos e quando é a escolha certa.</p>
+  <p>Uma vez construído algo - um site, uma <a href="/pt/e/blog/2026-06-14-what-is-an-api.html">API</a>, um bot, ou uma app <a href="/pt/e/blog/2026-06-19-what-is-docker.html">em contentor</a> - é preciso um lugar onde correr que você controle. Para a maioria dos programadores, a resposta é um <strong>VPS</strong>. Este guia explica o que é um VPS, como funciona, como se compara com os outros alojamentos e quando é a escolha certa.</p>
 
   <h2>A definição curta</h2>
-  <p><strong>Um VPS – servidor privado virtual – é a sua porção isolada de um servidor físico, com CPU, memória e armazenamento dedicados, e acesso de administrador (root) completo.</strong> Uma máquina física é dividida em vários servidores virtuais, comportando-se cada um como um computador independente com o seu próprio sistema operativo. Obtém o controlo de um servidor dedicado a uma fração do custo, porque partilha o hardware subjacente sem partilhar a sua fatia.</p>
+  <p><strong>Um VPS - servidor privado virtual - é a sua porção isolada de um servidor físico, com CPU, memória e armazenamento dedicados, e acesso de administrador (root) completo.</strong> Uma máquina física é dividida em vários servidores virtuais, comportando-se cada um como um computador independente com o seu próprio sistema operativo. Obtém o controlo de um servidor dedicado a uma fração do custo, porque partilha o hardware subjacente sem partilhar a sua fatia.</p>
 
   <h2>Como funciona: a virtualização</h2>
   <p>Um VPS é criado por <strong>virtualização</strong>. Um software chamado hipervisor corre no servidor físico e divide-o em várias máquinas virtuais isoladas, cada uma com uma parte garantida do hardware. O seu VPS não pode ser abrandado por outro cliente que monopolize os recursos (ao contrário do alojamento partilhado básico), e pode instalar o sistema e o software à sua escolha, porque tem acesso root. É a mesma ideia de máquina virtual que sustenta a cloud.</p>
 
-  <figure><img src="/img/what-is-a-vps-2026-dev.jpg" alt="Código-fonte mostrado num editor de código num ecrã escuro" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>Código num editor – com um VPS, liga-se por SSH e implementa as suas próprias apps, com o mesmo controlo de uma máquina local.</figcaption></figure>
+  <figure><img src="/img/what-is-a-vps-2026-dev.jpg" alt="Código-fonte mostrado num editor de código num ecrã escuro" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>Código num editor - com um VPS, liga-se por SSH e implementa as suas próprias apps, com o mesmo controlo de uma máquina local.</figcaption></figure>
 
   <h2>VPS vs as alternativas</h2>
   <ul>
-    <li><strong>Alojamento partilhado</strong> – muitos sites partilham um servidor e os seus recursos, sem acesso root. O mais barato e simples, mas limitado e facilmente afetado pelos vizinhos. Bom para um site básico, não para correr a própria pilha.</li>
-    <li><strong>VPS</strong> – uma fatia garantida com acesso root e isolamento. O justo equilíbrio controlo/custo para a maioria dos projetos de programadores.</li>
-    <li><strong>Servidor dedicado</strong> – uma máquina física inteira só para si. Potência e isolamento máximos, a um preço muito mais elevado; excessivo enquanto não precisar realmente.</li>
-    <li><strong>Servidores cloud</strong> – instâncias do tipo VPS que arranca, escala e paga à hora, muitas vezes com serviços geridos à parte. Mais elásticos, por vezes mais caros para cargas estáveis.</li>
+    <li><strong>Alojamento partilhado</strong> - muitos sites partilham um servidor e os seus recursos, sem acesso root. O mais barato e simples, mas limitado e facilmente afetado pelos vizinhos. Bom para um site básico, não para correr a própria pilha.</li>
+    <li><strong>VPS</strong> - uma fatia garantida com acesso root e isolamento. O justo equilíbrio controlo/custo para a maioria dos projetos de programadores.</li>
+    <li><strong>Servidor dedicado</strong> - uma máquina física inteira só para si. Potência e isolamento máximos, a um preço muito mais elevado; excessivo enquanto não precisar realmente.</li>
+    <li><strong>Servidores cloud</strong> - instâncias do tipo VPS que arranca, escala e paga à hora, muitas vezes com serviços geridos à parte. Mais elásticos, por vezes mais caros para cargas estáveis.</li>
   </ul>
 
   <h2>Para que serve um VPS</h2>
   <p>Um VPS é a casa versátil do que constrói: alojar sites e apps web, correr uma <a href="/pt/e/blog/2026-06-14-what-is-an-api.html">API</a> ou um backend, implementar contentores <a href="/pt/e/blog/2026-06-19-what-is-docker.html">Docker</a> (até um pequeno nó <a href="/pt/e/blog/2026-06-19-what-is-kubernetes.html">Kubernetes</a>), executar bots, tarefas cron, um servidor Git, ou uma VPN pessoal. Tudo o que tenha de estar online 24/7 e que queira controlar totalmente encaixa bem.</p>
 
   <h2>Gerido vs não gerido</h2>
-  <p>É a escolha onde se tropeça. Um VPS <strong>não gerido</strong> dá-lhe um servidor nu – gere você mesmo o sistema, as atualizações, a segurança e os backups. Mais barato e flexível, mas é você o administrador de sistemas. Um VPS <strong>gerido</strong> custa mais, mas o fornecedor trata da manutenção, das correções e do suporte, o que compensa se preferir não administrar um servidor. Escolha consoante o volume de trabalho de sysadmin que quer assumir.</p>
+  <p>É a escolha onde se tropeça. Um VPS <strong>não gerido</strong> dá-lhe um servidor nu - gere você mesmo o sistema, as atualizações, a segurança e os backups. Mais barato e flexível, mas é você o administrador de sistemas. Um VPS <strong>gerido</strong> custa mais, mas o fornecedor trata da manutenção, das correções e do suporte, o que compensa se preferir não administrar um servidor. Escolha consoante o volume de trabalho de sysadmin que quer assumir.</p>
 
   <h2>Os compromissos honestos</h2>
-  <p>Um VPS oferece um verdadeiro controlo, mas com responsabilidades. Num servidor não gerido, a segurança é sua: software sem correções e configurações SSH fracas são a forma como os servidores são comprometidos. Os recursos são garantidos mas finitos – dimensiona a oferta consoante a sua carga e sobe de plano quando for preciso. E há uma curva de aprendizagem da linha de comandos e da administração Linux. Para a maioria dos programadores, esse controlo é precisamente o objetivo, e as competências transferem-se para todo o lado.</p>
+  <p>Um VPS oferece um verdadeiro controlo, mas com responsabilidades. Num servidor não gerido, a segurança é sua: software sem correções e configurações SSH fracas são a forma como os servidores são comprometidos. Os recursos são garantidos mas finitos - dimensiona a oferta consoante a sua carga e sobe de plano quando for preciso. E há uma curva de aprendizagem da linha de comandos e da administração Linux. Para a maioria dos programadores, esse controlo é precisamente o objetivo, e as competências transferem-se para todo o lado.</p>
 
   <h2>Perguntas frequentes</h2>
-  <details><summary>O que é um VPS em termos simples?</summary><p>Um VPS é a sua fatia privada de um servidor físico. Uma máquina real é dividida por software em vários servidores virtuais isolados, e você aluga um – com CPU, memória e armazenamento garantidos, o seu próprio sistema operativo e acesso de administrador completo – de modo que se comporta como um computador dedicado a um custo muito menor.</p></details>
+  <details><summary>O que é um VPS em termos simples?</summary><p>Um VPS é a sua fatia privada de um servidor físico. Uma máquina real é dividida por software em vários servidores virtuais isolados, e você aluga um - com CPU, memória e armazenamento garantidos, o seu próprio sistema operativo e acesso de administrador completo - de modo que se comporta como um computador dedicado a um custo muito menor.</p></details>
   <details><summary>Qual é a diferença entre um VPS e o alojamento partilhado?</summary><p>O alojamento partilhado coloca muitos sites num servidor com recursos partilhados e sem acesso root, por isso fica limitado e pode ser afetado por outros. Um VPS dá-lhe uma parte garantida e isolada dos recursos mais acesso root completo, para instalar os seus softwares e correr a sua pilha sem interferência.</p></details>
   <details><summary>Qual é a diferença entre um VPS e um servidor dedicado?</summary><p>Um VPS é uma fatia virtual de uma máquina física partilhada; um servidor dedicado é uma máquina física inteira reservada. O dedicado oferece mais potência e isolamento, mas custa muito mais. Um VPS dá grande parte do controlo a uma fração do preço.</p></details>
   <details><summary>É preciso ser sysadmin para usar um VPS?</summary><p>Num VPS não gerido, gere você mesmo o sistema, as atualizações e a segurança, por isso bases de Linux e de linha de comandos ajudam. Um VPS gerido confia a manutenção e o suporte ao fornecedor, a um custo maior. As competências de base aprendem-se com facilidade e servem em todo o lado.</p></details>
@@ -55,9 +55,9 @@ const description = 'Um VPS (servidor privado virtual) é a sua fatia isolada de
   <div class="affbox" style="margin:28px 0;">
     <span class="tag">Recomendado</span>
     <h3>Um VPS para correr os seus projetos</h3>
-    <p>Um VPS ou servidor cloud dá-lhe o controlo root completo para alojar sites, APIs, contentores ou uma VPN pessoal. A Infomaniak – um fornecedor suíço respeitador da privacidade – oferece VPS e servidores cloud para implementar o que constrói.</p>
+    <p>Um VPS ou servidor cloud dá-lhe o controlo root completo para alojar sites, APIs, contentores ou uma VPN pessoal. A Infomaniak - um fornecedor suíço respeitador da privacidade - oferece VPS e servidores cloud para implementar o que constrói.</p>
     <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Ver Infomaniak Cloud →</a>
-    <p class="disc">Link de afiliado – ajuda a suportar estes guias gratuitos.</p>
+    <p class="disc">Link de afiliado - ajuda a suportar estes guias gratuitos.</p>
   </div>
 
   <p>Explore outras explicações claras no nosso <a href="/pt/e/">índice de guias</a>.</p>
@@ -66,7 +66,7 @@ const description = 'Um VPS (servidor privado virtual) é a sua fatia isolada de
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
-      { "@type": "Question", "name": "O que é um VPS em termos simples?", "acceptedAnswer": { "@type": "Answer", "text": "Um VPS é a sua fatia privada de um servidor físico. Uma máquina real é dividida por software em vários servidores virtuais isolados, e você aluga um – com CPU, memória e armazenamento garantidos, o seu próprio sistema operativo e acesso de administrador completo – de modo que se comporta como um computador dedicado a um custo muito menor." } },
+      { "@type": "Question", "name": "O que é um VPS em termos simples?", "acceptedAnswer": { "@type": "Answer", "text": "Um VPS é a sua fatia privada de um servidor físico. Uma máquina real é dividida por software em vários servidores virtuais isolados, e você aluga um - com CPU, memória e armazenamento garantidos, o seu próprio sistema operativo e acesso de administrador completo - de modo que se comporta como um computador dedicado a um custo muito menor." } },
       { "@type": "Question", "name": "Qual é a diferença entre um VPS e o alojamento partilhado?", "acceptedAnswer": { "@type": "Answer", "text": "O alojamento partilhado coloca muitos sites num servidor com recursos partilhados e sem acesso root. Um VPS dá-lhe uma parte garantida e isolada dos recursos mais acesso root completo, para instalar os seus softwares e correr a sua pilha sem interferência." } },
       { "@type": "Question", "name": "Qual é a diferença entre um VPS e um servidor dedicado?", "acceptedAnswer": { "@type": "Answer", "text": "Um VPS é uma fatia virtual de uma máquina física partilhada; um servidor dedicado é uma máquina física inteira reservada. O dedicado oferece mais potência e isolamento, mas custa muito mais. Um VPS dá grande parte do controlo a uma fração do preço." } },
       { "@type": "Question", "name": "É preciso ser sysadmin para usar um VPS?", "acceptedAnswer": { "@type": "Answer", "text": "Num VPS não gerido, gere você mesmo o sistema, as atualizações e a segurança, por isso bases de Linux e de linha de comandos ajudam. Um VPS gerido confia a manutenção e o suporte ao fornecedor, a um custo maior. As competências de base aprendem-se com facilidade." } }

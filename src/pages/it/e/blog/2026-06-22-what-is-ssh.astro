@@ -20,10 +20,10 @@ const description = 'SSH (Secure Shell) è il protocollo cifrato che usi per acc
   <p>Nel momento in cui affitti un <a href="/it/e/blog/2026-06-19-what-is-a-vps.html">VPS</a> o distribuisci su un server remoto, ti scontri sempre con la stessa domanda: come accedi davvero ed esegui comandi su una macchina che vive in un data center? La risposta è quasi sempre <strong>SSH</strong>. Questa guida spiega cos’è SSH, come mantiene sicura la tua sessione e la manciata di comandi che ti servono davvero.</p>
 
   <h2>La definizione breve</h2>
-  <p><strong>SSH – Secure Shell – è un protocollo per accedere a un computer remoto ed eseguire comandi su una connessione cifrata.</strong> Ti dà un terminale su una macchina che si trova altrove, come se fosse proprio davanti a te, e cifra tutto ciò che passa tra te e il server. Quella cifratura è il punto centrale: ha sostituito vecchi strumenti come Telnet, che inviavano password e comandi in chiaro, leggibili da chiunque sulla rete.</p>
+  <p><strong>SSH - Secure Shell - è un protocollo per accedere a un computer remoto ed eseguire comandi su una connessione cifrata.</strong> Ti dà un terminale su una macchina che si trova altrove, come se fosse proprio davanti a te, e cifra tutto ciò che passa tra te e il server. Quella cifratura è il punto centrale: ha sostituito vecchi strumenti come Telnet, che inviavano password e comandi in chiaro, leggibili da chiunque sulla rete.</p>
 
   <h2>Come funziona SSH</h2>
-  <p>Quando ti connetti, il tuo client SSH e il server eseguono un rapido handshake. Si accordano sulle impostazioni di cifratura e creano una chiave segreta condivisa, così il resto della sessione resta privato. Il server dimostra anche la propria identità con una sua chiave, ed è per questo che il client ti avvisa la prima volta che vede un server nuovo. Dopodiché ti autentichi – dimostri chi sei – e ottieni un prompt sulla macchina remota. Da quel momento ogni tasto premuto e ogni risposta sono cifrati.</p>
+  <p>Quando ti connetti, il tuo client SSH e il server eseguono un rapido handshake. Si accordano sulle impostazioni di cifratura e creano una chiave segreta condivisa, così il resto della sessione resta privato. Il server dimostra anche la propria identità con una sua chiave, ed è per questo che il client ti avvisa la prima volta che vede un server nuovo. Dopodiché ti autentichi - dimostri chi sei - e ottieni un prompt sulla macchina remota. Da quel momento ogni tasto premuto e ogni risposta sono cifrati.</p>
 
   <figure><img src="/img/px-cbf4af27da8a.jpg" alt="Un armadio server pieno di cavi di rete e bretelle di patch" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>SSH è il modo in cui raggiungi server come questi. Ti connetti dal tuo portatile e controlli la macchina remota su un canale cifrato.</figcaption></figure>
 
@@ -49,16 +49,16 @@ const description = 'SSH (Secure Shell) è il protocollo cifrato che usi per acc
   <details><summary>Cos’è SSH in parole semplici?</summary><p>SSH, o Secure Shell, è un modo per accedere a un computer che si trova altrove ed eseguire comandi su di esso tramite una connessione cifrata. Ti dà un terminale su una macchina remota come se fosse davanti a te, mentre cifra tutto ciò che viene inviato tra te e il server, così nessuno sulla rete può leggerlo.</p></details>
   <details><summary>Qual è la differenza tra una password SSH e una chiave SSH?</summary><p>Una password è un segreto che digiti e può essere indovinata o forzata a forza bruta dai bot. Una chiave SSH è una coppia di file: una chiave privata tenuta sulla tua macchina e una chiave pubblica messa sul server. Entri solo se corrispondono, e la chiave privata non lascia mai il tuo computer, il che rende le chiavi più sicure e più comode delle password.</p></details>
   <details><summary>Quale porta usa SSH?</summary><p>SSH usa di default la porta TCP 22. Alcuni amministratori la cambiano con una porta diversa per ridurre i tentativi di accesso automatici, ma è un piccolo ostacolo più che vera sicurezza. Le protezioni reali sono usare le chiavi SSH e disattivare l’accesso con password, non nascondere la porta.</p></details>
-  <details><summary>SSH è sicuro?</summary><p>Sì, SSH è sicuro se configurato correttamente, perché cifra l’intera sessione. La maggior parte delle violazioni deriva da una configurazione debole, non da SSH in sé – di solito l’accesso con password lasciato attivo con una password indovinabile. Usare le chiavi SSH, disattivare l’accesso con password e proteggere la chiave privata lo rende molto sicuro.</p></details>
+  <details><summary>SSH è sicuro?</summary><p>Sì, SSH è sicuro se configurato correttamente, perché cifra l’intera sessione. La maggior parte delle violazioni deriva da una configurazione debole, non da SSH in sé - di solito l’accesso con password lasciato attivo con una password indovinabile. Usare le chiavi SSH, disattivare l’accesso con password e proteggere la chiave privata lo rende molto sicuro.</p></details>
 
   <div class="note">Guida indipendente, mantenuta dalla comunità. <strong>coldwa.st</strong> è un sito di risorse di programmazione; questo articolo è uno scritto esplicativo nuovo e originale sul protocollo SSH. I comandi mostrati sono l’uso standard di OpenSSH; consulta la documentazione del tuo client e server per i dettagli specifici.</div>
 
   <div class="affbox" style="margin:28px 0;">
     <span class="tag">Consigliato</span>
     <h3>Un server su cui esercitarti con SSH</h3>
-    <p>Il modo migliore per imparare SSH è avere un vero server a cui accedere. Un VPS o server cloud ti dà accesso root su SSH per distribuire siti, API o container. Infomaniak – un fornitore svizzero rispettoso della privacy – offre VPS e server cloud a cui puoi connetterti e che puoi gestire interamente via SSH.</p>
+    <p>Il modo migliore per imparare SSH è avere un vero server a cui accedere. Un VPS o server cloud ti dà accesso root su SSH per distribuire siti, API o container. Infomaniak - un fornitore svizzero rispettoso della privacy - offre VPS e server cloud a cui puoi connetterti e che puoi gestire interamente via SSH.</p>
     <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Scopri Infomaniak Cloud →</a>
-    <p class="disc">Link di affiliazione – sostiene queste guide gratuite.</p>
+    <p class="disc">Link di affiliazione - sostiene queste guide gratuite.</p>
   </div>
 
   <p>Sfoglia altre spiegazioni chiare nel nostro <a href="/it/e/">indice delle guide</a>.</p>

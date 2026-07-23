@@ -2,12 +2,12 @@
 import Base from '../../../../layouts/Base.astro';
 const path = '/it/e/blog/2026-06-18-what-is-an-ide.html';
 const title = 'Cos’è un IDE? Gli ambienti di sviluppo spiegati (2026)';
-const description = 'Un IDE (ambiente di sviluppo integrato) riunisce un editor di codice, strumenti di build, un debugger e altro in un’unica app – scrivi, esegui e correggi nello stesso posto. Cos’è un IDE, cosa contiene, IDE vs editor e come sceglierlo.';
+const description = 'Un IDE (ambiente di sviluppo integrato) riunisce un editor di codice, strumenti di build, un debugger e altro in un’unica app - scrivi, esegui e correggi nello stesso posto. Cos’è un IDE, cosa contiene, IDE vs editor e come sceglierlo.';
 const hero = '/img/what-is-an-ide-2026.jpg';
 const faq = [
   { q: 'Cos’è un IDE in parole semplici?', a: 'Un IDE (Integrated Development Environment, ambiente di sviluppo integrato) è una singola applicazione che riunisce tutto il necessario per scrivere software: un editor di codice, un modo per compilare/eseguire, un debugger per avanzare passo passo e di solito completamento automatico, evidenziazione degli errori e integrazione del controllo di versione. Invece di destreggiarti tra più strumenti, hai un unico spazio di lavoro. Esempi popolari: Visual Studio Code, IntelliJ IDEA, PyCharm, Visual Studio, Xcode.' },
-  { q: 'Qual è la differenza tra un IDE e un editor di codice?', a: 'Un editor di codice (come Notepad++ o, in versione base, un editor di testo) modifica soprattutto testo con evidenziazione della sintassi. Un IDE aggiunge il macchinario intorno: build/esecuzione, debugger integrato, navigazione nell’intero progetto, refactoring e tooling. Il confine si è sfumato – VS Code è tecnicamente un editor che, con le estensioni, si comporta come un IDE completo. In breve: ogni IDE contiene un editor, ma non ogni editor è un IDE.' },
-  { q: 'Quale IDE per un principiante?', a: 'Per la maggior parte dei principianti, Visual Studio Code è la scelta predefinita popolare: gratuito, leggero, multipiattaforma, estensibile a quasi ogni linguaggio. Se ti concentri su un linguaggio, un IDE dedicato può essere più fluido – PyCharm per Python, IntelliJ IDEA per Java, Xcode per le piattaforme Apple. Inizia da ciò che supporta meglio il linguaggio che stai imparando, senza investire troppo nella configurazione all’inizio.' },
+  { q: 'Qual è la differenza tra un IDE e un editor di codice?', a: 'Un editor di codice (come Notepad++ o, in versione base, un editor di testo) modifica soprattutto testo con evidenziazione della sintassi. Un IDE aggiunge il macchinario intorno: build/esecuzione, debugger integrato, navigazione nell’intero progetto, refactoring e tooling. Il confine si è sfumato - VS Code è tecnicamente un editor che, con le estensioni, si comporta come un IDE completo. In breve: ogni IDE contiene un editor, ma non ogni editor è un IDE.' },
+  { q: 'Quale IDE per un principiante?', a: 'Per la maggior parte dei principianti, Visual Studio Code è la scelta predefinita popolare: gratuito, leggero, multipiattaforma, estensibile a quasi ogni linguaggio. Se ti concentri su un linguaggio, un IDE dedicato può essere più fluido - PyCharm per Python, IntelliJ IDEA per Java, Xcode per le piattaforme Apple. Inizia da ciò che supporta meglio il linguaggio che stai imparando, senza investire troppo nella configurazione all’inizio.' },
   { q: 'Gli IDE sono gratuiti?', a: 'Molti dei migliori lo sono. Visual Studio Code, gli editor basati su VS Code, NetBeans ed Eclipse sono gratuiti e open source o liberi all’uso; PyCharm e IntelliJ IDEA hanno edizioni Community gratuite. Le offerte a pagamento (IntelliJ Ultimate, ecc.) aggiungono tooling avanzato per framework/database per i professionisti. Si può tranquillamente imparare e rilasciare software reale senza pagare un IDE.' },
 ];
 ---
@@ -24,42 +24,42 @@ const faq = [
     <figcaption>Un IDE riunisce editor, strumenti di build e debugger in un unico spazio, per scrivere, eseguire e correggere senza uscire dall’app.</figcaption>
   </figure>
 
-  <p>Se hai iniziato a programmare, hai sentito il termine <strong>IDE</strong> – e ti sei probabilmente chiesto in cosa differisca da un «editor di codice». In breve: un <strong>IDE (ambiente di sviluppo integrato)</strong> è un’app che riunisce tutto il necessario per costruire software. Questa guida spiega cosa contiene davvero un IDE, in cosa differisce da un semplice editor e come sceglierne uno. (Nuovo nel campo? Inizia da <a href="/it/e/blog/2026-06-14-what-is-an-algorithm.html">cos’è un algoritmo</a>.)</p>
+  <p>Se hai iniziato a programmare, hai sentito il termine <strong>IDE</strong> - e ti sei probabilmente chiesto in cosa differisca da un «editor di codice». In breve: un <strong>IDE (ambiente di sviluppo integrato)</strong> è un’app che riunisce tutto il necessario per costruire software. Questa guida spiega cosa contiene davvero un IDE, in cosa differisce da un semplice editor e come sceglierne uno. (Nuovo nel campo? Inizia da <a href="/it/e/blog/2026-06-14-what-is-an-algorithm.html">cos’è un algoritmo</a>.)</p>
 
   <h2>Cosa contiene davvero un IDE</h2>
   <p>La parola «integrato» è l’essenziale: un IDE combina strumenti che altrimenti avvieresti separatamente. La maggior parte include:</p>
   <ul>
     <li><strong>Un editor di codice</strong> con evidenziazione della sintassi e completamento automatico.</li>
-    <li><strong>Build / esecuzione</strong> – compilare o eseguire il programma senza uscire dall’app.</li>
-    <li><strong>Un debugger</strong> – mettere in pausa, ispezionare le variabili, avanzare riga per riga.</li>
-    <li><strong>Navigazione del progetto e refactoring</strong> – saltare alle definizioni, rinominare in sicurezza su tutti i file.</li>
-    <li><strong>Controllo di versione</strong> – integrazione di <a href="/it/e/blog/2026-06-14-what-is-git.html">Git</a>.</li>
+    <li><strong>Build / esecuzione</strong> - compilare o eseguire il programma senza uscire dall’app.</li>
+    <li><strong>Un debugger</strong> - mettere in pausa, ispezionare le variabili, avanzare riga per riga.</li>
+    <li><strong>Navigazione del progetto e refactoring</strong> - saltare alle definizioni, rinominare in sicurezza su tutti i file.</li>
+    <li><strong>Controllo di versione</strong> - integrazione di <a href="/it/e/blog/2026-06-14-what-is-git.html">Git</a>.</li>
   </ul>
   <p>Riunire tutto riduce i cambi di contesto e accelera il riscontro quando qualcosa si rompe.</p>
 
   <h2>IDE vs editor di codice</h2>
-  <p>Un semplice <strong>editor di codice</strong> modifica bene il testo; un <strong>IDE</strong> aggiunge il macchinario intorno (build, debug, tooling avanzato). La distinzione si è ammorbidita: <strong>Visual Studio Code</strong> è tecnicamente un editor, ma con le estensioni si comporta come un IDE completo. La regola pratica regge ancora – ogni IDE contiene un editor, ma non ogni editor è un IDE.</p>
+  <p>Un semplice <strong>editor di codice</strong> modifica bene il testo; un <strong>IDE</strong> aggiunge il macchinario intorno (build, debug, tooling avanzato). La distinzione si è ammorbidita: <strong>Visual Studio Code</strong> è tecnicamente un editor, ma con le estensioni si comporta come un IDE completo. La regola pratica regge ancora - ogni IDE contiene un editor, ma non ogni editor è un IDE.</p>
 
   <figure><img src="/img/what-is-an-ide-2026-editor.jpg" alt="Primo piano di codice colorato con numeri di riga su uno schermo scuro" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Evidenziazione della sintassi e numeri di riga fanno parte di ciò che un IDE aggiunge oltre alla modifica di testo grezzo.</figcaption></figure>
 
   <h2>IDE popolari nel 2026</h2>
   <ul>
-    <li><strong>Visual Studio Code</strong> – gratuito, multipiattaforma, guidato dalle estensioni; la scelta predefinita comune per molti linguaggi.</li>
-    <li><strong>IntelliJ IDEA / PyCharm / WebStorm</strong> (JetBrains) – tooling specifico per il linguaggio molto avanzato.</li>
-    <li><strong>Visual Studio</strong> – completo per .NET e C++ su Windows.</li>
-    <li><strong>Xcode</strong> – l’IDE di Apple per lo sviluppo iOS e macOS.</li>
-    <li><strong>Neovim / Emacs</strong> – editor che i power user configurano in setup in stile IDE.</li>
+    <li><strong>Visual Studio Code</strong> - gratuito, multipiattaforma, guidato dalle estensioni; la scelta predefinita comune per molti linguaggi.</li>
+    <li><strong>IntelliJ IDEA / PyCharm / WebStorm</strong> (JetBrains) - tooling specifico per il linguaggio molto avanzato.</li>
+    <li><strong>Visual Studio</strong> - completo per .NET e C++ su Windows.</li>
+    <li><strong>Xcode</strong> - l’IDE di Apple per lo sviluppo iOS e macOS.</li>
+    <li><strong>Neovim / Emacs</strong> - editor che i power user configurano in setup in stile IDE.</li>
   </ul>
 
   <h2>Come sceglierne uno</h2>
-  <p>Scegli in base al tuo linguaggio e alla tua piattaforma: l’IDE che supporta meglio ciò che stai costruendo farà risparmiare più tempo. I principianti sono ben serviti da VS Code; il lavoro su un solo linguaggio è spesso più fluido in un IDE dedicato. Non configurare troppo presto in modo eccessivo – un setup predefinito basta per imparare.</p>
+  <p>Scegli in base al tuo linguaggio e alla tua piattaforma: l’IDE che supporta meglio ciò che stai costruendo farà risparmiare più tempo. I principianti sono ben serviti da VS Code; il lavoro su un solo linguaggio è spesso più fluido in un IDE dedicato. Non configurare troppo presto in modo eccessivo - un setup predefinito basta per imparare.</p>
 
   <div class="affbox" style="margin:28px 0;">
     <span class="tag">Consigliato</span>
     <h3>Un posto dove far girare ciò che costruisci</h3>
-    <p>Un IDE scrive e testa il tuo codice in locale – ma un’app web, un’API o un bot ha bisogno di un server per girare. Un VPS o server cloud ti dà il pieno controllo del runtime. Infomaniak – un hoster svizzero, rispettoso della privacy – offre VPS e server cloud per distribuire ciò che costruisci.</p>
+    <p>Un IDE scrive e testa il tuo codice in locale - ma un’app web, un’API o un bot ha bisogno di un server per girare. Un VPS o server cloud ti dà il pieno controllo del runtime. Infomaniak - un hoster svizzero, rispettoso della privacy - offre VPS e server cloud per distribuire ciò che costruisci.</p>
     <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Scopri Infomaniak Cloud →</a>
-    <p class="disc">Link di affiliazione – sostiene queste guide gratuite.</p>
+    <p class="disc">Link di affiliazione - sostiene queste guide gratuite.</p>
   </div>
 
   <h2>Domande frequenti</h2>
