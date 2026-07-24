@@ -1,6 +1,6 @@
 // CTA perso par contenu (Eric 2026-06-19) - l'encart "Recommandé" reflète le
 // SUJET de chaque page au lieu de toujours parler de Haskell. Seul l'ANGLE change.
-// Offre = DigitalOcean (cloud pour développeurs, MAJ 2026-06-29 : remplace Infomaniak
+// Offre = DigitalOcean (cloud pour développeurs, MAJ 2026-06-29 : remplace DigitalOcean
 // - bien plus aligné avec l'audience devops de coldwa : Droplets/VPS, Kubernetes managé,
 // bases managées, App Platform). Défaut = dev généraliste (PAS Haskell).
 // honnêteté: faits vérifiables uniquement (DigitalOcean propose Droplets/VPS Linux,
