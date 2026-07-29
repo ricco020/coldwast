@@ -35,6 +35,9 @@ packages:
 
   <figure><img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&q=80&auto=format&fit=crop" alt="Streams of green code on a dark screen" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Streams of code on screen - both tools fetch dependencies and compile them; they differ mainly in where versions come from.</figcaption></figure>
 
+  <h2>Where the two tools stand today</h2>
+  <p>Versions matter here, because both tools moved recently. As of <strong>29 July 2026</strong>, the current stable <code>cabal-install</code> is <strong>3.18.1.0</strong>, released that same day; the previous stable line was <strong>3.16.1.0</strong> from December 2025. On the Stack side, the current stable release is <strong>3.11.1</strong>, from June 2026. Release dates and version numbers here come from each project's GitHub releases, checked on the date given, so verify against the project pages before pinning anything in CI.</p>
+
   <h2>The key differences</h2>
   <ul>
     <li><strong>Package source</strong> - Cabal resolves against all of Hackage; Stack builds against a curated Stackage snapshot. Stackage trades some freshness for guaranteed-compatible sets.</li>
