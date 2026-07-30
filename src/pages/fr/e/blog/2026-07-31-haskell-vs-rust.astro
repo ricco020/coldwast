@@ -1,0 +1,56 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/fr/e/blog/2026-07-31-haskell-vs-rust.html';
+const title = 'Haskell vs Rust (2026) : deux réponses à la même question';
+const description = 'Haskell et Rust promettent tous deux la correction par le système de types, puis divergent complètement sur la mémoire. Garbage collector contre ownership, paresse contre évaluation stricte, et à quelle question chacun répond vraiment.';
+---
+<Base title={title} description={description} path={path} type="article" lang="fr"
+  image="https://images.pexels.com/photos/17342282/pexels-photo-17342282.jpeg?auto=compress&cs=tinysrgb&w=1200" datePublished="2026-07-31" dateModified="2026-07-31">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/fr/">Accueil</a><span>/</span><a href="/fr/e/">Guides</a><span>/</span>Haskell vs Rust</nav>
+  <p class="kicker">Haskell · Rust · conception de langages</p>
+  <h1>Haskell vs Rust : deux réponses à la même question</h1>
+  <div class="artmeta"><span>Par Coldwast</span><span>Mis à jour le 31 juillet 2026</span><span>8 min de lecture</span><span class="tag">#haskell</span><span class="tag">#rust</span><span class="tag">#types</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.pexels.com/photos/17342282/pexels-photo-17342282.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Deux chemins de terre qui divergent à travers une prairie sous un ciel couvert" width="1200" height="420" loading="eager" />
+    <figcaption>Deux chemins de terre qui divergent à travers une prairie avant de se rejoindre au loin, sous un ciel couvert.</figcaption>
+  </figure>
+
+  <p>Haskell et Rust sont comparés en permanence, et la comparaison est presque toujours présentée comme un match. Ce cadrage masque ce qui est réellement intéressant : les deux langages partent de la même prémisse, à savoir que le compilateur doit vous empêcher d’écrire des programmes cassés, puis prennent des routes opposées sur la seule décision qui détermine tout le reste.</p>
+
+  <h2>Là où ils sont d’accord</h2>
+  <p>Tous deux font peser un poids inhabituel sur le système de types. La description que Haskell donne de lui-même est que « chaque expression en Haskell a un type qui est déterminé à la compilation », et que son système de types fort « s’assure qu’il n’y a pas de surprises ». Le compilateur de Rust fait respecter ses règles avec la même intention, en refusant de construire du code qui les viole.</p>
+  <p>Dans les deux cas, l’échange est identique : vous passez plus de temps à faire compiler le programme, et moins de temps à déboguer une catégorie de défaillances à l’exécution. Si cet échange vous déplaît, aucun des deux langages ne vous semblera agréable, et le choix entre eux est hors sujet.</p>
+
+  <h2>Là où ils divergent : la mémoire</h2>
+  <p>C’est la décision dont découle tout le reste.</p>
+  <p>Le Rust Book la présente comme trois options : « Certains langages disposent d’un garbage collector qui cherche régulièrement la mémoire qui n’est plus utilisée pendant que le programme tourne ; dans d’autres langages, le programmeur doit explicitement allouer et libérer la mémoire. Rust utilise une troisième approche : la mémoire est gérée par un système d’ownership assorti d’un ensemble de règles que le compilateur vérifie. »</p>
+  <p>La mémoire est libérée de façon déterministe : « la mémoire est automatiquement rendue dès que la variable qui la possède sort de sa portée », via une fonction <code>drop</code> que le compilateur appelle à l’accolade fermante. Et le coût est payé à la compilation plutôt qu’à l’exécution, puisque « aucune des fonctionnalités de l’ownership ne ralentira votre programme pendant qu’il s’exécute ».</p>
+  <p>Haskell prend la première de ces trois options. GHC « est livré avec un garbage collector parallèle haute performance et une bibliothèque de concurrence légère ». Vous ne raisonnez pas en termes d’ownership parce que le runtime gère la récupération à votre place.</p>
+  <p>Cette unique différence explique l’essentiel du reste. Rust peut viser des contextes où un garbage collector est inacceptable, et vous demande en échange de satisfaire le borrow checker. Haskell retire toute cette catégorie de travail de votre journée, et vous demande d’accepter un runtime qui effectue la collecte pour vous.</p>
+
+  <h2>Là où ils divergent : l’évaluation</h2>
+  <p>La deuxième vraie différence est le moment où les choses se produisent.</p>
+  <p>Haskell est paresseux par défaut. Comme le formule haskell.org, « les fonctions n’évaluent pas leurs arguments », et la conséquence revendiquée est compositionnelle : « cela signifie que les programmes se composent très bien entre eux ». Vous pouvez définir des structures conceptuellement infinies et n’en consommer que la partie dont vous avez besoin.</p>
+  <p>Rust évalue de façon stricte, comme la plupart des langages. Un argument est calculé avant l’appel.</p>
+  <p>La paresse est véritablement puissante et véritablement plus difficile à appréhender côté performance, parce que le moment où un calcul a lieu n’est plus là où vous l’avez écrit. L’évaluation stricte est plus prévisible et moins expressive sur ce point précis. Aucune n’est un défaut ; ce sont des choix par défaut différents.</p>
+
+  <h2>La pureté, et ce qu’elle apporte</h2>
+  <p>Haskell décrit chaque fonction comme « une fonction au sens mathématique (c’est-à-dire "pure") », et cite « la transparence référentielle, l’immutabilité et l’évaluation paresseuse » parmi ses caractéristiques. La transparence référentielle signifie qu’une expression peut être remplacée par sa valeur sans changer le programme, ce qui rend sûrs le raisonnement et le refactoring agressifs.</p>
+  <p>Rust n’est pas pur, et ne prétend pas l’être. Il vous donne à la place une mutation contrôlée : le borrow checker régit qui peut muter quoi et quand, de sorte que la mutation reste sûre sans être interdite.</p>
+
+  <h2>Alors, à quelle question répondez-vous ?</h2>
+  <p>La façon utile de choisir est de se demander ce que le projet ne peut pas tolérer.</p>
+  <p><strong>S’il ne peut pas tolérer un garbage collector</strong>, parce que vous écrivez un composant de système d’exploitation, une cible embarquée, un moteur de jeu ou tout ce qui a des exigences de latence dures, cela tranche. Rust existe pour cette contrainte.</p>
+  <p><strong>S’il ne peut pas tolérer une logique incorrecte</strong>, et que le domaine est assez complexe pour que le raisonnement lui-même soit la partie difficile, la pureté et le système de types de Haskell visent exactement cela. Les compilateurs, la modélisation financière et l’outillage de langages reviennent dans les usages réels de Haskell pour cette raison.</p>
+  <p><strong>Si aucune de ces deux contraintes ne s’impose</strong>, cette comparaison n’est probablement pas votre facteur décisif. La disponibilité des bibliothèques, le recrutement et ce que votre équipe connaît déjà compteront davantage que la sémantique du langage, et il est honnête de le dire.</p>
+
+  <h2>La version courte</h2>
+  <p>Haskell et Rust s’accordent sur le fait que le compilateur doit attraper vos erreurs, puis répondent à deux questions différentes. Rust répond à « comment obtenir la sûreté mémoire sans garbage collector », avec l’ownership vérifié à la compilation et sans coût à l’exécution. Haskell répond à « comment rendre la logique elle-même difficile à rater », avec la pureté, la paresse et un garbage collector qui se charge de la récupération.</p>
+  <p>Ce ne sont pas vraiment des concurrents. Ce sont deux routes qui partent du même point, et la contrainte que vous ne pouvez pas négocier vous dit sur laquelle vous êtes.</p>
+  <p>Si vous découvrez le premier des deux, commencez par <a href="/fr/e/blog/2026-06-14-what-is-haskell.html">ce qu’est Haskell</a> et, quand vous en viendrez à construire des projets, <a href="/fr/e/blog/2026-06-14-stack-vs-cabal-haskell.html">Stack versus Cabal</a>.</p>
+
+  <p class="note"><em>La description de la gestion mémoire et les citations proviennent du chapitre officiel du Rust Book sur l’ownership ; les descriptions de la pureté, de la paresse, du système de types et du garbage collector proviennent de haskell.org. Les deux ont été vérifiées au moment de la rédaction. Les implémentations de langages évoluent, alors vérifiez auprès de la documentation courante avant de vous appuyer sur une affirmation précise.</em></p>
+  </div>
+</Base>

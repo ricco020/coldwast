@@ -1,0 +1,56 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-07-31-haskell-vs-rust.html';
+const title = 'Haskell vs Rust (2026): Two Answers to the Same Question';
+const description = 'Haskell and Rust both promise correctness through the type system, then diverge completely on memory. Garbage collection versus ownership, lazy versus strict, and which question each one actually answers.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://images.pexels.com/photos/17342282/pexels-photo-17342282.jpeg?auto=compress&cs=tinysrgb&w=1200" datePublished="2026-07-31" dateModified="2026-07-31">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e/">Guides</a><span>/</span>Haskell vs Rust</nav>
+  <p class="kicker">Haskell · Rust · language design</p>
+  <h1>Haskell vs Rust: two answers to the same question</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Jul 31, 2026</span><span>8 min read</span><span class="tag">#haskell</span><span class="tag">#rust</span><span class="tag">#types</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.pexels.com/photos/17342282/pexels-photo-17342282.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Two dirt tracks diverging across a meadow under an overcast sky" width="1200" height="420" loading="eager" />
+    <figcaption>Two dirt tracks diverging across a meadow before rejoining in the distance, under an overcast sky.</figcaption>
+  </figure>
+
+  <p>Haskell and Rust get compared constantly, and the comparison is usually framed as a contest. That framing hides what is actually interesting: both languages start from the same premise, that the compiler should stop you writing broken programs, and then take opposite routes on the one decision that shapes everything else.</p>
+
+  <h2>Where they agree</h2>
+  <p>Both put an unusual amount of weight on the type system. Haskell's own description is that "every expression in Haskell has a type which is determined at compile time", and that its strong type system "makes sure there are no surprises". Rust's compiler enforces its rules with the same intent, refusing to build code that violates them.</p>
+  <p>In both cases the trade is the same: you spend more time getting the program to compile, and less time debugging a class of failures at runtime. If you dislike that trade, neither language will feel pleasant, and the choice between them is beside the point.</p>
+
+  <h2>Where they diverge: memory</h2>
+  <p>This is the decision everything else follows from.</p>
+  <p>The Rust Book frames it as three options: "Some languages have garbage collection that regularly looks for no-longer-used memory as the program runs; in other languages, the programmer must explicitly allocate and free the memory. Rust uses a third approach: Memory is managed through a system of ownership with a set of rules that the compiler checks."</p>
+  <p>Memory is released deterministically: "the memory is automatically returned once the variable that owns it goes out of scope", through a <code>drop</code> function the compiler calls at the closing brace. And the cost is paid at compile time rather than at run time, since "none of the features of ownership will slow down your program while it's running".</p>
+  <p>Haskell takes the first of those three options. GHC "comes with a high-performance parallel garbage collector and light-weight concurrency library". You do not reason about ownership because the runtime handles reclamation for you.</p>
+  <p>That single difference explains most of the rest. Rust can target contexts where a garbage collector is unacceptable, and asks you to satisfy the borrow checker in exchange. Haskell removes that entire category of work from your day, and asks you to accept a runtime doing collection on your behalf.</p>
+
+  <h2>Where they diverge: evaluation</h2>
+  <p>The second real difference is when things happen.</p>
+  <p>Haskell is lazy by default. As haskell.org puts it, "functions don't evaluate their arguments", and the consequence claimed is compositional: "this means that programs can compose together very well". You can define structures that are conceptually infinite and consume only the part you need.</p>
+  <p>Rust evaluates strictly, like most languages. An argument is computed before the call.</p>
+  <p>Laziness is genuinely powerful and genuinely harder to reason about for performance, because the moment a computation happens is no longer where you wrote it. Strict evaluation is more predictable and less expressive in that particular respect. Neither is a defect; they are different defaults.</p>
+
+  <h2>Purity, and what it buys</h2>
+  <p>Haskell describes every function as "a function in the mathematical sense (i.e., 'pure')", and lists "referential transparency, immutability and lazy evaluation" among its characteristics. Referential transparency means an expression can be replaced by its value without changing the program, which is what makes aggressive reasoning and refactoring safe.</p>
+  <p>Rust is not pure, and does not claim to be. It gives you controlled mutation instead: the borrow checker governs who may mutate what and when, so mutation stays safe without being forbidden.</p>
+
+  <h2>So which question are you answering?</h2>
+  <p>The useful way to choose is to ask what the project cannot tolerate.</p>
+  <p><strong>If it cannot tolerate a garbage collector</strong>, because you are writing an operating system component, an embedded target, a game engine or anything with hard latency requirements, that decides it. Rust exists for that constraint.</p>
+  <p><strong>If it cannot tolerate incorrect logic</strong>, and the domain is complex enough that the reasoning itself is the hard part, Haskell's purity and type system are aimed exactly there. Compilers, financial modelling and language tooling recur in Haskell's real-world use for that reason.</p>
+  <p><strong>If neither constraint binds</strong>, this comparison is probably not your deciding factor. Library availability, hiring, and what your team already knows will matter more than the language semantics, and it is honest to say so.</p>
+
+  <h2>The short version</h2>
+  <p>Haskell and Rust agree that the compiler should catch your mistakes, then answer two different questions. Rust answers "how do I get memory safety without a garbage collector", with ownership checked at compile time and no runtime cost. Haskell answers "how do I make the logic itself hard to get wrong", with purity, laziness and a garbage collector doing the reclamation.</p>
+  <p>They are not really competitors. They are two roads from the same starting point, and the constraint you cannot negotiate tells you which one you are on.</p>
+  <p>If you are new to the first of them, start with <a href="/e/blog/2026-06-14-what-is-haskell.html">what Haskell is</a> and, when you get to building projects, <a href="/e/blog/2026-06-14-stack-vs-cabal-haskell.html">Stack versus Cabal</a>.</p>
+
+  <p class="note"><em>The memory-management description and quotations come from the official Rust Book chapter on ownership; the purity, laziness, type system and garbage collector descriptions come from haskell.org. Both were checked at the time of writing. Language implementations evolve, so verify against current documentation before relying on a specific claim.</em></p>
+  </div>
+</Base>

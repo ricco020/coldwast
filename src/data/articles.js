@@ -161,6 +161,16 @@ export const articles = [
     "cats": "Haskell, Laziness, Concepts"
   },
   {
+    "href": "/e/blog/2026-07-31-haskell-vs-rust.html",
+    "title": "Haskell vs Rust (2026): Two Answers to the Same Question",
+    "dek": "Haskell and Rust both promise correctness through the type system, then diverge completely on memory. Garbage collection versus ownership, lazy versus strict, and which question each one actually answers.",
+    "img": "https://images.pexels.com/photos/17342282/pexels-photo-17342282.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    "imgAlt": "Two dirt tracks diverging across a meadow under an overcast sky",
+    "date": "Jul 31, 2026",
+    "read": "8 min read",
+    "cats": "Haskell, Rust, Languages"
+  },
+  {
     "href": "/e/blog/2026-06-14-stack-vs-cabal-haskell.html",
     "title": "Stack vs Cabal: Choosing a Haskell Build Tool (2026)",
     "dek": "Cabal and Stack are the two main ways to build Haskell projects. What each one is, how they differ (Hackage vs Stackage, reproducibility, GHC management), the equivalent commands, and how to choose in 2026.",

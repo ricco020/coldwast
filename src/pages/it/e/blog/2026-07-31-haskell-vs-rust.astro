@@ -1,0 +1,56 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/it/e/blog/2026-07-31-haskell-vs-rust.html';
+const title = 'Haskell vs Rust (2026): due risposte alla stessa domanda';
+const description = 'Haskell e Rust promettono entrambi correttezza tramite il sistema di tipi, poi divergono completamente sulla memoria. Garbage collector contro ownership, pigrizia contro valutazione stretta, e a quale domanda risponde davvero ciascuno.';
+---
+<Base title={title} description={description} path={path} type="article" lang="it"
+  image="https://images.pexels.com/photos/17342282/pexels-photo-17342282.jpeg?auto=compress&cs=tinysrgb&w=1200" datePublished="2026-07-31" dateModified="2026-07-31">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/it/">Home</a><span>/</span><a href="/it/e/">Guide</a><span>/</span>Haskell vs Rust</nav>
+  <p class="kicker">Haskell · Rust · progettazione dei linguaggi</p>
+  <h1>Haskell vs Rust: due risposte alla stessa domanda</h1>
+  <div class="artmeta"><span>Di Coldwast</span><span>Aggiornato il 31 luglio 2026</span><span>8 min di lettura</span><span class="tag">#haskell</span><span class="tag">#rust</span><span class="tag">#types</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.pexels.com/photos/17342282/pexels-photo-17342282.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Due sentieri sterrati che divergono attraverso un prato sotto un cielo coperto" width="1200" height="420" loading="eager" />
+    <figcaption>Due sentieri sterrati che divergono attraverso un prato prima di ricongiungersi in lontananza, sotto un cielo coperto.</figcaption>
+  </figure>
+
+  <p>Haskell e Rust vengono confrontati di continuo, e il confronto è quasi sempre impostato come una gara. Questa impostazione nasconde ciò che è davvero interessante: entrambi i linguaggi partono dalla stessa premessa, cioè che il compilatore debba impedirti di scrivere programmi rotti, e poi prendono strade opposte sull’unica decisione che plasma tutto il resto.</p>
+
+  <h2>Dove sono d’accordo</h2>
+  <p>Entrambi caricano un peso insolito sul sistema di tipi. La descrizione che Haskell dà di sé è che «ogni espressione in Haskell ha un tipo che viene determinato a tempo di compilazione», e che il suo sistema di tipi forte «fa in modo che non ci siano sorprese». Il compilatore di Rust fa rispettare le proprie regole con la stessa intenzione, rifiutandosi di compilare codice che le violi.</p>
+  <p>In entrambi i casi lo scambio è lo stesso: dedichi più tempo a far compilare il programma e meno tempo a fare il debug di una classe di fallimenti a runtime. Se quello scambio non ti piace, nessuno dei due linguaggi ti sembrerà piacevole, e la scelta tra i due è fuori tema.</p>
+
+  <h2>Dove divergono: la memoria</h2>
+  <p>È la decisione da cui discende tutto il resto.</p>
+  <p>Il Rust Book la presenta come tre opzioni: «Alcuni linguaggi hanno una garbage collection che cerca regolarmente la memoria non più utilizzata mentre il programma è in esecuzione; in altri linguaggi il programmatore deve allocare e liberare esplicitamente la memoria. Rust usa un terzo approccio: la memoria è gestita tramite un sistema di ownership con un insieme di regole che il compilatore verifica.»</p>
+  <p>La memoria viene rilasciata in modo deterministico: «la memoria viene restituita automaticamente non appena la variabile che la possiede esce dal suo ambito», attraverso una funzione <code>drop</code> che il compilatore chiama alla parentesi graffa di chiusura. E il costo si paga a tempo di compilazione anziché a runtime, dato che «nessuna delle caratteristiche dell’ownership rallenterà il tuo programma mentre è in esecuzione».</p>
+  <p>Haskell prende la prima di queste tre opzioni. GHC «viene fornito con un garbage collector parallelo ad alte prestazioni e una libreria di concorrenza leggera». Non ragioni in termini di ownership perché è il runtime a occuparsi del recupero per te.</p>
+  <p>Questa singola differenza spiega gran parte del resto. Rust può rivolgersi a contesti in cui un garbage collector è inaccettabile, e in cambio ti chiede di soddisfare il borrow checker. Haskell toglie dalla tua giornata quell’intera categoria di lavoro, e ti chiede di accettare un runtime che si occupa della raccolta al posto tuo.</p>
+
+  <h2>Dove divergono: la valutazione</h2>
+  <p>La seconda differenza reale è il momento in cui le cose accadono.</p>
+  <p>Haskell è pigro per impostazione predefinita. Come dice haskell.org, «le funzioni non valutano i loro argomenti», e la conseguenza dichiarata è composizionale: «questo significa che i programmi si compongono molto bene tra loro». Puoi definire strutture concettualmente infinite e consumarne solo la parte che ti serve.</p>
+  <p>Rust valuta in modo stretto, come la maggior parte dei linguaggi. Un argomento viene calcolato prima della chiamata.</p>
+  <p>La pigrizia è davvero potente e davvero più difficile da valutare in termini di prestazioni, perché il momento in cui avviene un calcolo non è più dove l’hai scritto. La valutazione stretta è più prevedibile e meno espressiva proprio su questo punto. Nessuna delle due è un difetto; sono impostazioni predefinite diverse.</p>
+
+  <h2>La purezza, e cosa porta con sé</h2>
+  <p>Haskell descrive ogni funzione come «una funzione in senso matematico (cioè "pura")», ed elenca «trasparenza referenziale, immutabilità e valutazione pigra» tra le sue caratteristiche. Trasparenza referenziale significa che un’espressione può essere sostituita dal suo valore senza cambiare il programma, ed è ciò che rende sicuri ragionamenti e refactoring aggressivi.</p>
+  <p>Rust non è puro, e non pretende di esserlo. Ti dà invece mutazione controllata: il borrow checker regola chi può mutare cosa e quando, così la mutazione resta sicura senza essere vietata.</p>
+
+  <h2>Allora, a quale domanda stai rispondendo?</h2>
+  <p>Il modo utile di scegliere è chiedersi cosa il progetto non può tollerare.</p>
+  <p><strong>Se non può tollerare un garbage collector</strong>, perché stai scrivendo un componente di sistema operativo, un target embedded, un motore di gioco o qualsiasi cosa con requisiti di latenza stringenti, la questione è decisa. Rust esiste per quel vincolo.</p>
+  <p><strong>Se non può tollerare una logica scorretta</strong>, e il dominio è abbastanza complesso da rendere il ragionamento stesso la parte difficile, la purezza e il sistema di tipi di Haskell puntano esattamente lì. Compilatori, modellazione finanziaria e strumenti per linguaggi ricorrono negli usi reali di Haskell proprio per questo motivo.</p>
+  <p><strong>Se nessuno dei due vincoli si impone</strong>, questo confronto probabilmente non è il tuo fattore decisivo. La disponibilità di librerie, le assunzioni e ciò che il tuo team già conosce conteranno più della semantica del linguaggio, ed è onesto dirlo.</p>
+
+  <h2>La versione breve</h2>
+  <p>Haskell e Rust concordano sul fatto che il compilatore debba intercettare i tuoi errori, poi rispondono a due domande diverse. Rust risponde a «come ottengo la sicurezza della memoria senza un garbage collector», con l’ownership verificata a tempo di compilazione e senza costi a runtime. Haskell risponde a «come rendo difficile sbagliare la logica stessa», con purezza, pigrizia e un garbage collector che si occupa del recupero.</p>
+  <p>Non sono davvero concorrenti. Sono due strade che partono dallo stesso punto, e il vincolo che non puoi negoziare ti dice su quale ti trovi.</p>
+  <p>Se il primo dei due è nuovo per te, comincia da <a href="/it/e/blog/2026-06-14-what-is-haskell.html">che cos’è Haskell</a> e, quando arrivi a costruire progetti, da <a href="/it/e/blog/2026-06-14-stack-vs-cabal-haskell.html">Stack contro Cabal</a>.</p>
+
+  <p class="note"><em>La descrizione della gestione della memoria e le citazioni provengono dal capitolo ufficiale del Rust Book sull’ownership; le descrizioni di purezza, pigrizia, sistema di tipi e garbage collector provengono da haskell.org. Entrambe sono state verificate al momento della stesura. Le implementazioni dei linguaggi evolvono, quindi verifica sulla documentazione attuale prima di fare affidamento su un’affermazione specifica.</em></p>
+  </div>
+</Base>
