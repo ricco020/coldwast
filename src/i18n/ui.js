@@ -3,9 +3,15 @@ export const LOCALES = ['en', 'fr', 'es', 'de', 'it', 'pt'];
 export const DEFAULT_LOCALE = 'en';
 
 // Prefix a root-relative path for a locale ('' for en).
+// The site is canonical WITHOUT a trailing slash: /de/e serves 200, /de/e/ is a 308.
+// We strip it here (except for the root) so that nav links, hreflang alternates and
+// the breadcrumb JSON-LD all point at the same URL the canonical declares. Before
+// this, the canonical said /de/e while its own hreflang said /de/e/, and a hreflang
+// cluster that does not point at canonical URLs can be dropped by Google entirely.
 export function localized(path, lang) {
-  if (lang === 'en') return path;
-  return '/' + lang + path;
+  const p = path !== '/' ? path.replace(/\/+$/, '') : path;
+  if (lang === 'en') return p || '/';
+  return '/' + lang + (p === '/' ? '' : p);
 }
 
 export const ui = {
