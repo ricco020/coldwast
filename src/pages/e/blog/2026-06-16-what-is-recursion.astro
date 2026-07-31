@@ -7,7 +7,7 @@ const description = 'Recursion is when a function calls itself to solve a proble
 <Base title={title} description={description} path={path} type="article"
   image="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-16" dateModified="2026-06-16">
   <div class="reading">
-  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e/">Guides</a><span>/</span>What is recursion</nav>
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e">Guides</a><span>/</span>What is recursion</nav>
   <p class="kicker">Programming · concepts · recursion</p>
   <h1>What is recursion?</h1>
   <div class="artmeta"><span>By Coldwast</span><span>Updated Jun 16, 2026</span><span>8 min read</span><span class="tag">#recursion</span><span class="tag">#concepts</span><span class="tag">#functional</span></div>
@@ -106,7 +106,7 @@ def fib(n):
   <p><strong>What is tail recursion?</strong> Recursion where the recursive call is the last action the function performs. Languages that support tail-call optimisation can run it in constant stack space, like a loop, avoiding stack overflow.</p>
   <p><strong>Why does my recursion cause a stack overflow?</strong> Usually a missing or unreachable base case (the input never shrinks to it), or simply recursing deeper than the call stack allows. Check that every recursive call moves toward the base case, and switch to iteration for very deep work.</p>
 
-  <p>Recursion is one of the fundamental ways to express computation - it's a close cousin of how we describe any <a href="/e/blog/2026-06-14-what-is-an-algorithm.html">algorithm</a> as smaller, repeatable steps, and it depends on understanding how a <a href="/e/blog/2026-06-15-what-is-a-variable.html">variable</a> like an accumulator carries state between calls. Browse more clear explainers in our <a href="/e/">guides index</a>.</p>
+  <p>Recursion is one of the fundamental ways to express computation - it's a close cousin of how we describe any <a href="/e/blog/2026-06-14-what-is-an-algorithm.html">algorithm</a> as smaller, repeatable steps, and it depends on understanding how a <a href="/e/blog/2026-06-15-what-is-a-variable.html">variable</a> like an accumulator carries state between calls. Browse more clear explainers in our <a href="/e">guides index</a>.</p>
 
   <h2>Frequently asked questions</h2>
   <details><summary>What is recursion in simple terms?</summary><p>Recursion is when a function calls itself to solve a problem by breaking it into smaller versions of the same problem. Each call handles a slightly smaller case until it reaches a <strong>base case</strong> that stops the chain. A classic example is factorial: <code>factorial(n) = n × factorial(n-1)</code>, with <code>factorial(0) = 1</code> as the base case.</p></details>

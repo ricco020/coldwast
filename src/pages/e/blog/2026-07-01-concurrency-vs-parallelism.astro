@@ -7,7 +7,7 @@ const description = 'Concurrency is about structuring a program to deal with man
 <Base title={title} description={description} path={path} type="article"
   image="https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&q=80&auto=format&fit=crop" datePublished="2026-07-01" dateModified="2026-07-01">
   <div class="reading">
-  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e/">Guides</a><span>/</span>Concurrency vs parallelism</nav>
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e">Guides</a><span>/</span>Concurrency vs parallelism</nav>
   <p class="kicker">Programming · concepts · performance</p>
   <h1>Concurrency vs parallelism</h1>
   <div class="artmeta"><span>By Coldwast</span><span>Updated Jul 1, 2026</span><span>9 min read</span><span class="tag">#concurrency</span><span class="tag">#parallelism</span><span class="tag">#performance</span></div>
@@ -95,7 +95,7 @@ parAdd a b = a `par` (b `pseq` (a + b))</code></pre>
   <p><strong>Deadlocks.</strong> When threads wait on each other in a cycle - thread A holds lock 1 and wants lock 2, thread B holds lock 2 and wants lock 1 - nobody can proceed and the program freezes. Acquiring locks in a consistent global order is a standard way to prevent it.</p>
   <p><strong>Other hazards</strong> include starvation (a task never gets scheduled), and the false assumption that more threads always means more speed - past the core count, extra threads add scheduling overhead without extra parallelism. Immutable data and pure functions, as in functional style, sidestep whole categories of these bugs, which is a large part of why languages like Haskell make concurrency and parallelism feel safer.</p>
 
-  <p>Concurrency and parallelism are the runtime side of ideas that also shape how we design programs: expressing work as independent, composable steps is close to how <a href="/e/blog/2026-06-15-what-is-functional-programming.html">functional programming</a> avoids shared mutable state, and both build on the same foundations as any <a href="/e/blog/2026-06-14-what-is-an-algorithm.html">algorithm</a> and its use of <a href="/e/blog/2026-06-16-what-is-recursion.html">recursion</a> to break work into smaller pieces. Browse more clear explainers in our <a href="/e/">guides index</a>.</p>
+  <p>Concurrency and parallelism are the runtime side of ideas that also shape how we design programs: expressing work as independent, composable steps is close to how <a href="/e/blog/2026-06-15-what-is-functional-programming.html">functional programming</a> avoids shared mutable state, and both build on the same foundations as any <a href="/e/blog/2026-06-14-what-is-an-algorithm.html">algorithm</a> and its use of <a href="/e/blog/2026-06-16-what-is-recursion.html">recursion</a> to break work into smaller pieces. Browse more clear explainers in our <a href="/e">guides index</a>.</p>
 
   <h2>Frequently asked questions</h2>
   <details><summary>What is the difference between concurrency and parallelism?</summary><p>Concurrency is structuring a program to deal with many tasks that overlap in time by interleaving them; parallelism is executing multiple tasks at literally the same instant on multiple cores. Concurrency is about structure and composition, parallelism is about simultaneous execution. You can have concurrency without parallelism (one core time-slicing many tasks), and parallelism needs more than one hardware execution unit.</p></details>
