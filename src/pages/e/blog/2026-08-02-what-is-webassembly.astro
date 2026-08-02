@@ -1,0 +1,60 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-08-02-what-is-webassembly.html';
+const title = 'What Is WebAssembly? A Compilation Target, Not a Language (2026)';
+const description = 'WebAssembly is a binary instruction format for a stack-based virtual machine, and a portable compilation target for other languages. What the official definition says, the four design goals, and why it was never limited to the browser.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://images.pexels.com/photos/20034017/pexels-photo-20034017.jpeg?auto=compress&cs=tinysrgb&w=1200" datePublished="2026-08-02" dateModified="2026-08-02">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e">Guides</a><span>/</span>What is WebAssembly</nav>
+  <p class="kicker">WebAssembly · compilation · virtual machines</p>
+  <h1>What is WebAssembly, exactly?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Aug 2, 2026</span><span>7 min read</span><span class="tag">#wasm</span><span class="tag">#compilers</span><span class="tag">#web</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.pexels.com/photos/20034017/pexels-photo-20034017.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Shipping containers stacked several rows high against a blue sky" width="1200" height="420" loading="eager" />
+    <figcaption>Shipping containers stacked several rows high against a blue sky, identical in shape whatever they happen to carry.</figcaption>
+  </figure>
+
+  <p>The most common misunderstanding about WebAssembly is that it is a language you write. It is not. The official definition is precise, and reading it literally answers most of the questions people have.</p>
+
+  <h2>The definition, word for word</h2>
+  <p>WebAssembly, abbreviated <em>Wasm</em>, is <strong>a binary instruction format for a stack-based virtual machine</strong>. It is designed as <strong>a portable compilation target for programming languages, enabling deployment on the web for client and server applications</strong>.</p>
+  <p>Two things follow immediately. It is a <strong>target</strong>, which means something else compiles into it, the way C compiles to machine code. And it is <strong>stack-based</strong>, which is a design decision about how the virtual machine holds operands, not a detail you interact with directly.</p>
+  <p>Nobody is expected to write Wasm by hand for production, any more than anyone writes x86 by hand. You write Rust, C, Go or another language, and the compiler emits Wasm.</p>
+
+  <h2>The four design goals, and what each one costs</h2>
+  <p>The project states four goals, and they are worth reading as trade-offs rather than as a feature list.</p>
+  <p><strong>Efficiency.</strong> The stack machine is designed to <strong>execute at native speed by taking advantage of common hardware capabilities available on a wide range of platforms</strong>. Note the qualifier: <em>common</em> capabilities, across a <em>wide range</em>. Speed here comes from targeting what every platform has, not from exploiting what any single one does best.</p>
+  <p><strong>Safety.</strong> Wasm describes <strong>a memory-safe, sandboxed execution environment</strong>, and one that may be implemented inside existing JavaScript virtual machines. The module cannot reach outside what the host hands it.</p>
+  <p><strong>Openness.</strong> It is <strong>designed to be pretty-printed in a textual format for debugging, testing, experimenting, optimizing, learning, teaching, and writing programs by hand</strong>. A binary format that ships a readable counterpart is making a deliberate choice against opacity.</p>
+  <p><strong>Portability.</strong> The stated aim is to preserve <strong>the versionless, feature-tested, and backwards-compatible nature of the web</strong>. That single phrase explains why Wasm has no version numbers to negotiate: you test for a feature, you do not ask which release you are talking to.</p>
+
+  <figure>
+    <img src="https://images.pexels.com/photos/4040327/pexels-photo-4040327.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="An orange plastic scoop lying on damp sand" width="1200" height="420" loading="lazy" />
+    <figcaption>An orange plastic scoop left in a sandpit, the place where you are allowed to dig without consequence.</figcaption>
+  </figure>
+
+  <h2>The relationship with JavaScript</h2>
+  <p>Wasm does not replace JavaScript, and the official wording about their interaction is careful in a way worth noticing. Modules <strong>will be able to call into and out of the JavaScript context and access browser functionality through the same Web APIs accessible from JavaScript</strong>.</p>
+  <p>That future tense, <em>will be able to</em>, sits in the official description. It is a reminder that the boundary between the two has been a moving target, and that anything you read about Wasm and the DOM should be checked against the version you are actually shipping rather than against a blog post.</p>
+  <p>The practical shape today: Wasm computes, JavaScript orchestrates. Heavy numeric work, codecs, compression, simulation, cryptography all fit the first role. Reaching the page, handling events and calling browser APIs fit the second.</p>
+
+  <h2>It was never only for browsers</h2>
+  <p>The name misleads people, and the site says so plainly: WebAssembly <strong>also supports non-web embeddings</strong>. The definition itself mentions <strong>client and server applications</strong>.</p>
+  <p>This is why Wasm turns up in places with no browser anywhere: plugin systems that need to run untrusted code safely, edge runtimes, embedded scripting inside larger applications. In all of them the appeal is the same pair of properties, a sandbox with a portable binary format, and the browser is simply the most visible host rather than the only one.</p>
+
+  <h2>When it is the wrong tool</h2>
+  <p><strong>If your bottleneck is the network</strong>, Wasm does not help. A module still has to be downloaded, and a fast computation behind a slow transfer is still slow.</p>
+  <p><strong>If your work is mostly DOM manipulation</strong>, crossing the boundary to do it costs more than it saves. That is what JavaScript is already good at.</p>
+  <p><strong>If you would need to rewrite working code</strong>, weigh that honestly. Wasm shines when a compiled language is already the natural fit, or when you have an existing C or Rust codebase to bring along.</p>
+
+  <h2>The short version</h2>
+  <p>WebAssembly is a binary instruction format for a stack-based virtual machine, and a portable compilation target rather than a language you write. Its four goals are efficiency at native speed on common hardware, a memory-safe sandbox, a readable text format alongside the binary, and the versionless, feature-tested portability of the web.</p>
+  <p>It complements JavaScript instead of replacing it, and it supports non-web embeddings, which is why it appears in plugin systems and server runtimes as readily as in browsers. Read the definition literally and most of the confusion around it disappears.</p>
+  <p>If you are getting into how compiled languages reach a target at all, our note on <a href="/e/blog/2026-06-14-what-is-an-algorithm.html">what an algorithm is</a> starts one level below this.</p>
+
+  <p class="note"><em>The definition, the four design goals and their wording, the statement about calling into and out of the JavaScript context, and the note on non-web embeddings are taken from the official WebAssembly site, checked at the time of writing. The specification evolves; verify against the current documentation before relying on a specific capability.</em></p>
+  </div>
+</Base>

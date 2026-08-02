@@ -1,0 +1,60 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/de/e/blog/2026-08-02-what-is-webassembly.html';
+const title = 'Was ist WebAssembly? Ein Kompilierziel, keine Sprache (2026)';
+const description = 'WebAssembly ist ein binäres Befehlsformat für eine stapelbasierte virtuelle Maschine und ein portables Kompilierziel für andere Sprachen. Was die offizielle Definition sagt, die vier Designziele und warum es nie auf den Browser beschränkt war.';
+---
+<Base title={title} description={description} path={path} type="article" lang="de"
+  image="https://images.pexels.com/photos/20034017/pexels-photo-20034017.jpeg?auto=compress&cs=tinysrgb&w=1200" datePublished="2026-08-02" dateModified="2026-08-02">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/de">Startseite</a><span>/</span><a href="/de/e">Guides</a><span>/</span>Was ist WebAssembly</nav>
+  <p class="kicker">WebAssembly · Kompilierung · virtuelle Maschinen</p>
+  <h1>Was ist WebAssembly genau?</h1>
+  <div class="artmeta"><span>Von Coldwast</span><span>Aktualisiert am 2. August 2026</span><span>7 Min. Lesezeit</span><span class="tag">#wasm</span><span class="tag">#compilers</span><span class="tag">#web</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.pexels.com/photos/20034017/pexels-photo-20034017.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Mehrere Reihen hoch gestapelte Seecontainer vor blauem Himmel" width="1200" height="420" loading="eager" />
+    <figcaption>Mehrere Reihen hoch gestapelte Seecontainer vor blauem Himmel, in der Form identisch, was auch immer sie gerade transportieren.</figcaption>
+  </figure>
+
+  <p>Das häufigste Missverständnis über WebAssembly ist die Annahme, es sei eine Sprache, die man schreibt. Das ist es nicht. Die offizielle Definition ist präzise, und wer sie wörtlich liest, bekommt die meisten Fragen bereits beantwortet.</p>
+
+  <h2>Die Definition, Wort für Wort</h2>
+  <p>WebAssembly, abgekürzt <em>Wasm</em>, ist <strong>ein binäres Befehlsformat für eine stapelbasierte virtuelle Maschine</strong>. Es ist entworfen als <strong>ein portables Kompilierziel für Programmiersprachen, das die Bereitstellung im Web für Client- und Serveranwendungen ermöglicht</strong>.</p>
+  <p>Daraus folgen sofort zwei Dinge. Es ist ein <strong>Ziel</strong>, das heißt, etwas anderes kompiliert dorthin, so wie C zu Maschinencode kompiliert. Und es ist <strong>stapelbasiert</strong>, was eine Designentscheidung darüber ist, wie die virtuelle Maschine Operanden hält, kein Detail, mit dem du direkt umgehst.</p>
+  <p>Von niemandem wird erwartet, Wasm für den Produktivbetrieb von Hand zu schreiben, so wenig wie jemand x86 von Hand schreibt. Du schreibst Rust, C, Go oder eine andere Sprache, und der Compiler gibt Wasm aus.</p>
+
+  <h2>Die vier Designziele und was jedes davon kostet</h2>
+  <p>Das Projekt nennt vier Ziele, und es lohnt sich, sie als Abwägungen zu lesen und nicht als Funktionsliste.</p>
+  <p><strong>Effizienz.</strong> Die Stapelmaschine ist darauf ausgelegt, <strong>mit nativer Geschwindigkeit ausgeführt zu werden, indem sie sich verbreitete Hardwarefähigkeiten zunutze macht, die auf einer breiten Palette von Plattformen verfügbar sind</strong>. Man beachte die Einschränkung: <em>verbreitete</em> Fähigkeiten, über eine <em>breite Palette</em> hinweg. Geschwindigkeit entsteht hier daraus, das anzusteuern, was jede Plattform hat, und nicht daraus, auszureizen, was eine einzelne am besten kann.</p>
+  <p><strong>Sicherheit.</strong> Wasm beschreibt <strong>eine speichersichere, in einer Sandbox laufende Ausführungsumgebung</strong>, die sich zudem innerhalb bestehender JavaScript-VMs implementieren lässt. Das Modul kann nicht über das hinausgreifen, was der Host ihm reicht.</p>
+  <p><strong>Offenheit.</strong> Es ist <strong>so entworfen, dass es in einem Textformat lesbar ausgegeben werden kann, zum Debuggen, Testen, Experimentieren, Optimieren, Lernen, Lehren und Schreiben von Programmen von Hand</strong>. Ein Binärformat, das ein lesbares Gegenstück mitliefert, trifft eine bewusste Entscheidung gegen Undurchsichtigkeit.</p>
+  <p><strong>Portabilität.</strong> Das erklärte Ziel ist es, <strong>die versionslose, per Feature-Test geprüfte und rückwärtskompatible Natur des Webs</strong> zu bewahren. Diese eine Formulierung erklärt, warum Wasm keine Versionsnummern hat, die ausgehandelt werden müssten: Man testet auf ein Feature und fragt nicht, mit welchem Release man spricht.</p>
+
+  <figure>
+    <img src="https://images.pexels.com/photos/4040327/pexels-photo-4040327.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Eine orangefarbene Plastikschaufel, die auf feuchtem Sand liegt" width="1200" height="420" loading="lazy" />
+    <figcaption>Eine orangefarbene Plastikschaufel, die im Sandkasten liegen geblieben ist, an dem Ort, an dem man ohne Folgen graben darf.</figcaption>
+  </figure>
+
+  <h2>Das Verhältnis zu JavaScript</h2>
+  <p>Wasm ersetzt JavaScript nicht, und die offizielle Formulierung zu ihrem Zusammenspiel ist auf eine Weise vorsichtig, die auffallen sollte. Module <strong>werden in den JavaScript-Kontext hinein und aus ihm heraus aufrufen können und über dieselben Web APIs auf Browserfunktionalität zugreifen können, die auch von JavaScript aus erreichbar sind</strong>.</p>
+  <p>Diese Zukunftsform, <em>werden aufrufen können</em>, steht so in der offiziellen Beschreibung. Sie erinnert daran, dass die Grenze zwischen beiden ein bewegliches Ziel war, und dass alles, was man über Wasm und das DOM liest, gegen die Version geprüft werden sollte, die man tatsächlich ausliefert, und nicht gegen einen Blogbeitrag.</p>
+  <p>Die praktische Form heute: Wasm rechnet, JavaScript orchestriert. Schwere numerische Arbeit, Codecs, Kompression, Simulation und Kryptografie passen alle in die erste Rolle. An die Seite heranzukommen, Ereignisse zu behandeln und Browser-APIs aufzurufen, passt in die zweite.</p>
+
+  <h2>Es war nie nur für Browser gedacht</h2>
+  <p>Der Name führt in die Irre, und die Website sagt es unumwunden: WebAssembly <strong>unterstützt auch Einbettungen außerhalb des Webs</strong>. Die Definition selbst erwähnt <strong>Client- und Serveranwendungen</strong>.</p>
+  <p>Deshalb taucht Wasm an Orten auf, an denen weit und breit kein Browser ist: Plugin-Systeme, die nicht vertrauenswürdigen Code sicher ausführen müssen, Edge-Laufzeitumgebungen, eingebettetes Skripting innerhalb größerer Anwendungen. In allen ist der Reiz dasselbe Paar von Eigenschaften, eine Sandbox mit einem portablen Binärformat, und der Browser ist schlicht der sichtbarste Host, nicht der einzige.</p>
+
+  <h2>Wann es das falsche Werkzeug ist</h2>
+  <p><strong>Wenn dein Engpass das Netzwerk ist</strong>, hilft Wasm nicht. Ein Modul muss weiterhin heruntergeladen werden, und eine schnelle Berechnung hinter einer langsamen Übertragung ist immer noch langsam.</p>
+  <p><strong>Wenn deine Arbeit überwiegend DOM-Manipulation ist</strong>, kostet das Überqueren der Grenze mehr, als es einspart. Genau darin ist JavaScript bereits gut.</p>
+  <p><strong>Wenn du funktionierenden Code neu schreiben müsstest</strong>, wäge das ehrlich ab. Wasm glänzt, wenn eine kompilierte Sprache ohnehin die natürliche Wahl ist, oder wenn du eine bestehende C- oder Rust-Codebasis mitbringst.</p>
+
+  <h2>Die kurze Fassung</h2>
+  <p>WebAssembly ist ein binäres Befehlsformat für eine stapelbasierte virtuelle Maschine und ein portables Kompilierziel, keine Sprache, die man schreibt. Seine vier Ziele sind Effizienz mit nativer Geschwindigkeit auf verbreiteter Hardware, eine speichersichere Sandbox, ein lesbares Textformat neben dem Binärformat und die versionslose, per Feature-Test geprüfte Portabilität des Webs.</p>
+  <p>Es ergänzt JavaScript, statt es zu ersetzen, und es unterstützt Einbettungen außerhalb des Webs, weshalb es in Plugin-Systemen und Server-Laufzeitumgebungen genauso selbstverständlich auftaucht wie in Browsern. Lies die Definition wörtlich, und der größte Teil der Verwirrung darum löst sich auf.</p>
+  <p>Wenn du dich erst damit befasst, wie kompilierte Sprachen überhaupt ein Ziel erreichen, setzt unsere Notiz dazu, <a href="/de/e/blog/2026-06-14-what-is-an-algorithm.html">was ein Algorithmus ist</a>, eine Ebene darunter an.</p>
+
+  <p class="note"><em>Die Definition, die vier Designziele und ihre Formulierung, die Aussage über Aufrufe in den und aus dem JavaScript-Kontext sowie der Hinweis auf Einbettungen außerhalb des Webs stammen von der offiziellen WebAssembly-Website, geprüft zum Zeitpunkt des Schreibens. Die Spezifikation entwickelt sich weiter; prüfe gegen die aktuelle Dokumentation, bevor du dich auf eine bestimmte Fähigkeit verlässt.</em></p>
+  </div>
+</Base>

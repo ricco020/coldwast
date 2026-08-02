@@ -1,0 +1,60 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/es/e/blog/2026-08-02-what-is-webassembly.html';
+const title = '¿Qué es WebAssembly? Un objetivo de compilación, no un lenguaje (2026)';
+const description = 'WebAssembly es un formato de instrucciones binario para una máquina virtual basada en pila, y un objetivo de compilación portable para otros lenguajes. Qué dice la definición oficial, los cuatro objetivos de diseño y por qué nunca estuvo limitado al navegador.';
+---
+<Base title={title} description={description} path={path} type="article" lang="es"
+  image="https://images.pexels.com/photos/20034017/pexels-photo-20034017.jpeg?auto=compress&cs=tinysrgb&w=1200" datePublished="2026-08-02" dateModified="2026-08-02">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/es">Inicio</a><span>/</span><a href="/es/e">Guías</a><span>/</span>Qué es WebAssembly</nav>
+  <p class="kicker">WebAssembly · compilación · máquinas virtuales</p>
+  <h1>¿Qué es WebAssembly, exactamente?</h1>
+  <div class="artmeta"><span>Por Coldwast</span><span>Actualizado el 2 de agosto de 2026</span><span>7 min de lectura</span><span class="tag">#wasm</span><span class="tag">#compilers</span><span class="tag">#web</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.pexels.com/photos/20034017/pexels-photo-20034017.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Contenedores de transporte apilados en varias filas de altura contra un cielo azul" width="1200" height="420" loading="eager" />
+    <figcaption>Contenedores de transporte apilados en varias filas de altura contra un cielo azul, idénticos en forma sea cual sea su carga.</figcaption>
+  </figure>
+
+  <p>El malentendido más común sobre WebAssembly es creer que es un lenguaje que se escribe. No lo es. La definición oficial es precisa, y leerla al pie de la letra responde a la mayoría de las preguntas que la gente tiene.</p>
+
+  <h2>La definición, palabra por palabra</h2>
+  <p>WebAssembly, abreviado <em>Wasm</em>, es <strong>un formato de instrucciones binario para una máquina virtual basada en pila</strong>. Está diseñado como <strong>un objetivo de compilación portable para lenguajes de programación, que permite el despliegue en la web para aplicaciones cliente y servidor</strong>.</p>
+  <p>De ahí se siguen dos cosas de inmediato. Es un <strong>objetivo</strong>, lo que significa que otra cosa se compila hacia él, igual que C se compila a código máquina. Y está <strong>basado en pila</strong>, que es una decisión de diseño sobre cómo la máquina virtual guarda los operandos, no un detalle con el que interactúes directamente.</p>
+  <p>No se espera que nadie escriba Wasm a mano para producción, igual que nadie escribe x86 a mano. Tú escribes Rust, C, Go u otro lenguaje, y el compilador emite Wasm.</p>
+
+  <h2>Los cuatro objetivos de diseño, y lo que cuesta cada uno</h2>
+  <p>El proyecto enuncia cuatro objetivos, y merece la pena leerlos como compromisos y no como una lista de características.</p>
+  <p><strong>Eficiencia.</strong> La máquina de pila está diseñada para <strong>ejecutarse a velocidad nativa aprovechando las capacidades de hardware comunes disponibles en una amplia gama de plataformas</strong>. Fíjate en el matiz: capacidades <em>comunes</em>, en una <em>amplia gama</em>. La velocidad aquí viene de apuntar a lo que toda plataforma tiene, no de explotar lo que una sola hace mejor.</p>
+  <p><strong>Seguridad.</strong> Wasm describe <strong>un entorno de ejecución seguro en memoria y aislado en un sandbox</strong>, que además puede implementarse dentro de las máquinas virtuales de JavaScript existentes. El módulo no puede alcanzar nada fuera de lo que el anfitrión le entrega.</p>
+  <p><strong>Apertura.</strong> Está <strong>diseñado para imprimirse de forma legible en un formato textual para depurar, probar, experimentar, optimizar, aprender, enseñar y escribir programas a mano</strong>. Un formato binario que envía una contraparte legible está tomando una decisión deliberada contra la opacidad.</p>
+  <p><strong>Portabilidad.</strong> El objetivo declarado es preservar <strong>la naturaleza sin versiones, probada por características y retrocompatible de la web</strong>. Esa sola frase explica por qué Wasm no tiene números de versión que negociar: compruebas si hay una característica, no preguntas con qué versión estás hablando.</p>
+
+  <figure>
+    <img src="https://images.pexels.com/photos/4040327/pexels-photo-4040327.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Una pala de plástico naranja tumbada sobre arena húmeda" width="1200" height="420" loading="lazy" />
+    <figcaption>Una pala de plástico naranja olvidada en un arenero, el lugar donde se te permite cavar sin consecuencias.</figcaption>
+  </figure>
+
+  <h2>La relación con JavaScript</h2>
+  <p>Wasm no sustituye a JavaScript, y la redacción oficial sobre su interacción es cuidadosa de un modo que conviene advertir. Los módulos <strong>podrán llamar hacia dentro y hacia fuera del contexto de JavaScript y acceder a la funcionalidad del navegador a través de las mismas Web APIs accesibles desde JavaScript</strong>.</p>
+  <p>Ese tiempo futuro, <em>podrán</em>, aparece en la descripción oficial. Es un recordatorio de que la frontera entre ambos ha sido un objetivo móvil, y de que cualquier cosa que leas sobre Wasm y el DOM debería comprobarse contra la versión que realmente estás desplegando y no contra una entrada de blog.</p>
+  <p>La forma práctica hoy: Wasm calcula, JavaScript orquesta. El trabajo numérico pesado, los códecs, la compresión, la simulación y la criptografía encajan todos en el primer papel. Llegar a la página, manejar eventos y llamar a las API del navegador encajan en el segundo.</p>
+
+  <h2>Nunca fue solo para navegadores</h2>
+  <p>El nombre confunde a la gente, y el sitio lo dice sin rodeos: WebAssembly <strong>también admite integraciones fuera de la web</strong>. La propia definición menciona <strong>aplicaciones cliente y servidor</strong>.</p>
+  <p>Por eso Wasm aparece en lugares donde no hay ningún navegador: sistemas de plugins que necesitan ejecutar código no confiable de forma segura, runtimes en el borde, scripting embebido dentro de aplicaciones mayores. En todos ellos el atractivo es el mismo par de propiedades, un sandbox con un formato binario portable, y el navegador es sencillamente el anfitrión más visible y no el único.</p>
+
+  <h2>Cuándo es la herramienta equivocada</h2>
+  <p><strong>Si tu cuello de botella es la red</strong>, Wasm no ayuda. Un módulo todavía tiene que descargarse, y un cálculo rápido detrás de una transferencia lenta sigue siendo lento.</p>
+  <p><strong>Si tu trabajo es sobre todo manipulación del DOM</strong>, cruzar la frontera para hacerlo cuesta más de lo que ahorra. Eso es en lo que JavaScript ya es bueno.</p>
+  <p><strong>Si tuvieras que reescribir código que funciona</strong>, sopésalo con honestidad. Wasm brilla cuando un lenguaje compilado ya es el encaje natural, o cuando tienes una base de código C o Rust existente que traer contigo.</p>
+
+  <h2>La versión corta</h2>
+  <p>WebAssembly es un formato de instrucciones binario para una máquina virtual basada en pila, y un objetivo de compilación portable más que un lenguaje que se escribe. Sus cuatro objetivos son la eficiencia a velocidad nativa sobre hardware común, un sandbox seguro en memoria, un formato de texto legible junto al binario, y la portabilidad sin versiones y probada por características de la web.</p>
+  <p>Complementa a JavaScript en lugar de sustituirlo, y admite integraciones fuera de la web, que es la razón por la que aparece en sistemas de plugins y runtimes de servidor con la misma facilidad que en los navegadores. Lee la definición al pie de la letra y casi toda la confusión que la rodea desaparece.</p>
+  <p>Si te estás metiendo en cómo los lenguajes compilados alcanzan un objetivo siquiera, nuestra nota sobre <a href="/es/e/blog/2026-06-14-what-is-an-algorithm.html">qué es un algoritmo</a> empieza un nivel por debajo de esto.</p>
+
+  <p class="note"><em>La definición, los cuatro objetivos de diseño y su redacción, la afirmación sobre llamar hacia dentro y hacia fuera del contexto de JavaScript, y la nota sobre las integraciones fuera de la web están tomadas del sitio oficial de WebAssembly, comprobado en el momento de escribir. La especificación evoluciona; verifica con la documentación actual antes de apoyarte en una capacidad concreta.</em></p>
+  </div>
+</Base>
