@@ -1,0 +1,91 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/es/e/blog/2026-08-04-cabal-add-dependency.html';
+const title = 'Cómo añadir una dependencia en Cabal: build-depends, cotas de versión y la PVP (2026)';
+const description = 'Añadir un paquete a un proyecto Haskell consiste en editar build-depends en el fichero .cabal. Qué espera ese campo, qué significa realmente el operador caret bajo la Package Versioning Policy y por qué cabal update va antes que nada.';
+---
+<Base title={title} description={description} path={path} type="article" lang="es"
+  image="https://cdn.pixabay.com/photo/2016/01/27/04/32/books-1163695_1280.jpg" datePublished="2026-08-04" dateModified="2026-08-04">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/es">Inicio</a><span>/</span><a href="/es/e">Guías</a><span>/</span>Dependencias en Cabal</nav>
+  <p class="kicker">Haskell · Cabal · gestión de paquetes</p>
+  <h1>¿Cómo se añade una dependencia en Cabal?</h1>
+  <div class="artmeta"><span>Por Coldwast</span><span>Actualizado el 4 de agosto de 2026</span><span>7 min de lectura</span><span class="tag">#haskell</span><span class="tag">#cabal</span><span class="tag">#paquetes</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://cdn.pixabay.com/photo/2016/01/27/04/32/books-1163695_1280.jpg" alt="Altas pilas de libros de segunda mano llenando el pasillo de una librería" width="1200" height="420" loading="eager" />
+    <figcaption>Pilas de libros de segunda mano abarrotan el pasillo de una librería, apiladas más alto que las estanterías del fondo.</figcaption>
+  </figure>
+
+  <p>La respuesta corta es que una dependencia no se añade con un comando, sino con una línea en un fichero. Un paquete Haskell declara lo que necesita en su fichero <code>.cabal</code>, bajo <strong>build-depends</strong>, y todo lo demás se deriva de esa declaración.</p>
+
+  <p>Conviene decirlo con claridad, porque quien llega desde npm o Cargo busca un comando <code>install</code> que modifique un manifiesto, y luego se pregunta por qué nada de lo instalado resulta visible para el compilador.</p>
+
+  <h2>El campo que de verdad importa: build-depends</h2>
+
+  <p>Abre tu fichero <code>.cabal</code> y localiza la estrofa de aquello que estás construyendo: una <code>library</code>, un <code>executable</code> o una <code>test-suite</code>. Cada una lleva su propio <code>build-depends</code>, y ese es el punto que más se pasa por alto.</p>
+
+  <pre><code>library
+  exposed-modules:  MyApp.Core
+  build-depends:    base ^&gt;=4.18
+                  , containers ^&gt;=0.6
+                  , text ^&gt;=2.0
+  default-language: Haskell2010</code></pre>
+
+  <p>Añadir un paquete consiste en añadir una línea aquí. La coma al principio de línea es una convención, no un requisito: existe para que añadir o quitar una línea toque una sola.</p>
+
+  <p><strong>Las dependencias son de cada estrofa.</strong> Un paquete que necesita tu suite de pruebas no pertenece al <code>build-depends</code> de la biblioteca, y un paquete que necesita tu biblioteca no queda automáticamente disponible para tu ejecutable, salvo que este dependa de la propia biblioteca. Es más estricto que en la mayoría de ecosistemas, y es deliberado: mantiene las herramientas de prueba fuera de lo que tus usuarios tienen que compilar.</p>
+
+  <h2>Qué significa realmente el operador caret</h2>
+
+  <p>El <code>^&gt;=</code> que se ve por todas partes no es decorativo. Es una abreviatura ligada a la <strong>Package Versioning Policy</strong> de Haskell, la PVP, y entenderla elimina casi todas las conjeturas sobre las cotas.</p>
+
+  <p>Bajo la PVP una versión se lee <code>A.B.C.D</code>, donde <strong>A.B en conjunto</strong> forman la versión mayor. Los cambios que rompen incrementan A o B. Las adiciones que no pueden romper código existente incrementan C. Así, <code>^&gt;=1.2.3</code> significa <em>al menos 1.2.3 y por debajo de la siguiente mayor</em>, lo que se expande a <code>&gt;=1.2.3 &amp;&amp; &lt;1.3</code>.</p>
+
+  <p>La consecuencia sorprende: en Haskell, <strong>pasar de 1.2 a 1.3 es un salto mayor</strong>, no menor. Si arrastras el modelo mental del versionado semántico, donde solo el primer número es mayor, escribirás cotas mucho más laxas de lo que pretendías.</p>
+
+  <figure>
+    <img src="https://cdn.pixabay.com/photo/2019/10/21/07/23/building-blocks-4565341_1280.jpg" alt="Tablillas de madera idénticas montadas en pequeñas estructuras, cada capa apoyada sobre la inferior" width="1200" height="420" loading="lazy" />
+    <figcaption>Tablillas de madera idénticas montadas en pequeñas estructuras, cada capa apoyada sobre la de abajo.</figcaption>
+  </figure>
+
+  <h2>Por qué cabal update va primero</h2>
+
+  <p>Cabal resuelve dependencias contra una <strong>copia local del índice de paquetes de Hackage</strong>. Si esa copia está obsoleta, un paquete publicado la semana pasada sencillamente no existe para tu máquina, y obtienes un error de resolución que se lee como si el nombre del paquete estuviera mal.</p>
+
+  <pre><code>cabal update
+cabal build</code></pre>
+
+  <p>Ejecuta <code>cabal update</code> cuando un paquete que sabes que existe no aparezca, y tras cualquier pausa larga entre sesiones. Es lo primero que hay que probar y no cuesta nada.</p>
+
+  <h2>Leer un fallo de resolución sin alarmarse</h2>
+
+  <p>Cuando el solucionador no puede satisfacer todas las restricciones a la vez, informa del conflicto en lugar de elegir en silencio. El mensaje es denso, pero dice algo concreto: dos de tus dependencias quieren rangos incompatibles de una tercera.</p>
+
+  <p>Las opciones honestas son pocas y conviene conocerlas antes de recurrir a una opción de línea de comandos:</p>
+
+  <p><strong>Relajar una cota que pusiste tú.</strong> Si la cota demasiado estrecha está en tu propio fichero <code>.cabal</code>, ampliarla es legítimo, siempre que después compiles y pruebes en vez de suponerlo.</p>
+
+  <p><strong>Elegir otra versión del paquete que estás añadiendo.</strong> A menudo una versión anterior de la nueva dependencia encaja con las restricciones que tu proyecto ya tiene.</p>
+
+  <p><strong>Usar <code>--allow-newer</code> a sabiendas y de forma temporal.</strong> Le dice al solucionador que ignore las cotas superiores declaradas por otros paquetes. Esas cotas las escribieron mantenedores que tenían un motivo, así que trátalo como un diagnóstico que revela dónde está el conflicto real, no como un arreglo que se commitea.</p>
+
+  <h2>Fijar lo que has resuelto</h2>
+
+  <p>La resolución elige versiones en un momento dado. Para hacer ese momento reproducible, fíjalo:</p>
+
+  <pre><code>cabal freeze</code></pre>
+
+  <p>Esto escribe un fichero <code>cabal.project.freeze</code> que registra las versiones exactas elegidas. Commitéalo cuando quieras una compilación que se comporte igual el mes que viene, que es la expectativa habitual en una aplicación. Las bibliotecas son el caso contrario: deben permanecer flexibles para que quien dependa de ellas pueda resolver con libertad.</p>
+
+  <p>Para un proyecto que abarque varios paquetes, o que necesite una dependencia de código fuente ausente de Hackage, esa configuración pertenece a <code>cabal.project</code> y no al fichero <code>.cabal</code>. Mantener ambos separados es la forma más clara de orientarse: <strong>el fichero <code>.cabal</code> describe un paquete y <code>cabal.project</code> describe cómo compilar un conjunto de ellos.</strong></p>
+
+  <h2>En resumen</h2>
+
+  <p>Añade una dependencia agregando una línea a <code>build-depends</code>, en la estrofa que realmente la necesita. Acótala con <code>^&gt;=</code>, recordando que bajo la PVP los dos primeros números forman juntos la versión mayor. Ejecuta <code>cabal update</code> antes de culpar a un paquete por no existir. Fija las aplicaciones y deja sueltas las bibliotecas.</p>
+
+  <p>Si todavía estás eligiendo herramientas, nuestra comparación entre <a href="/es/e/blog/2026-06-14-stack-vs-cabal-haskell.html">Stack y Cabal</a> aborda esa decisión, y la <a href="/es/e/blog/2026-06-14-ghcup-install-haskell.html">guía de instalación de GHCup</a> monta la cadena de herramientas que este artículo da por instalada.</p>
+
+  <p class="note"><em>El campo build-depends, la expansión del operador caret y la regla de la versión mayor A.B siguen la guía de usuario de Cabal y la Package Versioning Policy de Haskell, verificadas al momento de escribir. La disponibilidad de comandos varía según tu versión de cabal-install: ejecuta <code>cabal --version</code> y consulta la guía de tu versión antes de apoyarte en un subcomando concreto.</em></p>
+  </div>
+</Base>

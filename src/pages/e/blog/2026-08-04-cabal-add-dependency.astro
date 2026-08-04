@@ -1,0 +1,91 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-08-04-cabal-add-dependency.html';
+const title = 'How to Add a Dependency in Cabal: build-depends, Version Bounds and the PVP (2026)';
+const description = 'Adding a package to a Haskell project means editing build-depends in the .cabal file. What the field expects, what the caret operator really means under the Package Versioning Policy, and why cabal update matters before anything else.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://cdn.pixabay.com/photo/2016/01/27/04/32/books-1163695_1280.jpg" datePublished="2026-08-04" dateModified="2026-08-04">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e">Guides</a><span>/</span>Cabal dependencies</nav>
+  <p class="kicker">Haskell · Cabal · package management</p>
+  <h1>How do you add a dependency in Cabal?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Aug 4, 2026</span><span>7 min read</span><span class="tag">#haskell</span><span class="tag">#cabal</span><span class="tag">#packages</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://cdn.pixabay.com/photo/2016/01/27/04/32/books-1163695_1280.jpg" alt="Tall stacks of second-hand books filling a bookshop aisle" width="1200" height="420" loading="eager" />
+    <figcaption>Stacks of second-hand books crowding a bookshop aisle, piled higher than the shelves behind them.</figcaption>
+  </figure>
+
+  <p>The short answer is that you do not add a dependency with a command so much as with a line in a file. A Haskell package declares what it needs in its <code>.cabal</code> file, under <strong>build-depends</strong>, and everything else follows from that declaration.</p>
+
+  <p>That is worth stating plainly, because people arriving from npm or Cargo look for an <code>install</code> command that mutates a manifest, and then wonder why nothing they installed is visible to the compiler.</p>
+
+  <h2>The field that actually matters: build-depends</h2>
+
+  <p>Open your <code>.cabal</code> file and find the stanza for the thing you are building - a <code>library</code>, an <code>executable</code>, or a <code>test-suite</code>. Each one carries its own <code>build-depends</code>, and that is the point people miss most often.</p>
+
+  <pre><code>library
+  exposed-modules:  MyApp.Core
+  build-depends:    base ^&gt;=4.18
+                  , containers ^&gt;=0.6
+                  , text ^&gt;=2.0
+  default-language: Haskell2010</code></pre>
+
+  <p>Adding a package means adding a line here. The comma-first layout is a convention, not a requirement; it exists so that adding or removing a line touches one line rather than two.</p>
+
+  <p><strong>Dependencies are per-stanza.</strong> A package your test suite needs does not belong in the library's <code>build-depends</code>, and a package your library needs is not automatically available to your executable unless the executable depends on the library itself. This is stricter than most ecosystems, and it is deliberate: it keeps test-only tooling out of what your users have to build.</p>
+
+  <h2>What the caret operator really means</h2>
+
+  <p>The <code>^&gt;=</code> you see everywhere is not decoration. It is a shorthand tied to the Haskell <strong>Package Versioning Policy</strong>, the PVP, and understanding it removes most of the guesswork about bounds.</p>
+
+  <p>Under the PVP a version reads <code>A.B.C.D</code>, where <strong>A.B together</strong> form the major version. Breaking changes bump A or B. Additions that cannot break existing code bump C. So <code>^&gt;=1.2.3</code> means <em>at least 1.2.3, and below the next major</em>, which expands to <code>&gt;=1.2.3 &amp;&amp; &lt;1.3</code>.</p>
+
+  <p>The consequence catches people out: in Haskell, <strong>1.2 to 1.3 is a major bump</strong>, not a minor one. If you carry a mental model from semantic versioning, where the first number alone is major, you will write bounds that are far looser than you intended.</p>
+
+  <figure>
+    <img src="https://cdn.pixabay.com/photo/2019/10/21/07/23/building-blocks-4565341_1280.jpg" alt="Identical wooden planks assembled into small structures, each layer resting on the one below" width="1200" height="420" loading="lazy" />
+    <figcaption>Identical wooden planks assembled into small structures, each layer resting on the one below it.</figcaption>
+  </figure>
+
+  <h2>Why cabal update comes first</h2>
+
+  <p>Cabal resolves dependencies against a <strong>local copy of the Hackage package index</strong>. If that copy is stale, a package published last week simply does not exist as far as your machine is concerned, and you get a resolution error that reads as if the package name were wrong.</p>
+
+  <pre><code>cabal update
+cabal build</code></pre>
+
+  <p>Run <code>cabal update</code> when a package you know exists cannot be found, and after any long gap between sessions. It is the first thing to try, and it costs nothing.</p>
+
+  <h2>Reading a resolution failure without panic</h2>
+
+  <p>When the solver cannot satisfy every constraint at once, it reports the conflict rather than silently picking something. The message is dense, but it is telling you something specific: two of your dependencies want incompatible ranges of a third.</p>
+
+  <p>The honest options are few, and worth knowing before reaching for a flag:</p>
+
+  <p><strong>Relax a bound you set yourself.</strong> If the too-narrow bound is in your own <code>.cabal</code> file, widening it is legitimate, provided you then build and test rather than assume.</p>
+
+  <p><strong>Pick a different version of the package you are adding.</strong> Often an older release of the new dependency fits the constraints your project already has.</p>
+
+  <p><strong>Use <code>--allow-newer</code> knowingly, and temporarily.</strong> It tells the solver to ignore upper bounds that other packages declared. Those bounds were written by maintainers who had a reason, so treat this as a diagnostic that tells you where the real conflict is, not as a fix you commit.</p>
+
+  <h2>Pinning what you resolved</h2>
+
+  <p>Resolution picks versions at a moment in time. To make that moment reproducible, freeze it:</p>
+
+  <pre><code>cabal freeze</code></pre>
+
+  <p>This writes a <code>cabal.project.freeze</code> file recording the exact versions chosen. Commit it when you want a build that behaves the same next month, which is the usual expectation for an application. Libraries are the opposite case: they should stay flexible so that whoever depends on them can resolve freely.</p>
+
+  <p>For a project spanning several packages, or one that needs a source dependency not on Hackage, that configuration belongs in <code>cabal.project</code> rather than in the <code>.cabal</code> file. Keeping the two straight is the single clearest way to stay oriented: <strong>the <code>.cabal</code> file describes one package, <code>cabal.project</code> describes how to build a set of them together.</strong></p>
+
+  <h2>The short version</h2>
+
+  <p>Add a dependency by adding a line to <code>build-depends</code>, in the stanza that actually needs it. Bound it with <code>^&gt;=</code>, remembering that under the PVP the first two numbers together are the major version. Run <code>cabal update</code> before blaming a package for not existing. Freeze applications, leave libraries loose.</p>
+
+  <p>If you are still choosing your tooling, our comparison of <a href="/e/blog/2026-06-14-stack-vs-cabal-haskell.html">Stack and Cabal</a> covers that decision, and the <a href="/e/blog/2026-06-14-ghcup-install-haskell.html">GHCup installation guide</a> sets up the toolchain this assumes you already have.</p>
+
+  <p class="note"><em>The build-depends field, the caret operator's expansion and the A.B major-version rule follow the Cabal user guide and the Haskell Package Versioning Policy, checked at the time of writing. Command availability varies with your cabal-install version; run <code>cabal --version</code> and consult the guide for your release before relying on a specific subcommand.</em></p>
+  </div>
+</Base>
