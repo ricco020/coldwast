@@ -1,0 +1,63 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/es/e/blog/2026-08-05-what-is-serverless.html';
+const title = 'Qué es serverless: los servidores siguen ahí (2026)';
+const description = 'Serverless no significa que no haya servidor. Significa que tú no aprovisionas, parcheas ni dimensionas ninguno. Qué quita realmente, cómo funciona la facturación por invocación, las restricciones que el argumentario omite y el nivel de tráfico donde un VPS normal cuesta menos.';
+---
+<Base title={title} description={description} path={path} type="article" lang="es"
+  image="https://cdn.pixabay.com/photo/2024/02/14/22/47/pylon-8574348_1280.jpg" datePublished="2026-08-05" dateModified="2026-08-05">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/es">Inicio</a><span>/</span><a href="/es/e">Guías</a><span>/</span>Qué es serverless</nav>
+  <p class="kicker">serverless · cloud · arquitectura</p>
+  <h1>Qué es serverless, exactamente</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Aug 5, 2026</span><span>7 min read</span><span class="tag">#serverless</span><span class="tag">#cloud</span><span class="tag">#arquitectura</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://cdn.pixabay.com/photo/2024/02/14/22/47/pylon-8574348_1280.jpg" alt="Vista en contrapicado a través de la estructura metálica de una torre eléctrica sobre un cielo azul" width="1200" height="420" loading="eager" />
+    <figcaption>Vista hacia arriba por dentro de una torre de transporte eléctrico. La red es enorme, alguien la mantiene, y tú solo la tocas por un enchufe.</figcaption>
+  </figure>
+
+  <p>La palabra es un término de marketing que se ha quedado, y engaña a casi todo el mundo la primera vez. <strong>Serverless no significa que no haya servidor.</strong> Significa que nunca ves uno: no eliges su tamaño, no instalas sus actualizaciones, no decides cuántos poner en marcha. Todo eso lo hace otro, y a ti se te cobra lo que tu código hizo de verdad.</p>
+
+  <h2>Qué quita realmente</h2>
+  <p>En un <a href="/es/e/blog/2026-06-19-what-is-a-vps.html">VPS</a> alquilas una máquina. Existe venga alguien o no, eliges su RAM y sus vCPU, parcheas su kernel y decides cuándo añadir una segunda. Cada una de esas decisiones es tuya, y cada hora de la factura también.</p>
+  <p>Serverless quita la máquina como unidad sobre la que razonar. Le entregas a la plataforma un trozo de código y un disparador: una petición HTTP, un mensaje en una cola, un fichero que aterriza en el almacenamiento. La plataforma se ocupa de que ese código se ejecute cuando el disparador ocurre. Cuántas copias se ejecutan, y sobre qué, no es tu problema ni tu decisión.</p>
+  <p>Ese es todo el intercambio, dicho sin adornos: cedes el control del runtime a cambio de no operarlo nunca.</p>
+
+  <h2>Las dos familias</h2>
+  <p><strong>Function as a Service</strong> es la parte en la que se piensa primero. Despliegas una función, la plataforma la ejecuta por evento, y desaparece. AWS Lambda, Google Cloud Functions y Azure Functions son los ejemplos conocidos.</p>
+  <p>Los <strong>servicios gestionados serverless</strong> son la mitad más grande y menos comentada: bases de datos, colas, almacenamiento de objetos y búsqueda, facturados por petición o por unidad de trabajo en vez de por instancia aprovisionada. La mayoría de los sistemas serverless reales son sobre todo esto, con una cantidad modesta de código de función sujetando las piezas.</p>
+
+  <figure>
+    <img src="https://cdn.pixabay.com/photo/2018/05/18/00/16/meter-3410068_1280.jpg" alt="Primer plano de un contador eléctrico tras su tapa de cristal, con una etiqueta de código de barras y una pantalla digital" width="1200" height="420" loading="lazy" />
+    <figcaption>Un contador eléctrico tras su tapa de cristal. La facturación serverless funciona igual: se te cobra lo que se ejecutó, no la máquina que esperaba.</figcaption>
+  </figure>
+
+  <h2>La facturación y por qué el scale to zero es el titular</h2>
+  <p>Una máquina alquilada se factura por tiempo de reloj. Cuesta lo mismo a las tres de la madrugada sin visitas que en el pico. Serverless factura por invocación más los recursos que esa invocación consumió mientras corría.</p>
+  <p>La consecuencia es el <strong>scale to zero</strong>: sin tráfico no hay nada en marcha y no hay nada que pagar. Para un proyecto personal, una herramienta interna usada dos veces por semana o una carga a picos que está parada casi siempre, esta es la ventaja de verdad, y es grande.</p>
+  <p>El mismo mecanismo funciona en sentido contrario bajo carga. La plataforma arranca tantas copias concurrentes como exijan los eventos, sin que configures ningún autoescalador, y esa es la segunda ventaja real.</p>
+
+  <h2>Las restricciones que el argumentario omite</h2>
+  <p><strong>Arranques en frío.</strong> Cuando ninguna copia de tu función está caliente, la primera petición paga la inicialización del runtime y de tus dependencias antes de que tu código empiece siquiera. Bundles más pequeños y runtimes más ligeros lo reducen. Los proveedores venden capacidad precalentada, que funciona y que deshace en silencio el scale to zero, porque precalentado significa pagado mientras está ocioso.</p>
+  <p><strong>Ausencia de estado.</strong> Nada de lo que guardes en memoria o en disco local está garantizado la próxima vez. Dos invocaciones pueden caer en instancias distintas, y una instancia desaparece cuando la plataforma lo decide. El estado va a una base de datos o a un almacenamiento de objetos, siempre.</p>
+  <p><strong>Límites de ejecución.</strong> Una invocación tiene una duración máxima y un techo de memoria. Los procesos por lotes largos y todo lo que mantenga una conexión abierta durante horas encajan mal, y llegar al límite no es un aviso sino un fallo.</p>
+  <p><strong>Acoplamiento.</strong> El cuerpo de la función suele ser portable. Las formas de los eventos, el modelo de identidad y los servicios gestionados que lo rodean no lo son, y ahí es donde marcharse más tarde cuesta de verdad.</p>
+
+  <h2>Dónde se cruza la curva de coste</h2>
+  <p>La facturación por invocación es barata cuando la máquina habría estado ociosa y cara cuando habría estado ocupada. Por debajo de cierta carga estable, serverless gana con holgura. Por encima, pagas una prima por unidad de trabajo por una elasticidad que ya no usas, y un servidor encendido siempre, aunque modesto, sale más barato y más previsible.</p>
+  <p>La regla honesta es mirar la forma del tráfico más que su volumen. A picos, ocasional e impredecible: ventaja serverless. Estable y continuo: ventaja máquina alquilada por meses, y en ese punto el trabajo de operación que recuperas es un precio justo por una factura que deja de sorprender.</p>
+  <p>Si tu carga resulta estar del lado estable, un <a href="/es/e/blog/2026-06-19-what-is-a-vps.html">VPS</a> es la respuesta sencilla, y <a href="/es/e/blog/2026-06-19-what-is-docker.html">Docker</a> más algo de disciplina te devuelve casi toda la reproducibilidad que hacía atractivo el serverless al principio.</p>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Recomendado</span>
+    <h3>Un servidor para el lado estable de la curva</h3>
+    <p>Cuando el tráfico deja de ser a picos, la facturación por invocación cuesta más que una máquina que iba a estar ocupada de todos modos. DigitalOcean ofrece VPS y servidores cloud con control root completo, facturados al mes y no por llamada.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Ver DigitalOcean Cloud →</a>
+    <p class="disc">Enlace de afiliado - ayuda a mantener estas guías gratuitas.</p>
+  </div>
+
+  <h2>En resumen</h2>
+  <p>Serverless significa que los servidores son problema de otro, no que no existan. Ganas scale to zero, concurrencia automática y cero parcheo. Aceptas arranques en frío, ausencia de estado, límites de ejecución y una factura que sigue al uso y no al tiempo. Encaja con el trabajo a picos e intermitente, y deja de encajar cuando el tráfico se vuelve lo bastante estable como para que una máquina alquilada hubiera estado ocupada de todos modos.</p>
+  </div>
+</Base>

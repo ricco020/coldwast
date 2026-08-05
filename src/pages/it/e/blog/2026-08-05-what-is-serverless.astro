@@ -1,0 +1,63 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/it/e/blog/2026-08-05-what-is-serverless.html';
+const title = 'Serverless cos'è: i server ci sono ancora (2026)';
+const description = 'Serverless non vuol dire che non ci sia un server. Vuol dire che non ne provisioni, patchi né dimensioni nessuno. Che cosa toglie davvero, come funziona la fatturazione a invocazione, i vincoli che la presentazione omette e il livello di traffico dove un semplice VPS costa meno.';
+---
+<Base title={title} description={description} path={path} type="article" lang="it"
+  image="https://cdn.pixabay.com/photo/2024/02/14/22/47/pylon-8574348_1280.jpg" datePublished="2026-08-05" dateModified="2026-08-05">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/it">Home</a><span>/</span><a href="/it/e">Guide</a><span>/</span>Serverless cos'è</nav>
+  <p class="kicker">serverless · cloud · architettura</p>
+  <h1>Serverless cos'è, esattamente</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Aug 5, 2026</span><span>7 min read</span><span class="tag">#serverless</span><span class="tag">#cloud</span><span class="tag">#architettura</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://cdn.pixabay.com/photo/2024/02/14/22/47/pylon-8574348_1280.jpg" alt="Vista dal basso attraverso il traliccio in acciaio di un pilone elettrico contro un cielo azzurro" width="1200" height="420" loading="eager" />
+    <figcaption>Vista verso l'alto dentro il traliccio di un pilone dell'alta tensione. La rete è enorme, qualcuno la mantiene, e tu la tocchi solo attraverso una presa.</figcaption>
+  </figure>
+
+  <p>La parola è un termine di marketing che è rimasto, e la prima volta inganna quasi tutti. <strong>Serverless non vuol dire che non ci sia un server.</strong> Vuol dire che non ne vedi mai uno: non ne scegli la dimensione, non installi i suoi aggiornamenti, non decidi quanti farne girare. Se ne occupa qualcun altro, e a te viene addebitato ciò che il tuo codice ha davvero fatto.</p>
+
+  <h2>Che cosa toglie davvero</h2>
+  <p>Su un <a href="/it/e/blog/2026-06-19-what-is-a-vps.html">VPS</a> affitti una macchina. Esiste che arrivi qualcuno o no, ne scegli RAM e vCPU, ne aggiorni il kernel e decidi quando aggiungerne una seconda. Ognuna di quelle decisioni è tua, e lo è anche ogni ora della fattura.</p>
+  <p>Il serverless toglie la macchina come unità di ragionamento. Consegni alla piattaforma un pezzo di codice e un innesco: una richiesta HTTP, un messaggio in una coda, un file che arriva in uno storage. La piattaforma fa in modo che quel codice giri quando l'innesco scatta. Quante copie girano, e su che cosa, non è un tuo problema né una tua decisione.</p>
+  <p>È tutto qui lo scambio, detto senza giri: cedi il controllo del runtime in cambio del non doverlo mai gestire.</p>
+
+  <h2>Le due famiglie</h2>
+  <p><strong>Function as a Service</strong> è la parte a cui si pensa per prima. Distribuisci una funzione, la piattaforma la esegue per evento, e sparisce. AWS Lambda, Google Cloud Functions e Azure Functions sono gli esempi noti.</p>
+  <p>I <strong>servizi gestiti serverless</strong> sono la metà più ampia e meno discussa: database, code, storage a oggetti e ricerca, fatturati a richiesta o a unità di lavoro invece che a istanza provisionata. La maggior parte dei sistemi serverless reali è fatta soprattutto di questo, con una quantità modesta di codice di funzione a tenere insieme i pezzi.</p>
+
+  <figure>
+    <img src="https://cdn.pixabay.com/photo/2018/05/18/00/16/meter-3410068_1280.jpg" alt="Primo piano di un contatore elettrico dietro il coperchio di vetro, con etichetta a codice a barre e display digitale" width="1200" height="420" loading="lazy" />
+    <figcaption>Un contatore elettrico dietro il suo coperchio di vetro. La fatturazione serverless funziona allo stesso modo: ti viene addebitato ciò che ha girato, non la macchina che stava in attesa.</figcaption>
+  </figure>
+
+  <h2>La fatturazione, e perché lo scale to zero è il titolo</h2>
+  <p>Una macchina affittata si paga a tempo. Costa uguale alle tre di notte senza visitatori e nel picco. Il serverless fattura a invocazione più le risorse che quell'invocazione ha consumato mentre girava.</p>
+  <p>La conseguenza è lo <strong>scale to zero</strong>: senza traffico non gira nulla e non c'è nulla da pagare. Per un progetto personale, uno strumento interno usato due volte a settimana o un carico a picchi fermo quasi sempre, questo è il vantaggio vero, ed è grosso.</p>
+  <p>Lo stesso meccanismo lavora al contrario sotto carico. La piattaforma avvia tante copie concorrenti quante gli eventi richiedono, senza che tu configuri un autoscaler, ed è il secondo vantaggio reale.</p>
+
+  <h2>I vincoli che la presentazione omette</h2>
+  <p><strong>Avvii a freddo.</strong> Quando nessuna copia della tua funzione è calda, la prima richiesta paga l'inizializzazione del runtime e delle tue dipendenze prima ancora che il tuo codice parta. Bundle più piccoli e runtime più leggeri lo riducono. I fornitori vendono capacità preriscaldata, che funziona e che annulla in silenzio lo scale to zero, perché preriscaldato significa pagato mentre è fermo.</p>
+  <p><strong>Assenza di stato.</strong> Niente di ciò che tieni in memoria o su disco locale è garantito la volta dopo. Due invocazioni possono finire su istanze diverse, e un'istanza sparisce quando lo decide la piattaforma. Lo stato va in un database o in uno storage a oggetti, sempre.</p>
+  <p><strong>Limiti di esecuzione.</strong> Un'invocazione ha una durata massima e un tetto di memoria. I lavori batch lunghi e tutto ciò che tiene una connessione aperta per ore si adattano male, e toccare il limite non è un avviso ma un fallimento.</p>
+  <p><strong>Accoppiamento.</strong> Il corpo della funzione di solito è portabile. Le forme degli eventi, il modello di identità e i servizi gestiti attorno non lo sono, ed è lì che andarsene dopo costa davvero.</p>
+
+  <h2>Dove la curva dei costi si incrocia</h2>
+  <p>La fatturazione a invocazione è economica quando la macchina sarebbe stata ferma e cara quando sarebbe stata occupata. Sotto un certo carico stabile, il serverless vince facilmente. Sopra, paghi un sovrapprezzo per unità di lavoro per un'elasticità che non usi più, e un server sempre acceso, anche modesto, costa meno ed è più prevedibile.</p>
+  <p>La regola onesta è guardare la forma del traffico più che il suo volume. A picchi, occasionale e imprevedibile: vantaggio serverless. Stabile e continuo: vantaggio macchina affittata al mese, e a quel punto il lavoro operativo che ti riprendi è un prezzo giusto per una fattura che smette di sorprendere.</p>
+  <p>Se il tuo carico risulta dal lato stabile, un <a href="/it/e/blog/2026-06-19-what-is-a-vps.html">VPS</a> è la risposta semplice, e <a href="/it/e/blog/2026-06-19-what-is-docker.html">Docker</a> più un po' di disciplina ti restituisce gran parte della riproducibilità che rendeva attraente il serverless all'inizio.</p>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Consigliato</span>
+    <h3>Un server per il lato stabile della curva</h3>
+    <p>Quando il traffico smette di essere a picchi, la fatturazione a invocazione costa più di una macchina che sarebbe stata comunque occupata. DigitalOcean offre VPS e server cloud con controllo root completo, fatturati al mese e non a chiamata.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Scopri DigitalOcean Cloud →</a>
+    <p class="disc">Link di affiliazione - sostiene queste guide gratuite.</p>
+  </div>
+
+  <h2>In breve</h2>
+  <p>Serverless significa che i server sono un problema di qualcun altro, non che non esistano. Guadagni scale to zero, concorrenza automatica e zero patch. Accetti avvii a freddo, assenza di stato, limiti di esecuzione e una fattura che segue l'uso invece del tempo. Si adatta al lavoro a picchi e intermittente, e smette di adattarsi quando il traffico diventa abbastanza stabile perché una macchina affittata sarebbe stata comunque occupata.</p>
+  </div>
+</Base>

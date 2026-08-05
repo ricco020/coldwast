@@ -1,0 +1,63 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/pt/e/blog/2026-08-05-what-is-serverless.html';
+const title = 'O que é serverless? Os servidores continuam lá (2026)';
+const description = 'Serverless não quer dizer que não há servidor. Quer dizer que não aprovisiona, corrige nem dimensiona nenhum. O que retira de facto, como funciona a faturação por invocação, as restrições que o argumentário omite e o nível de tráfego onde um simples VPS custa menos.';
+---
+<Base title={title} description={description} path={path} type="article" lang="pt"
+  image="https://cdn.pixabay.com/photo/2024/02/14/22/47/pylon-8574348_1280.jpg" datePublished="2026-08-05" dateModified="2026-08-05">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/pt">Início</a><span>/</span><a href="/pt/e">Guias</a><span>/</span>O que é serverless</nav>
+  <p class="kicker">serverless · cloud · arquitetura</p>
+  <h1>O que é serverless, exatamente?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Aug 5, 2026</span><span>7 min read</span><span class="tag">#serverless</span><span class="tag">#cloud</span><span class="tag">#arquitetura</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://cdn.pixabay.com/photo/2024/02/14/22/47/pylon-8574348_1280.jpg" alt="Vista de baixo através da estrutura metálica de uma torre de alta tensão contra um céu azul" width="1200" height="420" loading="eager" />
+    <figcaption>Vista para cima por dentro da estrutura de uma torre de transporte de eletricidade. A rede é enorme, alguém a mantém, e você só lhe toca através de uma tomada.</figcaption>
+  </figure>
+
+  <p>A palavra é um termo de marketing que ficou, e engana quase toda a gente à primeira. <strong>Serverless não quer dizer que não há servidor.</strong> Quer dizer que nunca vê nenhum: não escolhe o tamanho, não instala as atualizações, não decide quantos põe a correr. Isso faz-o outra pessoa, e a si cobra-se o que o seu código realmente fez.</p>
+
+  <h2>O que retira de facto</h2>
+  <p>Num <a href="/pt/e/blog/2026-06-19-what-is-a-vps.html">VPS</a> aluga uma máquina. Ela existe venha alguém ou não, escolhe-lhe a RAM e os vCPU, corrige-lhe o kernel e decide quando acrescentar uma segunda. Cada uma dessas decisões é sua, e cada hora da fatura também.</p>
+  <p>O serverless retira a máquina enquanto unidade de raciocínio. Entrega à plataforma um pedaço de código e um gatilho: um pedido HTTP, uma mensagem numa fila, um ficheiro que aterra no armazenamento. A plataforma trata de que esse código corra quando o gatilho dispara. Quantas cópias correm, e sobre o quê, não é problema seu nem decisão sua.</p>
+  <p>É toda a troca, dita sem rodeios: abdica do controlo do runtime em troca de nunca o operar.</p>
+
+  <h2>As duas famílias</h2>
+  <p><strong>Function as a Service</strong> é a parte em que se pensa primeiro. Faz o deploy de uma função, a plataforma executa-a por evento, e ela desaparece. AWS Lambda, Google Cloud Functions e Azure Functions são os exemplos conhecidos.</p>
+  <p>Os <strong>serviços geridos serverless</strong> são a metade maior e menos comentada: bases de dados, filas, armazenamento de objetos e pesquisa, faturados por pedido ou por unidade de trabalho em vez de por instância aprovisionada. A maioria dos sistemas serverless reais é sobretudo isto, com uma quantidade modesta de código de função a segurar as peças.</p>
+
+  <figure>
+    <img src="https://cdn.pixabay.com/photo/2018/05/18/00/16/meter-3410068_1280.jpg" alt="Grande plano de um contador de eletricidade atrás da tampa de vidro, com etiqueta de código de barras e mostrador digital" width="1200" height="420" loading="lazy" />
+    <figcaption>Um contador de eletricidade atrás da sua tampa de vidro. A faturação serverless funciona da mesma maneira: cobra-se o que correu, não a máquina que estava à espera.</figcaption>
+  </figure>
+
+  <h2>A faturação, e porque o scale to zero é o título</h2>
+  <p>Uma máquina alugada é faturada ao tempo de relógio. Custa o mesmo às três da manhã sem visitas e no pico. O serverless fatura por invocação mais os recursos que essa invocação consumiu enquanto corria.</p>
+  <p>A consequência é o <strong>scale to zero</strong>: sem tráfego não corre nada e não há nada a pagar. Para um projeto pessoal, uma ferramenta interna usada duas vezes por semana ou uma carga aos picos parada quase sempre, esta é a vantagem verdadeira, e é grande.</p>
+  <p>O mesmo mecanismo trabalha ao contrário sob carga. A plataforma arranca tantas cópias concorrentes quantas os eventos exigirem, sem que configure um autoscaler, e essa é a segunda vantagem real.</p>
+
+  <h2>As restrições que o argumentário omite</h2>
+  <p><strong>Arranques a frio.</strong> Quando nenhuma cópia da sua função está quente, o primeiro pedido paga a inicialização do runtime e das suas dependências antes de o seu código sequer começar. Bundles mais pequenos e runtimes mais leves reduzem isso. Os fornecedores vendem capacidade pré-aquecida, que funciona e que desfaz em silêncio o scale to zero, porque pré-aquecido significa pago enquanto está parado.</p>
+  <p><strong>Ausência de estado.</strong> Nada do que guarde em memória ou em disco local está garantido da próxima vez. Duas invocações podem cair em instâncias diferentes, e uma instância desaparece quando a plataforma decidir. O estado vai para uma base de dados ou um armazenamento de objetos, sempre.</p>
+  <p><strong>Limites de execução.</strong> Uma invocação tem uma duração máxima e um teto de memória. Os processos por lotes longos e tudo o que mantenha uma ligação aberta durante horas encaixam mal, e atingir o limite não é um aviso mas uma falha.</p>
+  <p><strong>Acoplamento.</strong> O corpo da função costuma ser portável. As formas dos eventos, o modelo de identidade e os serviços geridos à volta não são, e é aí que sair mais tarde custa a sério.</p>
+
+  <h2>Onde a curva de custo se cruza</h2>
+  <p>A faturação por invocação é barata quando a máquina teria estado parada e cara quando teria estado ocupada. Abaixo de certa carga estável, o serverless ganha com folga. Acima, paga um prémio por unidade de trabalho por uma elasticidade que já não usa, e um servidor sempre ligado, ainda que modesto, sai mais barato e mais previsível.</p>
+  <p>A regra honesta é olhar para a forma do tráfego e não para o seu volume. Aos picos, ocasional e imprevisível: vantagem serverless. Estável e contínuo: vantagem máquina alugada ao mês, e nesse ponto o trabalho de operação que retoma é um preço justo por uma fatura que deixa de surpreender.</p>
+  <p>Se a sua carga estiver do lado estável, um <a href="/pt/e/blog/2026-06-19-what-is-a-vps.html">VPS</a> é a resposta simples, e o <a href="/pt/e/blog/2026-06-19-what-is-docker.html">Docker</a> mais alguma disciplina devolve-lhe quase toda a reprodutibilidade que tornava o serverless atraente ao início.</p>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Recomendado</span>
+    <h3>Um servidor para o lado estável da curva</h3>
+    <p>Quando o tráfego deixa de ser aos picos, a faturação por invocação custa mais do que uma máquina que ia estar ocupada de qualquer forma. A DigitalOcean oferece VPS e servidores cloud com controlo root completo, faturados ao mês e não por chamada.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">Ver DigitalOcean Cloud →</a>
+    <p class="disc">Link de afiliado - apoia estes guias gratuitos.</p>
+  </div>
+
+  <h2>Em resumo</h2>
+  <p>Serverless significa que os servidores são problema de outra pessoa, não que não existam. Ganha scale to zero, concorrência automática e zero correções. Aceita arranques a frio, ausência de estado, limites de execução e uma fatura que segue o uso em vez do tempo. Encaixa em trabalho aos picos e intermitente, e deixa de encaixar quando o tráfego se torna estável o suficiente para que uma máquina alugada estivesse ocupada de qualquer forma.</p>
+  </div>
+</Base>

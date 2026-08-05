@@ -1,0 +1,63 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-08-05-what-is-serverless.html';
+const title = 'What Is Serverless? The Servers Are Still There (2026)';
+const description = 'Serverless does not mean there is no server. It means you do not provision, patch or size one. What it actually removes, how per-invocation billing works, the constraints the pitch leaves out, and the traffic level where a plain VPS costs less.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://cdn.pixabay.com/photo/2024/02/14/22/47/pylon-8574348_1280.jpg" datePublished="2026-08-05" dateModified="2026-08-05">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e">Guides</a><span>/</span>What is serverless</nav>
+  <p class="kicker">serverless · cloud · architecture</p>
+  <h1>What is serverless, exactly?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Aug 5, 2026</span><span>7 min read</span><span class="tag">#serverless</span><span class="tag">#cloud</span><span class="tag">#architecture</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://cdn.pixabay.com/photo/2024/02/14/22/47/pylon-8574348_1280.jpg" alt="Looking straight up through the steel lattice of an electricity transmission pylon against a blue sky" width="1200" height="420" loading="eager" />
+    <figcaption>Looking up through the lattice of a transmission pylon. The grid is enormous, someone maintains it, and you interact with it only through a socket.</figcaption>
+  </figure>
+
+  <p>The word is a marketing term that has stuck, and it misleads almost everyone the first time. <strong>Serverless does not mean there is no server.</strong> It means you never see one: you do not choose its size, install its updates, or decide how many of them to run. Someone else does all of that, and you are billed for what your code actually did.</p>
+
+  <h2>What it actually removes</h2>
+  <p>On a <a href="/e/blog/2026-06-19-what-is-a-vps.html">VPS</a> you rent a machine. It exists whether or not anyone visits, you pick its RAM and vCPU, you patch its kernel, and you decide when to add a second one. Every one of those decisions is yours, and so is every hour of the bill.</p>
+  <p>Serverless removes the machine as a unit you reason about. You hand the platform a piece of code and a trigger, an HTTP request, a message on a queue, a file landing in storage, and the platform arranges for that code to run when the trigger fires. How many copies run, and on what, is not your problem and not your decision.</p>
+  <p>That is the whole trade, stated plainly: you give up control over the runtime in exchange for never operating it.</p>
+
+  <h2>The two families</h2>
+  <p><strong>Functions as a Service</strong> is the part people mean first. You deploy a single function, the platform runs it per event, and it is gone again. AWS Lambda, Google Cloud Functions and Azure Functions are the familiar examples.</p>
+  <p><strong>Managed serverless services</strong> are the larger and less discussed half: databases, queues, object storage and search that bill per request or per unit of work rather than per provisioned instance. Most real serverless systems are mostly this, with a modest amount of function code holding the pieces together.</p>
+
+  <figure>
+    <img src="https://cdn.pixabay.com/photo/2018/05/18/00/16/meter-3410068_1280.jpg" alt="Close-up of an electricity meter behind a glass cover, showing a barcode label and a digital display" width="1200" height="420" loading="lazy" />
+    <figcaption>An electricity meter behind its glass cover. Serverless billing works the same way: you are charged for what ran, not for the machine standing by.</figcaption>
+  </figure>
+
+  <h2>Billing, and why scale to zero is the headline</h2>
+  <p>A rented machine bills for wall-clock time. It costs the same at three in the morning with no visitors as it does at peak. Serverless bills per invocation plus the resources that invocation consumed while it ran.</p>
+  <p>The consequence is <strong>scale to zero</strong>: with no traffic, there is nothing running and nothing to pay for. For a side project, an internal tool used twice a week, or a spiky workload that is idle most of the time, this is the genuine advantage, and it is large.</p>
+  <p>The same mechanism runs in the other direction under load. The platform starts as many concurrent copies as the events demand, without you configuring an autoscaler, which is the second real advantage.</p>
+
+  <h2>The constraints the pitch leaves out</h2>
+  <p><strong>Cold starts.</strong> When no copy of your function is warm, the first request pays for initialising the runtime and your dependencies before your code runs at all. Smaller bundles and lighter runtimes reduce it. Providers sell pre-warmed capacity, which works and which quietly undoes scale to zero, since pre-warmed means paid for while idle.</p>
+  <p><strong>Statelessness.</strong> Nothing you keep in memory or on local disk is guaranteed to be there next time. Two invocations may land on different instances, and an instance disappears whenever the platform decides. State belongs in a database or an object store, always.</p>
+  <p><strong>Execution limits.</strong> A single invocation has a maximum duration and a memory ceiling. Long batch jobs and anything holding a connection open for hours are a poor fit, and hitting the limit is not a warning but a failure.</p>
+  <p><strong>Coupling.</strong> The function body is usually portable. The event shapes, the identity model and the surrounding managed services are not, and that is where moving later actually costs.</p>
+
+  <h2>Where the cost curve crosses</h2>
+  <p>Per-invocation billing is cheap when the machine would have been idle and expensive when it would have been busy. Below a certain steady load, serverless wins easily. Above it, you are paying a premium per unit of work for elasticity you are no longer using, and a modest always-on server is cheaper and more predictable.</p>
+  <p>The honest rule is to look at the shape of the traffic rather than its volume. Spiky, occasional and unpredictable favours serverless. Steady and continuous favours a machine you rent by the month, and at that point the operational work you took back is a fair price for a bill that stops surprising you.</p>
+  <p>If your workload turns out to sit on the steady side, a <a href="/e/blog/2026-06-19-what-is-a-vps.html">VPS</a> is the plain answer, and <a href="/e/blog/2026-06-19-what-is-docker.html">Docker</a> plus a small amount of discipline gets you most of the reproducibility that made serverless attractive in the first place.</p>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Recommended</span>
+    <h3>A server for the steady side of the curve</h3>
+    <p>When traffic stops being spiky, per-invocation billing costs more than a machine that was going to be busy anyway. DigitalOcean offers VPS and cloud servers with full root control, billed by the month rather than by the call.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">See DigitalOcean Cloud →</a>
+    <p class="disc">Affiliate link - it supports these free guides.</p>
+  </div>
+
+  <h2>The short version</h2>
+  <p>Serverless means the servers are somebody else's problem, not that they are absent. You gain scale to zero, automatic concurrency and no patching. You accept cold starts, statelessness, execution limits and a bill that follows usage rather than time. It fits bursty and intermittent work, and it stops fitting when the traffic becomes steady enough that a rented machine would have been busy anyway.</p>
+  </div>
+</Base>

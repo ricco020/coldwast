@@ -1,0 +1,63 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/de/e/blog/2026-08-05-what-is-serverless.html';
+const title = 'Was ist Serverless? Die Server sind weiterhin da (2026)';
+const description = 'Serverless heißt nicht, dass es keinen Server gibt. Es heißt, dass Sie keinen bereitstellen, patchen oder dimensionieren. Was es wirklich wegnimmt, wie die Abrechnung pro Aufruf funktioniert, welche Einschränkungen das Verkaufsargument auslässt, und ab welcher Last ein einfacher VPS günstiger ist.';
+---
+<Base title={title} description={description} path={path} type="article" lang="de"
+  image="https://cdn.pixabay.com/photo/2024/02/14/22/47/pylon-8574348_1280.jpg" datePublished="2026-08-05" dateModified="2026-08-05">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/de">Startseite</a><span>/</span><a href="/de/e">Guides</a><span>/</span>Was ist Serverless</nav>
+  <p class="kicker">Serverless · Cloud · Architektur</p>
+  <h1>Was ist Serverless, genau?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Aug 5, 2026</span><span>7 min read</span><span class="tag">#serverless</span><span class="tag">#cloud</span><span class="tag">#architektur</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://cdn.pixabay.com/photo/2024/02/14/22/47/pylon-8574348_1280.jpg" alt="Blick senkrecht nach oben durch das Stahlgitter eines Strommasten vor blauem Himmel" width="1200" height="420" loading="eager" />
+    <figcaption>Blick nach oben durch das Gitter eines Hochspannungsmasten. Das Netz ist gewaltig, jemand wartet es, und Sie berühren es nur über eine Steckdose.</figcaption>
+  </figure>
+
+  <p>Das Wort ist ein Marketingbegriff, der hängen geblieben ist, und er führt beim ersten Mal fast alle in die Irre. <strong>Serverless heißt nicht, dass es keinen Server gibt.</strong> Es heißt, dass Sie nie einen sehen: Sie wählen nicht seine Größe, spielen keine Updates ein und entscheiden nicht, wie viele laufen. Das macht jemand anders, und abgerechnet wird, was Ihr Code tatsächlich getan hat.</p>
+
+  <h2>Was es wirklich wegnimmt</h2>
+  <p>Auf einem <a href="/de/e/blog/2026-06-19-what-is-a-vps.html">VPS</a> mieten Sie eine Maschine. Sie existiert, ob jemand kommt oder nicht, Sie wählen RAM und vCPU, Sie patchen den Kernel und entscheiden, wann eine zweite dazukommt. Jede dieser Entscheidungen gehört Ihnen, und jede Stunde auf der Rechnung ebenso.</p>
+  <p>Serverless nimmt die Maschine als Denkeinheit weg. Sie übergeben der Plattform ein Stück Code und einen Auslöser: eine HTTP-Anfrage, eine Nachricht in einer Queue, eine Datei, die im Speicher landet. Die Plattform sorgt dafür, dass dieser Code läuft, wenn der Auslöser eintritt. Wie viele Kopien laufen und worauf, ist weder Ihr Problem noch Ihre Entscheidung.</p>
+  <p>Das ist der ganze Handel, schlicht gesagt: Sie geben die Kontrolle über die Laufzeitumgebung ab und betreiben sie dafür nie.</p>
+
+  <h2>Die zwei Familien</h2>
+  <p><strong>Function as a Service</strong> ist der Teil, an den man zuerst denkt. Sie deployen eine Funktion, die Plattform führt sie je Ereignis aus, und sie ist wieder weg. AWS Lambda, Google Cloud Functions und Azure Functions sind die bekannten Beispiele.</p>
+  <p><strong>Managed Serverless Services</strong> sind die größere und seltener besprochene Hälfte: Datenbanken, Queues, Objektspeicher und Suche, abgerechnet je Anfrage oder je Arbeitseinheit statt je bereitgestellter Instanz. Die meisten echten Serverless-Systeme bestehen überwiegend daraus, mit einer bescheidenen Menge Funktionscode, der die Teile zusammenhält.</p>
+
+  <figure>
+    <img src="https://cdn.pixabay.com/photo/2018/05/18/00/16/meter-3410068_1280.jpg" alt="Nahaufnahme eines Stromzählers hinter seiner Glasabdeckung, mit Barcode-Aufkleber und digitaler Anzeige" width="1200" height="420" loading="lazy" />
+    <figcaption>Ein Stromzähler hinter seiner Glasabdeckung. Serverless-Abrechnung funktioniert genauso: berechnet wird, was gelaufen ist, nicht die Maschine, die bereitstand.</figcaption>
+  </figure>
+
+  <h2>Abrechnung, und warum Scale to Zero die Schlagzeile ist</h2>
+  <p>Eine gemietete Maschine wird nach Uhrzeit abgerechnet. Sie kostet um drei Uhr nachts ohne Besucher dasselbe wie in der Spitze. Serverless rechnet je Aufruf ab, plus die Ressourcen, die dieser Aufruf während seiner Laufzeit verbraucht hat.</p>
+  <p>Die Folge ist <strong>Scale to Zero</strong>: ohne Verkehr läuft nichts und es gibt nichts zu zahlen. Für ein Nebenprojekt, ein internes Werkzeug, das zweimal die Woche benutzt wird, oder eine stoßweise Last, die meistens still liegt, ist das der echte Vorteil, und er ist groß.</p>
+  <p>Derselbe Mechanismus wirkt unter Last in die andere Richtung. Die Plattform startet so viele gleichzeitige Kopien, wie die Ereignisse verlangen, ohne dass Sie einen Autoscaler konfigurieren, und das ist der zweite echte Vorteil.</p>
+
+  <h2>Die Einschränkungen, die das Verkaufsargument auslässt</h2>
+  <p><strong>Kaltstarts.</strong> Ist keine Kopie Ihrer Funktion warm, zahlt die erste Anfrage die Initialisierung der Laufzeitumgebung und Ihrer Abhängigkeiten, bevor Ihr Code überhaupt beginnt. Kleinere Bundles und leichtere Runtimes verringern das. Anbieter verkaufen vorgewärmte Kapazität, die funktioniert und Scale to Zero still aufhebt, denn vorgewärmt heißt im Leerlauf bezahlt.</p>
+  <p><strong>Zustandslosigkeit.</strong> Nichts, was Sie im Speicher oder auf lokaler Platte halten, ist beim nächsten Mal garantiert da. Zwei Aufrufe können auf verschiedenen Instanzen landen, und eine Instanz verschwindet, wann die Plattform es entscheidet. Zustand gehört in eine Datenbank oder einen Objektspeicher, immer.</p>
+  <p><strong>Ausführungsgrenzen.</strong> Ein Aufruf hat eine maximale Dauer und eine Speicherobergrenze. Lange Batch-Läufe und alles, was stundenlang eine Verbindung offen hält, passen schlecht, und die Grenze zu erreichen ist keine Warnung, sondern ein Fehlschlag.</p>
+  <p><strong>Kopplung.</strong> Der Funktionsrumpf ist meist portabel. Die Ereignisformen, das Identitätsmodell und die umgebenden Managed Services sind es nicht, und genau dort kostet ein späterer Wechsel wirklich.</p>
+
+  <h2>Wo sich die Kostenkurve kreuzt</h2>
+  <p>Abrechnung je Aufruf ist billig, wenn die Maschine im Leerlauf gewesen wäre, und teuer, wenn sie beschäftigt gewesen wäre. Unterhalb einer gewissen gleichmäßigen Last gewinnt Serverless deutlich. Oberhalb zahlen Sie je Arbeitseinheit einen Aufschlag für Elastizität, die Sie nicht mehr nutzen, und ein bescheidener, dauerhaft laufender Server ist günstiger und berechenbarer.</p>
+  <p>Die ehrliche Regel lautet, auf die Form des Verkehrs zu schauen und nicht auf seine Menge. Stoßweise, gelegentlich und unvorhersehbar spricht für Serverless. Gleichmäßig und durchgehend spricht für eine monatlich gemietete Maschine, und dann ist die Betriebsarbeit, die Sie zurücknehmen, ein fairer Preis für eine Rechnung, die aufhört zu überraschen.</p>
+  <p>Liegt Ihre Last auf der gleichmäßigen Seite, ist ein <a href="/de/e/blog/2026-06-19-what-is-a-vps.html">VPS</a> die schlichte Antwort, und <a href="/de/e/blog/2026-06-19-what-is-docker.html">Docker</a> plus etwas Disziplin gibt Ihnen den größten Teil der Reproduzierbarkeit zurück, die Serverless ursprünglich attraktiv machte.</p>
+
+  <div class="affbox" style="margin:28px 0;">
+    <span class="tag">Empfohlen</span>
+    <h3>Ein Server für die gleichmäßige Seite der Kurve</h3>
+    <p>Sobald der Verkehr nicht mehr stoßweise ist, kostet die Abrechnung je Aufruf mehr als eine Maschine, die ohnehin beschäftigt gewesen wäre. DigitalOcean bietet VPS und Cloud-Server mit vollem Root-Zugang, monatlich abgerechnet statt pro Aufruf.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">DigitalOcean Cloud ansehen →</a>
+    <p class="disc">Affiliate-Link - er unterstützt diese kostenlosen Guides.</p>
+  </div>
+
+  <h2>Kurz gefasst</h2>
+  <p>Serverless heißt, dass die Server das Problem von jemand anderem sind, nicht dass sie fehlen. Sie gewinnen Scale to Zero, automatische Nebenläufigkeit und kein Patchen. Sie akzeptieren Kaltstarts, Zustandslosigkeit, Ausführungsgrenzen und eine Rechnung, die der Nutzung folgt statt der Zeit. Es passt zu stoßweiser und zeitweiliger Arbeit und hört auf zu passen, sobald der Verkehr gleichmäßig genug wird, dass eine gemietete Maschine ohnehin beschäftigt gewesen wäre.</p>
+  </div>
+</Base>
