@@ -1,0 +1,274 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+<Base title='Explicador de expressões cron - leia a linha, veja as próximas execuções' description='Cole uma linha de crontab e obtenha-a em linguagem clara com as próximas execuções. Aplica a regra POSIX que a maioria das ferramentas erra: se dia do mês e dia da semana estiverem ambos restritos, a tarefa corre em qualquer um dos dois.' path="/pt/cron-expression.html" lang="pt">
+  <div class="reading">
+  <p class="kicker" style="margin-top:30px">Coldwast</p>
+  <h1>Explicador de expressões cron</h1>
+  <p>Cole uma linha de crontab. Obtém a sua tradução em linguagem clara e as próximas vezes em que vai realmente disparar, calculadas no seu próprio fuso horário. Tudo corre no seu navegador.</p>
+
+  <label class="cronlab" for="expr">Crontab</label>
+  <input type="text" id="expr" value="0 0 1 * 1" autocomplete="off" spellcheck="false" />
+  <div class="presets" id="presets"></div>
+  <div id="out"></div>
+
+  <h2>A regra que surpreende</h2>
+  <p>Quando o dia do mês e o dia da semana estão ambos restritos, combinam-se com OU, não com E. <code>0 0 1 * 1</code> não significa "o dia 1, se calhar numa segunda-feira". Significa todos os dias 1 do mês, e ainda todas as segundas-feiras. A especificação é explícita: "se o mês ou o dia do mês for especificado como elemento ou lista, e o dia da semana também o for, então qualquer dia que corresponda ao mês e ao dia do mês, ou ao dia da semana, deve corresponder".</p>
+  <h2>O que não sabe</h2>
+  <p>As próximas execuções são calculadas no fuso horário do seu navegador. Um servidor corre normalmente em UTC ou no seu próprio fuso, pelo que as horas aí podem diferir. As mudanças de hora são outro caso limite: uma tarefa colocada na hora saltada na primavera não corre nesse dia, e uma colocada na hora repetida no outono pode correr duas vezes, consoante a implementação.</p>
+  </div>
+</Base>
+
+<style>
+
+  --paper:#fbfaf7; --ink:#101820; --rule:#d7d2c8;
+  --navy:#1f3a5f; --signal:#e2571e; --ok:#1f6b41; --dim:#6d6a63;
+}
+  margin:0;background:#fbfaf7;color:#101820;
+  font-family:"DM Mono",ui-monospace,monospace;font-size:15px;line-height:1.68;
+  background-image:
+    linear-gradient(#d7d2c8 .5px,transparent .5px),
+    linear-gradient(90deg,#d7d2c8 .5px,transparent .5px);
+  background-size:26px 26px;background-position:-1px -1px;
+}
+  box-shadow:0 0 0 1px #d7d2c8}
+  line-height:1.02;margin:0 0 18px;letter-spacing:-.01em}
+label span{display:block;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#6d6a63;margin-bottom:8px}
+input[type=text]{
+  width:100%;background:#fff;border:1px solid #d7d2c8;border-bottom:2px solid #1f3a5f;
+  color:#101820;font-family:inherit;font-size:21px;padding:14px 15px;letter-spacing:.06em
+}
+input[type=text]:focus{outline:2px solid #e2571e;outline-offset:-1px}
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 30px}
+.presets button{font-family:inherit;font-size:12px;background:#fff;border:1px solid #d7d2c8;
+  color:#1f3a5f;padding:6px 11px;cursor:pointer}
+.presets button:hover{border-color:#e2571e;color:#e2571e}
+.card{border:1px solid #d7d2c8;border-left:3px solid #1f3a5f;background:#fff;padding:20px 22px;margin-bottom:18px}
+.card.bad{border-left-color:#e2571e}
+.card h2{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#6d6a63;margin:0 0 12px;font-weight:500}
+.plain{font-family:"Instrument Serif",Georgia,serif;font-size:clamp(21px,3.4vw,30px);line-height:1.3}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;font-weight:500;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:#6d6a63;padding-bottom:8px;border-bottom:1px solid #d7d2c8}
+td{padding:9px 12px 9px 0;border-bottom:1px solid #eeebe4;vertical-align:top}
+td.f{font-weight:500;color:#1f3a5f}
+ol.runs{list-style:none;padding:0;margin:0;columns:2;column-gap:26px}
+@media(max-width:620px){ol.runs{columns:1}}
+ol.runs li{padding:5px 0;border-bottom:1px solid #eeebe4}
+.note{background:#fff6ef;border:1px solid #f0d3bf;border-left:3px solid #e2571e;padding:16px 18px;margin:20px 0}
+.note b{color:#e2571e}
+.prose{max-width:66ch;margin-top:44px;color:#3d4750}
+h3{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:26px;margin:32px 0 8px}
+code{background:#f1eee7;border:1px solid #d7d2c8;padding:1px 6px}
+a{color:#1f3a5f}
+blockquote{margin:14px 0;padding-left:16px;border-left:2px solid #d7d2c8;color:#4a545c;font-style:italic}
+footer{margin-top:48px;border-top:1px solid #d7d2c8;padding-top:20px;color:#6d6a63;font-size:12.5px}
+
+.cronlab{display:block;font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin:26px 0 8px}
+#expr{width:100%;font-family:ui-monospace,monospace;font-size:20px;padding:12px 14px;letter-spacing:.06em}
+</style>
+
+<script is:inline>
+
+var BORNES = [[0,59],[0,23],[1,31],[1,12],[0,6]];
+var NOMS_MOIS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+var NOMS_JOURS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+var ETIQ = ["Minute", "Hour", "Day of month", "Month", "Day of week"];
+var ALIAS_MOIS = {jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12};
+var ALIAS_JOURS = {sun:0,mon:1,tue:2,wed:3,thu:4,fri:5,sat:6};
+var RACCOURCIS = {
+  "@yearly":"0 0 1 1 *", "@annually":"0 0 1 1 *", "@monthly":"0 0 1 * *",
+  "@weekly":"0 0 * * 0", "@daily":"0 0 * * *", "@midnight":"0 0 * * *", "@hourly":"0 * * * *"
+};
+
+function champ(txt, i){
+  var min = BORNES[i][0], max = BORNES[i][1];
+  var brut = txt.toLowerCase();
+  if (i === 3) brut = brut.replace(/[a-z]{3}/g, function(m){ return ALIAS_MOIS[m] !== undefined ? ALIAS_MOIS[m] : m; });
+  if (i === 4) brut = brut.replace(/[a-z]{3}/g, function(m){ return ALIAS_JOURS[m] !== undefined ? ALIAS_JOURS[m] : m; });
+  var vals = new Set(), restreint = brut !== "*";
+  brut.split(",").forEach(function(part){
+    var pas = 1, corps = part;
+    var slash = part.split("/");
+    if (slash.length === 2){
+      corps = slash[0]; pas = parseInt(slash[1], 10);
+      if (!(pas > 0)) throw new Error("invalid step in “" + part + "”");
+    }
+    var a, b;
+    if (corps === "*"){ a = min; b = max; }
+    else if (corps.indexOf("-") > 0){ var d = corps.split("-"); a = parseInt(d[0],10); b = parseInt(d[1],10); }
+    else { a = b = parseInt(corps,10); if (slash.length === 2) b = max; }
+    if (isNaN(a) || isNaN(b)) throw new Error("not a number in “" + part + "”");
+    if (i === 4){ if (a === 7) a = 0; if (b === 7) b = 0; }
+    if (a < min || b > max || a > b) throw new Error("“" + part + "” is outside the range " + min + " to " + max);
+    for (var v = a; v <= b; v += pas) vals.add(v);
+  });
+  return { valeurs: vals, restreint: restreint, brut: txt };
+}
+
+function analyse(ligne){
+  var t = ligne.trim().toLowerCase();
+  if (RACCOURCIS[t]) t = RACCOURCIS[t];
+  if (t === "@reboot") return { reboot: true };
+  var m = t.split(/\s+/);
+  if (m.length !== 5) throw new Error("five fields are required (minute hour day-of-month month day-of-week), " + m.length + " found");
+  return { champs: m.map(champ), source: m };
+}
+
+function jourCorrespond(p, d){
+  var dom = p.champs[2], dow = p.champs[4];
+  if (!p.champs[3].valeurs.has(d.getMonth() + 1)) return false;
+  var okDom = dom.valeurs.has(d.getDate());
+  var okDow = dow.valeurs.has(d.getDay());
+  if (dom.restreint && dow.restreint) return okDom || okDow;
+  return okDom && okDow;
+}
+
+function prochaines(p, depuis, n){
+  var out = [], d = new Date(depuis.getTime());
+  d.setSeconds(0, 0); d.setMinutes(d.getMinutes() + 1);
+  var heures = Array.from(p.champs[1].valeurs).sort(function(a,b){return a-b;});
+  var minutes = Array.from(p.champs[0].valeurs).sort(function(a,b){return a-b;});
+  for (var jour = 0; jour < 1500 && out.length < n; jour++){
+    var base = new Date(d.getFullYear(), d.getMonth(), d.getDate() + jour);
+    if (!jourCorrespond(p, base)) continue;
+    for (var hi = 0; hi < heures.length && out.length < n; hi++){
+      for (var mi = 0; mi < minutes.length && out.length < n; mi++){
+        var c = new Date(base.getFullYear(), base.getMonth(), base.getDate(), heures[hi], minutes[mi]);
+        if (c >= d) out.push(c);
+      }
+    }
+  }
+  return out;
+}
+
+function liste(vals, noms){
+  var a = Array.from(vals).sort(function(x,y){return x-y;});
+  var s = a.map(function(v){ return noms ? noms[v] : String(v); });
+  if (s.length === 1) return s[0];
+  if (s.length === 2) return s[0] + " and " + s[1];
+  return s.slice(0, -1).join(", ") + " and " + s[s.length - 1];
+}
+
+function deuxChiffres(n){ return (n < 10 ? "0" : "") + n; }
+
+function enClair(p){
+  var min = p.champs[0], hr = p.champs[1], dom = p.champs[2], mon = p.champs[3], dow = p.champs[4];
+  var quand;
+  if (!min.restreint && !hr.restreint) quand = "Every minute";
+  else if (!hr.restreint) quand = "At minute " + liste(min.valeurs) + " of every hour";
+  else if (min.valeurs.size === 1 && hr.valeurs.size === 1)
+    quand = "At " + deuxChiffres(Array.from(hr.valeurs)[0]) + ":" + deuxChiffres(Array.from(min.valeurs)[0]);
+  else quand = "At minute " + liste(min.valeurs) + " past hour " + liste(hr.valeurs);
+
+  var jours = [];
+  if (dom.restreint && dow.restreint)
+    jours.push("on day " + liste(dom.valeurs) + " of the month, and also on " + liste(dow.valeurs, NOMS_JOURS));
+  else if (dom.restreint) jours.push("on day " + liste(dom.valeurs) + " of the month");
+  else if (dow.restreint) jours.push("on " + liste(dow.valeurs, NOMS_JOURS));
+  else jours.push("every day");
+  if (mon.restreint) jours.push("in " + liste(mon.valeurs, NOMS_MOIS));
+  return quand + ", " + jours.join(", ") + ".";
+}
+
+function el(t, c, txt){
+  var e = document.createElement(t);
+  if (c) e.className = c;
+  if (txt !== undefined) e.textContent = txt;
+  return e;
+}
+
+function fmt(d){
+  return NOMS_JOURS[d.getDay()].slice(0,3) + " " + d.getDate() + " " + NOMS_MOIS[d.getMonth()].slice(0,3) +
+         " " + d.getFullYear() + "  " + deuxChiffres(d.getHours()) + ":" + deuxChiffres(d.getMinutes());
+}
+
+function rendre(){
+  var out = document.getElementById("out");
+  while (out.firstChild) out.removeChild(out.firstChild);
+  var brut = document.getElementById("expr").value;
+  if (!brut.trim()) return;
+
+  var p;
+  try { p = analyse(brut); }
+  catch (e) {
+    var bad = el("div", "card bad");
+    bad.appendChild(el("h2", null, "Cannot read that line"));
+    bad.appendChild(el("div", null, e.message));
+    out.appendChild(bad);
+    return;
+  }
+
+  if (p.reboot){
+    var rb = el("div", "card");
+    rb.appendChild(el("h2", null, "In plain English"));
+    rb.appendChild(el("div", "plain", "Once at startup. @reboot has no schedule, so there are no future run times to list."));
+    out.appendChild(rb);
+    return;
+  }
+
+  var c1 = el("div", "card");
+  c1.appendChild(el("h2", null, "In plain English"));
+  c1.appendChild(el("div", "plain", enClair(p)));
+  out.appendChild(c1);
+
+  if (p.champs[2].restreint && p.champs[4].restreint){
+    var n = el("div", "note");
+    var b = el("b", null, "Both day fields are restricted, so they combine with OR.");
+    n.appendChild(b);
+    n.appendChild(document.createTextNode(" This line does not mean “day " +
+      liste(p.champs[2].valeurs) + " only when it falls on " + liste(p.champs[4].valeurs, NOMS_JOURS) +
+      "”. It fires on either. That is the specified behaviour, not a quirk of this tool."));
+    out.appendChild(n);
+  }
+
+  var c2 = el("div", "card");
+  c2.appendChild(el("h2", null, "Field by field"));
+  var tb = el("table");
+  var thead = el("thead"), trh = el("tr");
+  ["Field", "You wrote", "Meaning"].forEach(function(h){ trh.appendChild(el("th", null, h)); });
+  thead.appendChild(trh); tb.appendChild(thead);
+  var tbody = el("tbody");
+  p.champs.forEach(function(f, i){
+    var tr = el("tr");
+    tr.appendChild(el("td", "f", ETIQ[i]));
+    tr.appendChild(el("td", null, f.brut));
+    var noms = i === 3 ? NOMS_MOIS : (i === 4 ? NOMS_JOURS : null);
+    tr.appendChild(el("td", null, f.restreint ? liste(f.valeurs, noms) : "every value (" + BORNES[i][0] + " to " + BORNES[i][1] + ")"));
+    tbody.appendChild(tr);
+  });
+  tb.appendChild(tbody);
+  c2.appendChild(tb);
+  out.appendChild(c2);
+
+  var runs = prochaines(p, new Date(), 10);
+  var c3 = el("div", "card");
+  c3.appendChild(el("h2", null, "Next runs, in your timezone (" + Intl.DateTimeFormat().resolvedOptions().timeZone + ")"));
+  if (!runs.length){
+    c3.appendChild(el("div", null, "No run found in the next four years. A date that never occurs, such as 31 February, produces this."));
+  } else {
+    var ol = el("ol", "runs");
+    runs.forEach(function(d){ ol.appendChild(el("li", null, fmt(d))); });
+    c3.appendChild(ol);
+  }
+  out.appendChild(c3);
+}
+
+var PRESETS = [
+  ["The OR trap", "0 0 1 * 1"],
+  ["Every 15 min", "*/15 * * * *"],
+  ["Weekdays 09:00", "0 9 * * 1-5"],
+  ["First of month", "0 3 1 * *"],
+  ["@daily", "@daily"],
+  ["Every 6h on Sundays", "0 */6 * * sun"]
+];
+var boite = document.getElementById("presets");
+PRESETS.forEach(function(pr){
+  var b = el("button", null, pr[0]);
+  b.addEventListener("click", function(){ document.getElementById("expr").value = pr[1]; rendre(); });
+  boite.appendChild(b);
+});
+document.getElementById("expr").addEventListener("input", rendre);
+rendre();
+
+</script>
