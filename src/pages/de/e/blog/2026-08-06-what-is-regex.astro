@@ -1,0 +1,60 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/de/e/blog/2026-08-06-what-is-regex.html';
+const title = 'Was ist Regex? Muster, Engines und das eine, das Ihren Server aufhängt (2026)';
+const description = 'Ein regulärer Ausdruck ist eine kleine Sprache, um Formen von Text zu beschreiben. Was die gängigen Symbole bedeuten, warum sich dasselbe Muster je nach Sprache anders verhält, und der Fall von katastrophalem Backtracking, der aus einer harmlosen Regex einen Ausfall macht.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://cdn.pixabay.com/photo/2018/04/22/14/32/fishing-nets-3341187_1280.jpg" datePublished="2026-08-06" dateModified="2026-08-06">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/de/">Home</a><span>/</span><a href="/de/e">Guides</a><span>/</span>Was ist Regex</nav>
+  <p class="kicker">Regex · Textverarbeitung · Sicherheit</p>
+  <h1>Was ist Regex genau?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Aug 6, 2026</span><span>9 min read</span><span class="tag">#regex</span><span class="tag">#muster</span><span class="tag">#sicherheit</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://cdn.pixabay.com/photo/2018/04/22/14/32/fishing-nets-3341187_1280.jpg" alt="Stapel heller Fischernetze, zwei verschiedene Maschenweiten nebeneinander, bildfüllend" width="1200" height="420" loading="eager" />
+    <figcaption>Fischernetze in zwei Maschenweiten. Eine Regex ist das Netz: Sie beschreiben die Form dessen, was durchgehen soll, alles andere fällt hindurch.</figcaption>
+  </figure>
+
+  <p>Ein <strong>regulärer Ausdruck</strong>, kurz Regex, ist eine kleine Sprache, die die <em>Form</em> von Text beschreibt statt seines genauen Inhalts. Statt zu fragen „ist diese Zeichenkette gleich <code>abc</code>“, fragen Sie „sieht diese Zeichenkette aus wie drei Buchstaben, ein Bindestrich, vier Ziffern“.</p>
+
+  <p>Das ist die ganze Idee. Alles Weitere ist Notation.</p>
+
+  <h2>Die Notation in einem Durchgang</h2>
+  <p>Das meiste, was Sie lesen werden, besteht aus einer Handvoll Bausteine:</p>
+  <ul>
+    <li><code>.</code> ein beliebiges Zeichen, <code>\d</code> eine Ziffer, <code>\w</code> ein Wortzeichen, <code>\s</code> ein Leerraum</li>
+    <li><code>*</code> null oder mehr, <code>+</code> eins oder mehr, <code>?</code> null oder eins, <code>{2,5}</code> zwischen zwei und fünf</li>
+    <li><code>[abc]</code> eines davon, <code>[^abc]</code> alles außer diesen, <code>[a-z]</code> ein Bereich</li>
+    <li><code>^</code> der Anfang der Zeichenkette, <code>$</code> ihr Ende</li>
+    <li><code>(...)</code> eine Gruppe, die Sie wiederholen oder erfassen können, <code>|</code> das eine oder das andere</li>
+  </ul>
+  <p><code>^\d{3}-\d{4}$</code> liest sich also: ab dem Anfang drei Ziffern, ein Bindestrich, vier Ziffern, dann das Ende. Mehr nicht.</p>
+
+  <h2>Warum sich dasselbe Muster in zwei Sprachen anders verhält</h2>
+  <p>Es gibt nicht die eine Regex. Es gibt eine Familie von Dialekten, die sich in den Grundlagen einig sind und darüber hinaus auseinandergehen: POSIX, PCRE, die in JavaScript eingebaute Variante, die von Python, die von Go. Lookbehind, benannte Gruppen, Unicode-Eigenschafts-Escapes und selbst das, was <code>\d</code> als Ziffer ansieht, sind Stellen, an denen sie sich trennen.</p>
+  <p>Praktische Folge: Ein Muster, das aus einer für eine andere Sprache geschriebenen Antwort kopiert wurde, kann in Ihrer klammheimlich etwas anderes tun. Testen Sie es dort, wo es laufen wird, nicht dort, wo Sie es gefunden haben. Genau dafür gibt es den <a href="/de/regex-tester.html">Regex-Tester</a> auf dieser Seite.</p>
+
+  <h2>Der Fehlerfall, den man kennen sollte: katastrophales Backtracking</h2>
+  <p>Hier ist der Punkt, der aus einem Textwerkzeug ein Betriebsproblem macht.</p>
+  <p>Die meisten Regex-Engines gängiger Sprachen arbeiten mit <strong>Backtracking</strong>. Kann ein Muster auf mehrere Arten passen, probiert die Engine eine Aufteilung, und wenn der Rest scheitert, kehrt sie zurück und probiert eine andere. Für gewöhnliche Muster ist das billig. Für manche nicht.</p>
+  <p>Die gefährliche Form ist eine Wiederholung innerhalb einer Wiederholung, bei der beide denselben Text auf viele Arten unter sich aufteilen können. Das Lehrbuchbeispiel ist <code>(a+)+$</code>. Bei einer langen Folge von <code>a</code>, gefolgt von einem Zeichen, das nicht passen kann, muss die Engine jede mögliche Aufteilung dieser <code>a</code> zwischen innerer und äußerer Wiederholung durchprobieren, bevor sie auf Misserfolg schließen kann. Die Zahl der Kombinationen wächst exponentiell mit der Eingabelänge.</p>
+  <p>Zwanzig Zeichen können sofort fertig sein. Dreißig können eine Sekunde dauern. Vierzig werden womöglich nicht fertig, solange Sie dort noch arbeiten. Und weil das nur bei Eingaben passiert, die <em>fast</em> passen, taucht es in den Tests, die Sie mit passenden Eingaben geschrieben haben, nie auf.</p>
+  <p>Läuft diese Regex serverseitig über vom Nutzer gelieferte Eingaben, ist der exponentielle Fall für jeden erreichbar, der eine Anfrage senden kann. Das ist die Denial-of-Service-Klasse <strong>ReDoS</strong>, von der OWASP als Regular-Expression-Denial-of-Service geführt.</p>
+
+  <h2>Wie Sie sich heraushalten</h2>
+  <p><strong>Seien Sie misstrauisch bei verschachtelten Quantoren.</strong> Ein <code>+</code> oder <code>*</code> auf einer Gruppe, die bereits eines enthält, ist die zu suchende Form. Oft lässt sie sich zu etwas mit genau einer eindeutigen Möglichkeit zu passen verflachen.</p>
+  <p><strong>Verankern und präzise sein.</strong> <code>^</code>, <code>$</code> und genaue Zeichenklassen verringern die Zahl der Aufteilungen, die die Engine erwägen muss. <code>[^"]*</code> ist meist besser als <code>.*</code>.</p>
+  <p><strong>Schicken Sie Nutzereingaben nicht leichtfertig durch eine handgeschriebene Regex.</strong> Für E-Mails, URLs und Daten schlägt ein Parser oder eine gut geprüfte Bibliothek jedes clevere Muster, und sie scheitert auf lesbare Weise.</p>
+  <p><strong>Kennen Sie Ihre Engine.</strong> Manche, etwa RE2 in Go, beruhen auf einem anderen Algorithmus und backtracken überhaupt nicht. Sie verzichten auf Funktionen wie Rückwärtsreferenzen und garantieren dafür lineare Laufzeit. Muss eine Regex über feindliche Eingaben laufen, ist dieser Tausch oft der richtige.</p>
+
+  <h2>Kurz gefasst</h2>
+  <p>Eine Regex beschreibt die Form von Text, in einer Notation, die kleiner ist, als sie aussieht, und weniger portabel, als sie scheint. Lernen Sie das Dutzend Symbole, prüfen Sie den Dialekt dort, wo der Code laufen wird, und behandeln Sie einen Quantor in einem Quantor als Defekt, bis das Gegenteil bewiesen ist. Das Muster, das all Ihre Tests besteht, ist nicht das, welches die Seite lahmlegt.</p>
+
+  <figure>
+    <img src="https://cdn.pixabay.com/photo/2019/12/05/12/08/lobster-4674979_1280.jpg" alt="Verwitterte Taue, in Schlaufen und Knoten verheddert, über gestapelten Hummerkörben" width="1200" height="420" loading="lazy" />
+    <figcaption>Verhedderte Taue über Hummerkörben. Eine Engine, die jede mögliche Aufteilung einer Zeichenkette durchprobiert, sieht ungefähr so aus und braucht ähnlich lange, um sich zu lösen.</figcaption>
+  </figure>
+  </div>
+</Base>

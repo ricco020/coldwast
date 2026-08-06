@@ -1,0 +1,60 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-08-06-what-is-regex.html';
+const title = 'What Is Regex? Patterns, Engines, and the One That Hangs Your Server (2026)';
+const description = 'A regular expression is a small language for describing shapes of text. What the common symbols mean, why the same pattern behaves differently across languages, and the catastrophic backtracking case that turns a harmless-looking regex into an outage.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://cdn.pixabay.com/photo/2018/04/22/14/32/fishing-nets-3341187_1280.jpg" datePublished="2026-08-06" dateModified="2026-08-06">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e">Guides</a><span>/</span>What is regex</nav>
+  <p class="kicker">regex · text processing · security</p>
+  <h1>What is regex, exactly?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Aug 6, 2026</span><span>9 min read</span><span class="tag">#regex</span><span class="tag">#patterns</span><span class="tag">#security</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://cdn.pixabay.com/photo/2018/04/22/14/32/fishing-nets-3341187_1280.jpg" alt="Piles of pale fishing nets, two different mesh sizes side by side, filling the frame" width="1200" height="420" loading="eager" />
+    <figcaption>Fishing nets in two mesh sizes. A regex is the mesh: you describe the shape of what should pass, and everything else falls through.</figcaption>
+  </figure>
+
+  <p>A <strong>regular expression</strong>, or regex, is a small language for describing the <em>shape</em> of text rather than its exact content. Instead of asking "is this string equal to <code>abc</code>", you ask "does this string look like three letters, a dash, and four digits".</p>
+
+  <p>That is the whole idea. Everything else is notation.</p>
+
+  <h2>The notation, in one pass</h2>
+  <p>Most of what you will read is built from a handful of pieces:</p>
+  <ul>
+    <li><code>.</code> any single character, <code>\d</code> a digit, <code>\w</code> a word character, <code>\s</code> whitespace</li>
+    <li><code>*</code> zero or more, <code>+</code> one or more, <code>?</code> zero or one, <code>{2,5}</code> between two and five</li>
+    <li><code>[abc]</code> any one of these, <code>[^abc]</code> anything but these, <code>[a-z]</code> a range</li>
+    <li><code>^</code> start of the string, <code>$</code> end of it</li>
+    <li><code>(...)</code> a group you can repeat or capture, <code>|</code> either side</li>
+  </ul>
+  <p>So <code>^\d{3}-\d{4}$</code> reads: from the start, three digits, a dash, four digits, then the end. Nothing more.</p>
+
+  <h2>Why the same pattern behaves differently in two languages</h2>
+  <p>There is no single regex. There is a family of dialects that agree on the basics and diverge past them: POSIX, PCRE, the flavour built into JavaScript, the one in Python, the one in Go. Lookbehind, named groups, Unicode property escapes and even what <code>\d</code> considers a digit are places where they part company.</p>
+  <p>The practical consequence is that a pattern copied from a Stack Overflow answer written for one language can silently do something else in yours. Test it where it will run, not where you found it. That is what the <a href="/regex-tester.html">regex tester</a> on this site is for.</p>
+
+  <h2>The failure mode worth knowing: catastrophic backtracking</h2>
+  <p>Here is the part that turns a text-matching utility into an operational problem.</p>
+  <p>Most regex engines in mainstream languages work by <strong>backtracking</strong>. When a pattern can match in more than one way, the engine tries one split, and if the rest fails, it comes back and tries another. For ordinary patterns that is cheap. For some patterns it is not.</p>
+  <p>The dangerous shape is a repetition inside a repetition, where the two can divide the same text between them in many ways. The textbook example is <code>(a+)+$</code>. Fed a long run of <code>a</code> characters followed by one character that cannot match, the engine has to try every possible way of splitting those <code>a</code>s between the inner and outer repetition before it can conclude failure. The number of combinations grows exponentially with the length of the input.</p>
+  <p>Twenty characters may be instant. Thirty may take a second. Forty may not finish while you are still employed. And because this only happens on input that <em>nearly</em> matches, it never shows up in the tests you wrote with input that matches.</p>
+  <p>When that regex runs on user-supplied input on a server, the exponential case is reachable by anyone who can send a request. That is the denial-of-service class known as <strong>ReDoS</strong>, catalogued by the OWASP as a regular-expression denial of service.</p>
+
+  <h2>How to stay out of it</h2>
+  <p><strong>Be suspicious of nested quantifiers.</strong> A <code>+</code> or <code>*</code> applied to a group that already contains one is the shape to look for. Often it can be flattened to something with a single, unambiguous way to match.</p>
+  <p><strong>Anchor and be specific.</strong> <code>^</code>, <code>$</code> and precise character classes cut the number of splits the engine has to consider. <code>[^"]*</code> is usually better than <code>.*</code>.</p>
+  <p><strong>Do not run user input through a hand-written regex casually.</strong> For emails, URLs and dates, a parser or a well-tested library beats a clever pattern, and it fails in ways you can read.</p>
+  <p><strong>Know your engine.</strong> Some, such as Go's RE2, are built on a different algorithm and do not backtrack at all. They give up features like backreferences in exchange for a guaranteed linear-time match. If a regex must run on hostile input, that trade is often the right one.</p>
+
+  <h2>The short version</h2>
+  <p>A regex describes the shape of text, in a notation that is smaller than it looks and less portable than it seems. Learn the dozen symbols, verify the dialect where the code will run, and treat a quantifier inside a quantifier as a defect until proven otherwise. The pattern that matches everything you tested is not the one that will take the site down.</p>
+
+  <figure>
+    <img src="https://cdn.pixabay.com/photo/2019/12/05/12/08/lobster-4674979_1280.jpg" alt="Weathered ropes tangled in loops and knots across stacked lobster creels" width="1200" height="420" loading="lazy" />
+    <figcaption>Ropes tangled across lobster creels. A backtracking engine trying every possible split of a string looks a lot like this, and takes about as long to undo.</figcaption>
+  </figure>
+  </div>
+</Base>

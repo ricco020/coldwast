@@ -1,0 +1,60 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/pt/e/blog/2026-08-06-what-is-regex.html';
+const title = 'O que é uma regex? Padrões, motores e o que pendura o seu servidor (2026)';
+const description = 'Uma expressão regular é uma pequena linguagem para descrever formas de texto. O que significam os símbolos comuns, porque o mesmo padrão se comporta de forma diferente consoante a linguagem, e o caso de backtracking catastrófico que transforma uma regex inofensiva numa falha.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://cdn.pixabay.com/photo/2018/04/22/14/32/fishing-nets-3341187_1280.jpg" datePublished="2026-08-06" dateModified="2026-08-06">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/pt/">Home</a><span>/</span><a href="/pt/e">Guides</a><span>/</span>O que é uma regex</nav>
+  <p class="kicker">regex · processamento de texto · segurança</p>
+  <h1>O que é exatamente uma regex?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Aug 6, 2026</span><span>9 min read</span><span class="tag">#regex</span><span class="tag">#padroes</span><span class="tag">#seguranca</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://cdn.pixabay.com/photo/2018/04/22/14/32/fishing-nets-3341187_1280.jpg" alt="Montes de redes de pesca claras, dois tamanhos de malha lado a lado, a preencher o enquadramento" width="1200" height="420" loading="eager" />
+    <figcaption>Redes de pesca com dois tamanhos de malha. Uma regex é a malha: descreve a forma daquilo que deve passar, e todo o resto cai através dela.</figcaption>
+  </figure>
+
+  <p>Uma <strong>expressão regular</strong>, ou regex, é uma pequena linguagem que descreve a <em>forma</em> do texto em vez do seu conteúdo exato. Em vez de perguntar «esta cadeia é igual a <code>abc</code>?», pergunta «esta cadeia tem a forma de três letras, um hífen e quatro dígitos?».</p>
+
+  <p>A ideia é toda esta. O resto é notação.</p>
+
+  <h2>A notação, numa passagem</h2>
+  <p>Quase tudo o que vai ler constrói-se com um punhado de peças:</p>
+  <ul>
+    <li><code>.</code> qualquer carácter, <code>\d</code> um dígito, <code>\w</code> um carácter de palavra, <code>\s</code> um espaço</li>
+    <li><code>*</code> zero ou mais, <code>+</code> um ou mais, <code>?</code> zero ou um, <code>{2,5}</code> entre dois e cinco</li>
+    <li><code>[abc]</code> qualquer um destes, <code>[^abc]</code> tudo menos estes, <code>[a-z]</code> um intervalo</li>
+    <li><code>^</code> o início da cadeia, <code>$</code> o seu fim</li>
+    <li><code>(...)</code> um grupo que pode repetir ou capturar, <code>|</code> um ou outro</li>
+  </ul>
+  <p>Assim <code>^\d{3}-\d{4}$</code> lê-se: desde o início, três dígitos, um hífen, quatro dígitos, depois o fim. Nada mais.</p>
+
+  <h2>Porque o mesmo padrão se comporta de outra forma em duas linguagens</h2>
+  <p>Não existe uma regex. Existe uma família de dialetos que concordam no básico e divergem para além disso: POSIX, PCRE, a variante integrada no JavaScript, a do Python, a do Go. O lookbehind, os grupos nomeados, os escapes de propriedades Unicode e até o que o <code>\d</code> considera um dígito são pontos onde se separam.</p>
+  <p>A consequência prática é que um padrão copiado de uma resposta escrita para outra linguagem pode fazer silenciosamente outra coisa na sua. Teste-o onde vai correr, não onde o encontrou. É para isso que serve o <a href="/pt/regex-tester.html">testador de regex</a> deste site.</p>
+
+  <h2>A falha que vale a pena conhecer: backtracking catastrófico</h2>
+  <p>Eis o que transforma um utilitário de correspondência de texto num problema de operação.</p>
+  <p>A maioria dos motores de regex das linguagens correntes funciona por <strong>retrocesso</strong>. Quando um padrão pode corresponder de várias maneiras, o motor tenta uma divisão e, se o resto falhar, volta atrás e tenta outra. Para padrões vulgares isso é barato. Para alguns não é.</p>
+  <p>A forma perigosa é uma repetição dentro de uma repetição, em que ambas podem repartir entre si o mesmo texto de muitas maneiras. O exemplo dos manuais é <code>(a+)+$</code>. Perante uma longa série de <code>a</code> seguida de um carácter que não pode corresponder, o motor tem de tentar todas as formas possíveis de repartir esses <code>a</code> entre a repetição interna e a externa antes de poder concluir que falha. O número de combinações cresce exponencialmente com o comprimento da entrada.</p>
+  <p>Vinte caracteres podem ser instantâneos. Trinta podem demorar um segundo. Quarenta podem não terminar enquanto ainda lá trabalhar. E como isto só acontece com entradas que <em>quase</em> correspondem, nunca aparece nos testes que escreveu com entradas que correspondem.</p>
+  <p>Quando essa regex corre sobre entrada fornecida pelo utilizador num servidor, o caso exponencial está ao alcance de qualquer um que consiga enviar um pedido. É a classe de negação de serviço conhecida como <strong>ReDoS</strong>, catalogada pela OWASP como negação de serviço por expressão regular.</p>
+
+  <h2>Como ficar de fora</h2>
+  <p><strong>Desconfie dos quantificadores aninhados.</strong> Um <code>+</code> ou um <code>*</code> aplicado a um grupo que já contém um é a forma a procurar. Muitas vezes pode ser achatada em algo com uma única maneira inequívoca de corresponder.</p>
+  <p><strong>Ancore e seja específico.</strong> <code>^</code>, <code>$</code> e classes de caracteres precisas reduzem o número de divisões que o motor tem de considerar. <code>[^"]*</code> é normalmente melhor do que <code>.*</code>.</p>
+  <p><strong>Não passe entrada de utilizador por uma regex escrita à mão com ligeireza.</strong> Para emails, URL e datas, um analisador ou uma biblioteca testada ganha a um padrão engenhoso, e falha de um modo legível.</p>
+  <p><strong>Conheça o seu motor.</strong> Alguns, como o RE2 em Go, assentam noutro algoritmo e não retrocedem de todo. Abdicam de funcionalidades como as retro-referências em troca de uma correspondência garantida em tempo linear. Se uma regex tiver de correr sobre entrada hostil, essa troca é muitas vezes a certa.</p>
+
+  <h2>Em resumo</h2>
+  <p>Uma regex descreve a forma do texto, numa notação mais pequena do que parece e menos portável do que aparenta. Aprenda a dúzia de símbolos, verifique o dialeto onde o código vai correr, e trate um quantificador dentro de um quantificador como um defeito até prova em contrário. O padrão que passa todos os seus testes não é o que vai deitar o site abaixo.</p>
+
+  <figure>
+    <img src="https://cdn.pixabay.com/photo/2019/12/05/12/08/lobster-4674979_1280.jpg" alt="Cabos gastos emaranhados em laços e nós sobre covos de lagosta empilhados" width="1200" height="420" loading="lazy" />
+    <figcaption>Cabos emaranhados sobre covos. Um motor que tenta todas as divisões possíveis de uma cadeia parece-se bastante com isto, e demora aproximadamente o mesmo a desenredar-se.</figcaption>
+  </figure>
+  </div>
+</Base>

@@ -1,0 +1,60 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/fr/e/blog/2026-08-06-what-is-regex.html';
+const title = 'Regex, c\'est quoi ? Motifs, moteurs, et celui qui fige votre serveur (2026)';
+const description = 'Une expression régulière est un petit langage pour décrire des formes de texte. Ce que signifient les symboles courants, pourquoi un même motif se comporte différemment selon le langage, et le cas de backtracking catastrophique qui transforme une regex anodine en panne.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://cdn.pixabay.com/photo/2018/04/22/14/32/fishing-nets-3341187_1280.jpg" datePublished="2026-08-06" dateModified="2026-08-06">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/fr/">Home</a><span>/</span><a href="/fr/e">Guides</a><span>/</span>Qu'est-ce qu'une regex</nav>
+  <p class="kicker">regex · traitement de texte · sécurité</p>
+  <h1>Une regex, c'est quoi exactement ?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Aug 6, 2026</span><span>9 min read</span><span class="tag">#regex</span><span class="tag">#motifs</span><span class="tag">#securite</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://cdn.pixabay.com/photo/2018/04/22/14/32/fishing-nets-3341187_1280.jpg" alt="Des piles de filets de pêche clairs, deux tailles de mailles côte à côte, remplissant le cadre" width="1200" height="420" loading="eager" />
+    <figcaption>Des filets de pêche à deux tailles de mailles. Une regex est le maillage : vous décrivez la forme de ce qui doit passer, tout le reste tombe au travers.</figcaption>
+  </figure>
+
+  <p>Une <strong>expression régulière</strong>, ou regex, est un petit langage qui décrit la <em>forme</em> d'un texte plutôt que son contenu exact. Au lieu de demander « cette chaîne est-elle égale à <code>abc</code> », vous demandez « cette chaîne ressemble-t-elle à trois lettres, un tiret, quatre chiffres ».</p>
+
+  <p>C'est toute l'idée. Le reste n'est que notation.</p>
+
+  <h2>La notation, en une passe</h2>
+  <p>L'essentiel de ce que vous lirez se construit avec une poignée d'éléments :</p>
+  <ul>
+    <li><code>.</code> n'importe quel caractère, <code>\d</code> un chiffre, <code>\w</code> un caractère de mot, <code>\s</code> une espace</li>
+    <li><code>*</code> zéro ou plus, <code>+</code> un ou plus, <code>?</code> zéro ou un, <code>{2,5}</code> entre deux et cinq</li>
+    <li><code>[abc]</code> l'un de ceux-ci, <code>[^abc]</code> tout sauf ceux-ci, <code>[a-z]</code> un intervalle</li>
+    <li><code>^</code> le début de la chaîne, <code>$</code> sa fin</li>
+    <li><code>(...)</code> un groupe que l'on peut répéter ou capturer, <code>|</code> l'un ou l'autre</li>
+  </ul>
+  <p>Ainsi <code>^\d{3}-\d{4}$</code> se lit : depuis le début, trois chiffres, un tiret, quatre chiffres, puis la fin. Rien de plus.</p>
+
+  <h2>Pourquoi le même motif se comporte autrement dans deux langages</h2>
+  <p>Il n'existe pas une regex. Il existe une famille de dialectes qui s'accordent sur les bases et divergent au-delà : POSIX, PCRE, la variante intégrée à JavaScript, celle de Python, celle de Go. Le lookbehind, les groupes nommés, les échappements de propriétés Unicode et jusqu'à ce que <code>\d</code> considère comme un chiffre sont autant d'endroits où ils se séparent.</p>
+  <p>Conséquence pratique : un motif copié d'une réponse écrite pour un autre langage peut faire silencieusement autre chose dans le vôtre. Testez-le là où il tournera, pas là où vous l'avez trouvé. C'est à cela que sert le <a href="/fr/regex-tester.html">testeur de regex</a> de ce site.</p>
+
+  <h2>Le mode de défaillance à connaître : le backtracking catastrophique</h2>
+  <p>Voici ce qui transforme un utilitaire de correspondance de texte en problème d'exploitation.</p>
+  <p>La plupart des moteurs de regex des langages courants fonctionnent par <strong>retour sur trace</strong>. Quand un motif peut correspondre de plusieurs façons, le moteur essaie une découpe, et si la suite échoue, il revient en arrière et en essaie une autre. Pour des motifs ordinaires, c'est peu coûteux. Pour certains, non.</p>
+  <p>La forme dangereuse est une répétition à l'intérieur d'une répétition, où les deux peuvent se partager le même texte de multiples façons. L'exemple des manuels est <code>(a+)+$</code>. Soumis à une longue série de <code>a</code> suivie d'un caractère qui ne peut pas correspondre, le moteur doit essayer toutes les manières de répartir ces <code>a</code> entre la répétition interne et l'externe avant de pouvoir conclure à l'échec. Le nombre de combinaisons croît exponentiellement avec la longueur de l'entrée.</p>
+  <p>Vingt caractères peuvent être instantanés. Trente peuvent prendre une seconde. Quarante peuvent ne pas finir avant votre départ à la retraite. Et comme cela ne survient que sur une entrée qui correspond <em>presque</em>, cela n'apparaît jamais dans les tests que vous avez écrits avec une entrée qui correspond.</p>
+  <p>Quand cette regex s'exécute sur une entrée fournie par l'utilisateur, côté serveur, le cas exponentiel est atteignable par quiconque peut envoyer une requête. C'est la classe de déni de service appelée <strong>ReDoS</strong>, répertoriée par l'OWASP comme déni de service par expression régulière.</p>
+
+  <h2>Comment s'en tenir à l'écart</h2>
+  <p><strong>Méfiez-vous des quantificateurs imbriqués.</strong> Un <code>+</code> ou un <code>*</code> appliqué à un groupe qui en contient déjà un est la forme à repérer. Souvent, on peut l'aplatir en quelque chose qui n'a qu'une seule façon de correspondre.</p>
+  <p><strong>Ancrez et soyez précis.</strong> <code>^</code>, <code>$</code> et des classes de caractères précises réduisent le nombre de découpes que le moteur doit envisager. <code>[^"]*</code> vaut généralement mieux que <code>.*</code>.</p>
+  <p><strong>Ne faites pas passer à la légère une entrée utilisateur dans une regex écrite à la main.</strong> Pour les adresses e-mail, les URL et les dates, un analyseur ou une bibliothèque éprouvée vaut mieux qu'un motif astucieux, et il échoue d'une manière lisible.</p>
+  <p><strong>Connaissez votre moteur.</strong> Certains, comme RE2 en Go, reposent sur un autre algorithme et ne font aucun retour sur trace. Ils renoncent à des fonctionnalités comme les références arrière en échange d'une correspondance garantie en temps linéaire. Si une regex doit s'exécuter sur une entrée hostile, ce compromis est souvent le bon.</p>
+
+  <h2>En résumé</h2>
+  <p>Une regex décrit la forme d'un texte, dans une notation plus petite qu'elle n'en a l'air et moins portable qu'elle ne le paraît. Apprenez la douzaine de symboles, vérifiez le dialecte là où le code tournera, et traitez un quantificateur dans un quantificateur comme un défaut jusqu'à preuve du contraire. Le motif qui passe tous vos tests n'est pas celui qui fera tomber le site.</p>
+
+  <figure>
+    <img src="https://cdn.pixabay.com/photo/2019/12/05/12/08/lobster-4674979_1280.jpg" alt="Des cordages usés emmêlés en boucles et en nœuds sur des casiers à homards empilés" width="1200" height="420" loading="lazy" />
+    <figcaption>Des cordages emmêlés sur des casiers. Un moteur qui essaie toutes les découpes possibles d'une chaîne ressemble beaucoup à cela, et met à peu près autant de temps à s'en défaire.</figcaption>
+  </figure>
+  </div>
+</Base>
