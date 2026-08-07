@@ -1,0 +1,55 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/de/e/blog/2026-08-07-what-is-cron.html';
+const title = 'Was ist Cron? Die fünf Felder und das eine, das ein ODER ist (2026)';
+const description = 'Ein Cron-Ausdruck besteht aus fünf Feldern und einem Befehl. Das meiste ist offensichtlich. Was es nicht ist - und was still Aufgaben an Tagen ausführt, die Sie nie vorgesehen hatten - ist das, was passiert, wenn Sie Tag des Monats und Wochentag zugleich ausfüllen.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://images.pexels.com/photos/2087742/pexels-photo-2087742.jpeg?auto=compress&cs=tinysrgb&w=1600" datePublished="2026-08-07" dateModified="2026-08-07">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/de/">Home</a><span>/</span><a href="/de/e">Guides</a><span>/</span>Was ist Cron</nav>
+  <p class="kicker">Cron · Zeitsteuerung · Unix</p>
+  <h1>Was ist Cron genau?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Aug 7, 2026</span><span>8 min read</span><span class="tag">#cron</span><span class="tag">#zeitsteuerung</span><span class="tag">#unix</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.pexels.com/photos/2087742/pexels-photo-2087742.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Eine mechanische Kodak-Dunkelkammeruhr auf einer Holzfläche, das Zifferblatt in Minuten geteilt" width="1200" height="420" loading="eager" />
+    <figcaption>Eine mechanische Zeitschaltuhr. Cron ist dieselbe Idee mit mehr Feldern: Sie beschreiben wann, und etwas anderes denkt daran zu handeln.</figcaption>
+  </figure>
+
+  <p>Ein Cron-Eintrag besteht aus fünf Zeitfeldern und einem Befehl. In dieser Reihenfolge: <strong>Minute, Stunde, Tag des Monats, Monat, Wochentag</strong>.</p>
+
+  <pre><code>{`30 4 * * 1  /usr/local/bin/backup.sh`}</code></pre>
+
+  <p>Das liest sich: Minute 30, Stunde 4, jeder Tag des Monats, jeder Monat, Wochentag 1. Halb fünf morgens, montags.</p>
+
+  <h2>Das Vokabular eines Feldes</h2>
+  <p>Jedes Feld nimmt mehr als eine einzelne Zahl. <code>*</code> heißt jeder Wert. <code>1-5</code> ist ein Bereich. <code>1,15</code> ist eine Liste. <code>*/15</code> ist eine Schrittweite - jeder fünfzehnte Wert, im Minutenfeld also viermal pro Stunde.</p>
+  <p>Zwei Felder nehmen auch Namen an: Monate von <code>JAN</code> bis <code>DEC</code>, Wochentage von <code>SUN</code> bis <code>SAT</code>. Und das Wochentagsfeld hat eine bekannte Eigenheit: <strong>sowohl 0 als auch 7 bedeuten Sonntag</strong>, in den meisten Implementierungen.</p>
+
+  <h2>Das Feld, das ein ODER ist</h2>
+  <p>Hier ist der Teil, der überrascht, und er verdient ein zweites Lesen.</p>
+  <p>Tag des Monats und Wochentag sind zwei verschiedene Arten, denselben Tag zu benennen. Füllen Sie nur eines davon aus und lassen das andere auf <code>*</code>, verhält sich Cron genau wie erwartet. Füllen Sie <strong>beide</strong> aus, legt POSIX fest, dass ein Tag, der auf <em>eines von beiden</em> passt, die Aufgabe auslöst.</p>
+  <p>Es ist ein <strong>ODER</strong>, kein UND.</p>
+
+  <img src="https://images.pexels.com/photos/273153/pexels-photo-273153.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Nahaufnahme eines gedruckten Wandkalenders mit den Wochentagsnamen in einer linken Spalte und den nummerierten Monatstagen in einem Raster, die Monatsnamen in mehreren Sprachen" width="1200" height="420" loading="lazy" />
+
+  <p><code>0 0 1 * 1</code> bedeutet also nicht „am Ersten des Monats, wenn es ein Montag ist". Es bedeutet <strong>am Ersten jedes Monats und an jedem Montag</strong> - grob das Fünffache der beabsichtigten Läufe.</p>
+  <p>Die Begründung für diese Wahl ist vertretbar. Ein UND ließe die meisten Kombinationen fast nie feuern: „der 31., wenn er auf einen Freitag fällt" kommt ein- bis zweimal im Jahr vor. Das ODER erlaubt einer einzigen Zeile, „monatlich und wöchentlich" auszudrücken, ohne zweiten Eintrag. Aber es ist das Gegenteil dessen, was die Syntax nahelegt, und genau dort laufen geplante Aufgaben still an den falschen Tagen.</p>
+
+  <h2>Die Kurzformen, und warum sie nicht portabel sind</h2>
+  <p>Viele Implementierungen akzeptieren <code>@daily</code>, <code>@hourly</code>, <code>@weekly</code>, <code>@monthly</code> und <code>@reboot</code>. Sie sind bequem und <strong>nicht Teil von POSIX</strong> - sie stammen von Vixie cron und dessen Nachfahren.</p>
+  <p>Auf einer Maschine, die Ihnen gehört, ist das gleichgültig. In etwas, das überall laufen muss - ein Container-Image, ein Skript, das Sie weitergeben - sind die fünf ausgeschriebenen Felder die sichere Wahl. <code>@reboot</code> hat im Standard gar keine Entsprechung, und sein Verhalten hängt vollständig von der Implementierung ab.</p>
+
+  <h2>Was Cron nicht tut</h2>
+  <p><strong>Es holt nichts nach.</strong> War die Maschine um 4:30 aus, lief die 4:30-Aufgabe nicht und wird nicht nachgeholt. Cron feuert bei Übereinstimmung mit der Uhr und führt keine Warteschlange verpasster Arbeit.</p>
+  <p><strong>Es gibt Ihnen nicht Ihre Anmeldeumgebung.</strong> Eine Cron-Aufgabe läuft mit minimalem <code>PATH</code> und ohne Ihr Shell-Profil. Das häufigste „im Terminal geht es, in Cron nicht" ist ein Befehl, der über einen <code>PATH</code> gefunden wurde, den Cron nicht hat. Nehmen Sie absolute Pfade.</p>
+  <p><strong>Es verhindert keine Überschneidung.</strong> Braucht eine alle fünf Minuten geplante Aufgabe sechs, laufen zwei Kopien gleichzeitig. Cron startet die nächste ungeachtet dessen; die Sperrdatei ist Ihre Sache, nicht seine.</p>
+  <p><strong>Es sagt Ihnen nicht, dass es fehlgeschlagen ist.</strong> Die Ausgabe geht per Mail hinaus, sofern Mail eingerichtet ist, und sonst ins Nichts. Leiten Sie in eine Logdatei um und sehen Sie hinein, sonst erfahren Sie es am fehlenden Backup.</p>
+
+  <h2>Lesen Sie den Ausdruck, bevor Sie ihm trauen</h2>
+  <p>Weil das ODER in der Syntax unsichtbar ist, kann ein Ausdruck richtig aussehen und auf eine Weise falsch sein, die sich erst Wochen später zeigt. Ihn vor dem Ausrollen Feld für Feld zu entschlüsseln kostet Sekunden - dafür gibt es den <a href="/de/cron-expression.html">Cron-Ausdruck-Decoder</a> auf dieser Seite.</p>
+
+  <p class="disc">Ein Kalender mit Wochentagsnamen an der Seite und Tageszahlen im Raster. Cron hat für beides ein Feld, und wenn Sie beide ausfüllen, trifft es auf das eine ODER das andere zu - nicht auf beide zusammen.</p>
+  </div>
+</Base>

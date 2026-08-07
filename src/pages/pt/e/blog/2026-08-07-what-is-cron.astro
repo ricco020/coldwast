@@ -1,0 +1,55 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/pt/e/blog/2026-08-07-what-is-cron.html';
+const title = 'O que é o cron? Os cinco campos, e aquele que é um OU (2026)';
+const description = 'Uma expressão cron são cinco campos e um comando. Quase tudo é evidente. O que não é, e executa em silêncio tarefas em dias que nunca previu, é o que acontece quando preenche ao mesmo tempo o dia do mês e o dia da semana.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://images.pexels.com/photos/2087742/pexels-photo-2087742.jpeg?auto=compress&cs=tinysrgb&w=1600" datePublished="2026-08-07" dateModified="2026-08-07">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/pt/">Home</a><span>/</span><a href="/pt/e">Guides</a><span>/</span>O que é o cron</nav>
+  <p class="kicker">cron · agendamento · unix</p>
+  <h1>O que é o cron, exatamente?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Aug 7, 2026</span><span>8 min read</span><span class="tag">#cron</span><span class="tag">#agendamento</span><span class="tag">#unix</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.pexels.com/photos/2087742/pexels-photo-2087742.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Um temporizador mecânico Kodak de câmara escura sobre uma superfície de madeira, com o mostrador graduado em minutos" width="1200" height="420" loading="eager" />
+    <figcaption>Um temporizador mecânico. O cron é a mesma ideia com mais campos: você descreve quando, e outra coisa lembra-se de agir.</figcaption>
+  </figure>
+
+  <p>Uma entrada cron são cinco campos de tempo e um comando. Por ordem: <strong>minuto, hora, dia do mês, mês, dia da semana</strong>.</p>
+
+  <pre><code>{`30 4 * * 1  /usr/local/bin/backup.sh`}</code></pre>
+
+  <p>Lê-se: minuto 30, hora 4, qualquer dia do mês, qualquer mês, dia da semana 1. Quatro e meia da manhã, às segundas.</p>
+
+  <h2>O vocabulário de um campo</h2>
+  <p>Cada campo aceita mais do que um número solto. <code>*</code> significa todos os valores. <code>1-5</code> é um intervalo. <code>1,15</code> é uma lista. <code>*/15</code> é um passo: um valor em cada quinze, ou seja quatro vezes por hora no campo dos minutos.</p>
+  <p>Dois campos aceitam também nomes: os meses de <code>JAN</code> a <code>DEC</code>, os dias da semana de <code>SUN</code> a <code>SAT</code>. E o campo do dia da semana tem uma esquisitice conhecida: <strong>tanto 0 como 7 significam domingo</strong> na maioria das implementações.</p>
+
+  <h2>O campo que é um OU</h2>
+  <p>Eis a parte que surpreende, e merece uma segunda leitura.</p>
+  <p>O dia do mês e o dia da semana são duas formas diferentes de nomear o mesmo dia. Se preencher apenas um e deixar o outro em <code>*</code>, o cron comporta-se exatamente como espera. Se preencher <strong>ambos</strong>, o POSIX especifica que um dia que corresponda a <em>qualquer um</em> dos campos dispara a tarefa.</p>
+  <p>É um <strong>OU</strong>, não um E.</p>
+
+  <img src="https://images.pexels.com/photos/273153/pexels-photo-273153.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Grande plano de um calendário de parede impresso com os nomes dos dias da semana numa coluna à esquerda e os números dos dias do mês numa grelha, com os meses em várias línguas" width="1200" height="420" loading="lazy" />
+
+  <p>Portanto <code>0 0 1 * 1</code> não significa «no primeiro do mês, se calhar numa segunda». Significa <strong>no primeiro de cada mês, e em todas as segundas</strong> - cerca de cinco vezes mais execuções do que o previsto.</p>
+  <p>O raciocínio por trás da escolha defende-se. Um E faria com que quase nenhuma combinação disparasse: «o 31 quando calha numa sexta» acontece uma ou duas vezes por ano. O OU permite que uma só linha exprima «mensal e semanal» sem uma segunda entrada. Mas é o contrário do que a sintaxe sugere, e é aí que as tarefas agendadas correm em silêncio nos dias errados.</p>
+
+  <h2>Os atalhos, e porque não são portáveis</h2>
+  <p>Muitas implementações aceitam <code>@daily</code>, <code>@hourly</code>, <code>@weekly</code>, <code>@monthly</code> e <code>@reboot</code>. São cómodos e <strong>não fazem parte do POSIX</strong>: vêm do Vixie cron e dos seus descendentes.</p>
+  <p>Numa máquina que controla, tanto faz. Em algo que tem de correr em qualquer lado - uma imagem de contentor, um script que distribui - os cinco campos explícitos são a opção segura. O <code>@reboot</code> em particular não tem equivalente algum na norma, e o seu comportamento depende inteiramente da implementação.</p>
+
+  <h2>O que o cron não faz</h2>
+  <p><strong>Não recupera o perdido.</strong> Se a máquina estava desligada às 4:30, a tarefa das 4:30 não correu e não será relançada. O cron dispara por correspondência de relógio, não mantém uma fila de trabalho falhado.</p>
+  <p><strong>Não lhe dá o seu ambiente de sessão.</strong> Uma tarefa cron corre com um <code>PATH</code> mínimo e sem nada do seu perfil de shell. O «funciona no meu terminal mas não no cron» mais comum é um comando encontrado por um <code>PATH</code> que o cron não tem. Use caminhos absolutos.</p>
+  <p><strong>Não evita a sobreposição.</strong> Se uma tarefa agendada a cada cinco minutos demora seis, fica com duas cópias a correr. O cron arrancará a seguinte na mesma; o ficheiro de bloqueio é consigo, não com ele.</p>
+  <p><strong>Não lhe diz que falhou.</strong> A saída vai por correio se o correio estiver configurado, e para lado nenhum se não estiver. Redirecione para um ficheiro de registo e veja-o, ou saberá pela cópia de segurança que falta.</p>
+
+  <h2>Leia a expressão antes de confiar nela</h2>
+  <p>Como o OU é invisível na sintaxe, uma expressão de aspeto correto pode estar errada de uma forma que só se manifesta semanas depois. Descodificá-la campo a campo antes de implantar custa segundos: é para isso que serve o <a href="/pt/cron-expression.html">descodificador de expressões cron</a> deste site.</p>
+
+  <p class="disc">Um calendário com os nomes dos dias ao lado e os números na grelha. O cron tem um campo para cada um, e quando preenche ambos corresponde a um OU a outro, não aos dois juntos.</p>
+  </div>
+</Base>

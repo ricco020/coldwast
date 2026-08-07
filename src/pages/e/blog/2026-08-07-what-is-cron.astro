@@ -1,0 +1,55 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-08-07-what-is-cron.html';
+const title = 'What Is Cron? The Five Fields, and the One That Is an OR (2026)';
+const description = 'A cron expression is five fields and a command. Most of it is obvious. The part that is not, and that silently runs jobs on days you never intended, is what happens when you fill in both day-of-month and day-of-week.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://images.pexels.com/photos/2087742/pexels-photo-2087742.jpeg?auto=compress&cs=tinysrgb&w=1600" datePublished="2026-08-07" dateModified="2026-08-07">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e">Guides</a><span>/</span>What is cron</nav>
+  <p class="kicker">cron · scheduling · unix</p>
+  <h1>What is cron, exactly?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Aug 7, 2026</span><span>8 min read</span><span class="tag">#cron</span><span class="tag">#scheduling</span><span class="tag">#unix</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.pexels.com/photos/2087742/pexels-photo-2087742.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="A vintage Kodak mechanical darkroom timer on a wooden surface, its dial marked in minutes" width="1200" height="420" loading="eager" />
+    <figcaption>A mechanical timer. Cron is the same idea with more fields: you describe when, and something else remembers to act.</figcaption>
+  </figure>
+
+  <p>A cron entry is five time fields and a command. In order: <strong>minute, hour, day of month, month, day of week</strong>.</p>
+
+  <pre><code>{`30 4 * * 1  /usr/local/bin/backup.sh`}</code></pre>
+
+  <p>That reads: minute 30, hour 4, any day of the month, any month, day of week 1. Half past four in the morning, on Mondays.</p>
+
+  <h2>The vocabulary of a field</h2>
+  <p>Each field takes more than a single number. <code>*</code> means every value. <code>1-5</code> is a range. <code>1,15</code> is a list. <code>*/15</code> is a step - every fifteenth value, so in the minute field that is four times an hour.</p>
+  <p>Two of the fields also accept names: months as <code>JAN</code> to <code>DEC</code>, days of the week as <code>SUN</code> to <code>SAT</code>. And the day-of-week field has a well-known oddity: <strong>both 0 and 7 mean Sunday</strong> in most implementations.</p>
+
+  <h2>The field that is an OR</h2>
+  <p>Here is the part that surprises people, and it is worth reading twice.</p>
+  <p>Day-of-month and day-of-week are two different ways of naming the same day. When you fill in only one of them and leave the other as <code>*</code>, cron behaves exactly as you expect. When you fill in <strong>both</strong>, POSIX specifies that a day matching <em>either</em> field triggers the job.</p>
+  <p>It is an <strong>OR</strong>, not an AND.</p>
+
+  <img src="https://images.pexels.com/photos/273153/pexels-photo-273153.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Close-up of a printed wall calendar showing weekday names in a left-hand column and the numbered days of the month in a grid, with month names in several languages" width="1200" height="420" loading="lazy" />
+
+  <p>So <code>0 0 1 * 1</code> does not mean "the first of the month, if it is a Monday". It means <strong>the first of every month, and every Monday</strong> - which is roughly five times as many runs as intended.</p>
+  <p>The reasoning behind the choice is defensible. An AND would make most combinations fire almost never: "the 31st when it is a Friday" happens once or twice a year. The OR lets one line express "monthly and weekly" without a second entry. But it is the opposite of what the syntax looks like, and it is where scheduled jobs quietly run on the wrong days.</p>
+
+  <h2>Shorthands, and why they are not portable</h2>
+  <p>Many implementations accept <code>@daily</code>, <code>@hourly</code>, <code>@weekly</code>, <code>@monthly</code> and <code>@reboot</code>. They are convenient and they are <strong>not part of POSIX</strong> - they come from Vixie cron and its descendants.</p>
+  <p>On a machine you control, fine. In something that has to run anywhere - a container image, a script you distribute - the five explicit fields are the safer choice. <code>@reboot</code> in particular has no equivalent at all in the standard, and its behaviour depends entirely on the implementation.</p>
+
+  <h2>What cron does not do</h2>
+  <p><strong>It does not catch up.</strong> If the machine was off at 4:30, the 4:30 job did not run and will not be rerun. Cron fires on wall-clock matches, it does not keep a queue of missed work.</p>
+  <p><strong>It does not give you your login environment.</strong> A cron job runs with a minimal <code>PATH</code> and none of your shell profile. The single most common "it works in my terminal but not in cron" is a command found through a <code>PATH</code> that cron does not have. Use absolute paths.</p>
+  <p><strong>It does not prevent overlap.</strong> If a job scheduled every five minutes takes six, you get two copies running. Cron will start the next one regardless; a lock file is your responsibility, not its.</p>
+  <p><strong>It does not tell you it failed.</strong> Output goes to mail if mail is configured, and into nothing if it is not. Redirect to a log file and check it, or you will find out from the missing backup.</p>
+
+  <h2>Read the expression before you trust it</h2>
+  <p>Because the OR is invisible in the syntax, an expression that looks right can be wrong in a way that only shows up weeks later. Decoding it field by field before deploying costs a few seconds - that is what the <a href="/cron-expression.html">cron expression decoder</a> on this site is for.</p>
+
+  <p class="disc">A calendar showing weekday names down the side and day numbers across the grid. Cron has a field for each, and when you fill in both, it matches either one - not both together.</p>
+  </div>
+</Base>

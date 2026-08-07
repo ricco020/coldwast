@@ -1,0 +1,55 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/fr/e/blog/2026-08-07-what-is-cron.html';
+const title = 'Qu\'est-ce que cron ? Les cinq champs, et celui qui est un OU (2026)';
+const description = 'Une expression cron, ce sont cinq champs et une commande. L\'essentiel est évident. Ce qui ne l\'est pas, et qui lance silencieusement des tâches des jours que vous n\'aviez pas prévus, c\'est ce qui se produit quand vous remplissez à la fois le jour du mois et le jour de la semaine.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://images.pexels.com/photos/2087742/pexels-photo-2087742.jpeg?auto=compress&cs=tinysrgb&w=1600" datePublished="2026-08-07" dateModified="2026-08-07">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/fr/">Home</a><span>/</span><a href="/fr/e">Guides</a><span>/</span>Qu'est-ce que cron</nav>
+  <p class="kicker">cron · planification · unix</p>
+  <h1>Qu'est-ce que cron, exactement ?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Aug 7, 2026</span><span>8 min read</span><span class="tag">#cron</span><span class="tag">#planification</span><span class="tag">#unix</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.pexels.com/photos/2087742/pexels-photo-2087742.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Un minuteur mécanique Kodak de chambre noire posé sur une surface en bois, son cadran gradué en minutes" width="1200" height="420" loading="eager" />
+    <figcaption>Un minuteur mécanique. Cron, c'est la même idée avec davantage de champs : vous décrivez quand, et quelque chose d'autre se souvient d'agir.</figcaption>
+  </figure>
+
+  <p>Une entrée cron, ce sont cinq champs de temps et une commande. Dans l'ordre : <strong>minute, heure, jour du mois, mois, jour de la semaine</strong>.</p>
+
+  <pre><code>{`30 4 * * 1  /usr/local/bin/backup.sh`}</code></pre>
+
+  <p>Cela se lit : minute 30, heure 4, n'importe quel jour du mois, n'importe quel mois, jour de la semaine 1. Quatre heures et demie du matin, le lundi.</p>
+
+  <h2>Le vocabulaire d'un champ</h2>
+  <p>Chaque champ accepte plus qu'un simple nombre. <code>*</code> signifie toutes les valeurs. <code>1-5</code> est un intervalle. <code>1,15</code> est une liste. <code>*/15</code> est un pas - une valeur sur quinze, soit quatre fois par heure dans le champ des minutes.</p>
+  <p>Deux champs acceptent aussi des noms : les mois de <code>JAN</code> à <code>DEC</code>, les jours de la semaine de <code>SUN</code> à <code>SAT</code>. Et le champ jour de la semaine a une bizarrerie connue : <strong>0 et 7 désignent tous deux le dimanche</strong> dans la plupart des implémentations.</p>
+
+  <h2>Le champ qui est un OU</h2>
+  <p>Voici la partie qui surprend, et elle mérite une seconde lecture.</p>
+  <p>Le jour du mois et le jour de la semaine sont deux façons différentes de désigner le même jour. Quand vous n'en remplissez qu'un et laissez l'autre à <code>*</code>, cron se comporte exactement comme prévu. Quand vous remplissez <strong>les deux</strong>, POSIX spécifie qu'un jour correspondant à <em>l'un ou l'autre</em> champ déclenche la tâche.</p>
+  <p>C'est un <strong>OU</strong>, pas un ET.</p>
+
+  <img src="https://images.pexels.com/photos/273153/pexels-photo-273153.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Gros plan d'un calendrier mural imprimé montrant les noms des jours de la semaine dans une colonne à gauche et les numéros des jours du mois dans une grille, avec les noms de mois en plusieurs langues" width="1200" height="420" loading="lazy" />
+
+  <p>Ainsi <code>0 0 1 * 1</code> ne veut pas dire « le premier du mois, s'il tombe un lundi ». Cela veut dire <strong>le premier de chaque mois, et tous les lundis</strong> - soit environ cinq fois plus d'exécutions que prévu.</p>
+  <p>Le raisonnement derrière ce choix se défend. Un ET ferait que la plupart des combinaisons ne se déclencheraient presque jamais : « le 31 quand c'est un vendredi » arrive une ou deux fois par an. Le OU permet à une seule ligne d'exprimer « mensuel et hebdomadaire » sans seconde entrée. Mais c'est l'inverse de ce que la syntaxe laisse croire, et c'est là que des tâches planifiées s'exécutent discrètement les mauvais jours.</p>
+
+  <h2>Les raccourcis, et pourquoi ils ne sont pas portables</h2>
+  <p>Beaucoup d'implémentations acceptent <code>@daily</code>, <code>@hourly</code>, <code>@weekly</code>, <code>@monthly</code> et <code>@reboot</code>. Ils sont pratiques et ils <strong>ne font pas partie de POSIX</strong> : ils viennent de Vixie cron et de ses descendants.</p>
+  <p>Sur une machine que vous maîtrisez, cela n'a pas d'importance. Dans quelque chose qui doit tourner n'importe où - une image de conteneur, un script que vous distribuez - les cinq champs explicites sont le choix sûr. <code>@reboot</code> en particulier n'a aucun équivalent dans le standard, et son comportement dépend entièrement de l'implémentation.</p>
+
+  <h2>Ce que cron ne fait pas</h2>
+  <p><strong>Il ne rattrape pas.</strong> Si la machine était éteinte à 4h30, la tâche de 4h30 n'a pas tourné et ne sera pas relancée. Cron se déclenche sur une correspondance d'horloge, il ne tient pas de file d'attente du travail manqué.</p>
+  <p><strong>Il ne vous donne pas votre environnement de connexion.</strong> Une tâche cron s'exécute avec un <code>PATH</code> minimal et rien de votre profil shell. Le « ça marche dans mon terminal mais pas dans cron » le plus fréquent est une commande trouvée via un <code>PATH</code> que cron n'a pas. Utilisez des chemins absolus.</p>
+  <p><strong>Il n'empêche pas le chevauchement.</strong> Si une tâche planifiée toutes les cinq minutes en prend six, vous obtenez deux copies simultanées. Cron lancera la suivante quoi qu'il arrive ; le fichier de verrou est votre affaire, pas la sienne.</p>
+  <p><strong>Il ne vous dit pas qu'il a échoué.</strong> La sortie part par courriel si le courriel est configuré, et dans le néant sinon. Redirigez vers un fichier de journal et consultez-le, ou vous l'apprendrez par la sauvegarde manquante.</p>
+
+  <h2>Lisez l'expression avant de lui faire confiance</h2>
+  <p>Parce que le OU est invisible dans la syntaxe, une expression qui a l'air juste peut être fausse d'une manière qui ne se manifeste que des semaines plus tard. La décoder champ par champ avant de déployer coûte quelques secondes - c'est à cela que sert le <a href="/fr/cron-expression.html">décodeur d'expression cron</a> de ce site.</p>
+
+  <p class="disc">Un calendrier avec les noms des jours sur le côté et les numéros de jours dans la grille. Cron a un champ pour chacun, et quand vous remplissez les deux, il retient l'un OU l'autre - pas les deux ensemble.</p>
+  </div>
+</Base>

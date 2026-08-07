@@ -1,0 +1,55 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/es/e/blog/2026-08-07-what-is-cron.html';
+const title = '¿Qué es cron? Los cinco campos, y el que es un O (2026)';
+const description = 'Una expresión cron son cinco campos y un comando. Casi todo es evidente. Lo que no lo es, y ejecuta tareas en silencio días que nunca previste, es lo que ocurre cuando rellenas a la vez el día del mes y el día de la semana.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://images.pexels.com/photos/2087742/pexels-photo-2087742.jpeg?auto=compress&cs=tinysrgb&w=1600" datePublished="2026-08-07" dateModified="2026-08-07">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/es/">Home</a><span>/</span><a href="/es/e">Guides</a><span>/</span>Qué es cron</nav>
+  <p class="kicker">cron · programación de tareas · unix</p>
+  <h1>¿Qué es cron, exactamente?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Aug 7, 2026</span><span>8 min read</span><span class="tag">#cron</span><span class="tag">#tareas</span><span class="tag">#unix</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.pexels.com/photos/2087742/pexels-photo-2087742.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Un temporizador mecánico Kodak de cuarto oscuro sobre una superficie de madera, con el dial graduado en minutos" width="1200" height="420" loading="eager" />
+    <figcaption>Un temporizador mecánico. Cron es la misma idea con más campos: tú describes cuándo, y otra cosa se acuerda de actuar.</figcaption>
+  </figure>
+
+  <p>Una entrada cron son cinco campos de tiempo y un comando. En orden: <strong>minuto, hora, día del mes, mes, día de la semana</strong>.</p>
+
+  <pre><code>{`30 4 * * 1  /usr/local/bin/backup.sh`}</code></pre>
+
+  <p>Se lee: minuto 30, hora 4, cualquier día del mes, cualquier mes, día de la semana 1. Las cuatro y media de la madrugada, los lunes.</p>
+
+  <h2>El vocabulario de un campo</h2>
+  <p>Cada campo admite más que un número suelto. <code>*</code> significa todos los valores. <code>1-5</code> es un rango. <code>1,15</code> es una lista. <code>*/15</code> es un paso: un valor de cada quince, o sea cuatro veces por hora en el campo de los minutos.</p>
+  <p>Dos campos admiten además nombres: los meses de <code>JAN</code> a <code>DEC</code>, los días de la semana de <code>SUN</code> a <code>SAT</code>. Y el campo del día de la semana tiene una rareza conocida: <strong>tanto 0 como 7 significan domingo</strong> en la mayoría de implementaciones.</p>
+
+  <h2>El campo que es un O</h2>
+  <p>Aquí está la parte que sorprende, y merece una segunda lectura.</p>
+  <p>El día del mes y el día de la semana son dos formas distintas de nombrar el mismo día. Si rellenas solo uno y dejas el otro en <code>*</code>, cron se comporta como esperas. Si rellenas <strong>los dos</strong>, POSIX especifica que un día que coincida con <em>cualquiera</em> de los campos dispara la tarea.</p>
+  <p>Es un <strong>O</strong>, no un Y.</p>
+
+  <img src="https://images.pexels.com/photos/273153/pexels-photo-273153.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Primer plano de un calendario de pared impreso con los nombres de los días de la semana en una columna a la izquierda y los números de los días del mes en una cuadrícula, con los meses en varios idiomas" width="1200" height="420" loading="lazy" />
+
+  <p>Así que <code>0 0 1 * 1</code> no significa «el primero del mes, si cae en lunes». Significa <strong>el primero de cada mes, y todos los lunes</strong>, es decir unas cinco veces más ejecuciones de las previstas.</p>
+  <p>El razonamiento detrás de la decisión se sostiene. Un Y haría que casi ninguna combinación se disparara: «el 31 cuando sea viernes» ocurre una o dos veces al año. El O permite que una sola línea exprese «mensual y semanal» sin una segunda entrada. Pero es lo contrario de lo que la sintaxis aparenta, y ahí es donde las tareas programadas se ejecutan sin ruido los días equivocados.</p>
+
+  <h2>Los atajos, y por qué no son portables</h2>
+  <p>Muchas implementaciones aceptan <code>@daily</code>, <code>@hourly</code>, <code>@weekly</code>, <code>@monthly</code> y <code>@reboot</code>. Son cómodos y <strong>no forman parte de POSIX</strong>: vienen de Vixie cron y sus descendientes.</p>
+  <p>En una máquina que controlas, da igual. En algo que debe funcionar en cualquier sitio - una imagen de contenedor, un script que distribuyes - los cinco campos explícitos son la opción segura. <code>@reboot</code> en particular no tiene equivalente alguno en el estándar, y su comportamiento depende por completo de la implementación.</p>
+
+  <h2>Lo que cron no hace</h2>
+  <p><strong>No recupera lo perdido.</strong> Si la máquina estaba apagada a las 4:30, la tarea de las 4:30 no se ejecutó y no se relanzará. Cron dispara por coincidencia de reloj, no mantiene una cola de trabajo pendiente.</p>
+  <p><strong>No te da tu entorno de sesión.</strong> Una tarea cron se ejecuta con un <code>PATH</code> mínimo y sin nada de tu perfil de shell. El «funciona en mi terminal pero no en cron» más común es un comando encontrado por un <code>PATH</code> que cron no tiene. Usa rutas absolutas.</p>
+  <p><strong>No evita el solapamiento.</strong> Si una tarea programada cada cinco minutos tarda seis, acabas con dos copias a la vez. Cron lanzará la siguiente igualmente; el fichero de bloqueo es cosa tuya, no suya.</p>
+  <p><strong>No te avisa de que falló.</strong> La salida va al correo si el correo está configurado, y a ninguna parte si no lo está. Redirige a un fichero de registro y míralo, o te enterarás por la copia de seguridad que falta.</p>
+
+  <h2>Lee la expresión antes de fiarte de ella</h2>
+  <p>Como el O es invisible en la sintaxis, una expresión que parece correcta puede estar mal de un modo que solo se nota semanas después. Descodificarla campo por campo antes de desplegar cuesta unos segundos: para eso está el <a href="/es/cron-expression.html">descodificador de expresiones cron</a> de este sitio.</p>
+
+  <p class="disc">Un calendario con los nombres de los días al lado y los números en la cuadrícula. Cron tiene un campo para cada uno, y cuando rellenas ambos, coincide con uno U otro, no con los dos juntos.</p>
+  </div>
+</Base>

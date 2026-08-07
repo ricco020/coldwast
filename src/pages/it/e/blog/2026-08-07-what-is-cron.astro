@@ -1,0 +1,55 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/it/e/blog/2026-08-07-what-is-cron.html';
+const title = 'Che cos\'è cron? I cinque campi, e quello che è un OR (2026)';
+const description = 'Un\'espressione cron è cinque campi e un comando. Quasi tutto è ovvio. Ciò che non lo è, e che esegue in silenzio processi in giorni mai previsti, è quello che accade quando compili sia il giorno del mese sia il giorno della settimana.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://images.pexels.com/photos/2087742/pexels-photo-2087742.jpeg?auto=compress&cs=tinysrgb&w=1600" datePublished="2026-08-07" dateModified="2026-08-07">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/it/">Home</a><span>/</span><a href="/it/e">Guides</a><span>/</span>Che cos'è cron</nav>
+  <p class="kicker">cron · pianificazione · unix</p>
+  <h1>Che cos'è cron, esattamente?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Aug 7, 2026</span><span>8 min read</span><span class="tag">#cron</span><span class="tag">#pianificazione</span><span class="tag">#unix</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.pexels.com/photos/2087742/pexels-photo-2087742.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Un timer meccanico Kodak da camera oscura su una superficie di legno, con il quadrante graduato in minuti" width="1200" height="420" loading="eager" />
+    <figcaption>Un timer meccanico. Cron è la stessa idea con più campi: tu descrivi quando, e qualcos'altro si ricorda di agire.</figcaption>
+  </figure>
+
+  <p>Una voce cron è cinque campi temporali e un comando. Nell'ordine: <strong>minuto, ora, giorno del mese, mese, giorno della settimana</strong>.</p>
+
+  <pre><code>{`30 4 * * 1  /usr/local/bin/backup.sh`}</code></pre>
+
+  <p>Si legge: minuto 30, ora 4, qualsiasi giorno del mese, qualsiasi mese, giorno della settimana 1. Le quattro e mezza del mattino, il lunedì.</p>
+
+  <h2>Il vocabolario di un campo</h2>
+  <p>Ogni campo accetta più di un singolo numero. <code>*</code> significa ogni valore. <code>1-5</code> è un intervallo. <code>1,15</code> è un elenco. <code>*/15</code> è un passo: un valore ogni quindici, quindi quattro volte l'ora nel campo dei minuti.</p>
+  <p>Due campi accettano anche nomi: i mesi da <code>JAN</code> a <code>DEC</code>, i giorni della settimana da <code>SUN</code> a <code>SAT</code>. E il campo del giorno della settimana ha una stranezza nota: <strong>sia 0 sia 7 indicano la domenica</strong> nella maggior parte delle implementazioni.</p>
+
+  <h2>Il campo che è un OR</h2>
+  <p>Ecco la parte che sorprende, e merita una seconda lettura.</p>
+  <p>Giorno del mese e giorno della settimana sono due modi diversi di nominare lo stesso giorno. Se ne compili uno solo e lasci l'altro a <code>*</code>, cron si comporta esattamente come ti aspetti. Se li compili <strong>entrambi</strong>, POSIX specifica che un giorno corrispondente a <em>uno qualsiasi</em> dei due campi fa scattare il processo.</p>
+  <p>È un <strong>OR</strong>, non un AND.</p>
+
+  <img src="https://images.pexels.com/photos/273153/pexels-photo-273153.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Primo piano di un calendario da parete stampato con i nomi dei giorni della settimana in una colonna a sinistra e i numeri dei giorni del mese in una griglia, con i mesi in più lingue" width="1200" height="420" loading="lazy" />
+
+  <p>Quindi <code>0 0 1 * 1</code> non significa «il primo del mese, se è lunedì». Significa <strong>il primo di ogni mese, e ogni lunedì</strong>: all'incirca cinque volte le esecuzioni previste.</p>
+  <p>Il ragionamento dietro la scelta regge. Un AND farebbe scattare quasi mai la maggior parte delle combinazioni: «il 31 quando cade di venerdì» capita una o due volte l'anno. L'OR consente a una sola riga di esprimere «mensile e settimanale» senza una seconda voce. Ma è l'opposto di ciò che la sintassi lascia intendere, ed è lì che i processi pianificati girano in silenzio nei giorni sbagliati.</p>
+
+  <h2>Le scorciatoie, e perché non sono portabili</h2>
+  <p>Molte implementazioni accettano <code>@daily</code>, <code>@hourly</code>, <code>@weekly</code>, <code>@monthly</code> e <code>@reboot</code>. Sono comode e <strong>non fanno parte di POSIX</strong>: vengono da Vixie cron e dai suoi discendenti.</p>
+  <p>Su una macchina che controlli, poco importa. In qualcosa che deve girare ovunque - un'immagine di container, uno script che distribuisci - i cinque campi espliciti sono la scelta sicura. <code>@reboot</code> in particolare non ha alcun equivalente nello standard, e il suo comportamento dipende interamente dall'implementazione.</p>
+
+  <h2>Che cosa cron non fa</h2>
+  <p><strong>Non recupera.</strong> Se la macchina era spenta alle 4:30, il processo delle 4:30 non è girato e non verrà rilanciato. Cron scatta sulla corrispondenza dell'orologio, non tiene una coda del lavoro perso.</p>
+  <p><strong>Non ti dà il tuo ambiente di login.</strong> Un processo cron gira con un <code>PATH</code> minimo e nulla del tuo profilo di shell. Il «funziona nel mio terminale ma non in cron» più comune è un comando trovato tramite un <code>PATH</code> che cron non ha. Usa percorsi assoluti.</p>
+  <p><strong>Non impedisce la sovrapposizione.</strong> Se un processo pianificato ogni cinque minuti ne impiega sei, ottieni due copie in esecuzione. Cron avvierà comunque la successiva; il file di lock è affar tuo, non suo.</p>
+  <p><strong>Non ti dice che è fallito.</strong> L'output va per posta se la posta è configurata, e nel nulla se non lo è. Reindirizza su un file di log e guardalo, oppure lo scoprirai dal backup mancante.</p>
+
+  <h2>Leggi l'espressione prima di fidartene</h2>
+  <p>Poiché l'OR è invisibile nella sintassi, un'espressione dall'aria giusta può essere sbagliata in un modo che si manifesta solo settimane dopo. Decodificarla campo per campo prima di distribuire costa pochi secondi: è a questo che serve il <a href="/it/cron-expression.html">decodificatore di espressioni cron</a> di questo sito.</p>
+
+  <p class="disc">Un calendario con i nomi dei giorni di lato e i numeri nella griglia. Cron ha un campo per ciascuno, e quando li compili entrambi corrisponde all'uno O all'altro, non a entrambi insieme.</p>
+  </div>
+</Base>
