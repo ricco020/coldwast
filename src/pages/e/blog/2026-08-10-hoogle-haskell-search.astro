@@ -1,0 +1,89 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-08-10-hoogle-haskell-search.html';
+const title = 'Hoogle: Searching Haskell by Type Signature (2026)';
+const description = 'Hoogle searches the Haskell libraries by function name and, unusually, by type signature. How type search works, the query syntax that matters, how to scope results to your own dependencies, and when to run it locally.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://images.pexels.com/photos/6550462/pexels-photo-6550462.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" datePublished="2026-08-10" dateModified="2026-08-10">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e">Guides</a><span>/</span>Hoogle</nav>
+  <p class="kicker">Haskell · tooling · search</p>
+  <h1>Hoogle: searching Haskell by type signature</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Aug 10, 2026</span><span>7 min read</span><span class="tag">#haskell</span><span class="tag">#hoogle</span><span class="tag">#tooling</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.pexels.com/photos/6550462/pexels-photo-6550462.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" alt="A wall of pale wooden card-catalogue drawers with small metal label holders, one drawer pulled out at mid height revealing tightly packed upright index cards" width="940" height="627" loading="eager" />
+    <figcaption>A wall of wooden catalogue drawers, one pulled open on its tightly packed index cards. Card catalogues let you look things up by title or by author - two indexes over the same collection. Hoogle adds a third: the shape of what you want.</figcaption>
+  </figure>
+
+  <p>Most language documentation lets you search by name. That works when you know what the function is called. It does not help with the far more common situation: you know the <em>shape</em> of the thing you need - you have a list of <code>Maybe</code> values and you want a list of the ones that are present - but you have no idea what its author named it.</p>
+
+  <p><strong>Hoogle</strong> is the Haskell API search engine, and its distinguishing feature is that it searches by <strong>type signature</strong> as well as by name. That is only practical because Haskell types are precise enough to identify a function almost uniquely.</p>
+
+  <h2>Searching by name</h2>
+  <p>The ordinary case works as you would expect. Type <code>foldr</code> and you get the function, its type, the module it lives in, and its documentation. Partial names work too, and Hoogle tolerates approximate spelling, so <code>conc</code> will find <code>concat</code> and <code>concatMap</code>.</p>
+
+  <h2>Searching by type</h2>
+  <p>The interesting case is querying with a type instead. Suppose you have a <code>[Maybe a]</code> and want an <code>[a]</code>. You do not need to remember the name:</p>
+  <pre><code>[Maybe a] -&gt; [a]</code></pre>
+  <p>That query finds <code>catMaybes</code>, in <code>Data.Maybe</code>. The same trick answers a whole class of questions:</p>
+  <pre><code>(a -&gt; b) -&gt; [a] -&gt; [b]        -- finds map
+[[a]] -&gt; [a]                  -- finds concat
+(a -&gt; Bool) -&gt; [a] -&gt; [a]     -- finds filter, takeWhile, dropWhile
+Monad m =&gt; [m a] -&gt; m [a]     -- finds sequence</code></pre>
+  <p>Type variables are matched structurally, not literally: writing <code>a</code> or <code>x</code> makes no difference, because Hoogle unifies them. It will also return results whose types are more general than your query, which is usually what you want - a function on any <code>Foldable</code> will answer a question you asked about lists.</p>
+
+  <figure><img src="https://images.pexels.com/photos/1375261/pexels-photo-1375261.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" alt="Side view at desk level of one hand typing on a silver laptop keyboard, the machine's USB and headphone ports visible along the edge, with a wall of bookshelves blurred behind" width="940" height="627" loading="lazy" style="width:100%;height:auto;border-radius:12px" /><figcaption>A hand on a laptop keyboard photographed from the side, close enough to show the USB and headphone ports along the case edge; shelves recede out of focus behind. Type search is a typing exercise: you describe the shape you want and let the index do the recall.</figcaption></figure>
+
+  <h2>Query syntax worth knowing</h2>
+  <ul>
+    <li><strong>Restrict to a package</strong> - <code>+containers</code> limits results to that package; <code>-containers</code> excludes it.</li>
+    <li><strong>Restrict to a module</strong> - <code>+Data.Map</code> works the same way for module names.</li>
+    <li><strong>Mix name and type</strong> - <code>map +base</code> narrows a common name to the standard library.</li>
+    <li><strong>Search operators</strong> - you can paste an operator such as <code>&lt;$&gt;</code> directly.</li>
+    <li><strong>Find a type or class</strong> - searching a capitalised name such as <code>Traversable</code> returns the definition rather than functions using it.</li>
+  </ul>
+
+  <h2>What Hoogle indexes, and what it does not</h2>
+  <p>The public instance indexes a large set of Hackage packages, but <strong>not all of Hackage</strong>, and the default search scope is narrower than the full index. This matters in practice: a query that returns nothing has not proved the function does not exist. It may simply live in a package outside the scope you searched. Widening the scope, or adding an explicit <code>+package</code>, often turns an empty result into the answer.</p>
+  <p>Hoogle also matches on types as written, so a function hidden behind a type synonym or a newtype wrapper may not surface for the underlying shape. If a query looks like it should match and does not, try the more general form - drop a constraint, or replace a concrete type with a variable.</p>
+
+  <h2>Running Hoogle over your own dependencies</h2>
+  <p>The public site indexes public packages. It does not know about your project, your private modules, or the exact versions you have pinned. A local instance does, and it is the version that pays off on a real codebase:</p>
+  <pre><code>-- with Cabal
+cabal install hoogle
+hoogle generate
+hoogle server --local --port=8080
+
+-- with Stack
+stack hoogle -- generate --local
+stack hoogle -- server --local --port=8080</code></pre>
+  <p>Generating the database builds an index from the packages actually installed for your project, so searches return the functions you can really call - at the versions you are really using. Which of the two workflows you use depends on the build tool you picked; see <a href="/e/blog/2026-06-14-stack-vs-cabal-haskell.html">Stack vs Cabal</a> if you have not chosen yet. Both are installed for you by <a href="/e/blog/2026-06-14-ghcup-install-haskell.html">GHCup</a>.</p>
+
+  <h2>Hoogle inside the editor</h2>
+  <p>You do not have to leave your editor to get most of this. <a href="/e/blog/2026-06-14-haskell-language-server.html">Haskell Language Server</a> surfaces types and documentation on hover and at completion, which covers the "what is this thing" half. Hoogle covers the other half - the "what is the thing I do not know the name of" half - and that is the one a language server cannot answer, because you have nothing to point at yet.</p>
+
+  <h2>Why type search works in Haskell</h2>
+  <p>It is worth being clear about why this is not a feature every language could copy. Haskell functions are typically pure and their signatures carry most of the meaning: <code>(a -&gt; b) -&gt; [a] -&gt; [b]</code> has very few sensible implementations, so the type alone nearly identifies the function. In a language where a signature is <code>(Object, Object) -&gt; Object</code>, or where any function may do anything at all, the same query would return everything and therefore nothing. The precision of the type system is what makes the index useful.</p>
+
+  <h2>FAQ</h2>
+  <p><strong>What is Hoogle?</strong> A search engine for Haskell libraries. It looks up functions, types and classes by name, and also by type signature.</p>
+  <p><strong>How do I search Hoogle by type?</strong> Enter the signature itself, for example <code>[Maybe a] -&gt; [a]</code>. Type variable names do not matter; results whose types are more general than the query are included.</p>
+  <p><strong>Why does my search return nothing?</strong> Most often the package is outside the scope you searched, not missing. Add <code>+packagename</code>, widen the scope, or generalise the query by dropping a constraint.</p>
+  <p><strong>Can Hoogle search my own project?</strong> Yes, by generating a local database with <code>hoogle generate</code> (or <code>stack hoogle -- generate --local</code>) and running <code>hoogle server --local</code>. That indexes the packages and versions your project actually uses.</p>
+  <p><strong>Is Hoogle the same as Hayoo?</strong> No. Hayoo is a separate Haskell search engine with its own index and scope. Hoogle is the one most commonly linked from Haskell documentation.</p>
+
+  <div class="affbox">
+    <span class="tag">Recommended</span>
+    <h3>Run a local Hoogle for your team</h3>
+    <p>A local Hoogle server indexes your project's own dependencies, and a small always-on VPS makes it reachable by the whole team instead of one laptop. DigitalOcean offers VPS and cloud servers suited to that kind of small persistent service.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">See DigitalOcean cloud →</a>
+    <p class="disc">Affiliate link - supports these free guides.</p>
+  </div>
+
+  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about Haskell tooling, and is not affiliated with Hoogle, Hackage, Stackage or the GHC maintainers. Commands reflect standard Haskell tooling - verify options against the current Hoogle documentation, which changes between releases.</div>
+
+  <p class="note">Related reading: <a href="/e/blog/2026-06-14-stack-vs-cabal-haskell.html">Stack vs Cabal</a> · <a href="/e/blog/2026-08-04-cabal-add-dependency.html">How to Add a Dependency in Cabal</a></p>
+  </div>
+</Base>
