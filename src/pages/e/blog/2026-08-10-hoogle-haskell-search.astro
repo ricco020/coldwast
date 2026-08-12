@@ -25,6 +25,8 @@ const description = 'Hoogle searches the Haskell libraries by function name and,
   <p>The ordinary case works as you would expect. Type <code>foldr</code> and you get the function, its type, the module it lives in, and its documentation. Partial names work too, and Hoogle tolerates approximate spelling, so <code>conc</code> will find <code>concat</code> and <code>concatMap</code>.</p>
 
   <h2>Searching by type</h2>
+  <p>All of this assumes you can write the signature you are after. If the notation itself is the obstacle - what the arrows group to, why some names are lowercase, what the fat arrow does - <a href="/e/blog/2026-08-12-read-haskell-type-signature.html">how to read a Haskell type signature</a> covers the rules first.</p>
+
   <p>The interesting case is querying with a type instead. Suppose you have a <code>[Maybe a]</code> and want an <code>[a]</code>. You do not need to remember the name:</p>
   <pre><code>[Maybe a] -&gt; [a]</code></pre>
   <p>That query finds <code>catMaybes</code>, in <code>Data.Maybe</code>. The same trick answers a whole class of questions:</p>

@@ -1,0 +1,117 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-08-12-read-haskell-type-signature.html';
+const title = 'How to Read a Haskell Type Signature (2026)';
+const description = 'Haskell signatures look cryptic until you know the three rules that govern them: the arrow groups to the right, lowercase names are variables, and the fat arrow is not an argument. Read left to right, with worked examples.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://images.pexels.com/photos/4458203/pexels-photo-4458203.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" datePublished="2026-08-12" dateModified="2026-08-12">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e">Guides</a><span>/</span>Type signatures</nav>
+  <p class="kicker">Haskell · types · fundamentals</p>
+  <h1>How to read a Haskell type signature</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Aug 12, 2026</span><span>8 min read</span><span class="tag">#haskell</span><span class="tag">#types</span><span class="tag">#beginners</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.pexels.com/photos/4458203/pexels-photo-4458203.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" alt="A blue-toned architectural drawing photographed at a shallow angle, its cover sheet lettered in white with the Russian words for architectural drawings above a dimensioned floor plan" width="940" height="627" loading="eager" />
+    <figcaption>A blue architectural sheet shot at a shallow angle. White lettering across the top reads СТРОИТЕЛЬНЫЕ ЧЕРТЕЖИ, with ARCHITECTURAL DRAWINGS beneath it; below, a floor plan covered in dimension figures falls out of focus toward the bottom edge.</figcaption>
+  </figure>
+
+  <p>Haskell signatures are the part beginners skip, and they are the part that pays the most to learn. A signature is not documentation attached to a function - it is a near-complete specification of what the function can do. Once you can read one, you can often guess what a function does without reading a line of its implementation.</p>
+
+  <p>The apparent difficulty comes from three conventions that nobody states explicitly. Learn those and the rest is reading left to right.</p>
+
+  <h2>Rule 1 - the arrow groups to the right</h2>
+  <p>Start with the simplest case:</p>
+  <pre><code>not :: Bool -&gt; Bool</code></pre>
+  <p>Read it as "not takes a <code>Bool</code> and gives back a <code>Bool</code>". The <code>::</code> means "has type". So far so obvious. Now two arguments:</p>
+  <pre><code>replicate :: Int -&gt; a -&gt; [a]</code></pre>
+  <p>The temptation is to read this as "takes an <code>Int</code> and an <code>a</code>, returns a list". That reading works in practice, but it hides what is really going on, and the real structure explains several things that otherwise look arbitrary. The arrow <strong>associates to the right</strong>, so the compiler sees:</p>
+  <pre><code>replicate :: Int -&gt; (a -&gt; [a])</code></pre>
+  <p><strong>Every Haskell function takes exactly one argument.</strong> <code>replicate</code> takes an <code>Int</code> and returns <em>another function</em>, which takes an <code>a</code> and returns a list. This is currying, and it is why partial application needs no special syntax: <code>replicate 3</code> is simply the inner function, perfectly usable on its own.</p>
+  <p>The practical rule: <strong>the last thing after the last arrow is the return type; everything before is an argument</strong> - as long as no parentheses say otherwise.</p>
+
+  <h2>Rule 2 - lowercase means "any type"</h2>
+  <p>Case is significant, and it carries a lot of meaning:</p>
+  <ul>
+    <li><strong>Uppercase</strong> - a concrete type. <code>Bool</code>, <code>Int</code>, <code>String</code>, <code>Maybe</code>.</li>
+    <li><strong>Lowercase</strong> - a <em>type variable</em>: any type at all, chosen by the caller.</li>
+  </ul>
+  <p>The names themselves mean nothing. <code>a -&gt; a</code> and <code>foo -&gt; foo</code> are the same type. What matters is <strong>which letters repeat</strong>. In <code>a -&gt; a</code>, the two <code>a</code>s must be the same type. In <code>a -&gt; b</code> they may differ - but they are not obliged to, since <code>b</code> can be chosen to equal <code>a</code>.</p>
+  <p>This is where signatures start telling you things. Consider:</p>
+  <pre><code>mystery :: a -&gt; a</code></pre>
+  <p>The function must work for <em>every</em> type, so it cannot inspect its argument - it has no idea what it is. It cannot produce a value of type <code>a</code> from nothing either. Ignoring bottom (an exception or an infinite loop), <strong>there is exactly one thing this function can be</strong>: the identity function. The type alone pins it down. That property is why Haskellers say the types do so much work, and it is what makes searching by signature practical in <a href="/e/blog/2026-08-10-hoogle-haskell-search.html">Hoogle</a>.</p>
+
+  <figure><img src="https://images.pexels.com/photos/6855079/pexels-photo-6855079.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" alt="A grey metal post carrying nine blank arrow-shaped direction signs in cream, grey-blue, red, green, yellow, dark blue, purple, light blue and teal, pointing left and right against a blue sky with white cloud" width="940" height="627" loading="lazy" style="width:100%;height:auto;border-radius:12px" /><figcaption>Nine arrow-shaped signs bolted around a grey post, each a different colour and every one of them blank, pointing left and right against a partly clouded blue sky. Nothing is written on any of them.</figcaption></figure>
+
+  <h2>Rule 3 - the fat arrow is not an argument</h2>
+  <p>This one trips up nearly everybody:</p>
+  <pre><code>elem :: Eq a =&gt; a -&gt; [a] -&gt; Bool</code></pre>
+  <p>The <code>=&gt;</code> is not an arrow in the same sense. Everything to its left is a <strong>constraint</strong>, not a parameter. Read it as: "for any type <code>a</code> that supports equality, <code>elem</code> takes an <code>a</code> and a list of <code>a</code> and returns a <code>Bool</code>."</p>
+  <p>So <code>elem</code> takes <strong>two</strong> arguments, not three. The constraint narrows which types the caller may choose - here, only types with an <code>Eq</code> instance. Multiple constraints are grouped in parentheses and separated by commas:</p>
+  <pre><code>sortOn :: Ord b =&gt; (a -&gt; b) -&gt; [a] -&gt; [a]
+showBoth :: (Show a, Show b) =&gt; a -&gt; b -&gt; String</code></pre>
+  <p>Constraints are also a strong hint about behaviour. A signature carrying <code>Ord</code> almost certainly compares things; one carrying <code>Show</code> will render them as text.</p>
+
+  <h2>Parentheses change the meaning entirely</h2>
+  <p>Because the arrow groups rightward, a pair of parentheses on the left is never decoration:</p>
+  <pre><code>map :: (a -&gt; b) -&gt; [a] -&gt; [b]</code></pre>
+  <p>The first argument is <em>a function</em> from <code>a</code> to <code>b</code>. Remove the parentheses and you get <code>a -&gt; b -&gt; [a] -&gt; [b]</code>, a completely different function taking three arguments. Whenever you see parentheses to the left of an arrow, you are looking at a <strong>higher-order function</strong>: it takes a function as input.</p>
+  <p>Now read <code>map</code> as a whole. It takes a function turning <code>a</code>s into <code>b</code>s, plus a list of <code>a</code>s, and gives a list of <code>b</code>s. The signature already told you it applies the function to each element, and that it cannot reorder, drop or duplicate anything in a way that depends on the values - it does not know what they are.</p>
+
+  <h2>Reading the common shapes</h2>
+  <p>A handful of patterns cover most of what you will meet:</p>
+  <pre><code>filter    :: (a -&gt; Bool) -&gt; [a] -&gt; [a]
+foldr     :: (a -&gt; b -&gt; b) -&gt; b -&gt; [a] -&gt; b
+lookup    :: Eq a =&gt; a -&gt; [(a, b)] -&gt; Maybe b
+fmap      :: Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+putStrLn  :: String -&gt; IO ()
+readFile  :: FilePath -&gt; IO String</code></pre>
+  <ul>
+    <li><code>filter</code> - a test on <code>a</code>, a list of <code>a</code>, a list of <code>a</code>. The element type never changes, so it can only keep or drop.</li>
+    <li><code>lookup</code> - the <code>Maybe b</code> return says failure is possible and is part of the type, not an exception.</li>
+    <li><code>fmap</code> - the variable <code>f</code> is applied to another type, so it is a <em>type constructor</em>, not a plain type. Read <code>f a</code> as "some container or context holding <code>a</code>s".</li>
+    <li><code>putStrLn</code> - <code>IO ()</code> means it performs an effect and returns nothing useful. <code>()</code> is the unit type: exactly one value, carrying no information.</li>
+  </ul>
+
+  <h2>When you cannot tell how many arguments there are</h2>
+  <p>Type synonyms can hide arrows, and this is the one case where reading left to right misleads you:</p>
+  <pre><code>type Handler = Int -&gt; String
+
+process :: Handler -&gt; Bool</code></pre>
+  <p>That looks like one argument, and after expansion it is <code>(Int -&gt; String) -&gt; Bool</code> - still one argument, but a function. Expansion the other way is worse: a synonym for a function type on the <em>right</em> of the last arrow silently adds a parameter. When a signature refuses to make sense, expand the synonyms before doubting yourself.</p>
+
+  <h2>Getting the signature in the first place</h2>
+  <p>You do not have to find these in documentation. In GHCi, <code>:t</code> asks for the type of anything, including a partially applied expression, which is the fastest way to see currying at work:</p>
+  <pre><code>ghci&gt; :t replicate
+replicate :: Int -&gt; a -&gt; [a]
+ghci&gt; :t replicate 3
+replicate 3 :: a -&gt; [a]</code></pre>
+  <p>In an editor, <a href="/e/blog/2026-06-14-haskell-language-server.html">Haskell Language Server</a> shows the same information on hover and can insert a missing top-level signature for you. And when you know the shape you want but not the name, the search runs the other way round - that is exactly what <a href="/e/blog/2026-08-10-hoogle-haskell-search.html">Hoogle's type search</a> is for.</p>
+
+  <h2>A worked example, left to right</h2>
+  <pre><code>traverse :: (Applicative f, Traversable t) =&gt; (a -&gt; f b) -&gt; t a -&gt; f (t b)</code></pre>
+  <p>Take it in order. Everything before <code>=&gt;</code> is a constraint: <code>f</code> must be an <code>Applicative</code>, <code>t</code> must be <code>Traversable</code>. First real argument, in parentheses, is a function from <code>a</code> to <code>f b</code> - it produces an effect. Second argument is <code>t a</code>: a structure holding <code>a</code>s, a list say. The return is <code>f (t b)</code>.</p>
+  <p>So the effect that was <em>inside</em> each element in the argument has moved <em>outside</em> the structure in the result. A list of things each producing an effect becomes one effect producing a list. You have not read the implementation, and you already know what it does.</p>
+
+  <h2>FAQ</h2>
+  <p><strong>What does the double colon mean in Haskell?</strong> <code>::</code> is read "has type". <code>x :: Int</code> means x has type <code>Int</code>. Note this is the opposite of many other languages, where <code>::</code> is a namespace separator.</p>
+  <p><strong>What is the difference between -&gt; and =&gt; in a type signature?</strong> The thin arrow separates arguments and the return type. The fat arrow separates <em>constraints</em> from the type itself: everything to the left of <code>=&gt;</code> restricts which types the caller may choose, and contributes no arguments.</p>
+  <p><strong>Why are some type names lowercase?</strong> Lowercase names are type variables standing for any type, fixed by the caller. Uppercase names are concrete types or type constructors. Repeating the same lowercase letter forces those positions to be the same type.</p>
+  <p><strong>How do I know how many arguments a function takes?</strong> Count the top-level arrows, ignoring anything inside parentheses and anything left of <code>=&gt;</code>. The final type after the last top-level arrow is the return type. Watch for type synonyms, which can hide arrows on either side.</p>
+  <p><strong>What does IO () mean?</strong> An action that performs input or output and returns the unit value <code>()</code> - that is, no useful result. It is the type of things you run for their effect.</p>
+  <p><strong>How do I see the type of an expression?</strong> Use <code>:t expression</code> in GHCi, or hover over the name in an editor running Haskell Language Server.</p>
+
+  <div class="affbox">
+    <span class="tag">Recommended</span>
+    <h3>Somewhere to build when your laptop runs out of memory</h3>
+    <p>GHC and Haskell Language Server are memory-hungry on large projects, and a first full build of a dependency tree is the point where a modest machine starts swapping. Building on a cloud server with more RAM than your laptop is a common way round it. DigitalOcean offers VPS and cloud servers sized for that.</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">See DigitalOcean cloud →</a>
+    <p class="disc">Affiliate link - supports these free guides.</p>
+  </div>
+
+  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about Haskell and is not affiliated with the GHC maintainers or the Haskell Foundation. Signatures shown are those of the standard libraries at the time of writing - check the current documentation, as types are occasionally generalised between releases.</div>
+
+  <p class="note">Related reading: <a href="/e/blog/2026-08-10-hoogle-haskell-search.html">Hoogle: searching Haskell by type signature</a> · <a href="/e/blog/2026-06-14-haskell-monads.html">Monads in Haskell</a> · <a href="/e/blog/2026-06-14-what-is-haskell.html">What is Haskell</a></p>
+  </div>
+</Base>

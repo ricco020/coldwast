@@ -5,12 +5,12 @@ const title = 'Cabal Sandboxes: What They Were, and What Replaced Them (Updated)
 const description = 'A modern, community-updated guide to Cabal sandboxes - the per-project dependency isolation introduced in cabal-install 1.18 - and the nix-style v2-build workflow that replaced them in today\'s Haskell toolchain.';
 ---
 <Base title={title} description={description} path={path} type="article"
-  image="https://coldwa.st/img/cabal-sandbox.svg" datePublished="2013-08-20" dateModified="2026-06-13">
+  image="https://coldwa.st/img/cabal-sandbox.svg" datePublished="2013-08-20" dateModified="2026-08-12">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e">Guides</a><span>/</span>Cabal Sandboxes</nav>
   <p class="kicker">Haskell · Cabal · build tooling</p>
   <h1>Cabal Sandboxes: What They Were, and What Replaced Them</h1>
-  <div class="artmeta"><span>By Coldwast</span><span>Updated Jun 13, 2026</span><span>9 min read</span><span class="tag">#haskell</span><span class="tag">#cabal</span><span class="tag">#build</span></div>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Aug 12, 2026</span><span>9 min read</span><span class="tag">#haskell</span><span class="tag">#cabal</span><span class="tag">#build</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="/img/cabal-sandbox.svg" alt="Three isolated Cabal sandboxes, each holding its own package set, beside a terminal running cabal sandbox init" width="1200" height="420" />
@@ -49,7 +49,7 @@ $ cabal build</code></pre>
   <p>The fix, borrowed conceptually from Nix, was to make builds <strong>content-addressed and globally shared</strong>: build any given package-version-plus-flags combination once, store it under a hash in a global immutable store, and let every project that needs that exact combination reuse it. That is "nix-style local builds", and it arrived as <code>new-build</code> in Cabal 2.0.</p>
 
   <h2 id="today">What to use today (2026)</h2>
-  <figure><img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80&auto=format&fit=crop" alt="Source code on a computer screen" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Source code on a computer screen</figcaption></figure>
+  <figure><img src="https://images.pexels.com/photos/33692749/pexels-photo-33692749.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" alt="A wall of stacked shipping containers photographed head on, four rows high in red, yellow and blue, each with its own serial code stencilled on the doors" loading="lazy" width="940" height="627" style="width:100%;height:auto;border-radius:12px" /><figcaption>Stacked shipping containers filling the frame, doors toward the camera, four rows high in red, yellow and blue. Each carries its own stencilled serial code - MEDU, GLDU, SEGU, TCKU - and its own pair of locking bars; at the right a yellow container sits above a plain red one seen side on.</figcaption></figure>
   <p><code>cabal sandbox</code> was deprecated during the Cabal 2.x series and removed entirely in later releases. The modern, default workflow in current <code>cabal-install</code> needs <strong>no init step at all</strong> - isolation is automatic:</p>
   <pre><code># In any project directory with a .cabal file:
 $ cabal build          # nix-style local build (v2 is the default now)
@@ -93,6 +93,6 @@ cabal.sandbox.config               →  cabal.project (+ cabal.project.freeze)</
   <p>The lesson sandboxes taught - never pollute a global mutable state, isolate per project - won so completely that it is now invisible: it is simply how <code>cabal build</code> behaves. If you are reading this because an old link or tutorial pointed you at <code>cabal sandbox init</code>, you can safely forget the command. Just <code>cabal build</code>.</p>
 
   <hr />
-  <p class="meta">Related: <a href="/e/blog/2017-09-09-Cabal-2-0.html">Cabal 2.0 and nix-style builds</a> · <a href="/e/blog/2011-08-22-GSoC-Final.html">Parallelising cabal-install</a> · <a href="/e">all guides</a></p>
+  <p class="meta">Related: <a href="/e/blog/2017-09-09-Cabal-2-0.html">Cabal 2.0 and nix-style builds</a> · <a href="/e/blog/2026-08-04-cabal-add-dependency.html">Adding a dependency in Cabal today</a> · <a href="/e/blog/2026-06-14-stack-vs-cabal-haskell.html">Stack vs Cabal</a> · <a href="/e/blog/2026-08-12-read-haskell-type-signature.html">How to read a Haskell type signature</a> · <a href="/e/blog/2011-08-22-GSoC-Final.html">Parallelising cabal-install</a> · <a href="/e">all guides</a></p>
   </div>
 </Base>
