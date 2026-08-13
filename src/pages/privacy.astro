@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Privacy - Coldwast" description="What Coldwast measures, what it stores in your browser, and how to switch analytics off.">
+  <div class="reading">
+  <p class="kicker" style="margin-top:30px">Coldwast</p>
+  <h1>Privacy</h1>
+
+  <p>This page describes what this site actually does, not what a template says a site should do.</p>
+
+  <h2>No account, nothing to sign up for</h2>
+  <p>Coldwast has no accounts, no registration and no newsletter. You can read every guide without
+  giving anything, and there is no user database to leak.</p>
+
+  <h2>Audience measurement, and how to turn it off</h2>
+  <p>The site loads Google Analytics (property <code>G-4SQJ15V82L</code>) with IP anonymisation
+  enabled. Be aware of how the switch works here: analytics is loaded <strong>unless</strong> you
+  have declined it — it is opt-out, not opt-in. Your choice is kept in your browser's local storage
+  under the key <code>cw-consent</code>; declining sets it to <code>no</code> and the analytics
+  script is then never fetched on subsequent visits.</p>
+  <p>Clearing your browser storage resets that choice, which means measurement resumes until you
+  decline again. We would rather say so plainly than let you discover it.</p>
+
+  <h2>Affiliate links</h2>
+  <p>Some guides contain affiliate links to hosting, tools or learning resources. If you follow one
+  and subscribe, we may receive a commission at no extra cost to you. Following such a link takes
+  you to the partner's site, which applies its own privacy policy and may set its own cookies. These
+  links are disclosed where they appear and never change which tool a guide recommends.</p>
+  <p>When you click one, the site records the event in its own analytics (which link, which page) —
+  not who you are.</p>
+
+  <h2>Hosting and server logs</h2>
+  <p>The site is served by our hosting provider, which keeps technical logs — IP address, timestamp,
+  requested page — for security and troubleshooting. That is standard for any web server. We do not
+  use those logs to build profiles of readers.</p>
+
+  <h2>Your rights, and what we hold</h2>
+  <p>We hold no personal data about you: no account, no email address unless you write to us, no
+  profile. If you have written to us, ask and your message will be deleted. For anything concerning
+  this page, use the <a href="/contact.html">contact page</a>.</p>
+  </div>
+</Base>
