@@ -1,0 +1,21 @@
+---
+// Affiliate redirect (cloak). Destination + tracking live here in one place.
+// O2switch via Awin - Eric publisher 979469, merchant 13324. MID VERIFIE le 2026-08-13 en
+// suivant la redirection: 13324 -> o2switch.fr. Le catalogue interne annoncait 15380, qui
+// redirige en realite vers PlanetHoster — un lien construit sur cette donnee aurait envoye les visiteurs chez un concurrent.
+// O2switch: 20,66% de conversion et 3,47 EUR d'EPC, le meilleur du portefeuille Awin.
+const DEST = 'https://www.awin1.com/cread.php?awinmid=13324&awinaffid=979469&clickref=coldwa-o2switch';
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="robots" content="noindex,nofollow" />
+  <meta http-equiv="refresh" content={`0; url=${DEST}`} />
+  <title>Redirecting…</title>
+</head>
+<body>
+  <p>Redirecting to our recommended French web host… <a href={DEST} rel="sponsored nofollow noopener">Continue →</a></p>
+  <script is:inline define:vars={{ DEST }}>location.replace(DEST);</script>
+</body>
+</html>
