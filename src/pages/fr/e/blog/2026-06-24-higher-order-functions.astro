@@ -35,6 +35,8 @@ const description = 'Une fonction d’ordre supérieur prend une fonction en arg
   <h2>Comment elles remplacent les boucles</h2>
   <p>Dans un langage impératif, on écrirait une boucle avec un compteur, un accumulateur et un indice explicite. La même intention exprimée avec une fonction d’ordre supérieur tient en une seule ligne, car l’itération est déjà intégrée dans <code>map</code> ou <code>fold</code>. C’est pourquoi le code purement fonctionnel, qui évite les compteurs de boucle mutables, s’appuie autant sur ces fonctions et sur la récursion - les deux couvrent le travail que font ailleurs les boucles. Les <a href="/fr/e/blog/2026-06-14-haskell-list-comprehensions.html">listes en compréhension</a> sont souvent un raccourci lisible pour la même combinaison <code>map</code>-et-<code>filter</code>.</p>
 
+  <p>Sous le capot, <code>map</code> et <code>fold</code> sont eux-mêmes définis par <a href="/fr/e/blog/2026-06-16-what-is-recursion.html">récursion</a> : c’est la façon dont un style sans boucle exprime la répétition.</p>
+
   <figure><img src="/img/hof-closure-arg.jpg" alt="Du code source Swift sur un écran sombre où un bloc de fermeture est passé comme argument completionHandler à un appel d’ouverture de document" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>Une fonction d’ordre supérieur dans un autre langage : ici une closure (le bloc entre accolades) est passée comme argument completionHandler à document.open - une fonction confiée à une autre fonction, exactement l’idée derrière map et filter.</figcaption></figure>
 
   <h2>Renvoyer une fonction : là où ça devient puissant</h2>

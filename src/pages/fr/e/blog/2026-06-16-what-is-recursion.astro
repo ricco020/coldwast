@@ -1,0 +1,124 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/fr/e/blog/2026-06-16-what-is-recursion.html';
+const title = 'Qu\'est-ce que la récursion ? Une introduction claire avec des exemples (2026)';
+const description = 'La récursion, c\'est quand une fonction s\'appelle elle-même pour résoudre un problème en le réduisant à des sous-problèmes plus petits. Ce que c\'est, le cas de base et le cas récursif, des exemples réels en Python et Haskell, récursion contre itération, la récursion terminale, les pièges classiques, et sa place en programmation fonctionnelle.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-16" dateModified="2026-08-14">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/fr/">Accueil</a><span>/</span><a href="/fr/e">Guides</a><span>/</span>Qu'est-ce que la récursion</nav>
+  <p class="kicker">Programmation · concepts · récursion</p>
+  <h1>Qu'est-ce que la récursion ?</h1>
+  <div class="artmeta"><span>Par Coldwast</span><span>Mis à jour le 14 août 2026</span><span>8 min de lecture</span><span class="tag">#recursion</span><span class="tag">#concepts</span><span class="tag">#fonctionnel</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80&auto=format&fit=crop" alt="Du code source coloré par la coloration syntaxique sur un écran sombre" width="1200" height="420" loading="eager" />
+    <figcaption>Du code source colorisé sur un écran — la récursion est une technique pour écrire des fonctions de ce genre, qui s'appellent elles-mêmes afin de découper un problème en morceaux plus petits.</figcaption>
+  </figure>
+
+  <p>Certains problèmes sont naturellement auto-similaires : un dossier contient des dossiers, une phrase est faite de propositions faites de mots, une grande somme n'est qu'un nombre plus une somme plus petite. La <strong>récursion</strong> est la technique de programmation qui épouse directement cette forme — une fonction qui résout un problème en s'appelant <em>elle-même</em> sur une version plus petite du même problème. Ce guide explique ce qu'est réellement la récursion, les deux ingrédients indispensables, des exemples de code réels, la comparaison avec les boucles, ce qu'est la récursion terminale, les pièges classiques, et pourquoi elle est au cœur de la programmation fonctionnelle.</p>
+
+  <h2>La définition courte</h2>
+  <p><strong>La récursion, c'est quand une fonction s'appelle elle-même pour résoudre un problème en le réduisant à une ou plusieurs instances plus petites du même problème.</strong> Chaque appel traite un morceau un peu plus petit, et les appels se poursuivent jusqu'à ce que le problème soit assez simple pour être résolu directement. À ce moment-là, les réponses se recombinent en remontant pour résoudre le problème d'origine.</p>
+
+  <h2>Les deux ingrédients</h2>
+  <p>Toute fonction récursive correcte comporte exactement deux parties. Il suffit d'en oublier une pour que tout casse.</p>
+  <p><strong>1. Le cas de base.</strong> C'est la plus petite version du problème que l'on peut résoudre sans récursion — c'est lui qui <em>arrête</em> la récursion. Pour la factorielle, le cas de base est <code>0! = 1</code>. Pour la somme d'une liste, c'est la liste vide, dont la somme vaut <code>0</code>.</p>
+  <p><strong>2. Le cas récursif.</strong> Il traite le problème général en faisant un peu de travail, puis en rappelant la fonction sur une entrée <em>plus petite</em>, qui se rapproche du cas de base. Le mot qui compte est <strong>plus petite</strong> : si l'appel récursif ne porte pas sur un problème réellement plus petit, on n'atteint jamais le cas de base.</p>
+  <p>Sans cas de base atteignable, une fonction récursive s'appelle indéfiniment. En pratique, elle ne boucle pas en silence : elle épuise la pile d'appels du programme et plante avec un <strong>débordement de pile</strong> (stack overflow).</p>
+
+  <figure><img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=1200&q=80&auto=format&fit=crop" alt="Un éditeur de code affichant du code coloré sur un écran sombre" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Un éditeur de code sur écran sombre — une fonction récursive n'est que du code ordinaire qui, quelque part dans son corps, s'appelle lui-même sur une entrée plus petite jusqu'à atteindre le cas de base.</figcaption></figure>
+
+  <h2>Premier exemple : la factorielle</h2>
+  <p>La factorielle d'un nombre <code>n</code> (notée <code>n!</code>) vaut <code>n × (n-1) × … × 1</code>. Sa structure récursive est évidente : <code>n! = n × (n-1)!</code>, avec <code>0! = 1</code>. En Python :</p>
+  <pre><code>def factorial(n):
+    if n == 0:          # cas de base
+        return 1
+    return n * factorial(n - 1)   # cas recursif, sur un n plus petit
+
+factorial(5)   # 120</code></pre>
+  <p>Déroulez-la : <code>factorial(5)</code> attend <code>factorial(4)</code>, qui attend <code>factorial(3)</code>, jusqu'à <code>factorial(0)</code>, qui renvoie <code>1</code> directement. Les réponses se multiplient ensuite en remontant : <code>1 → 1 → 2 → 6 → 24 → 120</code>. La même idée en Haskell, où la récursion est l'outil quotidien pour ce type de boucle :</p>
+  <pre><code>factorial :: Integer -&gt; Integer
+factorial 0 = 1
+factorial n = n * factorial (n - 1)</code></pre>
+
+  <h2>D'autres exemples</h2>
+  <p><strong>Sommer une liste.</strong> La somme d'une liste est son premier élément plus la somme du reste ; la somme d'une liste vide vaut zéro.</p>
+  <pre><code># Python
+def total(xs):
+    if not xs:          # cas de base : liste vide
+        return 0
+    return xs[0] + total(xs[1:])
+
+total([3, 1, 4, 1])     # 9</code></pre>
+  <pre><code>-- Haskell
+total :: [Int] -&gt; Int
+total []     = 0
+total (x:xs) = x + total xs</code></pre>
+  <p><strong>Parcourir un arbre.</strong> La récursion brille sur les données imbriquées et auto-similaires — précisément là où les boucles deviennent pénibles. Pour compter les nœuds d'un arbre binaire, on compte ce nœud plus les nœuds de chaque sous-arbre :</p>
+  <pre><code># Python : un noeud est un dict avec des enfants left/right optionnels
+def count_nodes(node):
+    if node is None:        # cas de base : sous-arbre vide
+        return 0
+    return 1 + count_nodes(node["left"]) + count_nodes(node["right"])</code></pre>
+  <p>Remarquez la même forme à chaque fois : un cas de base pour la plus petite entrée, et un cas récursif qui combine les résultats d'entrées plus petites.</p>
+
+  <h2>Récursion contre itération</h2>
+  <p>Tout ce qui s'écrit avec la récursion s'écrit aussi avec une boucle (itération), et réciproquement — les deux ont la même puissance. Le choix porte sur la clarté et le coût.</p>
+  <p>La <strong>récursion</strong> se lit souvent plus naturellement pour les problèmes auto-similaires (arbres, structures imbriquées, algorithmes « diviser pour régner » comme le tri rapide ou le tri fusion). Son inconvénient : chaque appel consomme une trame de pile, donc une récursion profonde peut coûter beaucoup de mémoire, voire faire déborder la pile.</p>
+  <p>L'<strong>itération</strong> (une boucle <code>for</code> ou <code>while</code>) utilise un espace de pile constant et se révèle généralement plus rapide dans les langages qui n'optimisent pas les appels récursifs. Elle peut être plus claire pour un travail simple et linéaire du type « faire ceci N fois ». La factorielle ci-dessus en est un bon exemple : une boucle la calcule sans faire croître la pile du tout.</p>
+  <p>Règle empirique : privilégiez la récursion quand les données ou l'algorithme sont naturellement récursifs et que la profondeur est bornée ; privilégiez une boucle quand le travail est plat et que la performance brute ou une itération très profonde compte.</p>
+
+  <h2>La récursion terminale, et pourquoi elle compte</h2>
+  <p>Un appel récursif est en <strong>position terminale</strong> quand il est la toute dernière chose que fait la fonction : son résultat est renvoyé directement, sans traitement en attente. La première <code>factorial</code> ci-dessus n'est <em>pas</em> terminale : après le retour de <code>factorial(n - 1)</code>, il reste une multiplication à faire, donc chaque appel doit rester sur la pile. On peut la réécrire en transportant le résultat courant dans un accumulateur, de sorte que l'appel récursif <em>soit</em> la dernière étape :</p>
+  <pre><code>def factorial(n, acc=1):
+    if n == 0:
+        return acc
+    return factorial(n - 1, acc * n)   # appel terminal : plus rien apres</code></pre>
+  <p>Quand l'appel récursif est en position terminale, un compilateur peut effectuer l'<strong>optimisation d'appel terminal (TCO)</strong> : réutiliser la trame de pile courante au lieu d'en empiler une nouvelle, ce qui rend la récursion aussi économique qu'une boucle et supprime le risque de débordement. Que cela se produise dépend du langage : Scheme et beaucoup de langages fonctionnels garantissent la TCO, et le modèle paresseux de Haskell, optimisé par GHC, traite souvent efficacement la récursion à accumulateur. Point crucial : <strong>CPython ne fait pas de TCO</strong> — Python conserve chaque trame et plafonne même la profondeur de récursion (environ 1000 par défaut), si bien que la version terminale ci-dessus n'apporte aucun bénéfice en Python, où une simple boucle est le choix idiomatique. Vérifiez toujours votre langage avant de compter sur une récursion terminale profonde.</p>
+
+  <h2>Les pièges classiques</h2>
+  <p><strong>Cas de base absent ou inatteignable.</strong> Le bug numéro un. Si aucun appel n'atteint jamais le cas de base (ou si l'entrée ne rétrécit pas réellement), vous obtenez une récursion infinie et un débordement de pile.</p>
+  <p><strong>Trop de profondeur.</strong> Même correcte, une récursion peut déborder sur de très grandes entrées dans les langages sans TCO. Si vous risquez de descendre à des dizaines de milliers de niveaux, préférez l'itération ou une pile explicite.</p>
+  <p><strong>Travail redondant.</strong> La suite de Fibonacci récursive naïve recalcule sans cesse les mêmes valeurs :</p>
+  <pre><code>def fib(n):
+    if n &lt; 2:
+        return n
+    return fib(n - 1) + fib(n - 2)   # recalcule des sous-problemes qui se recouvrent</code></pre>
+  <p>Elle se ramifie en deux appels environ à chaque niveau, si bien que son temps d'exécution croît <em>exponentiellement</em> — <code>fib(40)</code> engendre déjà des centaines de millions d'appels. Le remède est la <strong>mémoïsation</strong> : mettre en cache chaque résultat au premier calcul, pour que les sous-problèmes répétés soient résolus instantanément.</p>
+  <pre><code>from functools import lru_cache
+
+@lru_cache(maxsize=None)
+def fib(n):
+    if n &lt; 2:
+        return n
+    return fib(n - 1) + fib(n - 2)   # chaque n n est calcule qu une fois</code></pre>
+  <p>Avec le cache, la même récursion s'exécute en temps linéaire. La leçon : la récursion décrit clairement <em>ce qu'il faut</em> calculer, mais il reste à surveiller la quantité de travail que les appels dupliquent réellement.</p>
+
+  <h2>Récursion et programmation fonctionnelle</h2>
+  <p>En programmation fonctionnelle, la récursion assure une bonne part du travail que les boucles font en style impératif. Comme le style fonctionnel pur évite les compteurs de boucle mutables et les modifications sur place, la répétition s'exprime par une fonction qui s'appelle elle-même sur des données plus petites — exactement les exemples de listes et d'arbres ci-dessus. Des langages comme <a href="/fr/e/blog/2026-06-14-what-is-haskell.html">Haskell</a> s'appuient sur la récursion (et sur des <a href="/fr/e/blog/2026-06-24-higher-order-functions.html">fonctions d'ordre supérieur</a> comme <code>map</code> et <code>fold</code>, elles-mêmes récursives en dessous), et l'<a href="/fr/e/blog/2026-06-14-lazy-evaluation-haskell.html">évaluation paresseuse</a> de Haskell permet même à la récursion de définir des structures infinies, calculées seulement aussi loin que vous les lisez.</p>
+
+  <h2>Questions fréquentes</h2>
+  <details><summary>Qu'est-ce que la récursion, en termes simples ?</summary><p>La récursion, c'est quand une fonction s'appelle elle-même pour résoudre un problème en le découpant en versions plus petites du même problème. Chaque appel traite un cas légèrement plus petit jusqu'à atteindre un <strong>cas de base</strong> qui arrête la chaîne. L'exemple classique est la factorielle : <code>factorial(n) = n × factorial(n-1)</code>, avec <code>factorial(0) = 1</code> comme cas de base.</p></details>
+  <details><summary>Qu'est-ce qu'un cas de base ?</summary><p>Le cas de base est la condition qui arrête la récursion — le plus petit problème que la fonction résout directement, sans se rappeler elle-même. Sans cas de base correct, une fonction récursive s'appelle indéfiniment et plante avec un débordement de pile. Toute fonction récursive a besoin d'au moins un cas de base et d'un cas récursif qui s'en rapproche.</p></details>
+  <details><summary>Quelle différence entre récursion et itération ?</summary><p>Les deux répètent du travail, mais l'itération utilise des boucles (for/while) et un état explicite, tandis que la récursion répète en s'appelant elle-même et se sert de la pile d'appels pour conserver l'état. La récursion est souvent plus claire pour des structures naturellement récursives (arbres, données imbriquées, diviser pour régner) ; l'itération est généralement plus économe en mémoire, puisqu'elle évite les trames de pile. Beaucoup de solutions récursives se réécrivent en boucles, et inversement.</p></details>
+  <details><summary>Pourquoi ma récursion provoque-t-elle un débordement de pile ?</summary><p>Chaque appel récursif ajoute une trame à la pile. Si la récursion est trop profonde — ou si le cas de base est absent ou jamais atteint — la pile manque d'espace et le programme plante. Les remèdes : vérifier que le cas de base est correct, réduire la profondeur, ou convertir en itération ; certains langages optimisent aussi les appels terminaux pour éviter de faire croître la pile.</p></details>
+
+  <div class="note">Guide indépendant, maintenu par la communauté. <strong>coldwa.st</strong> est un site de ressources pour la programmation ; cet article est un texte explicatif original sur la récursion. Les limites de pile, l'optimisation d'appel terminal et la syntaxe varient selon les langages ; vérifiez la documentation du vôtre.</div>
+
+  <p class="note">À lire aussi : <a href="/fr/e/blog/2026-06-14-what-is-an-algorithm.html">Qu'est-ce qu'un algorithme</a> · <a href="/fr/e/blog/2026-06-15-what-is-a-variable.html">Qu'est-ce qu'une variable</a> · <a href="/fr/e">index des guides</a></p>
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "inLanguage": "fr",
+    "mainEntity": [
+      { "@type": "Question", "name": "Qu'est-ce que la récursion, en termes simples ?", "acceptedAnswer": { "@type": "Answer", "text": "La récursion, c'est quand une fonction s'appelle elle-même pour résoudre un problème en le découpant en versions plus petites du même problème. Chaque appel traite un cas plus petit jusqu'à atteindre un cas de base qui arrête la chaîne. Exemple : factorial(n) = n × factorial(n-1), avec factorial(0) = 1 comme cas de base." } },
+      { "@type": "Question", "name": "Qu'est-ce qu'un cas de base en récursion ?", "acceptedAnswer": { "@type": "Answer", "text": "Le cas de base est la condition qui arrête la récursion : le plus petit problème que la fonction résout directement sans se rappeler elle-même. Sans cas de base correct, la fonction récurse indéfiniment et plante avec un débordement de pile. Toute fonction récursive a besoin d'un cas de base et d'un cas récursif qui s'en rapproche." } },
+      { "@type": "Question", "name": "Quelle est la différence entre récursion et itération ?", "acceptedAnswer": { "@type": "Answer", "text": "Les deux répètent du travail : l'itération utilise des boucles et un état explicite, la récursion s'appelle elle-même et se sert de la pile d'appels. La récursion est plus claire pour les arbres, les données imbriquées et le diviser-pour-régner ; l'itération est généralement plus économe en mémoire. Beaucoup de solutions passent de l'une à l'autre." } },
+      { "@type": "Question", "name": "Qu'est-ce qu'un débordement de pile en récursion ?", "acceptedAnswer": { "@type": "Answer", "text": "Chaque appel récursif ajoute une trame de pile. Si la récursion est trop profonde, ou si le cas de base est absent ou jamais atteint, la pile manque d'espace et le programme plante. Corrigez le cas de base, réduisez la profondeur, ou convertissez en itération ; certains langages optimisent les appels terminaux." } }
+    ]
+  })} />
+</Base>
