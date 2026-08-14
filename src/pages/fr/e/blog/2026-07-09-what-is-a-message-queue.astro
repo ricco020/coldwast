@@ -47,6 +47,8 @@ const description = 'Une file de messages est un tampon entre services : une par
   <h2>Quand vous n’en avez pas besoin</h2>
   <p>Une file est une pièce mobile à faire tourner et surveiller. Si le travail est rapide et que l’appelant a vraiment besoin du résultat tout de suite, un appel de fonction direct ou une écriture en <a href="/fr/e/blog/2026-06-14-what-is-an-api.html">base de données</a> est plus simple. Optez pour une file de messages quand vous avez besoin de tâches d’arrière-plan asynchrones, de tamponner des pics de charge, ou de découpler des services qui ne devraient pas dépendre directement l’un de l’autre - les mêmes raisons qui vous font déjà placer des services derrière un <a href="/fr/e/blog/2026-06-26-what-is-a-reverse-proxy.html">reverse proxy</a> ou un <a href="/fr/e/blog/2026-06-26-what-is-a-load-balancer.html">load balancer</a>.</p>
 
+  <p>Dès que ces pièces se multiplient, savoir où le temps est réellement parti cesse d’être évident : c’est le problème que traite <a href="/fr/e/blog/2026-08-14-what-is-opentelemetry.html">OpenTelemetry</a>, en suivant une même requête d’un service à l’autre.</p>
+
   <h2>En résumé</h2>
   <p>Une file de messages est un tampon entre services : les producteurs déposent du travail, les consommateurs le récupèrent, et les deux sont découplés tandis que la charge est lissée. Utilisez une simple file de travail pour répartir des tâches, le pub/sub pour diffuser des événements, attendez-vous à une livraison au-moins-une-fois (rendez donc vos consommateurs idempotents), et optez pour RabbitMQ, Kafka, Redis ou une file cloud managée quand il vous faut un traitement asynchrone fiable.</p>
 
