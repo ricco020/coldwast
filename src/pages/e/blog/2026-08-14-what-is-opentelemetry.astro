@@ -1,0 +1,77 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-08-14-what-is-opentelemetry.html';
+const title = 'What Is OpenTelemetry? Traces, Metrics and Logs Explained (2026)';
+const description = 'OpenTelemetry is a vendor-neutral standard for producing traces, metrics and logs: you instrument your code once and choose the backend afterwards. What the API, SDK and Collector each do, what the three signals are for, and what OpenTelemetry deliberately does not give you.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://images.pexels.com/photos/577210/pexels-photo-577210.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" datePublished="2026-08-14" dateModified="2026-08-14">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e">Guides</a><span>/</span>OpenTelemetry</nav>
+  <p class="kicker">Observability · standards · devops</p>
+  <h1>What is OpenTelemetry?</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Aug 14, 2026</span><span>9 min read</span><span class="tag">#opentelemetry</span><span class="tag">#observability</span><span class="tag">#devops</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.pexels.com/photos/577210/pexels-photo-577210.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" alt="A silver laptop open on a dark low table in a living room, its screen filled with a web analytics dashboard: a trend line, a blue cohort grid, a world map and a blue donut chart" width="940" height="627" loading="eager" />
+    <figcaption>A laptop on a low table showing an analytics dashboard - trend line, blue cohort grid, world map and a donut chart, with a grey sofa out of focus behind it. The dashboard is the easy part; what feeds it is the question.</figcaption>
+  </figure>
+
+  <p><strong>OpenTelemetry is a standard for producing telemetry, not a tool for looking at it.</strong> That single sentence resolves most of the confusion around it. You instrument your application once, in a vendor-neutral way, and decide separately where the data goes.</p>
+
+  <p>It is a CNCF project, formed in 2019 from the merger of two earlier efforts - OpenTracing and OpenCensus - which had split the same problem between them. The merger is the whole point: before it, choosing an instrumentation library meant choosing a camp.</p>
+
+  <h2>The problem it exists to solve</h2>
+
+  <p>Before OpenTelemetry, instrumenting an application meant importing your monitoring vendor's SDK throughout your codebase. Changing vendor meant touching every service that had ever emitted a metric.</p>
+
+  <p>That is vendor lock-in expressed as source code, and it is unusually sticky, because the cost of leaving is spread across every team that ever added a span. OpenTelemetry inverts it: <strong>the instrumentation belongs to you, the backend is a configuration choice.</strong></p>
+
+  <h2>The three signals</h2>
+
+  <p>OpenTelemetry defines three kinds of telemetry, and they answer different questions.</p>
+
+  <p><strong>Traces</strong> follow a single request across services. A trace is made of spans, each with a start, a duration and a parent, so you can see that a request spent 40 ms in your API and 2 seconds waiting on a database. This is what tells you <em>where</em> time went.</p>
+
+  <p><strong>Metrics</strong> are aggregated numbers over time: request rate, error count, queue depth, memory in use. They are cheap to store and to graph, and they tell you <em>that</em> something changed, rarely why.</p>
+
+  <p><strong>Logs</strong> are the familiar timestamped lines. Their addition to OpenTelemetry matters less for the format than for the correlation: a log emitted inside a span can carry that span's identifiers, so a line in a log file leads back to the exact request that produced it.</p>
+
+  <p>Used together the division of labour is clear: metrics notice the problem, traces locate it, logs explain it.</p>
+
+  <figure>
+    <img src="https://images.pexels.com/photos/106344/pexels-photo-106344.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" alt="A tablet standing on a wooden table showing an analytics dashboard with a traffic-sources pie chart, a world map overlay, a visitors line chart and a content table, with a white cup and a smartphone blurred beside it" width="940" height="627" loading="lazy" />
+    <figcaption>A tablet on a wooden desk showing a traffic dashboard: a pie chart splitting direct, search and referral traffic, a world map, and a visitors line reading 2,958. A white cup, a phone and a stylus sit around it, out of focus.</figcaption>
+  </figure>
+
+  <h2>API, SDK, Collector: what each part actually is</h2>
+
+  <p>Three names come up constantly, and mixing them up is the usual source of confusion.</p>
+
+  <p>The <strong>API</strong> is what your code calls. It is deliberately minimal and does nothing on its own: an application built against the API but without an SDK produces no telemetry and pays almost nothing for the calls. This is what makes it safe for a library author to instrument their library - the decision to collect is left to the application.</p>
+
+  <p>The <strong>SDK</strong> is the implementation you configure: sampling, batching, and which exporters to use. It turns API calls into data that leaves the process.</p>
+
+  <p>The <strong>Collector</strong> is a separate binary that receives telemetry, transforms it and forwards it. It is optional, and it is also the part people end up appreciating most: it lets you change backend, add filtering, drop noisy attributes or fan out to two systems <em>without redeploying your applications</em>.</p>
+
+  <h2>What OpenTelemetry does not do</h2>
+
+  <p>It does not store anything, and it does not draw a single graph. There is no OpenTelemetry UI to log into.</p>
+
+  <p>You still need a backend - Jaeger, Prometheus, Grafana, or a commercial platform - and that is a deliberate scope decision rather than a gap. It also means adopting OpenTelemetry does not by itself give you observability: it gives you portable data, and you still have to choose where to put it and who reads it at three in the morning.</p>
+
+  <p>The second thing worth knowing before adopting it: telemetry has a cost. Traces at full volume on a busy service produce a lot of data, which is why sampling exists and why it deserves thought early rather than after the first bill.</p>
+
+  <h2>Should you use it?</h2>
+
+  <p><strong>If you run more than a couple of services, yes</strong> - and the argument is portability rather than features. Instrumenting once against a standard means the next backend migration is a configuration change instead of a rewrite.</p>
+
+  <p><strong>If you run a single application</strong>, the honest answer is that plain logs and a couple of metrics will serve you for a long time. Distributed tracing solves a distributed problem; adopting it before you have one adds moving parts without answering a question you actually have.</p>
+
+  <p>The practical starting point for most teams is auto-instrumentation: for several languages, agents can produce useful traces from an unmodified application. It is enough to see whether the data tells you anything before you spend a sprint adding spans by hand.</p>
+
+  <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about OpenTelemetry and is not affiliated with the OpenTelemetry project or the CNCF. The specification evolves and signal stability differs between languages - check the current documentation for your runtime before relying on a detail.</div>
+
+  <p class="note">Related reading: <a href="/e/blog/2026-06-19-what-is-docker.html">What is Docker</a> · <a href="/e/blog/2026-06-19-what-is-kubernetes.html">What is Kubernetes</a> · <a href="/e/blog/2026-07-09-what-is-a-message-queue.html">What is a message queue</a></p>
+  </div>
+</Base>

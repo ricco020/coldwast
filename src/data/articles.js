@@ -1,7 +1,18 @@
 // Auto-généré depuis src/pages/e/blog/*.astro - liste partagée home + archive (/blog). Trié date desc.
-// Régénéré le 2026-08-14 : 25 des 52 articles manquaient (index figé depuis juin),
-// donc invisibles de la home ET de /blog malgré des pages servies en 200.
+// ⚠️ À REGÉNÉRER APRÈS CHAQUE AJOUT : un article absent d'ici répond 200 mais n'est
+// listé nulle part. 25 articles étaient dans ce cas de juin au 2026-08-14.
+// Contrôle: python3 scripts/guard-index-desync.py (câblé dans cortex-cycle §0-ter).
 export const articles = [
+  {
+    "href": "/e/blog/2026-08-14-what-is-opentelemetry.html",
+    "title": "What Is OpenTelemetry? Traces, Metrics and Logs Explained (2026)",
+    "dek": "OpenTelemetry is a vendor-neutral standard for producing traces, metrics and logs: you instrument your code once and choose the backend afterwards. What the API, SDK and Collector each do, what the three signals are for, and what OpenTelemetry deliberately does not give you.",
+    "img": "https://images.pexels.com/photos/577210/pexels-photo-577210.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+    "imgAlt": "A silver laptop open on a dark low table in a living room, its screen filled with a web analytics dashboard: a trend line, a blue cohort grid, a world map and a blue donut chart",
+    "date": "Aug 14, 2026",
+    "read": "9 min read",
+    "cats": "Opentelemetry, Observability, Devops"
+  },
   {
     "href": "/e/blog/2026-08-12-read-haskell-type-signature.html",
     "title": "How to Read a Haskell Type Signature (2026)",
