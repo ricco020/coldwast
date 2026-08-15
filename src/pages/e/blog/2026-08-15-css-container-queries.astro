@@ -1,0 +1,73 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-08-15-css-container-queries.html';
+const title = 'CSS Container Queries: Components That Respond to Their Container, Not the Window (2026)';
+const description = 'Media queries ask how wide the viewport is. Container queries ask how much room this component actually has. That difference is why the same card can finally work in a sidebar and in a full-width grid without a modifier class.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://images.pexels.com/photos/114907/pexels-photo-114907.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" datePublished="2026-08-15" dateModified="2026-08-15">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e">Guides</a><span>/</span>Container queries</nav>
+  <p class="kicker">CSS · layout · web standards</p>
+  <h1>CSS container queries</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Aug 15, 2026</span><span>8 min read</span><span class="tag">#css</span><span class="tag">#layout</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.pexels.com/photos/114907/pexels-photo-114907.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" alt="Overhead view of a wooden desk with an open silver laptop showing a web page of photo cards, a black smartphone displaying 10:35 AM, glasses, a cafetiere and a cup of coffee" />
+    <figcaption>The same card grid on a laptop and on a phone. Media queries only know the size of the screen; container queries know how much space the grid itself was given.</figcaption>
+  </figure>
+
+  <p><strong>A media query asks how wide the window is. A container query asks how much room this component actually has.</strong> Almost everything else about the feature follows from that one difference.</p>
+
+  <p>It matters because a component rarely occupies the whole viewport. A card in a sidebar and the same card in a three-column grid see identical media queries and completely different amounts of space - which is why the usual workaround was a modifier class like <code>card--compact</code>, applied by whoever placed the component and forgotten by whoever moved it.</p>
+
+  <h2>The two lines that make it work</h2>
+
+  <p>You declare an element as a container, then query it. Nothing else is required.</p>
+
+  <pre><code>.card-list &#123;
+  container-type: inline-size;
+  container-name: cards;
+&#125;
+
+&#64;container cards (min-width: 30rem) &#123;
+  .card &#123; display: grid; grid-template-columns: 8rem 1fr; &#125;
+&#125;</code></pre>
+
+  <p><code>container-type: inline-size</code> tells the browser to track the element's inline dimension - its width in horizontal writing modes - and to allow queries against it. The name is optional; without one, a component queries its nearest ancestor container.</p>
+
+  <p>The query itself reads like a media query and behaves like one, except that the thing being measured is an element rather than the viewport.</p>
+
+  <h2>The rule people trip over</h2>
+
+  <p><strong>An element cannot query itself.</strong> If you set <code>container-type</code> on <code>.card</code> and then write <code>&#64;container</code> rules targeting <code>.card</code>, nothing happens - and nothing warns you.</p>
+
+  <p>The container must be an ancestor of what you are styling. In practice that means declaring the container on the wrapper and styling the children inside the query. Once you have internalised that, most of the surprises disappear.</p>
+
+  <p>The second surprise is layout containment. <code>container-type: inline-size</code> makes the element's size independent of its contents in the inline direction, which is exactly what allows the browser to measure it without circular reasoning - but it also means an element that used to be sized by its children may now collapse. Check your wrappers after adding it.</p>
+
+  <h2>Container query units</h2>
+
+  <p>Alongside the queries come units relative to the container rather than the viewport: <code>cqw</code> and <code>cqh</code> for one percent of its inline and block size, plus <code>cqi</code>, <code>cqb</code>, <code>cqmin</code> and <code>cqmax</code>.</p>
+
+  <p>They are what makes truly portable typography possible - <code>font-size: 4cqi</code> scales a heading with the space the component was given, not with the browser window. Use them sparingly: text that scales continuously is easy to make unreadable at the extremes, and a couple of steps in a query is often kinder than a fluid formula.</p>
+
+  <h2>Where this actually changes how you work</h2>
+
+  <p>The honest answer is: in design systems, and much less elsewhere.</p>
+
+  <p>If you ship components that other people place in layouts you do not control, container queries remove an entire category of coordination. The component becomes responsible for its own adaptation, and the person using it no longer has to know which variant to pick.</p>
+
+  <p>If you build page-level layouts for a single site, media queries remain perfectly appropriate. The page really does respond to the viewport, and reaching for containers everywhere adds indirection without buying anything.</p>
+
+  <h2>Support, and what to do about it</h2>
+
+  <p>Container queries are supported across current versions of Chrome, Edge, Firefox and Safari, and have been for long enough that they are a normal tool rather than an experiment. The remaining question is your own support floor, not the feature's readiness.</p>
+
+  <p>If you must support older browsers, the graceful path is to write the component so that its default state - outside any <code>&#64;container</code> rule - is the narrow one. Browsers that do not understand the query simply keep the compact layout, which is usable everywhere. Progressive enhancement works here precisely because the fallback is a real design rather than a broken one.</p>
+
+  <h2>The short version</h2>
+
+  <p>Set <code>container-type: inline-size</code> on the wrapper, query it with <code>&#64;container</code>, and style the children - never the container itself. Reach for it when a component must work in places you do not control; keep media queries for the page. And design the un-queried state to be the narrow one, so that anything which does not understand the rule still gets something sensible.</p>
+  </div>
+</Base>
