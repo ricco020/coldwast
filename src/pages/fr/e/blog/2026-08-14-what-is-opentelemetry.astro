@@ -14,12 +14,12 @@ const description = 'OpenTelemetry est un standard indépendant des éditeurs po
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.pexels.com/photos/577210/pexels-photo-577210.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" alt="Un ordinateur portable argenté ouvert sur une table basse sombre dans un salon, son écran rempli d'un tableau de bord d'analytics : courbe de tendance, grille de cohortes bleue, carte du monde et anneau bleu" width="940" height="627" loading="eager" />
-    <figcaption>Un portable sur une table basse affichant un tableau de bord d'analytics — courbe de tendance, grille de cohortes bleue, carte du monde et diagramme en anneau, avec un canapé gris flou derrière. Le tableau de bord est la partie facile ; ce qui l'alimente est la vraie question.</figcaption>
+    <figcaption>Un portable sur une table basse affichant un tableau de bord d'analytics, courbe de tendance, grille de cohortes bleue, carte du monde et diagramme en anneau, avec un canapé gris flou derrière. Le tableau de bord est la partie facile ; ce qui l'alimente est la vraie question.</figcaption>
   </figure>
 
   <p><strong>OpenTelemetry est un standard pour PRODUIRE de la télémétrie, pas un outil pour la regarder.</strong> Cette seule phrase dissipe l'essentiel de la confusion qui l'entoure. Vous instrumentez votre application une fois, de façon indépendante des éditeurs, et vous décidez séparément où partent les données.</p>
 
-  <p>C'est un projet de la CNCF, né en 2019 de la fusion de deux efforts antérieurs — OpenTracing et OpenCensus — qui se partageaient le même problème. Cette fusion est tout l'enjeu : avant elle, choisir une bibliothèque d'instrumentation revenait à choisir un camp.</p>
+  <p>C'est un projet de la CNCF, né en 2019 de la fusion de deux efforts antérieurs, OpenTracing et OpenCensus, qui se partageaient le même problème. Cette fusion est tout l'enjeu : avant elle, choisir une bibliothèque d'instrumentation revenait à choisir un camp.</p>
 
   <h2>Le problème qu'il résout</h2>
 
@@ -48,7 +48,7 @@ const description = 'OpenTelemetry est un standard indépendant des éditeurs po
 
   <p>Trois noms reviennent sans cesse, et les confondre est la source habituelle des malentendus.</p>
 
-  <p>L'<strong>API</strong> est ce que votre code appelle. Elle est délibérément minimale et ne fait rien par elle-même : une application compilée avec l'API mais sans SDK ne produit aucune télémétrie et ne paie presque rien pour ces appels. C'est ce qui rend l'instrumentation sûre pour l'auteur d'une bibliothèque — la décision de collecter est laissée à l'application.</p>
+  <p>L'<strong>API</strong> est ce que votre code appelle. Elle est délibérément minimale et ne fait rien par elle-même : une application compilée avec l'API mais sans SDK ne produit aucune télémétrie et ne paie presque rien pour ces appels. C'est ce qui rend l'instrumentation sûre pour l'auteur d'une bibliothèque, la décision de collecter est laissée à l'application.</p>
 
   <p>Le <strong>SDK</strong> est l'implémentation que vous configurez : échantillonnage, mise en lots, et exporteurs à utiliser. Il transforme les appels d'API en données qui quittent le processus.</p>
 
@@ -58,19 +58,19 @@ const description = 'OpenTelemetry est un standard indépendant des éditeurs po
 
   <p>Il ne stocke rien, et ne trace pas un seul graphique. Il n'y a pas d'interface OpenTelemetry où se connecter.</p>
 
-  <p>Il vous faut toujours un backend — Jaeger, Prometheus, Grafana, ou une plateforme commerciale — et c'est une décision de périmètre délibérée, pas un manque. Cela signifie aussi qu'adopter OpenTelemetry ne vous donne pas l'observabilité pour autant : cela vous donne des données portables, et il reste à choisir où les mettre et qui les lit à trois heures du matin.</p>
+  <p>Il vous faut toujours un backend, Jaeger, Prometheus, Grafana, ou une plateforme commerciale, et c'est une décision de périmètre délibérée, pas un manque. Cela signifie aussi qu'adopter OpenTelemetry ne vous donne pas l'observabilité pour autant : cela vous donne des données portables, et il reste à choisir où les mettre et qui les lit à trois heures du matin.</p>
 
-  <p>La seconde chose à savoir avant d'adopter : la télémétrie a un coût. Des traces à plein volume sur un service chargé produisent beaucoup de données — c'est la raison d'être de l'échantillonnage, et cela mérite d'y penser tôt plutôt qu'après la première facture.</p>
+  <p>La seconde chose à savoir avant d'adopter : la télémétrie a un coût. Des traces à plein volume sur un service chargé produisent beaucoup de données: c'est la raison d'être de l'échantillonnage, et cela mérite d'y penser tôt plutôt qu'après la première facture.</p>
 
   <h2>Faut-il l'utiliser ?</h2>
 
-  <p><strong>Si vous exploitez plus de deux ou trois services, oui</strong> — et l'argument est la portabilité, pas les fonctionnalités. Instrumenter une fois contre un standard fait de la prochaine migration de backend un changement de configuration au lieu d'une réécriture.</p>
+  <p><strong>Si vous exploitez plus de deux ou trois services, oui</strong>, et l'argument est la portabilité, pas les fonctionnalités. Instrumenter une fois contre un standard fait de la prochaine migration de backend un changement de configuration au lieu d'une réécriture.</p>
 
   <p><strong>Si vous n'avez qu'une seule application</strong>, la réponse honnête est que des logs simples et deux ou trois métriques vous serviront longtemps. Le traçage distribué résout un problème distribué ; l'adopter avant d'en avoir un ajoute des pièces mobiles sans répondre à une question que vous vous posez réellement.</p>
 
   <p>Le point de départ pratique, pour la plupart des équipes, c'est l'auto-instrumentation : dans plusieurs langages, des agents produisent des traces utiles à partir d'une application non modifiée. C'est assez pour voir si ces données vous apprennent quelque chose avant de passer un sprint à ajouter des spans à la main.</p>
 
-  <div class="note">Guide indépendant, maintenu par la communauté. <strong>coldwa.st</strong> est un site de ressources pour la programmation ; cet article est un texte explicatif original sur OpenTelemetry et n'est affilié ni au projet OpenTelemetry ni à la CNCF. La spécification évolue et la stabilité des signaux diffère selon les langages — vérifiez la documentation en vigueur pour votre runtime avant de vous fier à un détail.</div>
+  <div class="note">Guide indépendant, maintenu par la communauté. <strong>coldwa.st</strong> est un site de ressources pour la programmation ; cet article est un texte explicatif original sur OpenTelemetry et n'est affilié ni au projet OpenTelemetry ni à la CNCF. La spécification évolue et la stabilité des signaux diffère selon les langages, vérifiez la documentation en vigueur pour votre runtime avant de vous fier à un détail.</div>
 
   <p class="note">À lire aussi : <a href="/fr/e/blog/2026-06-19-what-is-docker.html">Qu'est-ce que Docker</a> · <a href="/fr/e/blog/2026-06-19-what-is-kubernetes.html">Qu'est-ce que Kubernetes</a> · <a href="/fr/e/blog/2026-07-09-what-is-a-message-queue.html">Qu'est-ce qu'une file de messages</a></p>
   </div>
