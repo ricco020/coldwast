@@ -26,3 +26,14 @@ Other archived legacy paths (Cabal-1-18, Cabal-1-24, GSocIntroduction, tags, cv.
 
 ## Monetization
 See `AFFILIATES.md` - programs to apply for once live.
+
+## Canonicalisation d'hôte : `www` redirige vers l'apex
+
+`www.coldwa.st` renvoie **301** vers `https://coldwa.st`, chemin préservé.
+
+⚠️ **La redirection est configurée au niveau du DOMAINE, côté Vercel** (champ `redirect` du domaine,
+`redirectStatusCode: 301`), **et non dans `vercel.json`.**
+
+Une règle `redirects` avec `has: [{type:"host"}]` a été essayée le 29/08/2026 : elle a été **déployée
+avec succès** (déploiement `READY` sur le commit `0832ad1`) et **n'a produit aucune redirection**,
+`www` continuant de répondre 200. Elle a donc été retirée pour ne pas laisser croire qu'elle agit.
