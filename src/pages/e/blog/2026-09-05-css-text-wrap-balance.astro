@@ -1,0 +1,80 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-09-05-css-text-wrap-balance.html';
+const title = 'CSS text-wrap: balance, and Why It Is Only For Headings (2026)';
+const description = 'One declaration removes the single word left alone on the last line of a heading. It works, it is supported everywhere that matters, and it has a hard limit written into the specification that most articles never mention.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://images.pexels.com/photos/5003190/pexels-photo-5003190.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" datePublished="2026-09-05">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e">Guides</a><span>/</span>text-wrap balance</nav>
+  <p class="kicker">CSS · typography · web standards</p>
+  <h1>CSS text-wrap: balance</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Sep 5, 2026</span><span>6 min read</span><span class="tag">#css</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.pexels.com/photos/5003190/pexels-photo-5003190.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+      alt="The word Bold set in a large serif face on a dictionary page, sharp in the centre of the frame while the surrounding definition text about typography blurs away at both edges" loading="eager" />
+    <figcaption>A dictionary entry photographed close up: the headword sits alone on its line while the definition around it runs full width. The problem this property solves is the opposite case, a heading whose last line carries a single word.</figcaption>
+  </figure>
+
+  <p><strong>You have written a three-line heading and the third line contains one word.</strong> It looks like a mistake, it is not one, and until recently the only fixes were a manual line break or a non-breaking space that stopped being correct the moment the viewport changed.</p>
+
+  <p>The declaration is one line:</p>
+
+  <pre><code>h1, h2, h3 &#123;
+  text-wrap: balance;
+&#125;</code></pre>
+
+  <p>The browser then distributes the words so that the lines come out close to equal length, instead of filling each line greedily and leaving whatever remains on the last one.</p>
+
+  <h2>Why it is restricted to short text, and this is in the specification</h2>
+
+  <p>Normal line breaking is greedy: fill a line, move on, never look back. Balancing is not, because the browser has to try several distributions and compare them. That work grows with the number of lines, which is why the specification allows implementations to cap it.</p>
+
+  <p><strong>Chromium applies the property to blocks of six lines or fewer and ignores it beyond that.</strong> The limit is not a bug and not something to work around: it is what keeps a paragraph of forty lines from costing a layout pass it does not deserve. Applying <code>balance</code> to <code>p</code> is therefore not dangerous, it is simply ignored on anything long, which makes it a declaration that does nothing while looking like it does something.</p>
+
+  <figure>
+    <img src="https://images.pexels.com/photos/4079270/pexels-photo-4079270.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+      alt="An open book of poetry lying on a dark wooden table, the right hand page in focus showing a poem titled To a friend who sent me some roses under the header Poems published in 1817, the left page falling out of focus" loading="lazy" />
+    <figcaption>A printed poem, where every line break was decided by a person. On the web the browser decides, and until this property existed it decided greedily with no way to ask for anything else.</figcaption>
+  </figure>
+
+  <h2>balance, pretty, and stable are three different jobs</h2>
+
+  <p><code>text-wrap: pretty</code> is the one for body copy. It does not equalise line lengths; it avoids typographic orphans, the single word left on the final line of a paragraph, and it does so with a much smaller performance cost because it only reconsiders the end of the block.</p>
+
+  <p><code>text-wrap: stable</code> matters for text that changes as the user types. Without it, editing the middle of a paragraph can reflow every following line and make the text appear to jump. With it, lines before the cursor stay where they are.</p>
+
+  <p><strong>The short version: <code>balance</code> for headings, <code>pretty</code> for paragraphs, <code>stable</code> for editable regions.</strong> They are not stronger and weaker versions of one another.</p>
+
+  <h2>What happens in a browser that does not support it</h2>
+
+  <p>Nothing, which is the correct behaviour. An unknown value for <code>text-wrap</code> is dropped at parse time and the element wraps the way it always did. That makes this a genuine progressive enhancement: no feature query required, no fallback to write, no layout difference beyond a heading that breaks less elegantly.</p>
+
+  <p>If you want to branch on it anyway, <code>@supports (text-wrap: balance)</code> works, but for this property it is usually ceremony around a no-op.</p>
+
+  <h2>Where it goes wrong in practice</h2>
+
+  <p><strong>Applied to every element.</strong> A universal selector with <code>balance</code> is silently ignored on long blocks and costs layout work on the short ones. Target headings, captions, and blockquotes, which is where the visual problem actually appears.</p>
+
+  <p><strong>Combined with a fixed width.</strong> Balancing chooses break points; it does not change how much room the text has. A heading in a narrow column with long words will still break awkwardly, and the property has nothing to offer there.</p>
+
+  <p><strong>Expected to fix a widow in body text.</strong> That is the job of <code>pretty</code>. Reaching for <code>balance</code> and concluding the feature is broken is the most common way people meet the six line cap without realising it.</p>
+
+  <h2>The one line worth adopting</h2>
+
+  <p>For most sites this is a three line change in a stylesheet, applied to headings only:</p>
+
+  <pre><code>h1, h2, h3, h4, figcaption, blockquote &#123;
+  text-wrap: balance;
+&#125;
+
+p, li &#123;
+  text-wrap: pretty;
+&#125;</code></pre>
+
+  <p>It degrades to nothing where unsupported, it needs no JavaScript, and it removes a category of manual line breaks from your templates. Related reading: <a href="/e/blog/2026-08-15-css-container-queries.html">CSS container queries</a>.</p>
+
+  </div>
+</Base>
