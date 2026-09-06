@@ -5,7 +5,7 @@ const title = 'What Is a CDN? Content Delivery Networks, Explained (2026)';
 const description = 'A CDN caches your static content on servers spread around the world so visitors get it from a nearby machine. How the edge, cache hit and miss, TTL and invalidation work, static vs dynamic, and where a CDN fits with your host.';
 ---
 <Base title={title} description={description} path={path} type="article"
-  image="/img/2026-07-18-what-is-a-cdn-hero.jpg" datePublished="2026-07-18" dateModified="2026-07-18">
+  image="/img/2026-07-18-what-is-a-cdn-hero.jpg" datePublished="2026-07-18" dateModified="2026-09-06">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e">Guides</a><span>/</span>What is a CDN</nav>
   <p class="kicker">Programming · web · performance</p>
@@ -37,7 +37,7 @@ const description = 'A CDN caches your static content on servers spread around t
   <h2>TTL and invalidation: keeping the cache fresh</h2>
   <p>A cached copy cannot live forever, or visitors would keep seeing an old version after you update a file. Two mechanisms handle this:</p>
   <ul>
-    <li><strong>TTL (time to live):</strong> each cached item is given a lifetime, usually driven by HTTP caching headers such as <code>Cache-Control</code>. When the TTL expires, the edge treats the item as stale and re-checks the origin before serving it again.</li>
+    <li><strong>TTL (time to live):</strong> each cached item is given a lifetime, usually driven by HTTP caching headers such as <code>Cache-Control</code>. Its <code>max-age</code> directive is expressed in <strong>seconds</strong>, so the common "cache this for a year" value is written <code>max-age=31536000</code>. When the TTL expires, the edge treats the item as stale and re-checks the origin before serving it again. HTTP caching is specified in <strong>RFC 9111</strong> (June 2022), which replaced the earlier RFC 7234.</li>
     <li><strong>Invalidation (purge):</strong> when you deploy a change and cannot wait for the TTL, you tell the CDN to drop specific cached files so the next request fetches the fresh version from the origin. A common trick that avoids purging at all is <strong>cache busting</strong> - changing the file name or adding a version query, for example <code>style.abc123.css</code>, so a new URL is fetched fresh.</li>
   </ul>
 
@@ -53,7 +53,7 @@ const description = 'A CDN caches your static content on servers spread around t
   <h2>FAQ</h2>
   <p><strong>Does a CDN replace my web host?</strong> No. Your host is the origin that stores the real files and runs your app. A CDN caches and serves copies of the static, cacheable parts from servers near your visitors. You need both: a reliable origin plus the edge layer in front of it.</p>
   <p><strong>What is the difference between a cache hit and a cache miss?</strong> A hit means the edge server already has the requested file cached and serves it immediately. A miss means it does not, so it fetches the file from your origin, serves it, and stores a copy so the next request is a hit.</p>
-  <p><strong>What is TTL?</strong> Time to live: how long a cached item is considered fresh, usually set by HTTP caching headers. When the TTL expires, the edge re-checks the origin before serving the item again, so updates eventually reach everyone.</p>
+  <p><strong>What is TTL?</strong> Time to live: how long a cached item is considered fresh, usually set by HTTP caching headers in seconds. When the TTL expires, the edge re-checks the origin before serving the item again, so updates eventually reach everyone. If you set no explicit lifetime at all, a cache may pick one itself: RFC 9111 encourages a heuristic of no more than a fraction of the time since the file was last modified, and names 10% as a typical setting. Leaving the header off does not mean "do not cache".</p>
   <p><strong>Can a CDN cache dynamic content?</strong> Partly. Content that differs per user is hard to cache directly, but CDNs still speed it up with connection reuse, compression and edge logic. The biggest, simplest win remains caching static assets like images, CSS and JavaScript close to users.</p>
 
   <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is original explanatory writing about CDNs at an introductory level. The mechanisms described (edge caching, cache hit and miss, TTL, invalidation) are standard web-delivery concepts; the named products are well-known CDNs mentioned for illustration.</div>

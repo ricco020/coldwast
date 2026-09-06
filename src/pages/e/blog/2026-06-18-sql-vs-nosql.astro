@@ -12,7 +12,7 @@ const faq = [
 ];
 ---
 <Base title={title} description={description} path={path} type="article" lang="en"
-  image={hero} datePublished="2026-06-18" dateModified="2026-06-18">
+  image={hero} datePublished="2026-06-18" dateModified="2026-09-06">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e">Guides</a><span>/</span>SQL vs NoSQL</nav>
   <p class="kicker">Programming · data · databases</p>
@@ -34,7 +34,8 @@ const faq = [
   <p>SQL is <strong>structure-first</strong> ("define the shape, then store"); NoSQL is <strong>flexibility-first</strong> ("store now, shape varies").</p>
 
   <h2>Consistency and transactions</h2>
-  <p>Relational databases are built around <strong>ACID transactions</strong> and strong consistency: a transfer either fully happens or fully rolls back, and everyone reads the same committed state. That is why SQL dominates payments, inventory and anything where correctness is non-negotiable. Many NoSQL systems instead lean toward <strong>eventual consistency</strong> and BASE semantics - trading immediate consistency for availability and scale. The line has blurred (some NoSQL stores now offer transactions), but the default mindset still differs.</p>
+  <p>Relational databases are built around <strong>ACID transactions</strong> and strong consistency: a transfer either fully happens or fully rolls back, and everyone reads the same committed state. SQL has been a standard since 1986 at ANSI and 1987 at ISO, and "strong consistency" is not one setting but a dial: the standard defines <strong>4 isolation levels</strong>, from Read Uncommitted through Read Committed and Repeatable Read to Serializable. Worth knowing which one you are actually on, because it is rarely the strictest. PostgreSQL, for instance, defaults to Read Committed and implements only 3 distinct levels internally, since its MVCC design makes Read Uncommitted behave exactly like Read Committed.</p>
+  <p>That is why SQL dominates payments, inventory and anything where correctness is non-negotiable. Many NoSQL systems instead lean toward <strong>eventual consistency</strong> and BASE semantics - trading immediate consistency for availability and scale. The line has blurred (some NoSQL stores now offer transactions), but the default mindset still differs.</p>
 
   <figure><img src="/img/sql-vs-nosql-2026-servers.jpg" alt="Rack-mounted servers in a data centre with a hand reaching toward a unit" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>NoSQL stores are designed to spread across many servers; relational databases traditionally scale up on stronger hardware first.</figcaption></figure>
 

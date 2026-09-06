@@ -5,7 +5,7 @@ const title = 'What Is SSH? Secure Shell Explained for Developers (2026)';
 const description = 'SSH (Secure Shell) is the encrypted protocol you use to log in to and run commands on a remote server safely. What SSH is, how the handshake and keys work, passwords vs SSH keys, and the everyday commands you actually need.';
 ---
 <Base title={title} description={description} path={path} type="article"
-  image="/img/px-3a3f8ed9e2ea.jpg" datePublished="2026-06-22" dateModified="2026-06-22">
+  image="/img/px-3a3f8ed9e2ea.jpg" datePublished="2026-06-22" dateModified="2026-09-06">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e">Guides</a><span>/</span>What is SSH</nav>
   <p class="kicker">Programming · Servers · security</p>
@@ -20,7 +20,7 @@ const description = 'SSH (Secure Shell) is the encrypted protocol you use to log
   <p>The moment you rent a <a href="/e/blog/2026-06-19-what-is-a-vps.html">VPS</a> or deploy to a remote server, you hit the same question: how do you actually log in and run commands on a machine that lives in a data centre? The answer is almost always <strong>SSH</strong>. This guide explains what SSH is, how it keeps your session safe, and the handful of commands you really need.</p>
 
   <h2>The short definition</h2>
-  <p><strong>SSH - Secure Shell - is a protocol for logging in to a remote computer and running commands over an encrypted connection.</strong> It gives you a terminal on a machine somewhere else, as if it were right in front of you, and it scrambles everything that passes between you and the server. That encryption is the whole point: it replaced older tools like Telnet, which sent passwords and commands in plain text for anyone on the network to read.</p>
+  <p><strong>SSH - Secure Shell - is a protocol for logging in to a remote computer and running commands over an encrypted connection.</strong> It gives you a terminal on a machine somewhere else, as if it were right in front of you, and it scrambles everything that passes between you and the server. That encryption is the whole point: it replaced older tools like Telnet, which sent passwords and commands in plain text for anyone on the network to read. The version everyone runs today is SSH-2, specified in January 2006 across a set of RFCs, with the transport layer itself in <strong>RFC 4253</strong>.</p>
 
   <h2>How SSH works</h2>
   <p>When you connect, your SSH client and the server run a quick handshake. They agree on encryption settings and set up a shared secret key, so the rest of the session is private. The server also proves its identity with its own key, which is why your client warns you the first time it sees a new server. After that, you authenticate - you prove who you are - and you get a shell prompt on the remote machine. Every keystroke and every reply from then on is encrypted.</p>
@@ -48,7 +48,7 @@ const description = 'SSH (Secure Shell) is the encrypted protocol you use to log
   <h2>Frequently asked questions</h2>
   <details><summary>What is SSH in simple terms?</summary><p>SSH, or Secure Shell, is a way to log in to a computer somewhere else and run commands on it over an encrypted connection. It gives you a terminal on a remote machine as if it were in front of you, while scrambling everything sent between you and the server so no one on the network can read it.</p></details>
   <details><summary>What is the difference between an SSH password and an SSH key?</summary><p>A password is a secret you type, and it can be guessed or brute-forced by bots. An SSH key is a pair of files: a private key kept on your machine and a public key placed on the server. You're let in only if they match, and the private key never leaves your computer, which makes keys both safer and more convenient than passwords.</p></details>
-  <details><summary>What port does SSH use?</summary><p>SSH uses TCP port 22 by default. Some administrators change it to a different port to cut down on automated login attempts, but that is a small obstacle rather than real security. The real protections are using SSH keys and turning off password login, not hiding the port.</p></details>
+  <details><summary>What port does SSH use?</summary><p>SSH uses TCP port 22 by default, a number registered with the IANA and officially assigned to SSH. Some administrators change it to a different port to cut down on automated login attempts, but that is a small obstacle rather than real security. The real protections are using SSH keys and turning off password login, not hiding the port.</p></details>
   <details><summary>Is SSH secure?</summary><p>Yes, SSH is secure when set up properly, because it encrypts the whole session. Most break-ins come from weak configuration, not from SSH itself - usually password login left on with a guessable password. Using SSH keys, disabling password login and protecting your private key make it very safe.</p></details>
 
   <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about the SSH protocol. Commands shown are standard OpenSSH usage; check your own client and server documentation for specifics.</div>

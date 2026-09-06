@@ -5,7 +5,7 @@ const title = 'What Is Git? Version Control Explained for Beginners (2026)';
 const description = 'Git is a distributed version-control system that tracks every change to your code so you can branch, merge, collaborate and undo. What Git is, the core concepts (commit, branch, merge, remote), why it matters, and how it differs from GitHub.';
 ---
 <Base title={title} description={description} path={path} type="article"
-  image="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
+  image="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-09-06">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e">Guides</a><span>/</span>What is Git</nav>
   <p class="kicker">Programming · tools · version control</p>
@@ -20,7 +20,7 @@ const description = 'Git is a distributed version-control system that tracks eve
   <p>If you write code, you will meet <strong>Git</strong> within a day. It is the tool nearly every software project uses to track changes, and the foundation under GitHub, GitLab and the modern developer workflow. This guide explains what Git is, the handful of concepts that make it click, why it matters, and how it differs from GitHub.</p>
 
   <h2>The short definition</h2>
-  <p><strong>Git is a distributed version-control system: it records the history of changes to a set of files so you can review, branch, merge, collaborate and roll back.</strong> Created by Linus Torvalds in 2005 to manage the Linux kernel, it is now the de-facto standard. &quot;Distributed&quot; means every copy of the project carries its full history - you can work, commit and view history entirely offline.</p>
+  <p><strong>Git is a distributed version-control system: it records the history of changes to a set of files so you can review, branch, merge, collaborate and roll back.</strong> Created by Linus Torvalds in 2005 to manage the Linux kernel, it is now the de-facto standard. The first commit to Git&#39;s own repository landed on 7 April 2005, and version 1.0.0 was tagged on 21 December of the same year, about eight months later. &quot;Distributed&quot; means every copy of the project carries its full history - you can work, commit and view history entirely offline.</p>
 
   <h2>The core concepts</h2>
   <ul>
@@ -54,7 +54,7 @@ git push             # send your commits to the shared remote</code></pre>
   <p>They are constantly confused. <strong>Git</strong> is the version-control tool that runs on your machine. <strong>GitHub</strong> (like GitLab or Bitbucket) is a <em>hosting service</em> that stores Git repositories online and adds collaboration features - pull requests, issues, access control, CI. You can use Git with no GitHub account at all; GitHub is one popular place to put a Git remote, not Git itself.</p>
 
   <h2>The honest learning curve</h2>
-  <p>Git is powerful, and its command set can feel confusing at first - merges can conflict, and a few commands can rewrite history in ways that surprise beginners. The good news: 90% of daily work uses just <code>clone</code>, <code>add</code>, <code>commit</code>, <code>push</code>, <code>pull</code> and <code>branch</code>. Learn those well, and pick up the rest (rebase, stash, reset) when you actually need them.</p>
+  <p>Git is powerful, and its command set can feel confusing at first - merges can conflict, and a few commands can rewrite history in ways that surprise beginners. The surface really is large: <code>git help -a</code> on version 2.43.0 lists 167 commands. But <code>git help</code> on its own shows only the 22 it calls common, and daily work leans on a smaller set still - <code>clone</code>, <code>add</code>, <code>commit</code>, <code>push</code>, <code>pull</code> and <code>branch</code>. Learn those well, and pick up the rest (rebase, stash, reset) when you actually need them.</p>
 
   <h2>FAQ</h2>
   <p><strong>Is Git the same as GitHub?</strong> No. Git is the version-control software on your computer; GitHub is an online service that hosts Git repositories and adds collaboration tools. Git works without GitHub.</p>

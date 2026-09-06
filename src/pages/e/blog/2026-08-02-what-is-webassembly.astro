@@ -5,7 +5,7 @@ const title = 'What Is WebAssembly? A Compilation Target, Not a Language (2026)'
 const description = 'WebAssembly is a binary instruction format for a stack-based virtual machine, and a portable compilation target for other languages. What the official definition says, the four design goals, and why it was never limited to the browser.';
 ---
 <Base title={title} description={description} path={path} type="article"
-  image="https://images.pexels.com/photos/20034017/pexels-photo-20034017.jpeg?auto=compress&cs=tinysrgb&w=1200" datePublished="2026-08-02" dateModified="2026-08-02">
+  image="https://images.pexels.com/photos/20034017/pexels-photo-20034017.jpeg?auto=compress&cs=tinysrgb&w=1200" datePublished="2026-08-02" dateModified="2026-09-06">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e">Guides</a><span>/</span>What is WebAssembly</nav>
   <p class="kicker">WebAssembly · compilation · virtual machines</p>
@@ -23,6 +23,7 @@ const description = 'WebAssembly is a binary instruction format for a stack-base
   <p>WebAssembly, abbreviated <em>Wasm</em>, is <strong>a binary instruction format for a stack-based virtual machine</strong>. It is designed as <strong>a portable compilation target for programming languages, enabling deployment on the web for client and server applications</strong>.</p>
   <p>Two things follow immediately. It is a <strong>target</strong>, which means something else compiles into it, the way C compiles to machine code. And it is <strong>stack-based</strong>, which is a design decision about how the virtual machine holds operands, not a detail you interact with directly.</p>
   <p>Nobody is expected to write Wasm by hand for production, any more than anyone writes x86 by hand. You write Rust, C, Go or another language, and the compiler emits Wasm.</p>
+  <p>The binary itself is easy to recognise. Every module opens with a preamble of 8 bytes: a 4-byte magic number, the string <code>\0asm</code> (<code>0x00 0x61 0x73 0x6D</code>), followed by a 4-byte version field, which is 1 in the current binary format. After the preamble the module is a sequence of sections, and the core specification defines 14 section ids, numbered 0 to 13, from the custom section at 0 through the type, import and function sections up to the tag section at 13.</p>
 
   <h2>The four design goals, and what each one costs</h2>
   <p>The project states four goals, and they are worth reading as trade-offs rather than as a feature list.</p>

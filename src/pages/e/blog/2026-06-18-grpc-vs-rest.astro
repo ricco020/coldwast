@@ -12,7 +12,7 @@ const faq = [
 ];
 ---
 <Base title={title} description={description} path={path} type="article"
-  image={hero} datePublished="2026-06-18" dateModified="2026-06-18">
+  image={hero} datePublished="2026-06-18" dateModified="2026-09-06">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e">Guides</a><span>/</span>gRPC vs REST</nav>
   <p class="kicker">Programming · web · APIs</p>
@@ -34,7 +34,8 @@ const faq = [
   <p>REST is <strong>resource-oriented</strong> ("get this thing"); gRPC is <strong>action-oriented</strong> ("call this method"). REST is text; gRPC is binary and strongly typed.</p>
 
   <h2>Performance and the wire</h2>
-  <p>gRPC's Protocol Buffers are compact binary, sent over <strong>multiplexed HTTP/2</strong> connections - smaller payloads, less parsing, many calls over one connection. REST's JSON over HTTP/1.1 is heavier and more verbose, though very well optimised and cacheable. For high-volume <strong>service-to-service</strong> traffic gRPC's efficiency is real; for a typical public API, REST is usually fast enough and benefits from free HTTP caching.</p>
+  <p>gRPC's Protocol Buffers are compact binary, sent over <strong>multiplexed HTTP/2</strong> connections - smaller payloads, less parsing, many calls over one connection. HTTP/2 is specified in <strong>RFC 9113</strong> (June 2022, replacing RFC 7540 of May 2015), which recommends that a server allow at least 100 concurrent streams per connection, and sets the initial flow-control window at 65,535 octets and the initial maximum frame size at 16,384 octets. REST's JSON over HTTP/1.1 is heavier and more verbose, though very well optimised and cacheable. For high-volume <strong>service-to-service</strong> traffic gRPC's efficiency is real; for a typical public API, REST is usually fast enough and benefits from free HTTP caching.</p>
+  <p>The compactness comes from the encoding itself. A Protocol Buffers field is tagged with one of 6 wire types, and integers travel as <em>varints</em>, which carry 7 bits of payload per byte and use the eighth as a continuation flag. A small number such as 1 or 200 therefore occupies one or two bytes, where the same value in JSON costs the digits plus the quoted field name plus punctuation on every single message.</p>
 
   <figure><img src="/img/grpc-vs-rest-2026-cable.jpg" alt="A data cable connected to server hardware" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>The choice is a trade-off - match it to who calls your API and how much traffic it carries.</figcaption></figure>
 
