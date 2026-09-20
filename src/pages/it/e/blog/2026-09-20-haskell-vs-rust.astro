@@ -1,0 +1,96 @@
+---
+import Base from '../../../../layouts/Base.astro';
+const path = '/it/e/blog/2026-09-20-haskell-vs-rust.html';
+const title = 'Haskell vs Rust: due sistemi di tipi, due scommesse sulla sicurezza (2026)';
+const description = 'Haskell e Rust usano entrambi sistemi di tipi statici forti per intercettare gli errori prima dell esecuzione. Risolvono problemi diversi con compromessi diversi: Haskell punta sulla purezza e la valutazione pigra, Rust punta sull ownership e le astrazioni a costo zero. Confronto fattuale per categoria.';
+---
+<Base title={title} description={description} path={path} type="article" lang="it"
+  image="https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" datePublished="2026-09-20">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/it">Home</a><span>/</span><a href="/it/e">Guide</a><span>/</span>Haskell vs Rust</nav>
+  <p class="kicker">Haskell · Rust · linguaggi</p>
+  <h1>Haskell vs Rust</h1>
+  <div class="artmeta"><span>Di Coldwast</span><span>Aggiornato il 20 set. 2026</span><span>9 min di lettura</span><span class="tag">#haskell</span><span class="tag">#rust</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+      alt="Righe di codice sorgente colorato su un monitor scuro, evidenziazione sintattica verde e gialla su sfondo nero, fotografate con una leggera angolazione" loading="eager" />
+    <figcaption>Codice sorgente su uno schermo scuro. Haskell e Rust esigono entrambi di soddisfare il compilatore prima che qualsiasi cosa venga eseguita, ma controllano cose fondamentalmente diverse.</figcaption>
+  </figure>
+
+  <p><strong>Haskell e Rust sono entrambi a tipizzazione statica, entrambi compilati, ed entrambi attraggono programmatori attenti alla correttezza.</strong> Questa somiglianza superficiale nasconde una divergenza profonda su cio che ciascun linguaggio considera la fonte principale di bug, e quindi su cio che vi obbliga a gestire a tempo di compilazione.</p>
+
+  <p>Haskell considera gli <strong>effetti collaterali</strong> come il pericolo principale. Una funzione che legge un file o modifica una variabile porta questa informazione nel suo tipo. Le funzioni pure, che prendono valori e ne restituiscono senza altra interazione, sono il default, e l'impurita e l'eccezione che dovete dichiarare.</p>
+
+  <p>Rust considera gli <strong>errori nell'uso della memoria</strong> come il pericolo principale. Le sue regole di ownership e borrowing garantiscono a tempo di compilazione che due parti di un programma non detengano mai contemporaneamente un riferimento mutabile agli stessi dati. Le data race, i use-after-free e i double-free sono esclusi dal type checker, non da un garbage collector.</p>
+
+  <p>Nessuno dei due e un sovrainsieme dell'altro. La domanda non e quale sia migliore, ma quale problema state risolvendo.</p>
+
+  <h2>Sistemi di tipi: purezza vs ownership</h2>
+
+  <p>Il sistema di tipi di Haskell discende da Hindley-Milner. Supporta il polimorfismo parametrico, le classi di tipi (simili ai trait di Rust), i tipi di kind superiore e una separazione tra codice puro ed effettivo imposta dalla monade <code>IO</code>. L'inferenza dei tipi e pervasiva: potete scrivere programmi interi senza una singola annotazione e il compilatore inferira ogni tipo.</p>
+
+  <p>Il sistema di tipi di Rust e affine. Ogni valore ha esattamente un proprietario; quando l'ownership viene trasferita, il binding originale non e piu utilizzabile. Il borrowing (condiviso <code>&amp;T</code> o esclusivo <code>&amp;mut T</code>) permette di referenziare dati senza prenderne l'ownership, con la regola che potete avere un riferimento mutabile oppure un numero qualsiasi di riferimenti condivisi, mai entrambi. I lifetime, scritti come <code>'a</code>, indicano al compilatore per quanto tempo un riferimento e valido.</p>
+
+  <p>In pratica la differenza si manifesta in cio su cui discutete con il compilatore. In Haskell lottate con il type checker quando le firme delle vostre funzioni non compongono. In Rust lottate con il borrow checker quando il flusso dei dati viola le regole di ownership.</p>
+
+  <h2>Gestione della memoria</h2>
+
+  <p>Haskell usa un <strong>garbage collector a tracciamento</strong> (GC). Il runtime GHC include un GC generazionale, per copia, che gira in modo concorrente su una capability separata. L'allocazione e veloce (incrementare un puntatore in una nursery), e i valori a breve durata sono economici. Il costo si manifesta come pause GC, che il flag <code>-N</code> di GHC e il dimensionamento della nursery possono ridurre ma non eliminare.</p>
+
+  <p>Rust non usa <strong>alcun garbage collector</strong>. La memoria viene liberata in modo deterministico quando la variabile proprietaria esce dal suo scope. <code>Box</code>, <code>Rc</code>, <code>Arc</code> e le collezioni standard gestiscono la memoria heap, ma tutte rilasciano il contenuto in un punto noto. Il compromesso e che dovete soddisfare il borrow checker, che e un costo a tempo di compilazione in sforzo dello sviluppatore, non un costo a runtime in pause.</p>
+
+  <figure>
+    <img src="https://images.pexels.com/photos/1089438/pexels-photo-1089438.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+      alt="Primo piano di un monitor scuro che mostra righe di codice HTML e CSS con evidenziazione sintattica blu, verde e arancione, con i numeri di riga visibili sul margine sinistro" loading="lazy" />
+    <figcaption>Un editor di codice con evidenziazione sintattica. Haskell delega le decisioni sulla memoria a un garbage collector a runtime; Rust le risolve a tempo di compilazione tramite le regole di ownership.</figcaption>
+  </figure>
+
+  <h2>Caratteristiche prestazionali</h2>
+
+  <p><strong>Rust compila in codice nativo senza overhead a runtime oltre a cio che il programmatore richiede esplicitamente.</strong> Il compilatore (rustc, basato su LLVM) produce binari paragonabili in velocita a C e C++. La libreria standard di Rust evita le allocazioni nascoste: quando una funzione alloca, lo dichiara nella sua firma prendendo o restituendo un tipo posseduto.</p>
+
+  <p><strong>Haskell compila in codice nativo tramite GHC, ma la valutazione pigra rende il ragionamento sulle prestazioni piu difficile.</strong> La valutazione pigra significa che le espressioni non vengono calcolate finche il loro valore non e richiesto. Questo consente astrazioni eleganti (liste infinite, pipeline componibili) ma puo anche costruire catene di calcoli non valutati chiamati <em>thunk</em> che consumano memoria in modo inatteso. Le annotazioni strict (<code>!</code>, <code>BangPatterns</code>, <code>seq</code>) risolvono questo problema, ma sapere dove posizionarle e una competenza acquisita.</p>
+
+  <p>Nei benchmark come il Computer Language Benchmarks Game, i programmi Rust sono tipicamente da 2 a 10 volte piu veloci dei programmi Haskell equivalenti e usano significativamente meno memoria. Il divario si riduce quando il codice Haskell e ottimizzato con cura, ma lo sforzo di base richiesto e superiore.</p>
+
+  <h2>Concorrenza e parallelismo</h2>
+
+  <p>Il runtime di Haskell fornisce thread verdi leggeri (lanciati da <code>forkIO</code>), memoria transazionale software (<code>STM</code>) e la libreria <code>async</code> per la concorrenza strutturata. Poiche il codice puro non ha effetti collaterali, e trivialmente sicuro eseguirlo in parallelo: il compilatore puo persino parallelizzare automaticamente i calcoli puri con <code>par</code> e <code>pseq</code>.</p>
+
+  <p>Rust previene le data race a tempo di compilazione tramite l'ownership. <code>Send</code> e <code>Sync</code> sono trait marker che il compilatore verifica automaticamente: un tipo che non e sicuro inviare tra thread semplicemente non compilera in un contesto che tenta di farlo. Il runtime <code>tokio</code> fornisce un esecutore async; <code>rayon</code> fornisce il parallelismo dei dati. Entrambi sono librerie, non funzionalita del linguaggio.</p>
+
+  <p>La differenza pratica: Haskell rende la concorrenza facile da scrivere ma piu difficile da prevedere (i thunk pigri possono migrare tra thread). Rust rende la concorrenza piu difficile da scrivere (il borrow checker e rigoroso sullo stato mutabile condiviso) ma piu facile da prevedere (sapete esattamente cosa gira dove).</p>
+
+  <h2>Ecosistema e strumenti</h2>
+
+  <p>Il gestore di pacchetti di Rust e <code>cargo</code>. Gestisce compilazione, test, benchmarking, documentazione e risoluzione delle dipendenze. Il registro, <a href="https://crates.io" rel="noopener">crates.io</a>, ospita oltre 150.000 crate nel 2026. <code>rustfmt</code> formatta il codice, <code>clippy</code> lo analizza, ed entrambi sono distribuiti con la toolchain.</p>
+
+  <p>I principali strumenti di build di Haskell sono <code>cabal-install</code> e <code>stack</code>, che coesistono in modo un po' scomodo. <a href="https://hackage.haskell.org" rel="noopener">Hackage</a> ospita circa 17.000 pacchetti. <code>ghcup</code> gestisce le versioni di GHC e della toolchain. L'Haskell Language Server (HLS) fornisce le funzionalita IDE. L'ecosistema e piu piccolo ma profondo in domini specifici: parsing (megaparsec, attoparsec), compilatori, metodi formali e modellazione finanziaria.</p>
+
+  <h2>Curva di apprendimento</h2>
+
+  <p>Entrambi i linguaggi sono difficili da imparare rispetto a Python o JavaScript. Sono difficili in modi diversi.</p>
+
+  <p>Haskell richiede di imparare un nuovo paradigma di programmazione. Se provenite da un background imperativo, monadi, funtori, applicativi, classi di tipi e valutazione pigra sono concetti genuinamente nuovi. La sintassi e insolita, e i messaggi di errore di GHC possono essere criptici finche non imparate a leggere i report di discordanza dei tipi.</p>
+
+  <p>Rust richiede di imparare un nuovo modello di memoria. I concetti di ownership, borrowing, lifetime e la distinzione tra <code>Copy</code> e <code>Clone</code> non hanno un equivalente diretto nella maggior parte dei linguaggi. Il borrow checker rifiuta codice che compilerebbe senza problemi in C++, e capire <em>perche</em> e la parte difficile.</p>
+
+  <h2>Quando scegliere quale</h2>
+
+  <p><strong>Scegliete Haskell quando</strong> la correttezza della logica conta piu del controllo sull'hardware. Compilatori, interpreti, parser, linguaggi specifici di dominio, motori di regole finanziarie e prototipi di ricerca sono buoni candidati. Se il vostro problema si esprime meglio come composizione di trasformazioni pure, Haskell vi permette di scriverlo direttamente.</p>
+
+  <p><strong>Scegliete Rust quando</strong> avete bisogno di prestazioni prevedibili senza garbage collector. Programmazione di sistema, firmware embedded, motori di gioco, moduli WebAssembly, servizi di rete con vincoli stretti di latenza e strumenti a riga di comando che devono avviarsi istantaneamente sono buoni candidati. Se il vostro programma non deve fare pause, Rust lo impone strutturalmente.</p>
+
+  <p><strong>Si sovrappongono nei</strong> backend web (Haskell ha Servant e Yesod; Rust ha Actix-web e Axum), negli strumenti CLI e nell'elaborazione dati. In questi ambiti la scelta dipende dal fatto che preferiate il prototipaggio rapido con astrazioni forti (Haskell) o il throughput grezzo con controllo esplicito (Rust).</p>
+
+  <h2>Cosa hanno in comune</h2>
+
+  <p>Entrambi i linguaggi usano tipi di dati algebrici (<code>data</code> in Haskell, <code>enum</code> in Rust). Entrambi hanno pattern matching esaustivo imposto dal compilatore. Entrambi supportano i generici (polimorfismo parametrico in Haskell, parametri di tipo generico in Rust). Entrambi hanno trait o classi di tipi come meccanismo per il polimorfismo ad-hoc. Entrambi producono binari autonomi senza interprete.</p>
+
+  <p>Ed entrambi premiano il programmatore che legge attentamente i messaggi di errore del compilatore, perche in entrambi i casi il compilatore ha generalmente ragione.</p>
+
+  <p>Letture correlate: <a href="/it/e/blog/2026-08-02-what-is-webassembly.html">cos'e WebAssembly</a>.</p>
+
+  </div>
+</Base>
