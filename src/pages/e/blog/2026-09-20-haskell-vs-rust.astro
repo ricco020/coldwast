@@ -1,0 +1,96 @@
+---
+import Base from '../../../layouts/Base.astro';
+const path = '/e/blog/2026-09-20-haskell-vs-rust.html';
+const title = 'Haskell vs Rust: Two Type Systems, Two Bets on What Safety Means (2026)';
+const description = 'Haskell and Rust both use strong static type systems to catch errors before runtime. They solve different problems with different trade-offs: Haskell bets on purity and laziness, Rust bets on ownership and zero-cost abstractions. A factual comparison by category.';
+---
+<Base title={title} description={description} path={path} type="article"
+  image="https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" datePublished="2026-09-20">
+  <div class="reading">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e">Guides</a><span>/</span>Haskell vs Rust</nav>
+  <p class="kicker">Haskell · Rust · languages</p>
+  <h1>Haskell vs Rust</h1>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Sep 20, 2026</span><span>9 min read</span><span class="tag">#haskell</span><span class="tag">#rust</span></div>
+  <nav class="toc" id="toc"></nav>
+  <figure>
+    <img class="hero" src="https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+      alt="Lines of coloured source code on a dark monitor, green and yellow syntax highlighting against a black background, shot at a slight angle" loading="eager" />
+    <figcaption>Source code on a dark screen. Haskell and Rust both demand that you satisfy the compiler before anything runs, but they check for fundamentally different things.</figcaption>
+  </figure>
+
+  <p><strong>Haskell and Rust are both statically typed, both compiled, and both attract programmers who care about correctness.</strong> That surface similarity hides a deep divergence in what each language treats as the primary source of bugs, and therefore what it forces you to handle at compile time.</p>
+
+  <p>Haskell treats <strong>side effects</strong> as the main hazard. A function that reads a file or mutates a variable carries that fact in its type. Pure functions, which take values and return values with no other interaction, are the default, and impurity is the exception you must declare.</p>
+
+  <p>Rust treats <strong>memory misuse</strong> as the main hazard. Its ownership and borrowing rules guarantee at compile time that no two parts of a program hold a mutable reference to the same data at the same time. Data races, use-after-free and double-free errors are excluded by the type checker, not by a garbage collector.</p>
+
+  <p>Neither is a superset of the other. The question is not which is better, but which problem you are solving.</p>
+
+  <h2>Type systems: purity vs ownership</h2>
+
+  <p>Haskell's type system descends from Hindley-Milner. It supports parametric polymorphism, type classes (similar in purpose to Rust traits), higher-kinded types and a separation between pure and effectful code enforced by the <code>IO</code> monad. Type inference is pervasive: you can write entire programs without a single annotation and the compiler will infer every type.</p>
+
+  <p>Rust's type system is affine. Every value has exactly one owner; when ownership moves, the original binding is no longer usable. Borrowing (shared <code>&amp;T</code> or exclusive <code>&amp;mut T</code>) lets you reference data without taking ownership, subject to the rule that you may have either one mutable reference or any number of shared references, never both. Lifetimes, written as <code>'a</code>, tell the compiler how long a reference is valid.</p>
+
+  <p>In practice the difference shows up in what you argue with the compiler about. In Haskell you fight the type checker when your function signatures do not compose. In Rust you fight the borrow checker when your data flow violates the ownership rules.</p>
+
+  <h2>Memory management</h2>
+
+  <p>Haskell uses a <strong>tracing garbage collector</strong> (GC). The GHC runtime includes a generational, copying GC that runs concurrently on a separate capability. Allocation is fast (bump a pointer in a nursery), and short-lived values are cheap. The cost appears as GC pauses, which GHC's <code>-N</code> flag and nursery sizing can reduce but not eliminate.</p>
+
+  <p>Rust uses <strong>no garbage collector</strong>. Memory is freed deterministically when the owning variable goes out of scope. <code>Box</code>, <code>Rc</code>, <code>Arc</code> and the standard collections manage heap memory, but all of them drop their contents at a known point. The tradeoff is that you must satisfy the borrow checker, which is a compile-time cost in developer effort, not a runtime cost in pauses.</p>
+
+  <figure>
+    <img src="https://images.pexels.com/photos/1089438/pexels-photo-1089438.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+      alt="Close-up of a dark monitor displaying rows of HTML and CSS code in blue, green and orange syntax highlighting, with line numbers visible on the left margin" loading="lazy" />
+    <figcaption>A code editor with syntax-highlighted source. Haskell delegates memory decisions to a runtime garbage collector; Rust resolves them at compile time through ownership rules.</figcaption>
+  </figure>
+
+  <h2>Performance characteristics</h2>
+
+  <p><strong>Rust compiles to native code with no runtime overhead beyond what the programmer explicitly requests.</strong> The compiler (rustc, backed by LLVM) produces binaries comparable in speed to C and C++. The Rust standard library avoids hidden allocations: when a function allocates, it says so in its signature by taking or returning an owned type.</p>
+
+  <p><strong>Haskell compiles to native code through GHC, but laziness makes performance reasoning harder.</strong> Lazy evaluation means expressions are not computed until their value is demanded. This enables elegant abstractions (infinite lists, composable pipelines) but can also build up unevaluated chains of computation called <em>thunks</em> that consume memory unexpectedly. Strict annotations (<code>!</code>, <code>BangPatterns</code>, <code>seq</code>) fix this, but knowing where to place them is a learned skill.</p>
+
+  <p>In benchmarks such as the Computer Language Benchmarks Game, Rust programs typically run 2 to 10 times faster than equivalent Haskell programs and use significantly less memory. The gap narrows when Haskell code is carefully optimised, but the baseline effort required is higher.</p>
+
+  <h2>Concurrency and parallelism</h2>
+
+  <p>Haskell's runtime provides lightweight green threads (sparked by <code>forkIO</code>), software transactional memory (<code>STM</code>), and the <code>async</code> library for structured concurrency. Because pure code has no side effects, it is trivially safe to run in parallel: the compiler can even parallelise pure computations automatically with <code>par</code> and <code>pseq</code>.</p>
+
+  <p>Rust prevents data races at compile time through ownership. <code>Send</code> and <code>Sync</code> are marker traits that the compiler checks automatically: a type that is not safe to send across threads simply will not compile in a context that tries to. The <code>tokio</code> runtime provides an async executor; <code>rayon</code> provides data parallelism. Both are libraries, not language features.</p>
+
+  <p>The practical difference: Haskell makes concurrency easy to write but harder to predict (lazy thunks can migrate between threads). Rust makes concurrency harder to write (the borrow checker is strict about shared mutable state) but easier to predict (you know exactly what runs where).</p>
+
+  <h2>Ecosystem and tooling</h2>
+
+  <p>Rust's package manager is <code>cargo</code>. It handles building, testing, benchmarking, documentation and dependency resolution. The registry, <a href="https://crates.io" rel="noopener">crates.io</a>, hosts over 150,000 crates as of 2026. <code>rustfmt</code> formats code, <code>clippy</code> lints it, and both ship with the toolchain.</p>
+
+  <p>Haskell's main build tools are <code>cabal-install</code> and <code>stack</code>, which coexist somewhat awkwardly. <a href="https://hackage.haskell.org" rel="noopener">Hackage</a> hosts around 17,000 packages. <code>ghcup</code> manages GHC and toolchain versions. The Haskell Language Server (HLS) provides IDE features. The ecosystem is smaller but deep in specific domains: parsing (megaparsec, attoparsec), compilers, formal methods and financial modelling.</p>
+
+  <h2>Learning curve</h2>
+
+  <p>Both languages are difficult to learn compared to Python or JavaScript. They are difficult in different ways.</p>
+
+  <p>Haskell requires learning a new programming paradigm. If you come from an imperative background, monads, functors, applicatives, type classes and lazy evaluation are genuinely new concepts. The syntax is unfamiliar, and error messages from GHC can be cryptic until you learn to read type mismatch reports.</p>
+
+  <p>Rust requires learning a new memory model. The concepts of ownership, borrowing, lifetimes and the distinction between <code>Copy</code> and <code>Clone</code> have no direct equivalent in most languages. The borrow checker rejects code that would compile in C++ without complaint, and learning <em>why</em> is the hard part.</p>
+
+  <h2>When to choose which</h2>
+
+  <p><strong>Choose Haskell when</strong> correctness of logic matters more than control over hardware. Compilers, interpreters, parsers, domain-specific languages, financial rule engines, and research prototypes are strong fits. If your problem is best expressed as a composition of pure transformations, Haskell lets you write that directly.</p>
+
+  <p><strong>Choose Rust when</strong> you need predictable performance without a garbage collector. Systems programming, embedded firmware, game engines, WebAssembly modules, network services under strict latency budgets, and command-line tools that must start instantly are strong fits. If your program must not pause, Rust enforces that structurally.</p>
+
+  <p><strong>They overlap in</strong> web backends (Haskell has Servant and Yesod; Rust has Actix-web and Axum), CLI tools, and data processing. In these areas the choice depends on whether you value rapid prototyping with strong abstractions (Haskell) or raw throughput with explicit control (Rust).</p>
+
+  <h2>What they share</h2>
+
+  <p>Both languages use algebraic data types (<code>data</code> in Haskell, <code>enum</code> in Rust). Both have exhaustive pattern matching that the compiler enforces. Both support generics (parametric polymorphism in Haskell, generic type parameters in Rust). Both have traits or type classes as the mechanism for ad-hoc polymorphism. Both produce standalone binaries with no interpreter required.</p>
+
+  <p>And both reward the programmer who reads the compiler's error messages carefully, because in both cases the compiler is usually right.</p>
+
+  <p>Related reading: <a href="/e/blog/2026-08-12-read-haskell-type-signature.html">how to read a Haskell type signature</a>, <a href="/e/blog/2026-08-02-what-is-webassembly.html">what is WebAssembly</a>.</p>
+
+  </div>
+</Base>
