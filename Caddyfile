@@ -1,0 +1,83 @@
+{
+	auto_https off
+	admin off
+}
+
+:{$PORT:8080} {
+	root * /srv
+	encode zstd gzip
+
+	header {
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+	}
+	@h1 path /e/rss.xml
+	header @h1 Content-Type "application/rss+xml; charset=utf-8"
+
+	route {
+		@r0 {
+			path /blog/2013-08-20-Cabal-sandbox.html
+		}
+		redir @r0 "/e/blog/2013-08-20-Cabal-sandbox.html" 308
+		@r1 {
+			path /blog/2013-08-21-Cabal-1-18.html
+		}
+		redir @r1 "/e/blog/2013-08-20-Cabal-sandbox.html" 308
+		@r2 {
+			path /blog/2016-05-04-Cabal-1-24.html
+		}
+		redir @r2 "/e/blog/2017-09-09-Cabal-2-0.html" 308
+		@r3 {
+			path /e/blog/2013-08-21-Cabal-1-18.html
+		}
+		redir @r3 "/e/blog/2013-08-20-Cabal-sandbox.html" 308
+		@r4 {
+			path /e/blog/2016-05-04-Cabal-1-24.html
+		}
+		redir @r4 "/e/blog/2017-09-09-Cabal-2-0.html" 308
+		@r5 {
+			path /e/blog/2011-06-03-GSocIntroduction.html
+		}
+		redir @r5 "/e/blog/2011-08-22-GSoC-Final.html" 308
+		@r6 {
+			path /e/tags/gsoc.html
+		}
+		redir @r6 "/e/blog/2011-08-22-GSoC-Final.html" 308
+		@r7 {
+			path /e/tags/haskell.html
+		}
+		redir @r7 "/e/" 308
+		@r8 {
+			path /e/files/mikhail-glushenkov-cv.pdf
+		}
+		redir @r8 "/e/" 308
+		@r9 {
+			path /e/blog
+		}
+		redir @r9 "/e/" 308
+		@r10 {
+			path /blog
+		}
+		redir @r10 "/e/" 308
+		@lang {
+			path /
+			header_regexp al Accept-Language (?i)^\s*(fr|es|de|it|pt)\b
+		}
+		handle @lang {
+			header Vary Accept-Language
+			header Cache-Control no-store
+			redir * /{re.al.1} 302
+		}
+		@slash path_regexp sl ^(.+)/$
+		redir @slash {re.sl.1} 308
+		try_files {path} {path}/index.html {path}.html
+		file_server
+	}
+
+	handle_errors {
+		@404 expression {err.status_code} == 404
+		rewrite @404 /404.html
+		file_server
+	}
+}
