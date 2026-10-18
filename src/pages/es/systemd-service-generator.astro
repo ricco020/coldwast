@@ -8,6 +8,8 @@ import SystemdGen from '../../components/SystemdGen.astro';
   <h1>Generador de archivos de servicio systemd</h1>
   <p>Escribe el comando que arranca tu aplicación y obtén una unidad <code>.service</code> lista para colocar en <code>/etc/systemd/system/</code>, con los comandos de instalación correspondientes. El generador también revisa lo que has escrito y señala los errores que hacen fallar una unidad en el primer arranque. Todo se ejecuta en tu navegador.</p>
 
+  <figure><img src="/img/systemd-generator-server.jpg" alt="Frontal de un servidor torre con rejilla metálica perforada y pequeños botones de encendido, iluminado en azul sobre fondo oscuro" width="1200" height="798" style="width:100%;height:auto;border-radius:12px" /><figcaption>El panel frontal de un servidor torre, iluminado en azul. Una vez habilitada la unidad, systemd arranca tu aplicación en una máquina como esta en cada arranque, sin que nadie inicie sesión.</figcaption></figure>
+
   <SystemdGen lang="es" />
 
   <h2>Las cinco líneas que deciden si funciona</h2>
@@ -20,6 +22,8 @@ import SystemdGen from '../../components/SystemdGen.astro';
   <h2>El aislamiento, y lo que se dejó fuera a propósito</h2>
   <p>Con <code>ProtectSystem=strict</code> todo el sistema de archivos es de solo lectura para el servicio, salvo las rutas que indiques en <code>ReadWritePaths=</code>. <code>PrivateTmp</code> le da su propio <code>/tmp</code>, <code>NoNewPrivileges</code> le impide ganar permisos mediante binarios setuid, y los ajustes de kernel y cgroup le impiden cambiar el estado del sistema. Ejecuta <code>systemd-analyze security tuapp.service</code> antes y después: muestra una puntuación de exposición y lista cada ajuste que sigue abierto.</p>
   <p>Faltan a propósito dos recomendaciones habituales. <code>MemoryDenyWriteExecute=true</code> rompe los compiladores just-in-time, es decir Node.js, la JVM y PyPy. <code>PrivateDevices=true</code> no da problemas en una app web, pero rompe cualquier cosa que hable con una GPU o un puerto serie. Añádelas tú si sabes que tu programa no las necesita.</p>
+
+  <figure><img src="/img/systemd-generator-code.jpg" alt="Unas gafas sobre un escritorio delante de un monitor desenfocado que muestra código fuente de colores en un editor" loading="lazy" width="1200" height="900" style="width:100%;height:auto;border-radius:12px" /><figcaption>Unas gafas delante de una pantalla llena de código. Cuando una unidad falla, la respuesta también está en pantalla: systemctl status da el código de salida y journalctl la salida de tu programa.</figcaption></figure>
 
   <h2>Cuando no arranca: los códigos de salida</h2>
   <p><code>systemctl status tuapp</code> muestra un estado como <code>status=203/EXEC</code>. El número indica qué paso falló antes incluso de que tu programa se ejecutara:</p>

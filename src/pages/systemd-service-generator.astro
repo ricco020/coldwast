@@ -8,6 +8,8 @@ import SystemdGen from '../components/SystemdGen.astro';
   <h1>systemd service file generator</h1>
   <p>Fill in the command that starts your app and get a <code>.service</code> unit you can drop into <code>/etc/systemd/system/</code>, with the install commands to match. The generator also reads what you typed and flags the mistakes that make a unit fail on the first start. Everything runs in your browser.</p>
 
+  <figure><img src="/img/systemd-generator-server.jpg" alt="Front of a tower server with a perforated metal grille and small power buttons, lit in blue against a dark background" width="1200" height="798" style="width:100%;height:auto;border-radius:12px" /><figcaption>The front panel of a tower server, lit blue. Once a unit is enabled, systemd starts your app on a machine like this at every boot, with nobody logged in.</figcaption></figure>
+
   <SystemdGen lang="en" />
 
   <h2>The five lines that decide whether it works</h2>
@@ -20,6 +22,8 @@ import SystemdGen from '../components/SystemdGen.astro';
   <h2>The sandbox, and what was left out on purpose</h2>
   <p>With <code>ProtectSystem=strict</code> the whole filesystem is read-only for the service, except the paths you list in <code>ReadWritePaths=</code>. <code>PrivateTmp</code> gives it its own <code>/tmp</code>, <code>NoNewPrivileges</code> stops it from gaining rights through setuid binaries, and the kernel and cgroup settings stop it from changing system-wide state. Run <code>systemd-analyze security yourapp.service</code> before and after: it prints an exposure score and lists each setting still open.</p>
   <p>Two common recommendations are deliberately absent. <code>MemoryDenyWriteExecute=true</code> breaks just-in-time compilers, which means Node.js, the JVM and PyPy. <code>PrivateDevices=true</code> is safe for a web app but breaks anything that talks to a GPU or a serial port. Add them yourself if you know your program does not need them.</p>
+
+  <figure><img src="/img/systemd-generator-code.jpg" alt="A pair of eyeglasses on a desk in front of a blurred monitor showing coloured source code in an editor" loading="lazy" width="1200" height="900" style="width:100%;height:auto;border-radius:12px" /><figcaption>Glasses resting in front of a screen full of code. When a unit fails, the answer is on screen too: systemctl status gives the exit code, journalctl gives your program's own output.</figcaption></figure>
 
   <h2>When it will not start: the exit codes</h2>
   <p><code>systemctl status yourapp</code> shows a status like <code>status=203/EXEC</code>. The number tells you which step failed before your program even ran:</p>
