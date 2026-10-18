@@ -1,0 +1,42 @@
+---
+import Base from '../../layouts/Base.astro';
+import SystemdGen from '../../components/SystemdGen.astro';
+---
+<Base title='Générateur de fichier service systemd : une unité .service qui démarre vraiment' description='Générateur gratuit de fichier d&#39;unité systemd pour Node.js, Python, Go et Java. Signale les erreurs qui font échouer un service (chemins relatifs, syntaxe shell, secrets dans Environment=) et ajoute une isolation sûre.' path="/fr/systemd-service-generator.html" lang="fr">
+  <div class="reading">
+  <p class="kicker" style="margin-top:30px">Coldwast</p>
+  <h1>Générateur de fichier service systemd</h1>
+  <p>Indiquez la commande qui lance votre application et obtenez une unité <code>.service</code> à déposer dans <code>/etc/systemd/system/</code>, avec les commandes d'installation correspondantes. Le générateur relit aussi ce que vous avez saisi et signale les erreurs qui font échouer une unité dès le premier démarrage. Tout tourne dans votre navigateur.</p>
+
+  <SystemdGen lang="fr" />
+
+  <h2>Les cinq lignes qui décident si ça marche</h2>
+  <p><strong>ExecStart n'est pas un shell.</strong> systemd découpe lui-même la ligne en arguments et lance le programme directement. Un pipe, une redirection <code>&gt;</code> ou un <code>&amp;&amp;</code> est transmis tel quel à votre programme comme argument. systemd développe aussi <code>$VAR</code> de lui-même : un dollar littéral s'écrit donc <code>$$</code>. Quand le générateur repère de la syntaxe shell, il enveloppe la commande dans <code>/bin/sh -c</code> et fait cet échappement à votre place.</p>
+  <p><strong>Utilisez un chemin absolu.</strong> Un chemin comme <code>./server</code> est refusé d'emblée. Un nom nu comme <code>node</code> est accepté, mais systemd ne cherche que dans ses propres répertoires fixes, pas dans le PATH de votre shell : un Node installé avec nvm ou un outil placé dans <code>~/.local/bin</code> est introuvable.</p>
+  <p><strong>Type=simple ou exec pour presque tout.</strong> Un serveur web, un worker ou un bot qui reste au premier plan relève de <code>simple</code>. <code>exec</code> diffère sur un point utile : le démarrage n'est déclaré réussi qu'une fois le binaire réellement exécuté, si bien qu'un mauvais chemin fait échouer <code>systemctl start</code> au lieu d'échouer en silence un instant plus tard. <code>forking</code> sert aux vieux démons qui passent d'eux-mêmes en arrière-plan, et <code>notify</code> ne marche que si le programme appelle <code>sd_notify</code>.</p>
+  <p><strong>Restart=on-failure, avec une limite.</strong> <code>on-failure</code> relance après un plantage ou une sortie non nulle, pas après un arrêt propre ; <code>always</code> relance même dans ce cas. Par défaut systemd autorise 5 démarrages en 10 secondes, et avec un délai de 5 secondes une app qui plante n'atteint jamais cette limite : elle boucle sans fin. <code>StartLimitIntervalSec=300</code> avec <code>StartLimitBurst=5</code> la fait abandonner et laisse un état d'échec clair.</p>
+  <p><strong>Wants= et After= ensemble.</strong> <code>After=network-online.target</code> seul ne fait que fixer un ordre ; il n'active pas la cible. Sans <code>Wants=network-online.target</code>, votre service peut encore démarrer avant que le réseau soit prêt : c'est le bug classique « ça marche après un redémarrage manuel, ça échoue au boot ».</p>
+
+  <h2>L'isolation, et ce qui a été laissé de côté exprès</h2>
+  <p>Avec <code>ProtectSystem=strict</code>, tout le système de fichiers est en lecture seule pour le service, sauf les chemins listés dans <code>ReadWritePaths=</code>. <code>PrivateTmp</code> lui donne son propre <code>/tmp</code>, <code>NoNewPrivileges</code> l'empêche de gagner des droits via des binaires setuid, et les réglages noyau et cgroup l'empêchent de modifier l'état du système. Lancez <code>systemd-analyze security votreapp.service</code> avant et après : la commande affiche un score d'exposition et liste chaque réglage encore ouvert.</p>
+  <p>Deux recommandations courantes sont volontairement absentes. <code>MemoryDenyWriteExecute=true</code> casse les compilateurs à la volée, c'est-à-dire Node.js, la JVM et PyPy. <code>PrivateDevices=true</code> ne pose pas de problème pour une app web mais casse tout ce qui parle à un GPU ou à un port série. Ajoutez-les vous-même si vous savez que votre programme n'en a pas besoin.</p>
+
+  <h2>Quand il refuse de démarrer : les codes de sortie</h2>
+  <p><code>systemctl status votreapp</code> affiche un état du type <code>status=203/EXEC</code>. Le nombre indique quelle étape a échoué avant même que votre programme tourne :</p>
+  <table>
+    <thead><tr><th>État</th><th>Signification</th><th>Correction habituelle</th></tr></thead>
+    <tbody>
+      <tr><td><code>203/EXEC</code></td><td>Le programme n'a pas pu être exécuté</td><td>Mauvais chemin, bit d'exécution absent, ou script sans ligne shebang</td></tr>
+      <tr><td><code>200/CHDIR</code></td><td>WorkingDirectory absent ou inaccessible</td><td>Le créer, ou vérifier que ProtectHome ne le masque pas</td></tr>
+      <tr><td><code>217/USER</code></td><td>Le compte User= n'existe pas</td><td>Lancer la ligne <code>useradd</code> ci-dessus</td></tr>
+      <tr><td><code>226/NAMESPACE</code></td><td>L'isolation n'a pas pu être mise en place</td><td>Un chemin de ReadWritePaths n'existe pas : le créer ou le préfixer par <code>-</code></td></tr>
+    </tbody>
+  </table>
+  <p>Tout autre échec vient de votre programme lui-même, et sa sortie se trouve dans <code>journalctl -u votreapp -b</code>.</p>
+
+  <h2>Le modifier plus tard</h2>
+  <p>Après avoir modifié le fichier dans <code>/etc/systemd/system/</code>, lancez <code>sudo systemctl daemon-reload</code> avant de redémarrer, sinon systemd garde l'ancienne version. Pour une unité installée par un paquet, ne la modifiez pas sur place : <code>sudo systemctl edit votreapp</code> crée un fichier de surcharge qui survit aux mises à jour et recharge systemd pour vous.</p>
+  <p>À lire aussi : <a href="/fr/e/blog/2026-06-19-what-is-a-vps.html">ce qu'est un VPS</a>, <a href="/fr/e/blog/2026-06-26-what-is-a-reverse-proxy.html">placer un reverse proxy devant l'app</a>, <a href="/fr/e/blog/2026-06-22-what-is-ssh.html">les bases de SSH</a>, et pour les tâches planifiées le <a href="/fr/cron-expression.html">décodeur d'expression cron</a>.</p>
+  <p class="meta">Les directives suivent les pages de manuel systemd.service(5) et systemd.exec(5). Type=exec demande systemd 240 ou plus récent ; toutes les versions actuelles de Debian, Ubuntu, Fedora et RHEL conviennent.</p>
+  </div>
+</Base>

@@ -13,6 +13,7 @@ Other archived legacy paths (Cabal-1-18, Cabal-1-24, GSocIntroduction, tags, cv.
 
 ## Interactive tools
 - [`/regex-tester.html`](https://coldwa.st/regex-tester.html) - free in-browser regular-expression tester (JavaScript RegExp engine): live match highlighting and a capture-group table, six languages, nothing uploaded.
+- [`/systemd-service-generator.html`](https://coldwa.st/systemd-service-generator.html) - systemd unit file generator (Node.js, Python, Go, Java presets), install commands, optional sandbox, and checks for the mistakes that stop a unit from starting (warnings verified against `systemd-analyze verify`, systemd 255). Shared logic in `src/components/SystemdGen.astro`, strings in `src/data/systemd-i18n.js`, six languages. Contextual DigitalOcean CTA via `/go/cloud.html` (clickref `coldwa-cloud`).
 
 ## Rules (enforced)
 - ANTI-PBN: zero links to any other network site. Ever.

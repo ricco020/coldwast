@@ -1,0 +1,42 @@
+---
+import Base from '../../layouts/Base.astro';
+import SystemdGen from '../../components/SystemdGen.astro';
+---
+<Base title='Gerador de ficheiros de serviço systemd: uma unidade .service que arranca mesmo' description='Gerador gratuito de ficheiros de unidade systemd para Node.js, Python, Go e Java. Assinala os erros que fazem falhar um serviço (caminhos relativos, sintaxe de shell, segredos em Environment=) e acrescenta um isolamento seguro.' path="/pt/systemd-service-generator.html" lang="pt">
+  <div class="reading">
+  <p class="kicker" style="margin-top:30px">Coldwast</p>
+  <h1>Gerador de ficheiros de serviço systemd</h1>
+  <p>Indique o comando que arranca a sua aplicação e obtenha uma unidade <code>.service</code> para colocar em <code>/etc/systemd/system/</code>, com os comandos de instalação correspondentes. O gerador também relê o que escreveu e assinala os erros que fazem uma unidade falhar logo no primeiro arranque. Tudo corre no seu navegador.</p>
+
+  <SystemdGen lang="pt" />
+
+  <h2>As cinco linhas que decidem se funciona</h2>
+  <p><strong>ExecStart não é uma shell.</strong> O systemd divide a linha em argumentos por si próprio e executa o programa diretamente. Um pipe, uma redireção <code>&gt;</code> ou um <code>&amp;&amp;</code> chega ao seu programa como argumento literal. O systemd também expande <code>$VAR</code> por conta própria, por isso um cifrão literal escreve-se <code>$$</code>. Quando o gerador deteta sintaxe de shell, envolve o comando em <code>/bin/sh -c</code> e faz esse escape por si.</p>
+  <p><strong>Use um caminho absoluto.</strong> Um caminho como <code>./server</code> é rejeitado de imediato. Um nome sem caminho como <code>node</code> é aceite, mas o systemd procura apenas nos seus próprios diretórios fixos, não no PATH da sua shell, por isso um Node instalado com nvm ou uma ferramenta em <code>~/.local/bin</code> não é encontrado.</p>
+  <p><strong>Type=simple ou exec para quase tudo.</strong> Um servidor web, um worker ou um bot que fica em primeiro plano é <code>simple</code>. <code>exec</code> difere num ponto útil: o arranque só é dado como bem-sucedido quando o binário foi realmente executado, por isso um caminho errado faz falhar <code>systemctl start</code> em vez de falhar em silêncio um momento depois. <code>forking</code> é para daemons antigos que passam sozinhos para segundo plano, e <code>notify</code> só funciona se o programa chamar <code>sd_notify</code>.</p>
+  <p><strong>Restart=on-failure, com um limite.</strong> <code>on-failure</code> reinicia após uma falha ou uma saída diferente de zero, mas não após uma paragem limpa; <code>always</code> reinicia mesmo nesse caso. Por omissão o systemd permite 5 arranques em 10 segundos e, com uma espera de 5 segundos, uma app que falha nunca atinge esse limite: entra num ciclo infinito. <code>StartLimitIntervalSec=300</code> com <code>StartLimitBurst=5</code> faz com que desista e deixe um estado de falha claro.</p>
+  <p><strong>Wants= e After= juntos.</strong> <code>After=network-online.target</code> sozinho apenas define uma ordem; não ativa o target. Sem <code>Wants=network-online.target</code> o seu serviço pode arrancar antes de a rede estar pronta: o clássico «funciona depois de um reinício manual, falha no arranque da máquina».</p>
+
+  <h2>O isolamento, e o que ficou de fora de propósito</h2>
+  <p>Com <code>ProtectSystem=strict</code> todo o sistema de ficheiros fica só de leitura para o serviço, exceto os caminhos indicados em <code>ReadWritePaths=</code>. <code>PrivateTmp</code> dá-lhe o seu próprio <code>/tmp</code>, <code>NoNewPrivileges</code> impede-o de ganhar privilégios através de binários setuid, e as definições de kernel e cgroup impedem-no de alterar o estado do sistema. Execute <code>systemd-analyze security suaapp.service</code> antes e depois: mostra uma pontuação de exposição e lista cada definição ainda aberta.</p>
+  <p>Duas recomendações comuns estão ausentes de propósito. <code>MemoryDenyWriteExecute=true</code> parte os compiladores just-in-time, ou seja Node.js, a JVM e PyPy. <code>PrivateDevices=true</code> não causa problemas numa app web, mas parte tudo o que fala com uma GPU ou uma porta série. Acrescente-as se souber que o seu programa não precisa delas.</p>
+
+  <h2>Quando não arranca: os códigos de saída</h2>
+  <p><code>systemctl status suaapp</code> mostra um estado como <code>status=203/EXEC</code>. O número indica que passo falhou antes mesmo de o seu programa correr:</p>
+  <table>
+    <thead><tr><th>Estado</th><th>Significado</th><th>Correção habitual</th></tr></thead>
+    <tbody>
+      <tr><td><code>203/EXEC</code></td><td>Não foi possível executar o programa</td><td>Caminho errado, falta de permissão de execução ou script sem linha shebang</td></tr>
+      <tr><td><code>200/CHDIR</code></td><td>WorkingDirectory inexistente ou inacessível</td><td>Criá-lo, ou verificar que ProtectHome não o esconde</td></tr>
+      <tr><td><code>217/USER</code></td><td>A conta de User= não existe</td><td>Executar a linha <code>useradd</code> acima</td></tr>
+      <tr><td><code>226/NAMESPACE</code></td><td>Não foi possível montar o isolamento</td><td>Um caminho de ReadWritePaths não existe: criá-lo ou prefixá-lo com <code>-</code></td></tr>
+    </tbody>
+  </table>
+  <p>Qualquer outra falha é o seu próprio programa a terminar, e a saída dele está em <code>journalctl -u suaapp -b</code>.</p>
+
+  <h2>Alterá-lo mais tarde</h2>
+  <p>Depois de editar o ficheiro em <code>/etc/systemd/system/</code>, execute <code>sudo systemctl daemon-reload</code> antes de reiniciar, caso contrário o systemd continua a usar a versão antiga. Para uma unidade instalada por um pacote, não a edite no local: <code>sudo systemctl edit suaapp</code> cria um ficheiro de substituição que sobrevive às atualizações e recarrega o systemd por si.</p>
+  <p>Relacionado: <a href="/pt/e/blog/2026-06-19-what-is-a-vps.html">o que é um VPS</a>, <a href="/pt/e/blog/2026-06-26-what-is-a-reverse-proxy.html">colocar um proxy reverso à frente da app</a>, <a href="/pt/e/blog/2026-06-22-what-is-ssh.html">o básico de SSH</a> e, para tarefas agendadas, o <a href="/pt/cron-expression.html">explicador de expressões cron</a>.</p>
+  <p class="meta">As diretivas seguem as páginas de manual systemd.service(5) e systemd.exec(5). Type=exec requer systemd 240 ou posterior; todas as versões atuais de Debian, Ubuntu, Fedora e RHEL cumprem.</p>
+  </div>
+</Base>

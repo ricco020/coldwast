@@ -1,0 +1,223 @@
+---
+// Generateur de fichier .service systemd, partage par les 6 locales.
+// Tout tourne dans le navigateur. Les avertissements viennent de systemd.service(5)
+// et systemd.exec(5) (voir src/data/systemd-i18n.js).
+import { SD } from '../data/systemd-i18n.js';
+import { ctaAngle } from '../data/cta-angle.js';
+interface Props { lang?: string }
+const { lang = 'en' } = Astro.props;
+const S = SD[lang] || SD.en;
+const cta = ctaAngle(lang, 'vps server');
+---
+<div class="sdg" id="sdg">
+  <div class="sdg-presets">
+    <span>{S.presets}</span>
+    <button type="button" data-p="node">{S.p_node}</button>
+    <button type="button" data-p="python">{S.p_python}</button>
+    <button type="button" data-p="go">{S.p_go}</button>
+    <button type="button" data-p="java">{S.p_java}</button>
+  </div>
+  <div class="sdg-grid">
+    <form class="sdg-form" id="sdg-form" autocomplete="off" onsubmit="return false">
+      <label>{S.name}<input name="name" value="myapp" spellcheck="false" /></label>
+      <label>{S.desc}<input name="desc" value="My Node.js app" /></label>
+      <label class="wide">{S.exec}<input name="exec" value="/usr/bin/node /opt/myapp/server.js" spellcheck="false" /></label>
+      <label class="wide">{S.wd}<input name="wd" value="/opt/myapp" spellcheck="false" /></label>
+      <label>{S.user}<input name="user" value="myapp" spellcheck="false" /></label>
+      <label>{S.group}<input name="group" value="" spellcheck="false" /></label>
+      <label>{S.type}
+        <select name="type"><option>simple</option><option>exec</option><option>notify</option><option>forking</option><option>oneshot</option></select>
+      </label>
+      <label>{S.restart}
+        <select name="restart"><option>on-failure</option><option>always</option><option>no</option></select>
+      </label>
+      <label>{S.restartsec}<input name="rsec" type="number" min="0" value="5" /></label>
+      <label>{S.envfile}<input name="envfile" value="" placeholder="/etc/myapp.env" spellcheck="false" /></label>
+      <label class="wide">{S.env}<textarea name="env" rows="3" spellcheck="false">NODE_ENV=production
+PORT=3000</textarea></label>
+      <label class="chk wide"><input type="checkbox" name="net" checked /> {S.net}</label>
+      <label class="chk wide"><input type="checkbox" name="limit" checked /> {S.limit}</label>
+      <label class="chk wide"><input type="checkbox" name="lowport" /> {S.lowport}</label>
+      <label class="chk wide"><input type="checkbox" name="harden" checked /> {S.harden}</label>
+      <label class="wide">{S.rw}<input name="rw" value="/opt/myapp/data" spellcheck="false" /></label>
+    </form>
+    <div class="sdg-out">
+      <div class="sdg-head">
+        <h3 id="sdg-file">{S.out}</h3>
+        <div><button type="button" id="sdg-copy">{S.copy}</button> <button type="button" id="sdg-dl">{S.dl}</button></div>
+      </div>
+      <pre id="sdg-unit"></pre>
+      <h3>{S.checks}</h3>
+      <ul id="sdg-warn" class="sdg-warn"></ul>
+      <h3>{S.install}</h3>
+      <pre id="sdg-cmd" class="sdg-cmd"></pre>
+    </div>
+  </div>
+  <aside class="sdg-cta">
+    <span class="tag">{S.cta_tag}</span>
+    <h4>{cta.h}</h4>
+    <p>{cta.p}</p>
+    <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">{S.cta_go}</a>
+    <p class="disc">{S.cta_disc}</p>
+  </aside>
+</div>
+
+<style>
+  .sdg { margin:26px 0 34px; }
+  @media (min-width:1240px) { .sdg { margin-left:-130px; margin-right:-130px; } }
+  .sdg-presets { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:16px; font-family:'Baloo 2',sans-serif; font-size:15px; }
+  .sdg-presets span { color:var(--ink-dim); font-weight:700; margin-right:4px; }
+  .sdg button { font-family:'Baloo 2',sans-serif; font-weight:700; font-size:14px; background:var(--pill); color:var(--brand-ink); border:1px solid #f1d6b4; border-radius:999px; padding:5px 14px; cursor:pointer; }
+  .sdg button:hover { background:var(--bar); color:#fff; border-color:var(--bar); }
+  .sdg-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.15fr); gap:24px; align-items:start; }
+  @media (max-width:900px) { .sdg-grid { grid-template-columns:1fr; } }
+  .sdg-form { display:grid; grid-template-columns:1fr 1fr; gap:12px 14px; background:var(--soft); border:1px solid var(--border); border-radius:14px; padding:18px; }
+  .sdg-form label { display:flex; flex-direction:column; gap:5px; font-family:'Baloo 2',sans-serif; font-size:14px; font-weight:700; color:var(--ink-dim); }
+  .sdg-form label.wide { grid-column:1 / -1; }
+  .sdg-form label.chk { flex-direction:row; align-items:center; gap:9px; font-weight:600; color:var(--ink); }
+  .sdg-form input:not([type=checkbox]), .sdg-form select, .sdg-form textarea {
+    font-family:'JetBrains Mono',ui-monospace,monospace; font-size:13.5px; font-weight:400; color:var(--ink);
+    padding:8px 10px; border:1px solid #d9d4ca; border-radius:8px; background:#fff; width:100%; box-sizing:border-box; }
+  .sdg-form input:focus, .sdg-form select:focus, .sdg-form textarea:focus { outline:2px solid var(--bar); border-color:var(--bar); }
+  .sdg-form input[type=checkbox] { accent-color:var(--bar); width:17px; height:17px; }
+  .sdg-out h3 { font-size:17px; margin:18px 0 8px; }
+  .sdg-head { display:flex; justify-content:space-between; align-items:center; gap:10px; }
+  .sdg-head h3 { margin:0; font-family:'JetBrains Mono',monospace; font-size:15px; }
+  .sdg-out pre { background:#1d1f24; color:#f3efe6; border-radius:12px; padding:16px 18px; font-size:13px; line-height:1.55; overflow-x:auto; margin:10px 0 0; white-space:pre; }
+  .sdg-out pre.sdg-cmd { background:#2a2620; }
+  .sdg-warn { list-style:none; padding:0; margin:0; font-size:15.5px; }
+  .sdg-warn li { border-left:3px solid var(--bar); background:var(--pill); padding:9px 13px; margin-bottom:8px; border-radius:0 8px 8px 0; }
+  .sdg-warn li.ok { border-left-color:#2f8a57; background:#eef7f1; }
+  .sdg-warn li.err { border-left-color:#c2410c; background:#fdece4; }
+  .sdg-cta { margin-top:28px; border:1px solid var(--border); border-radius:16px; padding:20px 22px; background:linear-gradient(135deg,#fff 0%,var(--pill) 100%); }
+  .sdg-cta .tag { display:inline-block; background:var(--bar); color:#fff; font-weight:800; font-family:'Baloo 2',sans-serif; font-size:12px; letter-spacing:.5px; text-transform:uppercase; padding:5px 12px; border-radius:999px; margin-bottom:10px; }
+  .sdg-cta h4 { font-size:20px; margin:0 0 6px; }
+  .sdg-cta p { margin:0 0 12px; }
+  .sdg-cta .go { display:inline-block; background:var(--bar); color:#fff; border-radius:9px; padding:10px 18px; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:15px; text-decoration:none; }
+  .sdg-cta .go:hover { background:var(--bar-d); }
+  .sdg-cta .disc { font-size:13px; color:var(--ink-faint); margin:10px 0 0; }
+</style>
+
+<script is:inline define:vars={{ S }}>
+(function(){
+  var F = document.getElementById('sdg-form');
+  var PRESETS = {
+    node:   { desc:'My Node.js app', exec:'/usr/bin/node /opt/myapp/server.js', wd:'/opt/myapp', type:'simple', env:'NODE_ENV=production\nPORT=3000', rw:'/opt/myapp/data' },
+    python: { desc:'My Python web app', exec:'/opt/myapp/venv/bin/gunicorn --workers 3 --bind 127.0.0.1:8000 app:app', wd:'/opt/myapp', type:'simple', env:'PYTHONUNBUFFERED=1', rw:'/opt/myapp/instance' },
+    go:     { desc:'My Go service', exec:'/opt/myapp/bin/myapp -addr :8080', wd:'/opt/myapp', type:'exec', env:'', rw:'' },
+    java:   { desc:'My Java service', exec:'/usr/bin/java -Xmx512m -jar /opt/myapp/app.jar', wd:'/opt/myapp', type:'simple', env:'', rw:'/opt/myapp/logs' }
+  };
+  function v(n){ return F.elements[n].type === 'checkbox' ? F.elements[n].checked : F.elements[n].value.trim(); }
+  function fill(s, x, y){ return s.replace('{x}', x).replace('{y}', y || ''); }
+  function q(val){
+    // Environment= : on met la paire entre guillemets si elle contient un espace ou un guillemet.
+    if (/[\s"'\\]/.test(val)) return '"' + val.replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"';
+    return val;
+  }
+  function build(){
+    var W = [];
+    var raw = v('name') || 'myapp';
+    var name = raw.replace(/\.service$/i, '').replace(/[^A-Za-z0-9:_.@-]+/g, '-').replace(/^-+|-+$/g, '') || 'myapp';
+    if (name !== raw.replace(/\.service$/i, '')) W.push(['', fill(S.w_name, name)]);
+    var exec = v('exec'), type = v('type'), restart = v('restart'), user = v('user'), wd = v('wd');
+    var harden = v('harden'), rw = v('rw');
+    var shellRe = /(\|\||&&|[|<>;`]|\$\()/;
+    var already = /^\/(usr\/)?bin\/(ba|da|z)?sh\s+-c\b/.test(exec);
+    var execOut = exec;
+    if (!exec) W.push(['err', S.w_noexec]);
+    else {
+      var m = exec.match(shellRe);
+      if (m && !already){
+        W.push(['', fill(S.w_shell, m[0])]);
+        execOut = '/bin/sh -c "' + exec.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\$/g, function(){ return '$$'; }) + '"';
+      }
+      var first = exec.split(/\s+/)[0];
+      if (first.charAt(0) !== '/' && !(m && !already)){
+        if (first.indexOf('/') !== -1 || first.charAt(0) === '~') W.push(['err', fill(S.w_relative, first, first.replace(/^[.~]\/?/, ''))]);
+        else W.push(['', fill(S.w_bare, first)]);
+      }
+    }
+    if (!user || user === 'root') W.push(['', S.w_root]);
+    if (type === 'forking') W.push(['', S.w_forking]);
+    if (type === 'notify') W.push(['', S.w_notify]);
+    if (type === 'oneshot' && restart === 'always') W.push(['err', S.w_oneshot]);
+
+    var envLines = [], hasPyUnbuf = false;
+    v('env').split('\n').forEach(function(l){
+      l = l.trim(); if (!l || l.charAt(0) === '#') return;
+      if (!/^[A-Za-z_][A-Za-z0-9_]*=/.test(l)){ W.push(['err', fill(S.w_envline, l)]); return; }
+      var k = l.split('=')[0];
+      if (k === 'PYTHONUNBUFFERED') hasPyUnbuf = true;
+      if (/(PASS|SECRET|TOKEN|PRIVATE|API_?KEY|DATABASE_URL)/i.test(k)) W.push(['', fill(S.w_secret, k)]);
+      envLines.push('Environment=' + q(l));
+    });
+    if (/python|gunicorn|uvicorn|celery/i.test(exec) && !hasPyUnbuf){
+      envLines.unshift('Environment=PYTHONUNBUFFERED=1'); W.push(['', S.w_python]);
+    }
+    var home = /^\/(home|root)(\/|$)/.exec(wd);
+    if (harden && home) W.push(['', fill(S.w_home, '/' + home[1])]);
+    if (harden && !rw) W.push(['', S.w_norw]);
+
+    var u = ['[Unit]', 'Description=' + (v('desc') || name)];
+    if (v('net')) u.push('Wants=network-online.target', 'After=network-online.target');
+    if (v('limit') && restart !== 'no') u.push('# Give up after 5 failed starts in 5 minutes instead of looping forever', 'StartLimitIntervalSec=300', 'StartLimitBurst=5');
+    u.push('', '[Service]', 'Type=' + type);
+    if (user && user !== 'root') u.push('User=' + user);
+    if (v('group')) u.push('Group=' + v('group'));
+    if (wd) u.push('WorkingDirectory=' + wd);
+    envLines.forEach(function(l){ u.push(l); });
+    if (v('envfile')) u.push('EnvironmentFile=' + v('envfile'));
+    u.push('ExecStart=' + (execOut || '/path/to/your/program'));
+    if (/\bjava\b/.test(exec)) u.push('# The JVM exits with 143 on SIGTERM; count that as a clean stop', 'SuccessExitStatus=143');
+    if (restart !== 'no') u.push('Restart=' + restart, 'RestartSec=' + (v('rsec') || '5'));
+    if (v('lowport')) u.push('AmbientCapabilities=CAP_NET_BIND_SERVICE', 'CapabilityBoundingSet=CAP_NET_BIND_SERVICE');
+    if (harden){
+      u.push('', '# Sandboxing: check the result with systemd-analyze security ' + name + '.service',
+        'NoNewPrivileges=true', 'PrivateTmp=true', 'ProtectSystem=strict',
+        'ProtectHome=' + (home ? 'read-only' : 'true'));
+      if (rw) u.push('ReadWritePaths=' + rw);
+      u.push('ProtectKernelTunables=true', 'ProtectKernelModules=true', 'ProtectControlGroups=true',
+        'RestrictSUIDSGID=true', 'LockPersonality=true');
+    }
+    u.push('', '[Install]', 'WantedBy=multi-user.target');
+    var unit = u.join('\n') + '\n';
+
+    var c = [], file = name + '.service';
+    if (user && user !== 'root') c.push('# ' + S.c_user, 'sudo useradd --system --no-create-home --shell /usr/sbin/nologin ' + user);
+    if (v('envfile')) c.push('# ' + S.c_secret, 'sudo chown root:root ' + v('envfile') + ' && sudo chmod 600 ' + v('envfile'));
+    c.push('# ' + S.c_place, 'sudo cp ' + file + ' /etc/systemd/system/' + file,
+      '# ' + S.c_verify, 'sudo systemd-analyze verify /etc/systemd/system/' + file,
+      '# ' + S.c_start, 'sudo systemctl daemon-reload', 'sudo systemctl enable --now ' + file,
+      '# ' + S.c_logs, 'journalctl -u ' + name + ' -f');
+    if (harden) c.push('# ' + S.c_sec, 'systemd-analyze security ' + file);
+
+    document.getElementById('sdg-file').textContent = file;
+    document.getElementById('sdg-unit').textContent = unit;
+    document.getElementById('sdg-cmd').textContent = c.join('\n');
+    var ul = document.getElementById('sdg-warn');
+    while (ul.firstChild) ul.removeChild(ul.firstChild);
+    if (!W.length) W.push(['ok', S.none]);
+    W.forEach(function(w){ var li = document.createElement('li'); if (w[0]) li.className = w[0]; li.textContent = w[1]; ul.appendChild(li); });
+    return { unit: unit, file: file };
+  }
+  F.addEventListener('input', build);
+  F.addEventListener('change', build);
+  document.querySelectorAll('#sdg [data-p]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var p = PRESETS[b.getAttribute('data-p')];
+      Object.keys(p).forEach(function(k){ F.elements[k].value = p[k]; });
+      build();
+    });
+  });
+  document.getElementById('sdg-copy').addEventListener('click', function(e){
+    var t = build().unit, btn = e.currentTarget;
+    if (navigator.clipboard) navigator.clipboard.writeText(t).then(function(){ btn.textContent = S.copied; setTimeout(function(){ btn.textContent = S.copy; }, 1500); });
+  });
+  document.getElementById('sdg-dl').addEventListener('click', function(){
+    var r = build(), a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([r.unit], { type:'text/plain' }));
+    a.download = r.file; document.body.appendChild(a); a.click(); a.remove();
+  });
+  build();
+})();
+</script>

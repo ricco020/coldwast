@@ -40,6 +40,7 @@ const description = 'A VPS (virtual private server) is your own isolated slice o
 
   <h2>Managed vs unmanaged</h2>
   <p>This is the choice that trips people up. An <strong>unmanaged</strong> VPS gives you a bare server - you handle the operating system, updates, security and backups yourself. It's cheaper and more flexible, but you are the system administrator. A <strong>managed</strong> VPS costs more but the provider handles maintenance, patching and support, which is worth it if you'd rather not run a server. Pick based on how much sysadmin work you want to own.</p>
+  <p>On an unmanaged VPS, the first job is usually keeping your app running after you log out and after a reboot. On almost every Linux distribution that means a systemd service: our <a href="/systemd-service-generator.html">systemd service file generator</a> writes the unit and the install commands, and flags the mistakes that stop it from starting.</p>
 
   <h2>The honest trade-offs</h2>
   <p>A VPS gives real control, but with responsibility. On an unmanaged box, security is on you: unpatched software and weak SSH settings are how servers get compromised. Resources are guaranteed but finite - you size the plan to your workload and scale up when needed. And there's a learning curve to the command line and Linux administration. For most developers, though, that control is exactly the point, and the skills transfer everywhere.</p>

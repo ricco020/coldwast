@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+import SystemdGen from '../components/SystemdGen.astro';
+---
+<Base title='systemd Service File Generator: a .service Unit That Actually Starts' description='Free systemd unit file generator for Node.js, Python, Go and Java. Flags the mistakes that make a service fail (relative paths, shell syntax, secrets in Environment=) and adds a safe sandbox.' path="/systemd-service-generator.html" lang="en">
+  <div class="reading">
+  <p class="kicker" style="margin-top:30px">Coldwast</p>
+  <h1>systemd service file generator</h1>
+  <p>Fill in the command that starts your app and get a <code>.service</code> unit you can drop into <code>/etc/systemd/system/</code>, with the install commands to match. The generator also reads what you typed and flags the mistakes that make a unit fail on the first start. Everything runs in your browser.</p>
+
+  <SystemdGen lang="en" />
+
+  <h2>The five lines that decide whether it works</h2>
+  <p><strong>ExecStart is not a shell.</strong> systemd splits the line into arguments itself and runs the program directly. A pipe, a <code>&gt;</code> redirection or <code>&amp;&amp;</code> is handed to your program as a literal argument. systemd also expands <code>$VAR</code> on its own, so a literal dollar sign has to be written <code>$$</code>. When the generator sees shell syntax it wraps the command in <code>/bin/sh -c</code> and does that escaping for you.</p>
+  <p><strong>Use an absolute path.</strong> A path such as <code>./server</code> is rejected outright. A bare name such as <code>node</code> is accepted, but systemd searches only its own fixed directories, not the PATH of your login shell, so a Node installed with nvm or a tool in <code>~/.local/bin</code> is not found.</p>
+  <p><strong>Type=simple or exec for almost everything.</strong> A web server, a worker or a bot that stays in the foreground is <code>simple</code>. <code>exec</code> differs in one useful way: the start is only reported as successful once the binary has actually been executed, so a wrong path fails <code>systemctl start</code> instead of failing silently a moment later. <code>forking</code> is for old daemons that put themselves in the background, and <code>notify</code> only works if the program calls <code>sd_notify</code>.</p>
+  <p><strong>Restart=on-failure with a limit.</strong> <code>on-failure</code> restarts after a crash or a non-zero exit, but not after a clean stop; <code>always</code> restarts even then. By default systemd allows 5 starts in 10 seconds, and with a 5-second delay a crashing app never reaches that limit, so it loops forever. <code>StartLimitIntervalSec=300</code> with <code>StartLimitBurst=5</code> makes it give up and leave a clear failed state.</p>
+  <p><strong>Wants= and After= together.</strong> <code>After=network-online.target</code> on its own only sets an order; it does not pull the target in. Without <code>Wants=network-online.target</code> your service can still start before the network is up, which is the classic "works after a manual restart, fails at boot" bug.</p>
+
+  <h2>The sandbox, and what was left out on purpose</h2>
+  <p>With <code>ProtectSystem=strict</code> the whole filesystem is read-only for the service, except the paths you list in <code>ReadWritePaths=</code>. <code>PrivateTmp</code> gives it its own <code>/tmp</code>, <code>NoNewPrivileges</code> stops it from gaining rights through setuid binaries, and the kernel and cgroup settings stop it from changing system-wide state. Run <code>systemd-analyze security yourapp.service</code> before and after: it prints an exposure score and lists each setting still open.</p>
+  <p>Two common recommendations are deliberately absent. <code>MemoryDenyWriteExecute=true</code> breaks just-in-time compilers, which means Node.js, the JVM and PyPy. <code>PrivateDevices=true</code> is safe for a web app but breaks anything that talks to a GPU or a serial port. Add them yourself if you know your program does not need them.</p>
+
+  <h2>When it will not start: the exit codes</h2>
+  <p><code>systemctl status yourapp</code> shows a status like <code>status=203/EXEC</code>. The number tells you which step failed before your program even ran:</p>
+  <table>
+    <thead><tr><th>Status</th><th>Meaning</th><th>Usual fix</th></tr></thead>
+    <tbody>
+      <tr><td><code>203/EXEC</code></td><td>The program could not be executed</td><td>Wrong path, missing execute bit, or a script without a shebang line</td></tr>
+      <tr><td><code>200/CHDIR</code></td><td>WorkingDirectory is missing or not accessible</td><td>Create it, or check that ProtectHome is not hiding it</td></tr>
+      <tr><td><code>217/USER</code></td><td>The User= account does not exist</td><td>Run the <code>useradd</code> line above</td></tr>
+      <tr><td><code>226/NAMESPACE</code></td><td>The sandbox could not be set up</td><td>A path in ReadWritePaths does not exist; create it or prefix it with <code>-</code></td></tr>
+    </tbody>
+  </table>
+  <p>Any other failure is your own program exiting, and its output is in <code>journalctl -u yourapp -b</code>.</p>
+
+  <h2>Changing it later</h2>
+  <p>After editing the file in <code>/etc/systemd/system/</code>, run <code>sudo systemctl daemon-reload</code> before restarting, or systemd keeps using the old version. For a unit installed by a package, do not edit it in place: <code>sudo systemctl edit yourapp</code> creates an override file that survives upgrades and reloads systemd for you.</p>
+  <p>Related: <a href="/e/blog/2026-06-19-what-is-a-vps.html">what a VPS is</a>, <a href="/e/blog/2026-06-26-what-is-a-reverse-proxy.html">putting a reverse proxy in front of the app</a>, <a href="/e/blog/2026-06-22-what-is-ssh.html">SSH basics</a>, and for scheduled jobs the <a href="/cron-expression.html">cron expression explainer</a>.</p>
+  <p class="meta">Directives follow the systemd.service(5) and systemd.exec(5) manual pages. Type=exec needs systemd 240 or later; every current Debian, Ubuntu, Fedora and RHEL release qualifies.</p>
+  </div>
+</Base>

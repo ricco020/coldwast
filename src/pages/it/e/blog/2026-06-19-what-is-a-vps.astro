@@ -40,6 +40,7 @@ const description = 'Un VPS (server privato virtuale) è la tua fetta isolata di
 
   <h2>Gestito vs non gestito</h2>
   <p>È la scelta su cui si inciampa. Un VPS <strong>non gestito</strong> ti dà un server nudo - gestisci tu stesso il sistema, gli aggiornamenti, la sicurezza e i backup. Più economico e flessibile, ma sei tu l’amministratore di sistema. Un VPS <strong>gestito</strong> costa di più ma il fornitore si occupa di manutenzione, patch e supporto, il che vale la pena se preferisci non amministrare un server. Scegli in base alla quantità di lavoro sysadmin che vuoi assumerti.</p>
+  <p>Su un VPS non gestito, il primo compito è di solito tenere l'app in esecuzione dopo il logout e dopo un riavvio. Su quasi tutte le distribuzioni Linux questo significa un servizio systemd: il nostro <a href="/it/systemd-service-generator.html">generatore di file di servizio systemd</a> scrive l'unità e i comandi di installazione, e segnala gli errori che ne impediscono l'avvio.</p>
 
   <h2>I compromessi onesti</h2>
   <p>Un VPS offre un vero controllo, ma con delle responsabilità. Su un server non gestito, la sicurezza spetta a te: software non aggiornato e impostazioni SSH deboli sono il modo in cui i server vengono compromessi. Le risorse sono garantite ma finite - dimensioni l’offerta in base al tuo carico e passi a un piano superiore quando serve. E c’è una curva di apprendimento per la riga di comando e l’amministrazione Linux. Per la maggior parte degli sviluppatori, questo controllo è proprio il punto, e le competenze si trasferiscono ovunque.</p>

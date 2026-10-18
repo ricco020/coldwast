@@ -34,6 +34,7 @@ const FOOTER = `
 ## Interactive tools
 
 - [Regex tester](${SITE}/regex-tester.html): free in-browser regular-expression tester using the browser's own JavaScript engine - live match highlighting and capture-group table. Available in six languages.
+- [systemd service file generator](${SITE}/systemd-service-generator.html): builds a .service unit for Node.js, Python, Go or Java with install commands and an optional sandbox, and flags the mistakes that make a unit fail to start (relative paths, shell syntax in ExecStart, secrets in Environment=). Available in six languages.
 
 ## More
 
