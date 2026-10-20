@@ -76,7 +76,30 @@ export function ctaAngle(lang, hint = '') {
   const L = ANGLES[lang] || ANGLES.en;
   const h = String(hint).toLowerCase();
   for (const [key, re] of RULES) {
-    if (re.test(h)) return L[key];
+    if (re.test(h)) return { ...L[key], key };
   }
-  return L.default;
+  return { ...L.default, key: 'default' };
+}
+
+// Second lien sous l encart DigitalOcean, pour les angles « un VPS a vous » (server, containers) seulement.
+// DigitalOcean (Awin 123996) : 165 clics en 90 j, 0 vente au 20/10/2026 ; Contabo (CJ 4639721) est le seul
+// programme du reseau qui vend. PID CJ coldwa 101807052 ; lien texte CJ dans la langue du lecteur quand
+// Contabo en publie un (DE 17058456, ES 17248464), sinon EN 12454592. Aucun prix cite.
+const CONTABO_AID = { en: 12454592, de: 17058456, es: 17248464 };
+const CONTABO_TXT = {
+  en: ['Another option:', 'Contabo Cloud VPS', ', root access and its own public IPv4 (affiliate link).'],
+  fr: ['Autre option :', 'Cloud VPS Contabo', ', accès root et IPv4 publique dédiée (lien affilié).'],
+  es: ['Otra opción:', 'Cloud VPS de Contabo', ', acceso root e IPv4 pública propia (enlace de afiliado).'],
+  de: ['Eine weitere Option:', 'Contabo Cloud VPS', ', Root-Zugriff und eigene öffentliche IPv4 (Affiliate-Link).'],
+  it: ["Un'altra opzione:", 'Cloud VPS di Contabo', ', accesso root e IPv4 pubblico dedicato (link di affiliazione).'],
+  pt: ['Outra opção:', 'Cloud VPS da Contabo', ', acesso root e IPv4 pública própria (link de afiliado).'],
+};
+export function contaboAlt(lang, cta, page = '') {
+  if (!cta || !['server', 'containers'].includes(cta.key)) return null;
+  // Faux positifs des regles d angle (« Hangs Your Server », « container queries » CSS, serverless = pas de VPS).
+  if (/regex|css-|serverless/i.test(String(page))) return null;
+  const aid = CONTABO_AID[lang] || CONTABO_AID.en;
+  const slug = String(page).replace(/^\/+|\.html$/g, '').replace(/[^a-z0-9]+/gi, '-').slice(0, 60);
+  const [pre, link, post] = CONTABO_TXT[lang] || CONTABO_TXT.en;
+  return { pre, link, post, url: `https://www.tkqlhce.com/click-101807052-${aid}?sid=coldwa-${slug}` };
 }

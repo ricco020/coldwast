@@ -11,7 +11,7 @@ const {
 import { guides, categories, guideTitle, catLabel } from '../data/guides.js';
 import { hasTx } from '../data/i18n-articles.js';
 import { ui, localized, LOCALES } from '../i18n/ui.js';
-import { ctaAngle } from '../data/cta-angle.js';
+import { ctaAngle, contaboAlt } from '../data/cta-angle.js';
 import ShareButtons from '../components/ShareButtons.astro';
 const t = ui[lang] || ui.en;
 const SITE = 'https://coldwa.st';
@@ -43,6 +43,7 @@ const related = isArticle
   : [];
 // CTA perso par contenu : angle déduit du sujet de la page (offre fixe DigitalOcean).
 const cta = ctaAngle(lang, canonPath + ' ' + title);
+const ctaAlt = contaboAlt(lang, cta, canonPath);
 // Catbar: "All guides" + each category. SLUGS identical across locales; only
 // the LABEL and the locale prefix change.
 const cats = [
@@ -439,6 +440,7 @@ const alts = [
               <h4 class="amh">{cta.h}</h4>
               <p>{cta.p}</p>
               <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">{t.aff_cta}</a>
+              {ctaAlt && <p class="altvps">{ctaAlt.pre} <a href={ctaAlt.url} rel="sponsored nofollow noopener" target="_blank">{ctaAlt.link}</a>{ctaAlt.post}</p>}
               <p class="disc">{t.aff_disc}</p>
             </div>
             <div class="sidebox relmini">
