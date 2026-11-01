@@ -5,12 +5,12 @@ const title = 'Stack vs Cabal: escolher uma ferramenta de build Haskell (2026)';
 const description = 'O Cabal e o Stack são as duas principais formas de construir projetos Haskell. O que é cada um, em que diferem (Hackage vs Stackage, reprodutibilidade, gestão do GHC), os comandos equivalentes e como escolher em 2026.';
 ---
 <Base title={title} description={description} path={path} type="article" lang="pt"
-  image="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
+  image="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-11-01">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/pt">Início</a><span>/</span><a href="/pt/e">Guias</a><span>/</span>Stack vs Cabal</nav>
   <p class="kicker">Haskell · build · ferramentas</p>
   <h1>Stack vs Cabal: escolher uma ferramenta de build Haskell</h1>
-  <div class="artmeta"><span>Por Coldwast</span><span>Atualizado a 14 de junho de 2026</span><span>8 min de leitura</span><span class="tag">#haskell</span><span class="tag">#cabal</span><span class="tag">#stack</span></div>
+  <div class="artmeta"><span>Por Coldwast</span><span>Atualizado a 1 de novembro de 2026</span><span>8 min de leitura</span><span class="tag">#haskell</span><span class="tag">#cabal</span><span class="tag">#stack</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=1200&q=80&auto=format&fit=crop" alt="Um portátil numa secretária a mostrar código num editor" width="1200" height="420" loading="eager" />
@@ -36,7 +36,7 @@ packages:
   <figure><img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&q=80&auto=format&fit=crop" alt="Fluxos de código verde num ecrã escuro" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Fluxos de código no ecrã - ambas as ferramentas obtêm as dependências e compilam-nas; diferem sobretudo na proveniência das versões.</figcaption></figure>
 
   <h2>Onde estão hoje as duas ferramentas</h2>
-  <p>As versões contam aqui, porque ambas as ferramentas se moveram recentemente. A <strong>29 de julho de 2026</strong>, a versão estável atual do <code>cabal-install</code> é a <strong>3.18.1.0</strong>, publicada nesse mesmo dia; a linha estável anterior era a <strong>3.16.1.0</strong>, de dezembro de 2025. No Stack, a versão estável atual é a <strong>3.11.1</strong>, de junho de 2026. Estes números e datas provêm das páginas de releases do GitHub de cada projeto, consultadas na data indicada: confirme-os antes de fixar seja o que for na sua integração contínua.</p>
+  <p>As versões contam aqui, porque as duas ferramentas continuam a evoluir. A <strong>1 de novembro de 2026</strong>, a versão estável do <code>cabal-install</code> é a <strong>3.18.2.0</strong>, publicada a <strong>30 de setembro de 2026</strong> (<a href="https://github.com/haskell/cabal/releases/tag/cabal-install-v3.18.2.0">página da versão</a>); sucede à 3.18.1.0 de 29 de julho de 2026, por isso, se a sua CI fixava a 3.18.1.0, a atualização fica na mesma linha 3.18. No Stack, a versão estável continua a ser a <strong>3.11.1</strong>, de 13 de junho de 2026 (<a href="https://github.com/commercialhaskell/stack/releases/tag/v3.11.1">página da versão</a>), e o snapshot de suporte longo mais recente no Stackage é <strong><code>lts-24.65</code></strong> (<a href="https://www.stackage.org/lts">Stackage LTS</a>). Datas e números vêm das páginas GitHub de cada projeto e do Stackage, verificados na data indicada: confirme-os nas páginas dos projetos antes de fixar algo na CI.</p>
 
   <h2>As diferenças chave</h2>
   <ul>
