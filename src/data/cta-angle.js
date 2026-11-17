@@ -95,7 +95,7 @@ const CONTABO_TXT = {
   pt: ['Outra opção:', 'Cloud VPS da Contabo', ', acesso root e IPv4 pública própria (link de afiliado).'],
 };
 export function contaboAlt(lang, cta, page = '') {
-  if (!cta || !['server', 'containers'].includes(cta.key)) return null;
+  if (!cta || !['server', 'containers', 'haskell'].includes(cta.key)) return null;
   // Faux positifs des regles d angle (« Hangs Your Server », « container queries » CSS, serverless = pas de VPS).
   if (/regex|css-|serverless/i.test(String(page))) return null;
   const aid = CONTABO_AID[lang] || CONTABO_AID.en;

@@ -268,6 +268,13 @@ const alts = [
       .affmini p { font-size:13.5px; color:var(--ink-dim); margin:0 0 13px; line-height:1.55; }
       .affmini .go { display:inline-block; background:var(--bar); color:#fff; border-radius:9px; padding:9px 16px; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:14px; text-decoration:none; }
       .affmini .go:hover { background:var(--bar-d); }
+      .affinl { background:linear-gradient(180deg,#fff7ee,#fdeed9); border:1px solid #f1ddc2; border-radius:14px; padding:14px 16px; margin:22px 0; }
+      .affinl .tag { display:inline-block; background:var(--bar); color:#fff; font-weight:800; font-family:'Baloo 2',sans-serif; font-size:10.5px; letter-spacing:.5px; text-transform:uppercase; padding:4px 10px; border-radius:999px; margin-right:8px; }
+      .affinl .ainh { font-family:'Baloo 2',sans-serif; font-size:16px; color:var(--ink); }
+      .affinl p { margin:10px 0 0; }
+      .affinl .go { display:inline-block; background:var(--bar); color:#fff; border-radius:9px; padding:9px 15px; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:14px; text-decoration:none; }
+      .affinl .go2 { margin-left:10px; font-size:13.5px; color:var(--brand-ink); }
+      .affinl .disc { font-size:11.5px; color:var(--ink-faint); }
       .affmini .disc { font-size:11.5px; color:var(--ink-faint); margin:11px 0 0; }
       .sidebox { background:#fff; border:1px solid var(--border); border-radius:14px; padding:20px 20px; }
       .relmini ul { list-style:none; padding:0; margin:0; }
@@ -441,7 +448,20 @@ const alts = [
     </div>
     {isArticle ? (
       <div class="artgrid">
-        <main class="artmain"><slot /></main>
+        <main class="artmain"><slot />
+          {/* Rappel mobile (<940px) : l encart lateral tombe sous l article entier. Deplace apres la 1re section par le script ci-dessous, cache sinon. SID -inl pour mesurer cette position. */}
+          <div class="affinl" id="affinl" hidden>
+            <span class="tag">{t.reco}</span>
+            <strong class="ainh">{cta.h}</strong>
+            {ctaAlt ? (
+              <p><a class="go" href={ctaAlt.url.replace('?sid=coldwa-', '?sid=coldwa-inl-')} rel="sponsored nofollow noopener" target="_blank">{ctaAlt.link} →</a> <a class="go2" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">DigitalOcean</a></p>
+            ) : (
+              <p><a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">{t.aff_cta}</a></p>
+            )}
+            <p class="disc">{t.aff_disc}</p>
+          </div>
+          <script is:inline>(function(){var b=document.getElementById('affinl');if(!b||!window.matchMedia('(max-width:940px)').matches)return;var h=document.querySelectorAll('.artmain h2');if(h.length<3)return;h[1].parentNode.insertBefore(b,h[1]);b.hidden=false;})();</script>
+        </main>
         <aside class="artside">
           <div class="sticky">
             <ShareButtons title={title} locale={lang} />
