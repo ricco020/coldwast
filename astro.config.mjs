@@ -1,6 +1,11 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
+
+// Dates de derniere modification par page, ecrites par scripts/gen-lastmod.py depuis git log
+// (le build Docker n a pas l historique). Page absente du fichier = pas de lastmod.
+let LASTMOD = {};
+try { LASTMOD = JSON.parse(readFileSync('src/data/lastmod.json', 'utf8')); } catch {}
 
 // coldwa.st - static dev/programming resources.
 // build.format:'file' so legacy paths like /e/blog/2013-08-20-Cabal-sandbox.html
@@ -25,6 +30,7 @@ export default defineConfig({
       serialize(item) {
         const u = new URL(item.url);
         const path = decodeURIComponent(u.pathname).replace(/\/$/, '');
+        if (LASTMOD[path]) item.lastmod = LASTMOD[path];
         if (path === '' || /\.[a-z0-9]+$/i.test(path)) return item;
         if (existsSync(`dist${path}.html`) && !existsSync(`dist${path}/index.html`)) {
           u.pathname = path + '.html';

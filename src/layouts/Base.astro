@@ -54,6 +54,17 @@ const cats = [
   })),
 ];
 const cur = path;
+// Pied de page : les 3 outils gratuits lies depuis toutes les pages (l accueil n en liait qu un).
+const TOOL_NAMES = {
+  en: ['systemd service file generator', 'Cron expression explainer', 'Regex tester'],
+  fr: ['Générateur de fichier service systemd', "Décodeur d'expression cron", 'Testeur regex'],
+  es: ['Generador de archivos de servicio systemd', 'Explicador de expresiones cron', 'Probador de regex'],
+  de: ['systemd Service-Datei Generator', 'Cron-Ausdruck erklärt', 'Regex-Tester'],
+  it: ['Generatore di file di servizio systemd', 'Spiegatore di espressioni cron', 'Tester regex'],
+  pt: ['Gerador de ficheiros de serviço systemd', 'Explicador de expressões cron', 'Testador de regex'],
+};
+const footTools = ['/systemd-service-generator.html', '/cron-expression.html', '/regex-tester.html']
+  .map((h, i) => ({ h, l: (TOOL_NAMES[lang] || TOOL_NAMES.en)[i] }));
 // Root-relative path stripped of any /fr or /es prefix → used for the language
 // switcher and hreflang alternates.
 const rootPath = path.replace(/^\/(fr|es|de|it|pt)(?=\/|$)/, '') || '/';
@@ -467,7 +478,8 @@ const alts = [
       <div class="wrap">
         <p style="color:var(--ink);font-weight:700;font-size:17px;margin:0;font-family:'Baloo 2',sans-serif">{t.footer_tag}</p>
         <p style="margin:8px 0 0;max-width:640px">{t.footer_about}</p>
-        <p style="margin:16px 0 0">© {year} coldwa.st · <a href={localized('/about.html', lang)}>{t.footer_policy}</a> · <a href="/contact.html">Contact</a> · <a href="/privacy.html">Privacy</a> · <a href="/e/rss.xml">{t.nav_rss}</a></p>
+        <p style="margin:16px 0 0"><span style="color:var(--ink);font-weight:700">{t.nav_tools} :</span> {footTools.map((ft, i) => <>{i > 0 && ' · '}<a href={localized(ft.h, lang)}>{ft.l}</a></>)}</p>
+        <p style="margin:10px 0 0">© {year} coldwa.st · <a href={localized('/about.html', lang)}>{t.footer_policy}</a> · <a href="/contact.html">Contact</a> · <a href="/privacy.html">Privacy</a> · <a href="/e/rss.xml">{t.nav_rss}</a></p>
       </div>
     </footer>
     <script>
