@@ -5,7 +5,7 @@ const title = 'Cos\'è un reverse proxy? Nginx, Caddy e routing spiegati (2026)'
 const description = 'Un reverse proxy si trova davanti ai tuoi server, riceve ogni richiesta in entrata e la inoltra al backend giusto. Cos\'è un reverse proxy, in cosa differisce da un proxy diretto e da un load balancer, perché si usa (TLS, cache, routing) e gli strumenti comuni.';
 ---
 <Base title={title} description={description} path={path} type="article" lang="it"
-  image="/img/reverse-proxy-2026.jpg" datePublished="2026-06-26" dateModified="2026-06-26">
+  image="/img/reverse-proxy-2026.jpg" datePublished="2026-06-26" dateModified="2026-11-18">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/it">Home</a><span>/</span><a href="/it/e">Guide</a><span>/</span>Cos'è un reverse proxy</nav>
   <p class="kicker">Programmazione · Server · Reti</p>
@@ -54,6 +54,17 @@ const description = 'Un reverse proxy si trova davanti ai tuoi server, riceve og
     &#125;
 &#125;</code></pre>
   <p>Questa è tutta l'idea: le richieste per <code>example.com</code> arrivano a Nginx sulla porta 80, e Nginx le inoltra alla tua app sulla porta 3000, passando l'host originale. Aggiungi un blocco TLS e un secondo <code>server</code> per la tua API, e una sola macchina serve in modo pulito più applicazioni via HTTPS.</p>
+
+  <h2>La stessa cosa con Caddy, HTTPS compreso</h2>
+  <p>Con Caddy, due siti sullo stesso server stanno in un <code>Caddyfile</code> di sei righe:</p>
+  <pre><code>example.com &#123;
+    reverse_proxy 127.0.0.1:3000
+&#125;
+
+api.example.com &#123;
+    reverse_proxy 127.0.0.1:8080
+&#125;</code></pre>
+  <p>Caddy richiede e rinnova da solo un certificato Let’s Encrypt per ogni nome e reindirizza HTTP su HTTPS. Funziona solo se <code>example.com</code> e <code>api.example.com</code> puntano (record DNS A) all’IP pubblico della macchina e se le porte 80 e 443 sono aperte. Per questo un reverse proxy di solito gira su un <a href="/it/e/blog/2026-06-19-what-is-a-vps.html">VPS</a> con il proprio IPv4 pubblico, non su un portatile né su un hosting condiviso. Verifica con <code>caddy validate --config /etc/caddy/Caddyfile</code>, poi <code>systemctl reload caddy</code>.</p>
 
   <h2>I compromessi onesti</h2>
   <p>Un reverse proxy aggiunge un pezzo in movimento in più. Diventa il punto unico attraverso cui passa ogni richiesta, quindi se cade tutto ciò che sta dietro diventa irraggiungibile - ecco perché in produzione lo si esegue in modo affidabile e a volte in coppia. Aggiunge anche un po' di latenza e un altro file di configurazione da capire. Per una sola piccola app che già ascolta sulla porta 443, potresti non averne bisogno. Ma appena ospiti più di un servizio, vuoi gestire l'HTTPS in un solo posto o pensi di scalare, un reverse proxy si ripaga in fretta.</p>

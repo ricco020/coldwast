@@ -5,7 +5,7 @@ const title = 'Was ist ein Reverse Proxy? Nginx, Caddy & Routing erklärt (2026)
 const description = 'Ein Reverse Proxy steht vor Ihren Servern, nimmt jede eingehende Anfrage entgegen und leitet sie an das richtige Backend weiter. Was ein Reverse Proxy ist, wie er sich von einem Forward Proxy und einem Load Balancer unterscheidet, wozu man ihn nutzt (TLS, Caching, Routing) und die gängigen Tools.';
 ---
 <Base title={title} description={description} path={path} type="article" lang="de"
-  image="/img/reverse-proxy-2026.jpg" datePublished="2026-06-26" dateModified="2026-06-26">
+  image="/img/reverse-proxy-2026.jpg" datePublished="2026-06-26" dateModified="2026-11-18">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/de">Startseite</a><span>/</span><a href="/de/e">Guides</a><span>/</span>Was ist ein Reverse Proxy</nav>
   <p class="kicker">Programmierung · Server · Netzwerk</p>
@@ -54,6 +54,17 @@ const description = 'Ein Reverse Proxy steht vor Ihren Servern, nimmt jede einge
     &#125;
 &#125;</code></pre>
   <p>Das ist die ganze Idee: Anfragen für <code>example.com</code> kommen bei Nginx auf Port 80 an, und Nginx leitet sie an Ihre App auf Port 3000 weiter und gibt den ursprünglichen Host mit. Fügen Sie einen TLS-Block und einen zweiten <code>server</code> für Ihre API hinzu, und eine einzige Maschine bedient sauber mehrere Anwendungen über HTTPS.</p>
+
+  <h2>Dasselbe mit Caddy, HTTPS inklusive</h2>
+  <p>Mit Caddy passen zwei Websites auf einem Server in ein sechszeiliges <code>Caddyfile</code>:</p>
+  <pre><code>example.com &#123;
+    reverse_proxy 127.0.0.1:3000
+&#125;
+
+api.example.com &#123;
+    reverse_proxy 127.0.0.1:8080
+&#125;</code></pre>
+  <p>Caddy beantragt und erneuert für jeden Namen selbst ein Let’s-Encrypt-Zertifikat und leitet HTTP auf HTTPS um. Das klappt nur, wenn <code>example.com</code> und <code>api.example.com</code> per DNS-A-Eintrag auf die öffentliche IP der Maschine zeigen und dort die Ports 80 und 443 offen sind. Deshalb läuft ein Reverse Proxy meist auf einem <a href="/de/e/blog/2026-06-19-what-is-a-vps.html">VPS</a> mit eigener öffentlicher IPv4, nicht auf einem Laptop oder Shared Hosting. Prüfen Sie mit <code>caddy validate --config /etc/caddy/Caddyfile</code>, danach <code>systemctl reload caddy</code>.</p>
 
   <h2>Die ehrlichen Kompromisse</h2>
   <p>Ein Reverse Proxy fügt ein weiteres bewegliches Teil hinzu. Er wird zur einzigen Stelle, durch die jede Anfrage fließt, sodass bei seinem Ausfall alles dahinter unerreichbar ist - weshalb man ihn in Produktion zuverlässig und manchmal doppelt betreibt. Er fügt außerdem etwas Latenz und eine weitere zu verstehende Konfigurationsdatei hinzu. Für eine einzige kleine App, die bereits auf Port 443 lauscht, brauchen Sie ihn vielleicht gar nicht. Doch sobald Sie mehr als einen Dienst hosten, HTTPS an einer Stelle verwalten oder skalieren wollen, macht sich ein Reverse Proxy schnell bezahlt.</p>
