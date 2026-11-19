@@ -1,23 +1,27 @@
 ---
 import Base from '../../../layouts/Base.astro';
 const path = '/e/blog/2026-06-17-what-is-a-webhook.html';
-const title = 'What Is a Webhook? How They Work, with Examples (2026)';
-const description = 'A webhook is an automated HTTP request a service sends you when an event happens - the "reverse" of an API call you make. What webhooks are, how they differ from polling an API, how to receive one safely, and real examples.';
+const title = "What Is a Webhook? How It Works, a Tested Example, and Who Sets It Up";
+const description = "A webhook is an HTTP POST a service sends to your URL when an event happens. How it works, a Python receiver tested with curl (HMAC signature, duplicates), who sets it up, whether you can reply, whether it costs money, and what happens if your server is down.";
 const hero = '/img/what-is-a-webhook-2026.jpg';
 const faq = [
   { q: 'What is a webhook in simple terms?', a: 'A webhook is an automated message a service sends to a URL you control the moment something happens - for example, "a payment succeeded" or "a new commit was pushed". Instead of you repeatedly asking a service "anything new yet?" (polling its API), the service calls you with an HTTP POST as soon as the event occurs. It is often described as a "reverse API": with a normal API you make the request; with a webhook the service makes the request to you.' },
   { q: 'What is the difference between a webhook and an API?', a: 'They are related but point in opposite directions. With a normal (REST) API you send a request to the provider when you want data, and they respond. With a webhook the provider sends a request to your server when an event happens, so you get data pushed to you in near real time without asking. A webhook is delivered over the same HTTP mechanics as an API - it is essentially the provider acting as the client and your endpoint acting as the server.' },
   { q: 'Why use a webhook instead of polling?', a: 'Polling means repeatedly calling an API on a timer to check for changes, which wastes requests and adds delay between the event and your reaction. Webhooks push the event to you the moment it happens, so they are more efficient and far closer to real time. The trade-off is that you must run an always-on endpoint to receive them, and handle retries and duplicate deliveries.' },
   { q: 'How do I receive a webhook securely?', a: 'Expose an HTTPS endpoint that accepts POST requests, return a 2xx status quickly to acknowledge receipt, and process the work asynchronously. Verify the payload signature the provider sends (an HMAC of the body with a shared secret) so you know the request is genuine, and make handling idempotent because providers may deliver the same event more than once. Reject anything that fails signature verification.' },
+  { q: "Who sets up the webhook, the sender or the receiver?", a: "The receiver. You write the endpoint (an HTTPS URL on your server), then register it in the sending service's dashboard or API and pick the events you care about. The sender only stores your URL and a secret used to sign requests, and calls you when the event happens." },
+  { q: "Can you reply to a webhook?", a: "Only with the HTTP status code. The sender checks whether you answered 2xx (received) or an error (retry, or mark as failed). The body of your response is usually ignored: if you need to send data back to the service, make your own call to its API afterwards." },
+  { q: "Does it cost money to use a webhook?", a: "No. A webhook is a plain HTTP request, and services that offer them (GitHub, Stripe, Slack...) do not charge for sending them. What you do need is an always-on server with a public URL to receive them: that hosting is the only cost." },
+  { q: "What happens if my server is down when the webhook arrives?", a: "It depends on the sender. GitHub does not retry by itself: if your server does not answer within 10 seconds, the delivery is marked as failed and you have to redeliver it by hand or through its API. Stripe, in live mode, retries for up to three days with a growing delay. That is why a receiver belongs on a server that never sleeps." },
 ];
 ---
 <Base title={title} description={description} path={path} type="article"
-  image={hero} datePublished="2026-06-17" dateModified="2026-06-17">
+  image={hero} datePublished="2026-06-17" dateModified="2026-11-19">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e">Guides</a><span>/</span>What is a webhook</nav>
   <p class="kicker">Programming · concepts · web</p>
   <h1>What is a webhook?</h1>
-  <div class="artmeta"><span>By Coldwast</span><span>Updated Jun 17, 2026</span><span>7 min read</span><span class="tag">#webhook</span><span class="tag">#api</span><span class="tag">#web</span></div>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Nov 19, 2026</span><span>9 min read</span><span class="tag">#webhook</span><span class="tag">#api</span><span class="tag">#web</span></div>
 
   <figure>
     <img class="hero" src={hero} alt="A server and a network switch connected by an orange Ethernet cable" width="1200" height="420" loading="eager" />
@@ -44,7 +48,7 @@ const faq = [
     <li>You register a <strong>URL</strong> (your endpoint) with the provider and choose which events you care about.</li>
     <li>When such an event happens, the provider sends an HTTP <strong>POST</strong> to your URL with a body (usually JSON) describing it.</li>
     <li>Your server reads the payload, returns a quick <strong>2xx</strong> status to acknowledge it, and does the real work afterwards.</li>
-    <li>If your endpoint is down or returns an error, most providers <strong>retry</strong> with backoff - which is why duplicates can happen.</li>
+    <li>If your endpoint is down or returns an error, many providers (Stripe, for example) <strong>retry</strong> with a growing delay - which is why duplicates can happen. GitHub does not retry on its own (see below).</li>
   </ol>
   <p>A delivery looks much like any HTTP request:</p>
   <pre><code>POST /webhooks/payments  HTTP/1.1
@@ -69,6 +73,49 @@ X-Signature: t=1718600000,v1=9f86d08...
     <li><strong>Return errors honestly</strong> - if you cannot process it, return a non-2xx so the provider retries instead of dropping it.</li>
   </ul>
   <p>Webhooks need an <strong>always-on endpoint</strong> with a public HTTPS URL - which is why a small server or cloud instance is the usual home for a webhook receiver, rather than a machine that sleeps.</p>
+
+
+  <h2>Your first webhook receiver, tested</h2>
+  <p>This Python receiver uses only the standard library. It checks the HMAC SHA-256 signature in the <code>X-Hub-Signature-256</code> header (the <code>sha256=...</code> format GitHub uses), ignores an event it has already seen by its <code>id</code>, and answers <code>204</code> as soon as it has recorded it. We ran it on Nov 19, 2026 with Python 3.12.3.</p>
+  <pre><code>import hmac, hashlib, json
+from http.server import BaseHTTPRequestHandler, HTTPServer
+
+SECRET = b"change-this-secret"
+seen = set()
+
+class Receiver(BaseHTTPRequestHandler):
+    def do_POST(self):
+        body = self.rfile.read(int(self.headers.get("Content-Length", 0)))
+        expected = "sha256=" + hmac.new(SECRET, body, hashlib.sha256).hexdigest()
+        if not hmac.compare_digest(expected, self.headers.get("X-Hub-Signature-256", "")):
+            self.send_response(401); self.end_headers(); return
+        event = json.loads(body)
+        if event["id"] in seen:
+            print("duplicate ignored:", event["id"])
+        else:
+            seen.add(event["id"])
+            print("event received:", event["event"], event["id"])
+        self.send_response(204); self.end_headers()
+
+HTTPServer(("0.0.0.0", 8080), Receiver).serve_forever()</code></pre>
+  <p>To play the sender from another terminal, we sign the body with the same secret and send it twice (a retry), then once with a fake signature:</p>
+  <pre><code>BODY='&#123;"event":"payment.succeeded","id":"pay_42"&#125;'
+SIG="sha256=$(printf '%s' "$BODY" | openssl dgst -sha256 -hmac 'change-this-secret' | sed 's/^.*= //')"
+curl -s -o /dev/null -w '%&#123;http_code&#125;\n' -X POST localhost:8080 -H "X-Hub-Signature-256: $SIG" -d "$BODY"
+curl -s -o /dev/null -w '%&#123;http_code&#125;\n' -X POST localhost:8080 -H "X-Hub-Signature-256: $SIG" -d "$BODY"
+curl -s -o /dev/null -w '%&#123;http_code&#125;\n' -X POST localhost:8080 -H "X-Hub-Signature-256: sha256=fake" -d "$BODY"</code></pre>
+  <p>Real output: curl prints <code>204</code>, <code>204</code> and <code>401</code>. The receiver prints:</p>
+  <pre><code>event received: payment.succeeded pay_42
+duplicate ignored: pay_42</code></pre>
+  <p>The first two requests get <code>204</code>: the sender knows not to retry, and the duplicate is not processed twice. The fake signature gets <code>401</code> and touches nothing. For production, store the <code>id</code> values in a database instead of memory, and put the receiver behind HTTPS (for example with a <a href="/e/blog/2026-06-26-what-is-a-reverse-proxy.html">reverse proxy</a> such as Caddy or Nginx).</p>
+
+  <h2>If your server does not answer: GitHub vs Stripe</h2>
+  <p>Senders do not treat a failed delivery the same way, and that decides where to host your receiver:</p>
+  <ul>
+    <li><strong>GitHub</strong>: if your server is down or takes longer than 10 seconds, the delivery is recorded as failed and <strong>is not retried automatically</strong>; you redeliver it from the webhook settings or through the REST API (<a href="https://docs.github.com/webhooks/using-webhooks/handling-failed-webhook-deliveries" rel="noopener" target="_blank">GitHub docs</a>).</li>
+    <li><strong>Stripe</strong>: in live mode it resends automatically for <strong>up to three days</strong> with a growing delay (<a href="https://docs.stripe.com/webhooks/process-undelivered-events" rel="noopener" target="_blank">Stripe docs</a>).</li>
+  </ul>
+  <p>Either way, a laptop that goes to sleep or a free tier that spins down after a few idle minutes loses events. A webhook receiver lives best on a small, always-on VPS.</p>
 
   <div class="affbox" style="margin:28px 0;">
     <span class="tag">Recommended</span>

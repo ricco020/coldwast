@@ -48,7 +48,7 @@ const faq = [
     <li>Registras una <strong>URL</strong> (tu endpoint) con el proveedor y eliges qué eventos te importan.</li>
     <li>Cuando ocurre tal evento, el proveedor envía un <strong>POST</strong> HTTP a tu URL con un cuerpo (normalmente JSON) que lo describe.</li>
     <li>Tu servidor lee el contenido, devuelve rápido un estado <strong>2xx</strong> para acusarlo, y hace el trabajo real después.</li>
-    <li>Si tu endpoint está caído o devuelve un error, la mayoría de los proveedores <strong>reintentan</strong> con backoff - de ahí los posibles duplicados.</li>
+    <li>Si tu endpoint está caído o devuelve un error, muchos proveedores (Stripe, por ejemplo) <strong>reintentan</strong> con espera creciente - de ahí los posibles duplicados. GitHub no reintenta solo (ver más abajo).</li>
   </ol>
   <p>Una entrega se parece a cualquier petición HTTP:</p>
   <pre><code>POST /webhooks/payments  HTTP/1.1
