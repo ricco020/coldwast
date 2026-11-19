@@ -72,7 +72,7 @@ Restart=always
 
 [Install]
 WantedBy=default.target</code></pre>
-  <p>Depois: <code>systemctl --user daemon-reload</code>, <code>systemctl --user start web</code>, e <code>loginctl enable-linger $USER</code> para o serviço arrancar com o servidor mesmo sem sessão aberta. Três armadilhas que a maioria das comparações não refere:</p>
+  <p>Depois: <code>systemctl --user daemon-reload</code>, <code>systemctl --user start web</code>, e <code>loginctl enable-linger $USER</code> para o serviço arrancar com o servidor mesmo sem sessão aberta. Três armadilhas a conhecer:</p>
   <ul>
     <li><strong>Versão do Podman</strong>: o Quadlet chegou com o Podman 4.4. O pacote por omissão do Debian 12 é o Podman 4.3.1 (sem Quadlet) e o do Ubuntu 22.04 é o 3.4.4. O Ubuntu 24.04 traz o 4.9.3 e o Debian 13 traz o 5.4.2 (versões lidas em packages.debian.org e packages.ubuntu.com a 20/11/2026). Num servidor novo, escolha Ubuntu 24.04 ou Debian 13 se for usar o Podman.</li>
     <li><strong>Portas 80 e 443 em rootless</strong>: um utilizador sem privilégios não pode abrir portas abaixo de 1024 (<code>net.ipv4.ip_unprivileged_port_start</code> vale 1024 por omissão). Publique na 8080 e ponha à frente um <a href="/pt/e/blog/2026-06-26-what-is-a-reverse-proxy.html">proxy reverso</a> como Caddy ou Nginx, ou baixe esse valor com sysctl.</li>
