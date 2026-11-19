@@ -5,12 +5,12 @@ const title = 'Install Haskell with GHCup: the 2026 toolchain guide (GHC, Cabal,
 const description = 'GHCup is the recommended way to install and manage the Haskell toolchain in 2026. How to install GHC, cabal-install, Stack and the Haskell Language Server, switch versions, and fix the common pitfalls - on Linux, macOS and Windows.';
 ---
 <Base title={title} description={description} path={path} type="article"
-  image="https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
+  image="https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-11-19">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e">Guides</a><span>/</span>Install Haskell with GHCup</nav>
   <p class="kicker">Haskell · toolchain · setup</p>
   <h1>Install Haskell with GHCup: the 2026 toolchain guide</h1>
-  <div class="artmeta"><span>By Coldwast</span><span>Updated Jun 14, 2026</span><span>7 min read</span><span class="tag">#haskell</span><span class="tag">#ghcup</span><span class="tag">#cabal</span></div>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Nov 19, 2026</span><span>7 min read</span><span class="tag">#haskell</span><span class="tag">#ghcup</span><span class="tag">#cabal</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.unsplash.com/photo-1610986603166-f78428624e76?w=1200&q=80&auto=format&fit=crop" alt="Syntax-highlighted source code on a dark screen" width="1200" height="420" loading="eager" />
@@ -61,6 +61,16 @@ mkdir hello &amp;&amp; cd hello
 cabal init --simple --non-interactive
 cabal run</code></pre>
   <p>If that prints output, your toolchain is healthy. From here, the build itself is parallel by default - see our guide on <a href="/e/blog/2011-08-22-GSoC-Final.html">how Cabal uses your cores</a>, and the deeper changes that landed in <a href="/e/blog/2017-09-09-Cabal-2-0.html">Cabal 2.0 and the new-build model</a>.</p>
+
+  <h2>On Windows: the install command and the errors people hit</h2>
+  <p>Paste this in a normal PowerShell window, <strong>not</strong> an administrator one: the GHCup documentation says its commands "should be run as non-root/non-admin user". This is the command published on haskell.org/ghcup (checked 19 November 2026):</p>
+  <pre><code>{`Set-ExecutionPolicy Bypass -Scope Process -Force;[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; try { & ([ScriptBlock]::Create((Invoke-WebRequest https://www.haskell.org/ghcup/sh/bootstrap-haskell.ps1 -UseBasicParsing))) -Interactive -DisableCurl } catch { Write-Error $_ }`}</code></pre>
+  <ul>
+    <li><strong><code>ghc</code> or <code>ghcup</code> is "not recognized" right after the install.</strong> The tools land in <code>C:\ghcup\bin</code>. A PowerShell window opened before the install keeps its old <code>PATH</code>, so close it, open a new one and run <code>ghcup --version</code>. If it still fails, add <code>C:\ghcup\bin</code> to <code>Path</code> in "Edit the system environment variables", as GHCup's manual install steps describe.</li>
+    <li><strong><code>invalid option '--set-recommended'</code>.</strong> <code>--set</code> and <code>recommended</code> are two separate words: <code>ghcup install ghc --set recommended</code>. Without a version, <code>ghcup install ghc</code> already picks the recommended one.</li>
+    <li><strong>The script exits immediately.</strong> GHCup's troubleshooting page names two causes: a company policy that blocks scripts (ask your administrator) or an antivirus / Windows Defender interfering, to disable temporarily during the install.</li>
+    <li><strong><code>curl: (60) SSL certificate problem</code>.</strong> Usually a corporate proxy. GHCup's fix: copy your CA certificates into <code>/etc/pki/ca-trust/source/anchors</code> inside its MSYS2 environment, then run <code>update-ca-trust</code>.</li>
+  </ul>
 
   <h2>Common pitfalls</h2>
   <ul>

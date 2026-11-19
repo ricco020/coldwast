@@ -5,12 +5,12 @@ const title = 'Instalar Haskell com o GHCup: o guia da toolchain 2026 (GHC, Caba
 const description = 'O GHCup é a forma recomendada de instalar e gerir a toolchain Haskell em 2026. Como instalar o GHC, o cabal-install, o Stack e o Haskell Language Server, alternar entre versões e corrigir os percalços mais comuns - em Linux, macOS e Windows.';
 ---
 <Base title={title} description={description} path={path} type="article" lang="pt"
-  image="https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
+  image="https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-11-19">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/pt">Início</a><span>/</span><a href="/pt/e">Guias</a><span>/</span>Instalar Haskell com o GHCup</nav>
   <p class="kicker">Haskell · toolchain · instalação</p>
   <h1>Instalar Haskell com o GHCup: o guia da toolchain 2026</h1>
-  <div class="artmeta"><span>Por Coldwast</span><span>Atualizado a 14 de junho de 2026</span><span>7 min de leitura</span><span class="tag">#haskell</span><span class="tag">#ghcup</span><span class="tag">#cabal</span></div>
+  <div class="artmeta"><span>Por Coldwast</span><span>Atualizado a 19 de novembro de 2026</span><span>7 min de leitura</span><span class="tag">#haskell</span><span class="tag">#ghcup</span><span class="tag">#cabal</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.unsplash.com/photo-1610986603166-f78428624e76?w=1200&q=80&auto=format&fit=crop" alt="Código-fonte colorido pela sintaxe num ecrã escuro" width="1200" height="420" loading="eager" />
@@ -61,6 +61,16 @@ mkdir hello &amp;&amp; cd hello
 cabal init --simple --non-interactive
 cabal run</code></pre>
   <p>Se isto apresentar uma saída, a sua toolchain está saudável. A partir daí, o próprio build é paralelo por predefinição - veja o nosso guia sobre <a href="/pt/e/blog/2011-08-22-GSoC-Final.html">como o Cabal aproveita os seus núcleos</a>, e as mudanças mais profundas que chegaram com o <a href="/pt/e/blog/2017-09-09-Cabal-2-0.html">Cabal 2.0 e o modelo new-build</a>.</p>
+
+  <h2>No Windows: o comando de instalação e os erros mais comuns</h2>
+  <p>Cole isto numa janela normal do PowerShell, <strong>não</strong> como administrador: a documentação do GHCup diz que os seus comandos "should be run as non-root/non-admin user". É o comando publicado em haskell.org/ghcup (verificado a 19 de novembro de 2026):</p>
+  <pre><code>{`Set-ExecutionPolicy Bypass -Scope Process -Force;[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; try { & ([ScriptBlock]::Create((Invoke-WebRequest https://www.haskell.org/ghcup/sh/bootstrap-haskell.ps1 -UseBasicParsing))) -Interactive -DisableCurl } catch { Write-Error $_ }`}</code></pre>
+  <ul>
+    <li><strong><code>ghc</code> ou <code>ghcup</code> "não é reconhecido" logo após a instalação.</strong> As ferramentas ficam em <code>C:\ghcup\bin</code>. Uma janela do PowerShell aberta antes da instalação mantém o <code>PATH</code> antigo: feche-a, abra outra e execute <code>ghcup --version</code>. Se continuar a falhar, adicione <code>C:\ghcup\bin</code> ao <code>Path</code> em "Editar as variáveis de ambiente do sistema", como descreve a instalação manual do GHCup.</li>
+    <li><strong><code>invalid option '--set-recommended'</code>.</strong> <code>--set</code> e <code>recommended</code> são duas palavras separadas: <code>ghcup install ghc --set recommended</code>. Sem versão, <code>ghcup install ghc</code> já escolhe a recomendada.</li>
+    <li><strong>O script fecha de imediato.</strong> A página de resolução de problemas do GHCup aponta duas causas: uma política da empresa que bloqueia scripts (fale com o administrador) ou um antivírus / Windows Defender que interfere, a desativar temporariamente durante a instalação.</li>
+    <li><strong><code>curl: (60) SSL certificate problem</code>.</strong> Normalmente um proxy empresarial. A solução do GHCup: copiar os certificados da CA para <code>/etc/pki/ca-trust/source/anchors</code> dentro do seu ambiente MSYS2 e executar <code>update-ca-trust</code>.</li>
+  </ul>
 
   <h2>Percalços comuns</h2>
   <ul>
