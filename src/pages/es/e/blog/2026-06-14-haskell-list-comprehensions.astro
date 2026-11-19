@@ -1,16 +1,16 @@
 ---
 import Base from '../../../../layouts/Base.astro';
 const path = '/es/e/blog/2026-06-14-haskell-list-comprehensions.html';
-const title = 'Las listas por comprensión de Haskell, explicadas (2026)';
-const description = 'Una lista por comprensión construye una lista a partir de uno o más generadores con guardas opcionales - concisa, legible y cercana a la notación matemática de definición de conjuntos. La sintaxis, los generadores múltiples, las guardas y su relación con map y filter.';
+const title = 'Listas por comprensión en Haskell: sintaxis, guardas, generadores y 9 casos probados';
+const description = 'Listas por comprensión en Haskell explicadas: generadores, guardas, varios generadores y 9 casos probados en GHC 9.10 (listas anidadas, cortar una lista infinita, índice, if then else, let, Y y O, rangos e intervalos, pares de divisores).';
 ---
 <Base title={title} description={description} path={path} type="article" lang="es"
-  image="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
+  image="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-11-19">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/es">Inicio</a><span>/</span><a href="/es/e">Guías</a><span>/</span>Listas por comprensión</nav>
   <p class="kicker">Haskell · sintaxis · listas</p>
   <h1>Las listas por comprensión de Haskell, explicadas</h1>
-  <div class="artmeta"><span>Por Coldwast</span><span>Actualizado el 14 de junio de 2026</span><span>6 min de lectura</span><span class="tag">#haskell</span><span class="tag">#lists</span><span class="tag">#syntax</span></div>
+  <div class="artmeta"><span>Por Coldwast</span><span>Actualizado el 19 de noviembre de 2026</span><span>6 min de lectura</span><span class="tag">#haskell</span><span class="tag">#lists</span><span class="tag">#syntax</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=1200&q=80&auto=format&fit=crop" alt="Código fuente en una pantalla" width="1200" height="420" loading="eager" />
@@ -46,6 +46,51 @@ pairs = [(x, y) | x &lt;- [1,2,3], y &lt;- [&#39;a&#39;,&#39;b&#39;]]
   <pre><code>[x*2 | x &lt;- xs, even x]
 map (*2) (filter even xs)</code></pre>
   <p>Usa la que se lea mejor en cada caso. Las comprensiones brillan cuando tienes varios generadores o varias guardas; <code>map</code>/<code>filter</code> se componen bien en canalizaciones libres de puntos. Como Haskell es <a href="/es/e/blog/2026-06-14-lazy-evaluation-haskell.html">perezoso</a>, una comprensión sobre una lista infinita como <code>[1..]</code> solo calcula los elementos que realmente consumes.</p>
+
+  <h2>9 casos que la gente pregunta de verdad</h2>
+  <p>Cada ejemplo se ejecutó el 19 de noviembre de 2026 en GHC 9.10.3, y la salida mostrada es la que devolvió <code>print</code>.</p>
+  <h3>Una comprensión dentro de otra (listas anidadas)</h3>
+  <pre><code>[[x * y | y &lt;- [1..3]] | x &lt;- [1..3]]
+-- [[1,2,3],[2,4,6],[3,6,9]]</code></pre>
+  <p>La comprensión interior es solo la expresión de salida de la exterior, así que cada <code>x</code> produce una fila entera. Dos generadores en una sola comprensión dan, en cambio, una lista plana.</p>
+  <h3>Cortar antes una lista infinita</h3>
+  <pre><code>takeWhile (&lt; 20) [x * x | x &lt;- [1..]]
+-- [1,4,9,16]</code></pre>
+  <p>Una guarda no puede detener una comprensión. <code>[x * x | x &lt;- [1..], x * x &lt; 20]</code> imprime <code>[1,4,9,16</code> y nunca termina: sigue probando 5, 6, 7 sin fin porque no puede saber que ningún cuadrado posterior baja de 20. Se corta con <code>takeWhile</code> (o <code>take n</code>) alrededor de la comprensión.</p>
+  <h3>Usar el índice de cada elemento</h3>
+  <pre><code>[c | (i, c) &lt;- zip [0..] "haskell", even i]
+-- "hsel"</code></pre>
+  <p>No hay índice incorporado: se empareja cada elemento con su posición mediante <code>zip [0..]</code> y se descompone con el patrón <code>(i, c)</code> en el generador. Aquí la guarda conserva las posiciones 0, 2, 4 y 6.</p>
+  <h3>if then else en la salida</h3>
+  <pre><code>[if even x then "even" else "odd" | x &lt;- [1..4]]
+-- ["odd","even","odd","even"]</code></pre>
+  <p>Una guarda elimina elementos, <code>if then else</code> en la salida conserva cada elemento y lo transforma. En Haskell la rama <code>else</code> es obligatoria.</p>
+  <h3>let dentro de una comprensión</h3>
+  <pre><code>[(x, sq) | x &lt;- [1..10], let sq = x * x, sq &gt; 50]
+-- [(8,64),(9,81),(10,100)]</code></pre>
+  <p><code>let</code> da nombre a un valor intermedio una sola vez, para que la guarda y la salida lo usen. Dentro de una comprensión no hace falta <code>in</code>.</p>
+  <h3>Varias condiciones: Y y O</h3>
+  <pre><code>[x | x &lt;- [1..30], even x, x `mod` 3 == 0]
+[x | x &lt;- [1..10], x &lt; 3 || x &gt; 8]
+-- [6,12,18,24,30]
+-- [1,2,9,10]</code></pre>
+  <p>Las guardas separadas por comas deben cumplirse todas (Y). Para O, se escribe una sola guarda con <code>||</code>. <code>&amp;&amp;</code> dentro de una guarda también funciona y equivale a una coma.</p>
+  <h3>Rangos: inclusivos, con paso, descendentes</h3>
+  <pre><code>[1..5]
+[10,8..1]
+[5..1]
+-- [1,2,3,4,5]
+-- [10,8,6,4,2]
+-- []</code></pre>
+  <p>El límite superior es inclusivo. Un rango descendente necesita un segundo elemento que fije el paso: <code>[5..1]</code> está vacío, y GHC 9.10 incluso avisa con <code>Enumeration is empty</code>.</p>
+  <h3>Pares de divisores de un número (generador y guardas)</h3>
+  <pre><code>[(a, n `div` a) | a &lt;- [1..n], n `mod` a == 0, a * a &lt;= n]
+-- [(1,36),(2,18),(3,12),(4,9),(6,6)]   -- n = 36</code></pre>
+  <p>La guarda <code>n `mod` a == 0</code> conserva los divisores, y <code>a * a &lt;= n</code> conserva cada par una sola vez.</p>
+  <h3>Cada fila y columna: orden de los generadores</h3>
+  <pre><code>[(r, c) | r &lt;- [0..1], c &lt;- [0..2]]
+-- [(0,0),(0,1),(0,2),(1,0),(1,1),(1,2)]</code></pre>
+  <p>Con varios generadores, el último cambia más rápido, como en bucles anidados: el resultado es el producto cartesiano, fila a fila. Un generador posterior puede usar una variable anterior, por ejemplo <code>c &lt;- [r..2]</code>.</p>
 
   <h2>Preguntas frecuentes</h2>
   <p><strong>¿Qué es un generador en una lista por comprensión?</strong> La parte <code>x &lt;- xs</code>: extrae cada valor de <code>x</code> de la lista <code>xs</code> para alimentar la expresión de salida.</p>

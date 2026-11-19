@@ -1,16 +1,16 @@
 ---
 import Base from '../../../../layouts/Base.astro';
 const path = '/de/e/blog/2026-06-14-haskell-list-comprehensions.html';
-const title = 'List Comprehensions in Haskell, erklärt (2026)';
-const description = 'Eine List Comprehension baut eine Liste aus einem oder mehreren Generatoren mit optionalen Guards auf - knapp, lesbar und nah an der mathematischen Mengenschreibweise. Die Syntax, mehrere Generatoren, Guards und ihr Bezug zu map und filter.';
+const title = 'List Comprehensions in Haskell: Syntax, Guards, Generatoren und 9 getestete Muster';
+const description = 'List Comprehensions in Haskell erklärt: Generatoren, Guards, mehrere Generatoren, dann 9 unter GHC 9.10 getestete Muster (verschachtelte Listen, Abbruch bei unendlicher Liste, Index, if then else, let, UND und ODER, Bereiche, Teilerpaare).';
 ---
 <Base title={title} description={description} path={path} type="article" lang="de"
-  image="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-06-14">
+  image="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=1200&q=80&auto=format&fit=crop" datePublished="2026-06-14" dateModified="2026-11-19">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/de">Startseite</a><span>/</span><a href="/de/e">Leitfäden</a><span>/</span>List Comprehensions</nav>
   <p class="kicker">Haskell · Syntax · Listen</p>
   <h1>List Comprehensions in Haskell, erklärt</h1>
-  <div class="artmeta"><span>Von Coldwast</span><span>Aktualisiert am 14. Juni 2026</span><span>6 Min. Lesezeit</span><span class="tag">#haskell</span><span class="tag">#lists</span><span class="tag">#syntax</span></div>
+  <div class="artmeta"><span>Von Coldwast</span><span>Aktualisiert am 19. November 2026</span><span>6 Min. Lesezeit</span><span class="tag">#haskell</span><span class="tag">#lists</span><span class="tag">#syntax</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=1200&q=80&auto=format&fit=crop" alt="Quellcode auf einem Bildschirm" width="1200" height="420" loading="eager" />
@@ -46,6 +46,51 @@ pairs = [(x, y) | x &lt;- [1,2,3], y &lt;- [&#39;a&#39;,&#39;b&#39;]]
   <pre><code>[x*2 | x &lt;- xs, even x]
 map (*2) (filter even xs)</code></pre>
   <p>Nehmen Sie, was sich im jeweiligen Fall am besten liest. Comprehensions glänzen, wenn Sie mehrere Generatoren oder mehrere Guards haben; <code>map</code>/<code>filter</code> lassen sich gut in point-free-Pipelines verketten. Weil Haskell <a href="/de/e/blog/2026-06-14-lazy-evaluation-haskell.html">lazy</a> ist, berechnet eine Comprehension über eine unendliche Liste wie <code>[1..]</code> nur die Elemente, die Sie tatsächlich verbrauchen.</p>
+
+  <h2>9 Muster, nach denen wirklich gefragt wird</h2>
+  <p>Jedes Beispiel wurde am 19. November 2026 unter GHC 9.10.3 ausgeführt, die gezeigte Ausgabe ist die von <code>print</code>.</p>
+  <h3>Eine Comprehension in einer Comprehension (verschachtelte Listen)</h3>
+  <pre><code>[[x * y | y &lt;- [1..3]] | x &lt;- [1..3]]
+-- [[1,2,3],[2,4,6],[3,6,9]]</code></pre>
+  <p>Die innere Comprehension ist einfach der Ausgabeausdruck der äußeren, also erzeugt jedes <code>x</code> eine ganze Zeile. Zwei Generatoren in einer einzigen Comprehension ergeben dagegen eine flache Liste.</p>
+  <h3>Früh abbrechen bei einer unendlichen Liste</h3>
+  <pre><code>takeWhile (&lt; 20) [x * x | x &lt;- [1..]]
+-- [1,4,9,16]</code></pre>
+  <p>Ein Guard kann eine Comprehension nicht stoppen. <code>[x * x | x &lt;- [1..], x * x &lt; 20]</code> gibt <code>[1,4,9,16</code> aus und endet nie: es prüft 5, 6, 7 ohne Ende, weil es nicht wissen kann, dass kein späteres Quadrat unter 20 liegt. Abbrechen mit <code>takeWhile</code> (oder <code>take n</code>) um die Comprehension.</p>
+  <h3>Den Index jedes Elements nutzen</h3>
+  <pre><code>[c | (i, c) &lt;- zip [0..] "haskell", even i]
+-- "hsel"</code></pre>
+  <p>Einen eingebauten Index gibt es nicht: Jedes Element wird mit <code>zip [0..]</code> mit seiner Position gepaart, dann im Generator per Muster <code>(i, c)</code> zerlegt. Hier behält der Guard die Positionen 0, 2, 4 und 6.</p>
+  <h3>if then else in der Ausgabe</h3>
+  <pre><code>[if even x then "even" else "odd" | x &lt;- [1..4]]
+-- ["odd","even","odd","even"]</code></pre>
+  <p>Ein Guard entfernt Elemente, <code>if then else</code> in der Ausgabe behält jedes Element und verändert es. In Haskell ist der <code>else</code>-Zweig Pflicht.</p>
+  <h3>let in einer Comprehension</h3>
+  <pre><code>[(x, sq) | x &lt;- [1..10], let sq = x * x, sq &gt; 50]
+-- [(8,64),(9,81),(10,100)]</code></pre>
+  <p><code>let</code> benennt einen Zwischenwert einmal, sodass Guard und Ausgabe ihn beide nutzen. Ein <code>in</code> ist in einer Comprehension nicht nötig.</p>
+  <h3>Mehrere Bedingungen: UND und ODER</h3>
+  <pre><code>[x | x &lt;- [1..30], even x, x `mod` 3 == 0]
+[x | x &lt;- [1..10], x &lt; 3 || x &gt; 8]
+-- [6,12,18,24,30]
+-- [1,2,9,10]</code></pre>
+  <p>Durch Kommas getrennte Guards müssen alle wahr sein (UND). Für ODER schreibt man einen Guard mit <code>||</code>. <code>&amp;&amp;</code> in einem Guard funktioniert auch und bedeutet dasselbe wie ein Komma.</p>
+  <h3>Bereiche: inklusiv, mit Schrittweite, absteigend</h3>
+  <pre><code>[1..5]
+[10,8..1]
+[5..1]
+-- [1,2,3,4,5]
+-- [10,8,6,4,2]
+-- []</code></pre>
+  <p>Die obere Grenze ist inklusiv. Ein absteigender Bereich braucht ein zweites Element für die Schrittweite: <code>[5..1]</code> ist leer, und GHC 9.10 warnt sogar mit <code>Enumeration is empty</code>.</p>
+  <h3>Teilerpaare einer Zahl (Generator plus Guards)</h3>
+  <pre><code>[(a, n `div` a) | a &lt;- [1..n], n `mod` a == 0, a * a &lt;= n]
+-- [(1,36),(2,18),(3,12),(4,9),(6,6)]   -- n = 36</code></pre>
+  <p>Der Guard <code>n `mod` a == 0</code> behält die Teiler, <code>a * a &lt;= n</code> behält jedes Paar nur einmal.</p>
+  <h3>Jede Zeile und Spalte: Reihenfolge der Generatoren</h3>
+  <pre><code>[(r, c) | r &lt;- [0..1], c &lt;- [0..2]]
+-- [(0,0),(0,1),(0,2),(1,0),(1,1),(1,2)]</code></pre>
+  <p>Bei mehreren Generatoren ändert sich der letzte am schnellsten, wie bei verschachtelten Schleifen: Das Ergebnis ist das kartesische Produkt, Zeile für Zeile. Ein späterer Generator darf eine frühere Variable nutzen, etwa <code>c &lt;- [r..2]</code>.</p>
 
   <h2>FAQ</h2>
   <p><strong>Was ist ein Generator in einer List Comprehension?</strong> Der Teil <code>x &lt;- xs</code>: Er zieht jeden Wert von <code>x</code> aus der Liste <code>xs</code>, um den Ausgabeausdruck zu speisen.</p>
