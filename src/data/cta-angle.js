@@ -99,7 +99,10 @@ export function contaboAlt(lang, cta, page = '') {
   // Faux positifs des regles d angle (« Hangs Your Server », « container queries » CSS, serverless = pas de VPS).
   if (/regex|css-|serverless/i.test(String(page))) return null;
   const aid = CONTABO_AID[lang] || CONTABO_AID.en;
-  const slug = String(page).replace(/^\/+|\.html$/g, '').replace(/[^a-z0-9]+/gi, '-').slice(0, 60);
-  const [pre, link, post] = CONTABO_TXT[lang] || CONTABO_TXT.en;
-  return { pre, link, post, url: `https://www.tkqlhce.com/click-101807052-${aid}?sid=coldwa-${slug}` };
+  // 19/11 : langue en tete du SID (canonPath est le chemin EN, donc les 6 langues partageaient le meme SID)
+  // et prefixe e-blog- retire : le SID le plus long depassait 64 caracteres et sa fin risquait d etre coupee.
+  const slug = String(page).replace(/^\/+|\.html$/g, '').replace(/^e\/blog\//, '').replace(/[^a-z0-9]+/gi, '-').slice(0, 44);
+  const l = CONTABO_TXT[lang] ? lang : 'en';
+  const [pre, link, post] = CONTABO_TXT[l];
+  return { pre, link, post, url: `https://www.tkqlhce.com/click-101807052-${aid}?sid=coldwa-${l}-${slug}` };
 }
