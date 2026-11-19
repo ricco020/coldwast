@@ -1,23 +1,27 @@
 ---
 import Base from '../../../../layouts/Base.astro';
 const path = '/es/e/blog/2026-06-17-what-is-a-webhook.html';
-const title = '¿Qué es un webhook? Cómo funcionan, con ejemplos (2026)';
-const description = 'Un webhook es una petición HTTP automática que un servicio te envía cuando ocurre un evento - lo contrario de una llamada a una API que tú haces. Qué es un webhook, en qué se diferencia del sondeo de una API, cómo recibirlo de forma segura, y ejemplos reales.';
+const title = '¿Qué es un webhook? Cómo funciona, ejemplo probado y quién lo configura';
+const description = 'Un webhook es una petición HTTP POST que un servicio envía a tu URL cuando ocurre un evento. Cómo funciona, un receptor en Python probado con curl (firma HMAC, duplicados), quién lo configura, si se puede responder, si hay que pagar y qué pasa si tu servidor está caído.';
 const hero = '/img/what-is-a-webhook-2026.jpg';
 const faq = [
   { q: '¿Qué es un webhook en términos simples?', a: 'Un webhook es un mensaje automático que un servicio envía a una URL que tú controlas en el momento en que ocurre algo - por ejemplo «un pago tuvo éxito» o «se subió un commit». En lugar de preguntar al servicio una y otra vez «¿algo nuevo?» (sondear su API), el servicio te llama con una petición HTTP POST en cuanto ocurre el evento. Suele describirse como una «API inversa»: con una API normal tú haces la petición; con un webhook el servicio te la hace a ti.' },
   { q: '¿Cuál es la diferencia entre un webhook y una API?', a: 'Están relacionados pero apuntan en sentidos opuestos. Con una API (REST) normal envías una petición al proveedor cuando quieres datos, y responde. Con un webhook el proveedor envía una petición a tu servidor cuando ocurre un evento, así recibes los datos casi en tiempo real sin pedirlos. Un webhook usa la misma mecánica HTTP que una API - es el proveedor actuando como cliente y tu endpoint como servidor.' },
   { q: '¿Por qué usar un webhook en vez de sondeo?', a: 'El sondeo (polling) consiste en llamar a una API en un temporizador para comprobar cambios, lo que desperdicia peticiones y añade retraso entre el evento y tu reacción. Los webhooks te empujan el evento en el momento en que ocurre, así que son más eficientes y mucho más cercanos al tiempo real. La contrapartida es que debes tener un endpoint siempre en línea, y manejar reintentos y entregas duplicadas.' },
   { q: '¿Cómo recibo un webhook de forma segura?', a: 'Expón un endpoint HTTPS que acepte POST, devuelve rápido un estado 2xx para acusar recibo, y procesa el trabajo de forma asíncrona. Verifica la firma que envía el proveedor (un HMAC del cuerpo con un secreto compartido) para saber que la petición es auténtica, y haz el manejo idempotente porque un mismo evento puede entregarse más de una vez. Rechaza todo lo que falle la verificación de firma.' },
+  { q: '¿Quién configura el webhook, el que envía o el que recibe?', a: 'El que recibe. Tú programas el endpoint (una URL HTTPS de tu servidor) y luego lo registras en el panel o la API del servicio emisor, eligiendo los eventos que te interesan. El emisor solo guarda tu URL y un secreto para firmar, y te llama cuando ocurre el evento.' },
+  { q: '¿Se puede responder a un webhook?', a: 'Solo con el código de estado HTTP. El emisor mira si respondes 2xx (recibido) o un error (reintentar o marcar como fallido). El cuerpo de tu respuesta normalmente se ignora: si necesitas devolver datos al servicio, haz tú una llamada a su API después, desde tu propio código.' },
+  { q: '¿Hay que pagar por usar un webhook?', a: 'No. Un webhook es una simple petición HTTP y los servicios que los ofrecen (GitHub, Stripe, Slack...) no cobran por enviarlos. Lo que sí necesitas es un servidor siempre encendido con una URL pública para recibirlos: ese alojamiento es el único coste.' },
+  { q: '¿Qué pasa si mi servidor está caído cuando llega el webhook?', a: 'Depende del emisor. GitHub no reintenta solo: si tu servidor no responde en 10 segundos, marca la entrega como fallida y tienes que reenviarla a mano o por su API. Stripe, en modo real, reintenta durante un máximo de tres días con espera creciente. Por eso un receptor debe estar en un servidor que no se apaga.' },
 ];
 ---
 <Base title={title} description={description} path={path} type="article" lang="es"
-  image={hero} datePublished="2026-06-17" dateModified="2026-06-17">
+  image={hero} datePublished="2026-06-17" dateModified="2026-11-19">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/es">Inicio</a><span>/</span><a href="/es/e">Guías</a><span>/</span>Qué es un webhook</nav>
   <p class="kicker">Programación · conceptos · web</p>
   <h1>¿Qué es un webhook?</h1>
-  <div class="artmeta"><span>Por Coldwast</span><span>Actualizado el 17 jun 2026</span><span>7 min de lectura</span><span class="tag">#webhook</span><span class="tag">#api</span><span class="tag">#web</span></div>
+  <div class="artmeta"><span>Por Coldwast</span><span>Actualizado el 19 nov 2026</span><span>9 min de lectura</span><span class="tag">#webhook</span><span class="tag">#api</span><span class="tag">#web</span></div>
 
   <figure>
     <img class="hero" src={hero} alt="Un servidor y un conmutador de red conectados por un cable Ethernet naranja" width="1200" height="420" loading="eager" />
@@ -69,6 +73,49 @@ X-Signature: t=1718600000,v1=9f86d08...
     <li><strong>Devolver errores con honestidad</strong> - si no puedes procesarlo, devuelve un no-2xx para que el proveedor reintente en vez de descartarlo.</li>
   </ul>
   <p>Los webhooks necesitan un <strong>endpoint siempre en línea</strong> con una URL HTTPS pública - por eso un pequeño servidor o instancia cloud es el hogar habitual de un receptor de webhooks, en lugar de una máquina que se duerme.</p>
+
+
+  <h2>Tu primer receptor de webhooks, probado</h2>
+  <p>Este receptor en Python usa solo la biblioteca estándar. Comprueba la firma HMAC SHA-256 en la cabecera <code>X-Hub-Signature-256</code> (el formato <code>sha256=...</code> que usa GitHub), ignora un evento ya visto por su <code>id</code> y responde <code>204</code> en cuanto lo ha registrado. Lo ejecutamos el 19 nov 2026 con Python 3.12.3.</p>
+  <pre><code>import hmac, hashlib, json
+from http.server import BaseHTTPRequestHandler, HTTPServer
+
+SECRETO = b"cambia-este-secreto"
+vistos = set()
+
+class Receptor(BaseHTTPRequestHandler):
+    def do_POST(self):
+        cuerpo = self.rfile.read(int(self.headers.get("Content-Length", 0)))
+        esperada = "sha256=" + hmac.new(SECRETO, cuerpo, hashlib.sha256).hexdigest()
+        if not hmac.compare_digest(esperada, self.headers.get("X-Hub-Signature-256", "")):
+            self.send_response(401); self.end_headers(); return
+        evento = json.loads(cuerpo)
+        if evento["id"] in vistos:
+            print("duplicado ignorado:", evento["id"])
+        else:
+            vistos.add(evento["id"])
+            print("evento recibido:", evento["event"], evento["id"])
+        self.send_response(204); self.end_headers()
+
+HTTPServer(("0.0.0.0", 8080), Receptor).serve_forever()</code></pre>
+  <p>Para hacer de emisor desde otra terminal, firmamos el cuerpo con el mismo secreto y lo enviamos dos veces (un reintento), y luego una vez con una firma falsa:</p>
+  <pre><code>BODY='&#123;"event":"payment.succeeded","id":"pay_42"&#125;'
+SIG="sha256=$(printf '%s' "$BODY" | openssl dgst -sha256 -hmac 'cambia-este-secreto' | sed 's/^.*= //')"
+curl -s -o /dev/null -w '%&#123;http_code&#125;\n' -X POST localhost:8080 -H "X-Hub-Signature-256: $SIG" -d "$BODY"
+curl -s -o /dev/null -w '%&#123;http_code&#125;\n' -X POST localhost:8080 -H "X-Hub-Signature-256: $SIG" -d "$BODY"
+curl -s -o /dev/null -w '%&#123;http_code&#125;\n' -X POST localhost:8080 -H "X-Hub-Signature-256: sha256=falsa" -d "$BODY"</code></pre>
+  <p>Salida real: curl imprime <code>204</code>, <code>204</code> y <code>401</code>. El receptor imprime:</p>
+  <pre><code>evento recibido: payment.succeeded pay_42
+duplicado ignorado: pay_42</code></pre>
+  <p>Las dos primeras peticiones reciben <code>204</code>: el emisor sabe que no debe reintentar, y el duplicado no se procesa dos veces. La firma falsa recibe <code>401</code> y no toca nada. Para producción, guarda los <code>id</code> en una base de datos en lugar de en memoria y pon el receptor detrás de HTTPS (por ejemplo con un <a href="/es/e/blog/2026-06-26-what-is-a-reverse-proxy.html">proxy inverso</a> como Caddy o Nginx).</p>
+
+  <h2>Si tu servidor no responde: GitHub frente a Stripe</h2>
+  <p>Los emisores no tratan igual una entrega fallida, y esto decide dónde alojar tu receptor:</p>
+  <ul>
+    <li><strong>GitHub</strong>: si tu servidor está caído o tarda más de 10 segundos, la entrega queda como fallida y <strong>no se reintenta sola</strong>; hay que reenviarla desde la configuración del webhook o por su API REST (<a href="https://docs.github.com/webhooks/using-webhooks/handling-failed-webhook-deliveries" rel="noopener" target="_blank">documentación de GitHub</a>).</li>
+    <li><strong>Stripe</strong>: en modo real reintenta automáticamente durante <strong>hasta tres días</strong> con espera creciente (<a href="https://docs.stripe.com/webhooks/process-undelivered-events" rel="noopener" target="_blank">documentación de Stripe</a>).</li>
+  </ul>
+  <p>En los dos casos, un portátil que se duerme o un servicio gratuito que se apaga tras unos minutos sin tráfico pierde eventos. Un receptor de webhooks vive mejor en un pequeño VPS siempre encendido.</p>
 
   <div class="affbox" style="margin:28px 0;">
     <span class="tag">Recomendado</span>
