@@ -1,16 +1,49 @@
 ---
 import Base from '../../../../layouts/Base.astro';
 const path = '/es/e/blog/2026-06-22-what-is-ci-cd.html';
-const title = '¿Qué es CI/CD? Integración y entrega continuas explicadas (2026)';
-const description = 'CI/CD automatiza el camino desde un cambio de código hasta una aplicación probada y desplegada. Qué significan la integración continua y la entrega/despliegue continuos, cómo funciona un pipeline, las herramientas habituales y por qué los equipos confían en ello.';
+const title = '¿Qué es CI/CD? Integración continua y entrega continua, con un pipeline real';
+const description = 'CI/CD es la integración continua (cada push se compila y se prueba) más la entrega o el despliegue continuo (el código probado llega a producción). Definición clara, un pipeline completo de GitHub Actions explicado línea por línea y dónde ejecutarlo.';
+const pipeline = `# .github/workflows/ci.yml
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:            # CI: compilar y probar
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npm test
+
+  deploy:          # CD: si pasan los tests, en main
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Desplegar en el servidor por SSH
+        env:
+          SSH_KEY: \${{ secrets.DEPLOY_KEY }}
+          HOST: \${{ secrets.DEPLOY_HOST }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh -o StrictHostKeyChecking=accept-new deploy@"$HOST" \\
+            'cd /srv/app && git pull --ff-only && npm ci --omit=dev && sudo systemctl restart app'`;
 ---
 <Base title={title} description={description} path={path} type="article" lang="es"
-  image="/img/ci-cd-hero.jpg" datePublished="2026-06-22" dateModified="2026-06-22">
+  image="/img/ci-cd-hero.jpg" datePublished="2026-06-22" dateModified="2026-11-19">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/es">Inicio</a><span>/</span><a href="/es/e">Guías</a><span>/</span>Qué es CI/CD</nav>
   <p class="kicker">Programación · DevOps · automatización</p>
   <h1>¿Qué es CI/CD?</h1>
-  <div class="artmeta"><span>Por Coldwast</span><span>Actualizado el 22 jun 2026</span><span>8 min de lectura</span><span class="tag">#cicd</span><span class="tag">#devops</span><span class="tag">#automation</span></div>
+  <div class="artmeta"><span>Por Coldwast</span><span>Actualizado el 19 nov 2026</span><span>8 min de lectura</span><span class="tag">#cicd</span><span class="tag">#devops</span><span class="tag">#automation</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="/img/ci-cd-hero.jpg" alt="Un brazo robótico industrial en una línea de producción automatizada" width="1200" height="420" loading="eager" />
@@ -38,6 +71,21 @@ const description = 'CI/CD automatiza el camino desde un cambio de código hasta
     <li><strong>Pruebas</strong> - se ejecutan las pruebas automáticas; un fallo detiene el pipeline.</li>
     <li><strong>Despliegue</strong> - si todo pasa, la app se publica en un servidor, a menudo <a href="/es/e/blog/2026-06-22-what-is-ssh.html">por SSH</a> a un <a href="/es/e/blog/2026-06-19-what-is-a-vps.html">VPS</a> o a un host en la nube.</li>
   </ul>
+
+  <h2>Un pipeline real, línea por línea</h2>
+  <p>Este es un pipeline completo para una app Node.js con GitHub Actions. El archivo vive en el repositorio, en <code>.github/workflows/</code>, y GitHub lo ejecuta en cada push.</p>
+  <pre><code set:text={pipeline} /></pre>
+  <ul>
+    <li><strong><code>on:</code></strong> los disparadores: cada push a <code>main</code> y cada pull request. Una pull request solo ejecuta los tests, nunca el despliegue.</li>
+    <li><strong>El job <code>test</code> es la CI.</strong> Una máquina nueva (<code>ubuntu-latest</code>) descarga el código, instala las versiones exactas de <code>package-lock.json</code> con <code>npm ci</code> y lanza los tests. Un test que falla pone el job en rojo y detiene todo.</li>
+    <li><strong>El job <code>deploy</code> es la CD.</strong> <code>needs: test</code> impide que arranque si los tests fallaron, y la condición <code>if</code> lo reserva a la rama <code>main</code>.</li>
+    <li><strong>Los secretos</strong> (<code>DEPLOY_KEY</code>, la clave SSH privada, y <code>DEPLOY_HOST</code>, la dirección del servidor) se guardan en Settings, Secrets and variables, Actions del repositorio, nunca en el archivo. La clave pública correspondiente va en <code>~/.ssh/authorized_keys</code> del usuario <code>deploy</code> en el servidor.</li>
+    <li><strong>El último comando</strong> actualiza el código en el servidor, instala las dependencias de producción y reinicia el servicio. Supone que la app corre como servicio systemd (nuestro <a href="/es/systemd-service-generator.html">generador de servicios systemd</a> escribe ese archivo) y que <code>deploy</code> puede ejecutar ese <code>systemctl restart</code> sin contraseña (regla <code>NOPASSWD</code> en sudoers limitada a ese comando).</li>
+  </ul>
+  <p>Tal cual, esto es <strong>despliegue continuo</strong>: todo lo que pasa los tests sale a producción. Para <strong>entrega continua</strong>, saque <code>deploy</code> de este archivo y póngalo en un segundo workflow disparado por <code>on: workflow_dispatch</code>. GitHub muestra entonces un botón «Run workflow» y es una persona quien elige el momento de publicar.</p>
+
+  <h2>Dónde se ejecuta el pipeline</h2>
+  <p>Los jobs de arriba corren en <strong>runners alojados</strong> por GitHub: una máquina virtual nueva por job, que se descarta al final. Es sencillo, pero nada persiste entre ejecuciones (dependencias, imágenes Docker, caché de compilación) salvo que configure una caché. La otra opción es un <strong>runner autoalojado</strong>: instala el agente de GitHub Actions en su propio servidor Linux (Settings, Actions, Runners, New self-hosted runner), lo instala como servicio con <code>sudo ./svc.sh install</code> y sus jobs lo usan con <code>runs-on: self-hosted</code>. Usted elige entonces CPU y memoria, las imágenes Docker se quedan en disco y el despliegue puede hacerse en la misma máquina. El precio: las actualizaciones y la seguridad de ese servidor corren de su cuenta, y GitHub desaconseja los runners autoalojados en repositorios públicos, donde cualquier pull request podría ejecutar código en ellos.</p>
 
   <h2>Las herramientas habituales</h2>
   <p>No construyes esto desde cero. <strong>GitHub Actions</strong> y <strong>GitLab CI/CD</strong> son populares porque viven junto a tu código; <strong>Jenkins</strong> es una opción consolidada y autoalojada; y servicios como CircleCI y otros cumplen el mismo papel. Todos hacen lo mismo: vigilan el repositorio, ejecutan las etapas que defines en un archivo de configuración e informan del resultado. Describes el pipeline una vez, en un archivo dentro de tu repo, y se ejecuta en cada cambio.</p>
