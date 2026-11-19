@@ -1,16 +1,16 @@
 ---
 import Base from '../../../../layouts/Base.astro';
 const path = '/de/e/blog/2026-06-19-what-is-kubernetes.html';
-const title = 'Was ist Kubernetes? Container-Orchestrierung erklärt (2026)';
-const description = 'Kubernetes ist ein Open-Source-System, das Container über viele Maschinen ausführt und koordiniert - es plant sie ein, skaliert sie, repariert sie und vernetzt sie automatisch. Was Kubernetes ist, die Schlüsselkonzepte (Pod, Knoten, Cluster, Deployment, Service), sein Bezug zu Docker und wann man es wirklich braucht.';
+const title = 'Was ist Kubernetes? Container-Orchestrierung erklärt, mit Fakten (2026)';
+const description = 'Kubernetes führt Container über viele Maschinen aus und hält sie automatisch am Laufen. Erklärung der Container-Orchestrierung, Schlüsselkonzepte (Pod, Knoten, Deployment, Service), Fakten (aktuelle Version 1.37, 3 Releases pro Jahr, 14 Monate Support) und was ein eigener Cluster an CPU und RAM braucht.';
 ---
 <Base title={title} description={description} path={path} type="article" lang="de"
-  image="/img/what-is-kubernetes-2026.jpg" datePublished="2026-06-19" dateModified="2026-06-19">
+  image="/img/what-is-kubernetes-2026.jpg" datePublished="2026-06-19" dateModified="2026-11-19">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/de">Startseite</a><span>/</span><a href="/de/e">Leitfäden</a><span>/</span>Was ist Kubernetes</nav>
   <p class="kicker">Programmierung · DevOps · Orchestrierung</p>
   <h1>Was ist Kubernetes?</h1>
-  <div class="artmeta"><span>Von Coldwast</span><span>Aktualisiert am 19. Juni 2026</span><span>8 Min. Lesezeit</span><span class="tag">#kubernetes</span><span class="tag">#containers</span><span class="tag">#devops</span></div>
+  <div class="artmeta"><span>Von Coldwast</span><span>Aktualisiert am 19. November 2026</span><span>8 Min. Lesezeit</span><span class="tag">#kubernetes</span><span class="tag">#containers</span><span class="tag">#devops</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="/img/what-is-kubernetes-2026.jpg" alt="Ein altes hölzernes Steuerrad eines Schiffs, das Ruder" width="1200" height="420" loading="eager" />
@@ -44,6 +44,31 @@ const description = 'Kubernetes ist ein Open-Source-System, das Container über 
 
   <h2>Brauchen Sie es wirklich?</h2>
   <p>Ehrlich gesagt oft nicht - zumindest noch nicht. Kubernetes glänzt, wenn Sie viele Dienste betreiben, Hochverfügbarkeit brauchen und über das Team verfügen, um es zu betreiben. Für eine einzige App oder ein kleines Projekt ist es in der Regel überdimensioniert: ein einzelner Server, ein managed Container-Dienst oder eine Platform-as-a-Service wird einfacher und günstiger sein. Die Kosten von Kubernetes sind echte Komplexität - Netzwerk, Speicher, Sicherheit und Updates erfordern Expertise. Setzen Sie es ein, wenn die Skalierung den Mehraufwand rechtfertigt, nicht aus Modegründen.</p>
+
+  <h2>Kubernetes in Fakten</h2>
+  <div style="overflow-x:auto"><table>
+    <thead><tr><th>Frage</th><th>Antwort</th></tr></thead>
+    <tbody>
+      <tr><td>Herkunft</td><td>Von Google entwickelt, 2014 als Open Source veröffentlicht, Version 1.0 im Juli 2015, seitdem bei der Cloud Native Computing Foundation (CNCF)</td></tr>
+      <tr><td>Aktuelle Version</td><td>v1.37.2, veröffentlicht am 28. Oktober 2026 (GitHub-Releases, Stand 19.11.2026)</td></tr>
+      <tr><td>Release-Rhythmus</td><td>Etwa drei Minor-Versionen pro Jahr</td></tr>
+      <tr><td>Support pro Version</td><td>Rund 14 Monate Patches, davon 12 Monate Standardzeitraum</td></tr>
+      <tr><td>Name</td><td>Griechisch für „Steuermann“, abgekürzt K8s</td></tr>
+      <tr><td>Was es orchestriert</td><td>Container (OCI-Images, etwa mit Docker gebaut), gruppiert in Pods</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>Was braucht ein eigener Cluster?</h2>
+  <p>Wer Kubernetes selbst betreibt, muss zuerst die Maschinen dimensionieren. Die offiziellen Mindestwerte:</p>
+  <div style="overflow-x:auto"><table>
+    <thead><tr><th>Variante</th><th>CPU</th><th>RAM</th></tr></thead>
+    <tbody>
+      <tr><td>Kubernetes mit kubeadm, Control-Plane-Knoten</td><td>2 CPUs</td><td>2 GB pro Maschine</td></tr>
+      <tr><td>K3s (leichte Distribution), Server</td><td>2 Kerne</td><td>2 GB</td></tr>
+      <tr><td>K3s, Agent (Worker)</td><td>1 Kern</td><td>512 MB</td></tr>
+    </tbody>
+  </table></div>
+  <p>Das sind Untergrenzen für Kubernetes selbst: Ihre Container kommen noch dazu, und die kubeadm-Dokumentation warnt, dass mit weniger als 2 GB kaum Platz für Ihre Apps bleibt. Zum Lernen oder für ein kleines Projekt reicht ein einzelner Linux-VPS mit K3s. Die Installation ist ein Befehl, <code>curl -sfL https://get.k3s.io | sh -</code>, danach zeigt <code>sudo k3s kubectl get nodes</code> den Knoten als <code>Ready</code>. Für einen echten Cluster mit kubeadm brauchen alle Maschinen volle Netzwerkverbindung untereinander und eindeutige Hostnamen. Quellen: kubeadm-Installationsanleitung auf kubernetes.io und K3s-Anforderungen auf docs.k3s.io, gelesen am 19.11.2026.</p>
 
   <h2>Managed vs. selbst gehostet</h2>
   <p>Sie können Kubernetes selbst betreiben, aber die meisten Teams nutzen einen <strong>managed</strong> Dienst, bei dem ein Cloud-Anbieter die Control Plane für Sie betreibt, sodass Sie nur Ihre Workloads verwalten. Das nimmt einen großen Teil der operativen Last ab und ist die vernünftige Standardwahl für die meisten Projekte, die wirklich Orchestrierung brauchen.</p>
