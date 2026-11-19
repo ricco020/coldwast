@@ -1,16 +1,16 @@
 ---
 import Base from '../../../../layouts/Base.astro';
 const path = '/it/e/blog/2026-06-27-docker-vs-podman.html';
-const title = 'Docker vs Podman: quale motore di container, e quando (2026)';
-const description = 'Docker esegue i container tramite un daemon centrale; Podman è senza daemon e rootless per progettazione. Condividono le immagini OCI e una CLI quasi identica. Architettura, sicurezza rootless, pod, systemd, Compose e la licenza di Docker Desktop a confronto.';
+const title = 'Docker vs Podman: differenze, produzione e stesso server (2026)';
+const description = 'Docker usa un daemon root; Podman è senza daemon e rootless. Quale usare in produzione su un VPS (Quadlet, versioni Debian e Ubuntu, porte 80 e 443), se possono convivere sullo stesso server, e la licenza di Docker Desktop.';
 ---
 <Base title={title} description={description} path={path} type="article" lang="it"
-  image="/img/what-is-a-webhook-2026-servers.jpg" datePublished="2026-06-27" dateModified="2026-06-27">
+  image="/img/what-is-a-webhook-2026-servers.jpg" datePublished="2026-06-27" dateModified="2026-11-20">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/it">Home</a><span>/</span><a href="/it/e">Guide</a><span>/</span>Docker vs Podman</nav>
   <p class="kicker">Programmazione · DevOps · Container</p>
   <h1>Docker vs Podman: quale motore di container, e quando?</h1>
-  <div class="artmeta"><span>Di Coldwast</span><span>Aggiornato il 27 giu 2026</span><span>9 min di lettura</span><span class="tag">#docker</span><span class="tag">#podman</span><span class="tag">#container</span></div>
+  <div class="artmeta"><span>Di Coldwast</span><span>Aggiornato il 20 nov 2026</span><span>12 min di lettura</span><span class="tag">#docker</span><span class="tag">#podman</span><span class="tag">#container</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="/img/what-is-a-webhook-2026-servers.jpg" alt="Render 3D di tre unità server nere identiche affiancate, con luci di stato verdi" width="1280" height="960" loading="eager" />
@@ -50,8 +50,43 @@ const description = 'Docker esegue i container tramite un daemon centrale; Podma
   <p>Molti progetti si affidano a Compose per avviare più container da un solo file YAML. Docker fornisce <code>docker compose</code> (il plugin Compose v2) come strumento di prima classe e ben mantenuto. Anche Podman supporta i flussi Compose: può lavorare con lo strumento separato <code>podman-compose</code>, e Podman fornisce inoltre un socket con cui il tooling Compose standard può dialogare, così che file <code>compose.yaml</code> esistenti spesso girano con poche o nessuna modifica. In pratica, l’esperienza Compose di Docker è la più matura e rifinita delle due, il che spiega perché i team con uso intensivo di Compose a volte restano su Docker.</p>
 
   <h2>Licenza di Docker Desktop vs modello open source di Podman</h2>
-  <p>Su Windows e macOS, Docker si usa di solito tramite <strong>Docker Desktop</strong>. Docker Desktop è gratuito per uso personale, didattica e piccole imprese, ma <strong>richiede un abbonamento a pagamento</strong> per le organizzazioni più grandi (oltre la soglia di dimensione pubblicata da Docker). Questo cambio di licenza è una reale questione di budget e conformità per le aziende più grandi.</p>
+  <p>Su Windows e macOS, Docker si usa di solito tramite <strong>Docker Desktop</strong>. Docker Desktop è gratuito per uso personale, didattica e piccole imprese, ma <strong>richiede un abbonamento a pagamento</strong> alle aziende da 250 dipendenti o da 10 milioni di dollari di fatturato annuo in su (FAQ prezzi di Docker, letta il 20/11/2026). Questo cambio di licenza è una reale questione di budget e conformità per le aziende più grandi.</p>
   <p>Podman è completamente <strong>open source</strong> e gratuito, senza licenza per postazione. Il suo compagno desktop, <strong>Podman Desktop</strong>, è anch’esso open source. Per le organizzazioni che vogliono evitare una licenza desktop commerciale - o semplicemente preferire uno stack open source end-to-end - questa differenza conta quanto qualsiasi differenza tecnica.</p>
+
+  <h2>Docker o Podman in produzione, su un server?</h2>
+  <p>Entrambi reggono la produzione. Red Hat non distribuisce più Docker in RHEL 8 e successivi: il motore di container dei suoi repository è Podman. Su un VPS Ubuntu o Debian la differenza pratica non sta nelle prestazioni dei container (stesso runtime, stessi namespace e cgroup) ma in come ripartono dopo un riavvio:</p>
+  <ul>
+    <li><strong>Docker</strong>: il daemon parte con il sistema e rilancia i container creati con <code>--restart unless-stopped</code>. È la via più semplice se lavori già con <code>docker compose</code>.</li>
+    <li><strong>Podman</strong>: senza daemon, nessuno rilancia nulla da solo. O attivi <code>podman-restart.service</code> (rilancia dopo il boot i container con una policy di riavvio, secondo la documentazione di <code>--restart</code>), o, meglio, dichiari il container come servizio systemd con <strong>Quadlet</strong>.</li>
+  </ul>
+  <p>Un container Quadlet rootless, in <code>~/.config/containers/systemd/web.container</code>:</p>
+  <pre><code>[Unit]
+Description=Nginx con Podman
+
+[Container]
+Image=docker.io/library/nginx:alpine
+PublishPort=8080:80
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target</code></pre>
+  <p>Poi: <code>systemctl --user daemon-reload</code>, <code>systemctl --user start web</code>, e <code>loginctl enable-linger $USER</code> perché il servizio parta con il server anche senza nessun utente collegato. Tre trappole che la maggior parte dei confronti non cita:</p>
+  <ul>
+    <li><strong>Versione di Podman</strong>: Quadlet è arrivato con Podman 4.4. Il pacchetto predefinito di Debian 12 è Podman 4.3.1 (senza Quadlet) e quello di Ubuntu 22.04 è 3.4.4. Ubuntu 24.04 ha 4.9.3 e Debian 13 ha 5.4.2 (versioni lette su packages.debian.org e packages.ubuntu.com il 20/11/2026). Su un server nuovo, scegli Ubuntu 24.04 o Debian 13 se userai Podman.</li>
+    <li><strong>Porte 80 e 443 in rootless</strong>: un utente senza privilegi non può aprire porte sotto la 1024 (<code>net.ipv4.ip_unprivileged_port_start</code> vale 1024 di default). Pubblica sulla 8080 e metti davanti un <a href="/it/e/blog/2026-06-26-what-is-a-reverse-proxy.html">reverse proxy</a> come Caddy o Nginx, oppure abbassa quel valore con sysctl.</li>
+    <li><strong>Non mescolare <code>--restart</code> e systemd</strong>: in un'unità Quadlet il riavvio lo gestisce <code>Restart=</code> di systemd, non l'opzione di Podman.</li>
+  </ul>
+
+  <h2>Docker e Podman sullo stesso server?</h2>
+  <p>Sì, convivono senza problemi, ma non condividono niente:</p>
+  <ul>
+    <li><strong>Immagini separate</strong>: Docker le tiene in <code>/var/lib/docker</code>, Podman in <code>/var/lib/containers/storage</code> (root) o <code>~/.local/share/containers/storage</code> (rootless). Un'immagine scaricata con uno non compare nell'altro: o la scarichi due volte, o la copi con <code>podman pull docker-daemon:nginx:alpine</code>.</li>
+    <li><strong>Porte</strong>: due container non possono pubblicare la stessa porta dell'host, qualunque sia il motore.</li>
+    <li><strong>Il comando <code>docker</code></strong>: il pacchetto <code>podman-docker</code> installa un comando <code>docker</code> che chiama Podman. Va in conflitto con il vero <code>docker</code>: installa l'uno o l'altro, non entrambi.</li>
+  </ul>
+  <p>È un buon modo per migrare: lasci i servizi su Docker, ne avvii uno su Podman su un'altra porta, verifichi, e cambi la destinazione del reverse proxy.</p>
 
   <h2>Quindi, quale usare?</h2>
   <table>
@@ -77,7 +112,9 @@ const description = 'Docker esegue i container tramite un daemon centrale; Podma
       { "@type": "Question", "name": "Podman è un sostituto diretto di Docker?", "acceptedAnswer": { "@type": "Answer", "text": "Per gran parte dell’uso quotidiano, quasi. Podman usa lo stesso formato d’immagine OCI, esegue gli stessi Dockerfile e offre una riga di comando quasi identica, al punto che molti impostano semplicemente alias docker=podman. Non è identico al 100 % in ogni caso limite, ma per costruire ed eseguire container il passaggio è di solito indolore." } },
       { "@type": "Question", "name": "Qual è la differenza principale tra Docker e Podman?", "acceptedAnswer": { "@type": "Answer", "text": "L’architettura. Docker esegue i container tramite un daemon centrale di lunga durata (dockerd) che gira come root per impostazione predefinita. Podman è senza daemon: avvia ogni container direttamente come processo figlio ed è rootless per progettazione. Per questo Podman ha una superficie di attacco più piccola, perché non c’è un servizio root sempre attivo." } },
       { "@type": "Question", "name": "Docker e Podman possono usare le stesse immagini?", "acceptedAnswer": { "@type": "Answer", "text": "Sì. Entrambi seguono gli standard OCI (Open Container Initiative), quindi un’immagine costruita con Docker gira sotto Podman e viceversa, ed entrambi scaricano dagli stessi registry come Docker Hub e Quay. Non esiste un formato d’immagine esclusivo di Docker o di Podman." } },
-      { "@type": "Question", "name": "Podman è gratuito? E Docker Desktop?", "acceptedAnswer": { "@type": "Answer", "text": "Podman è completamente open source e gratuito, Podman Desktop incluso. Docker Desktop è gratuito per uso personale, didattica e piccole imprese, ma richiede un abbonamento a pagamento per le organizzazioni più grandi oltre la soglia di dimensione pubblicata da Docker, il che spinge alcuni team verso Podman." } }
+      { "@type": "Question", "name": "Podman è gratuito? E Docker Desktop?", "acceptedAnswer": { "@type": "Answer", "text": "Podman è completamente open source e gratuito, Podman Desktop incluso. Docker Desktop è gratuito per uso personale, didattica e piccole imprese, ma richiede un abbonamento a pagamento per le organizzazioni più grandi oltre la soglia di dimensione pubblicata da Docker, il che spinge alcuni team verso Podman." } },
+      { "@type": "Question", "name": "Podman è consigliabile in produzione?", "acceptedAnswer": { "@type": "Answer", "text": "Sì. È il motore di container di RHEL 8 e successivi. Su un server, dichiara ogni container come servizio systemd con Quadlet (Podman 4.4 o superiore, cioè Ubuntu 24.04 o Debian 13, perché Debian 12 ha 4.3.1) e attiva loginctl enable-linger perché parta senza sessione aperta. In rootless, pubblica su una porta alta e metti un reverse proxy davanti per la 80 e la 443." } },
+      { "@type": "Question", "name": "Si possono installare Docker e Podman sullo stesso server?", "acceptedAnswer": { "@type": "Answer", "text": "Sì. Ognuno ha il proprio archivio di immagini (/var/lib/docker contro /var/lib/containers/storage), quindi non condividono le immagini. Si possono copiare con podman pull docker-daemon:immagine:tag. Non possono pubblicare la stessa porta dell'host, e il pacchetto podman-docker va in conflitto con il vero comando docker." } }
     ]
   })} />
   </div>

@@ -308,10 +308,10 @@ const alts = [
 
       /* ── Layout: content + sidebar ── */
       .layout { display:grid; grid-template-columns:1fr 340px; gap:48px; padding:38px 0 20px; }
-      @media (max-width:940px){ .layout { grid-template-columns:1fr; } }
+      @media (max-width:940px){ .layout { grid-template-columns:minmax(0,1fr); } }
 
       /* ── Story list item (polaroid author + serif title) ── */
-      .story { display:grid; grid-template-columns:96px 1fr; gap:20px; padding:30px 0; border-bottom:1px solid var(--border); }
+      .story { display:grid; grid-template-columns:96px minmax(0,1fr); gap:20px; padding:30px 0; border-bottom:1px solid var(--border); }
       .story:first-child { padding-top:6px; }
       .ava { width:84px; height:84px; border-radius:8px; object-fit:cover; transform:rotate(-5deg); box-shadow:5px 6px 0 0 var(--bar); border:3px solid #fff; }
       .ava.mono-ava { display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,var(--bar),var(--bar-d)); color:#fff; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:34px; }
@@ -391,7 +391,11 @@ const alts = [
       .artmeta .by { color:var(--brand); } .artmeta .tag { color:var(--tagink); } .artmeta .dot { color:#cfccc4; }
       .meta { color:var(--ink-faint); font-size:14px; }
       img.hero { width:100%; height:auto; border-radius:14px; border:1px solid var(--border); margin:8px 0 14px; display:block; box-shadow:8px 10px 0 0 var(--pill); }
-      figure { margin:26px 0; } figure img { border-radius:12px; }
+      figure { margin:26px 0; } figure img { border-radius:12px; max-width:100%; height:auto; display:block; }
+      .reading :not(pre) > code { overflow-wrap:anywhere; }
+      .reading img { max-width:100%; height:auto; }
+      .layout a, .story a { overflow-wrap:anywhere; }
+      @media (max-width:520px) { .reading th, .reading td { padding:8px 7px; } }
       figcaption { color:var(--ink-faint); font-size:13.5px; margin-top:10px; text-align:center; font-family:'Baloo 2',sans-serif; font-style:italic; }
       .reading { font-size:19px; line-height:1.78; color:#2b2f34; }
       .reading h2 { font-size:30px; font-weight:800; letter-spacing:-.3px; margin:46px 0 12px; color:var(--ink); }

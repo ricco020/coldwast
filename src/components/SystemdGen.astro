@@ -70,8 +70,9 @@ PORT=3000</textarea></label>
   .sdg button { font-family:'Baloo 2',sans-serif; font-weight:700; font-size:14px; background:var(--pill); color:var(--brand-ink); border:1px solid #f1d6b4; border-radius:999px; padding:5px 14px; cursor:pointer; }
   .sdg button:hover { background:var(--bar); color:#fff; border-color:var(--bar); }
   .sdg-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.15fr); gap:24px; align-items:start; }
-  @media (max-width:900px) { .sdg-grid { grid-template-columns:1fr; } }
-  .sdg-form { display:grid; grid-template-columns:1fr 1fr; gap:12px 14px; background:var(--soft); border:1px solid var(--border); border-radius:14px; padding:18px; }
+  @media (max-width:900px) { .sdg-grid { grid-template-columns:minmax(0,1fr); } }
+  @media (max-width:520px) { .sdg-form { grid-template-columns:minmax(0,1fr); } }
+  .sdg-form { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:12px 14px; background:var(--soft); border:1px solid var(--border); border-radius:14px; padding:18px; }
   .sdg-form label { display:flex; flex-direction:column; gap:5px; font-family:'Baloo 2',sans-serif; font-size:14px; font-weight:700; color:var(--ink-dim); }
   .sdg-form label.wide { grid-column:1 / -1; }
   .sdg-form label.chk { flex-direction:row; align-items:center; gap:9px; font-weight:600; color:var(--ink); }
