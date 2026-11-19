@@ -48,7 +48,7 @@ const faq = [
     <li>Vous enregistrez une <strong>URL</strong> (votre endpoint) auprès du fournisseur et choisissez les événements qui vous intéressent.</li>
     <li>Quand un tel événement survient, le fournisseur envoie un <strong>POST</strong> HTTP à votre URL avec un corps (souvent du JSON) qui le décrit.</li>
     <li>Votre serveur lit le contenu, renvoie vite un statut <strong>2xx</strong> pour l’accuser, et fait le vrai travail ensuite.</li>
-    <li>Si votre endpoint est hors ligne ou renvoie une erreur, la plupart des fournisseurs <strong>ré-essaient</strong> avec backoff - d’où les doublons possibles.</li>
+    <li>Si votre endpoint est hors ligne ou renvoie une erreur, beaucoup de fournisseurs (Stripe par exemple) <strong>réessaient</strong> avec une attente croissante, d’où les doublons possibles. GitHub ne réessaie pas tout seul (voir plus bas).</li>
   </ol>
   <p>Une livraison ressemble à n’importe quelle requête HTTP :</p>
   <pre><code>POST /webhooks/payments  HTTP/1.1
