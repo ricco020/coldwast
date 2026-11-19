@@ -1,16 +1,16 @@
 ---
 import Base from '../../../../layouts/Base.astro';
 const path = '/fr/e/blog/2026-06-19-what-is-docker.html';
-const title = 'Docker, c’est quoi ? Les conteneurs expliqués clairement (2026)';
-const description = 'Docker est une plateforme qui empaquette une application et tout ce dont elle a besoin dans un conteneur qui s’exécute de la même façon sur n’importe quelle machine. Ce qu’est Docker, conteneurs vs machines virtuelles, les concepts clés (image, conteneur, Dockerfile, registre), pourquoi ça compte, et Docker vs Kubernetes.';
+const title = 'Docker : définition simple. C’est quoi un conteneur Docker ? (2026)';
+const description = 'Docker, définition simple : un outil qui empaquette une appli et ses dépendances dans un conteneur qui tourne pareil partout. Conteneur ou VM, poids réel des images (3,9 Mo pour alpine contre 3,3 Go pour une ISO Ubuntu), Dockerfile, Kubernetes.';
 ---
 <Base title={title} description={description} path={path} type="article" lang="fr"
-  image="/img/what-is-docker-2026.jpg" datePublished="2026-06-19" dateModified="2026-06-19">
+  image="/img/what-is-docker-2026.jpg" datePublished="2026-06-19" dateModified="2026-11-19">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/fr">Accueil</a><span>/</span><a href="/fr/e">Guides</a><span>/</span>Docker, c’est quoi</nav>
   <p class="kicker">Programmation · DevOps · conteneurs</p>
   <h1>Docker, c’est quoi ?</h1>
-  <div class="artmeta"><span>Par Coldwast</span><span>Mis à jour le 19 juin 2026</span><span>8 min de lecture</span><span class="tag">#docker</span><span class="tag">#containers</span><span class="tag">#devops</span></div>
+  <div class="artmeta"><span>Par Coldwast</span><span>Mis à jour le 19 novembre 2026</span><span>8 min de lecture</span><span class="tag">#docker</span><span class="tag">#containers</span><span class="tag">#devops</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="/img/what-is-docker-2026.jpg" alt="Un porte-conteneurs chargé de conteneurs empilés dans un port, de nuit" width="1200" height="420" loading="eager" />
@@ -25,6 +25,21 @@ const description = 'Docker est une plateforme qui empaquette une application et
   <h2>Conteneurs vs machines virtuelles</h2>
   <p>Les deux isolent le logiciel, mais à des niveaux différents. Une <strong>machine virtuelle</strong> émule un ordinateur entier, avec son propre système d’exploitation complet, au-dessus d’un hyperviseur - puissant, mais lourd : chaque VM pèse des gigaoctets et démarre lentement. Un <strong>conteneur</strong> partage le noyau du système d’exploitation de la machine hôte et n’empaquette que l’appli et ses dépendances. Résultat bien plus léger : les conteneurs pèsent typiquement des mégaoctets, démarrent en quelques secondes, et on peut en faire tourner bien plus sur le même matériel.</p>
   <p>Le compromis, c’est l’isolation. Les VM offrent une séparation plus forte car chacune a son propre OS ; les conteneurs sont plus efficaces mais partagent le noyau, donc l’isolation est bonne plutôt qu’absolue. Beaucoup de systèmes réels utilisent les deux - des conteneurs tournant dans des VM dans le cloud.</p>
+
+  <h2>Combien pèse vraiment une image Docker ?</h2>
+  <p>« Un conteneur est léger » se vérifie en chiffres. Voici la taille de téléchargement (compressée, amd64) de quelques images officielles, relevée sur Docker Hub le 19 novembre 2026 :</p>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch"><table class="imgsize" style="margin:0;font-size:14.5px">
+    <thead><tr><th>Image</th><th>Taille téléchargée</th><th>Contenu</th></tr></thead>
+    <tbody>
+      <tr><td><code>alpine:latest</code></td><td>3,9 Mo</td><td>Linux minimal (BusyBox, apk)</td></tr>
+      <tr><td><code>debian:bookworm-slim</code></td><td>28,2 Mo</td><td>Debian 12 sans documentation</td></tr>
+      <tr><td><code>ubuntu:24.04</code></td><td>29,8 Mo</td><td>Espace utilisateur d’Ubuntu 24.04</td></tr>
+      <tr><td><code>nginx:alpine</code></td><td>26,3 Mo</td><td>Serveur web Nginx prêt à servir</td></tr>
+      <tr><td><code>python:3.13-slim</code></td><td>43,1 Mo</td><td>Python 3.13 sur Debian slim</td></tr>
+    </tbody>
+  </table></div>
+  <p>À titre de comparaison, l’image ISO d’Ubuntu Server 24.04.3 que l’on installe dans une machine virtuelle pèse 3,3 Go (3 303 444 480 octets sur releases.ubuntu.com), plus de 100 fois l’image ubuntu:24.04. L’écart vient de ce qui manque au conteneur : pas de noyau, pas de pilotes, pas de programme d’installation, puisqu’il emprunte le noyau de la machine hôte. C’est aussi pour ça qu’un conteneur démarre en une fraction de seconde : il n’y a aucun système à amorcer, juste un processus à lancer.</p>
+  <p><strong>Un conteneur a-t-il son propre système d’exploitation ?</strong> Il a ses propres fichiers (les bibliothèques et outils d’une distribution comme Alpine ou Debian), mais pas son propre noyau. Sous Windows et macOS, Docker Desktop fait tourner une petite machine virtuelle Linux pour fournir ce noyau. Pour vérifier les tailles vous-même : <code>docker pull alpine</code> puis <code>docker images</code>, qui affiche la taille une fois décompressée sur le disque, plus grande que la taille de téléchargement.</p>
 
   <figure><img src="/img/what-is-docker-2026-dev.jpg" alt="Un développeur au casque travaillant devant un écran rempli de code, dans une pièce sombre éclairée de bleu" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>Un développeur devant un écran rempli de code - Docker permet à la même appli conteneurisée de passer de ce portable à un serveur sans surprise.</figcaption></figure>
 

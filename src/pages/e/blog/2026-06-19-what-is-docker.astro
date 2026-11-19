@@ -5,12 +5,12 @@ const title = 'What Is Docker? Containers Explained Clearly (2026)';
 const description = 'Docker is a platform that packages an application and everything it needs into a container that runs the same way on any machine. What Docker is, containers vs virtual machines, the key concepts (image, container, Dockerfile, registry), why it matters, and Docker vs Kubernetes.';
 ---
 <Base title={title} description={description} path={path} type="article"
-  image="/img/what-is-docker-2026.jpg" datePublished="2026-06-19" dateModified="2026-06-19">
+  image="/img/what-is-docker-2026.jpg" datePublished="2026-06-19" dateModified="2026-11-19">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e">Guides</a><span>/</span>What is Docker</nav>
   <p class="kicker">Programming · DevOps · containers</p>
   <h1>What is Docker?</h1>
-  <div class="artmeta"><span>By Coldwast</span><span>Updated Jun 19, 2026</span><span>8 min read</span><span class="tag">#docker</span><span class="tag">#containers</span><span class="tag">#devops</span></div>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Nov 19, 2026</span><span>8 min read</span><span class="tag">#docker</span><span class="tag">#containers</span><span class="tag">#devops</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="/img/what-is-docker-2026.jpg" alt="A container ship loaded with stacked shipping containers at a port at night" width="1200" height="420" loading="eager" />
@@ -25,6 +25,21 @@ const description = 'Docker is a platform that packages an application and every
   <h2>Containers vs virtual machines</h2>
   <p>Both isolate software, but at different levels. A <strong>virtual machine</strong> emulates a whole computer, including its own full operating system, on top of a hypervisor - powerful, but heavy: each VM is gigabytes in size and slow to boot. A <strong>container</strong> shares the host machine's operating-system kernel and only packages the app and its dependencies. The result is far lighter: containers are typically megabytes, start in seconds, and you can run many more of them on the same hardware.</p>
   <p>The trade-off is isolation. VMs give stronger separation because each has its own OS; containers are more efficient but share the kernel, so isolation is good rather than absolute. Many real systems use both - containers running inside VMs in the cloud.</p>
+
+  <h2>How big is a Docker image, really?</h2>
+  <p>“Containers are lightweight” is easy to check with numbers. Here is the download size (compressed, amd64) of a few official images, read on Docker Hub on November 19, 2026:</p>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch"><table class="imgsize" style="margin:0;font-size:14.5px">
+    <thead><tr><th>Image</th><th>Download size</th><th>What is inside</th></tr></thead>
+    <tbody>
+      <tr><td><code>alpine:latest</code></td><td>3.9 MB</td><td>Minimal Linux (BusyBox, apk)</td></tr>
+      <tr><td><code>debian:bookworm-slim</code></td><td>28.2 MB</td><td>Debian 12 without docs</td></tr>
+      <tr><td><code>ubuntu:24.04</code></td><td>29.8 MB</td><td>Ubuntu 24.04 userland</td></tr>
+      <tr><td><code>nginx:alpine</code></td><td>26.3 MB</td><td>Nginx web server, ready to serve</td></tr>
+      <tr><td><code>python:3.13-slim</code></td><td>43.1 MB</td><td>Python 3.13 on Debian slim</td></tr>
+    </tbody>
+  </table></div>
+  <p>For comparison, the Ubuntu Server 24.04.3 ISO you would install in a virtual machine weighs 3.3 GB (3,303,444,480 bytes on releases.ubuntu.com), more than 100 times the ubuntu:24.04 image. The gap comes from what a container leaves out: no kernel, no drivers, no installer, because it borrows the kernel of the host machine. That is also why a container starts in a fraction of a second: there is no operating system to boot, only a process to launch.</p>
+  <p><strong>Does a container have its own operating system?</strong> It has its own files (the libraries and tools of a distribution such as Alpine or Debian), but not its own kernel. On Windows and macOS, Docker Desktop runs a small Linux virtual machine to provide that kernel. To check sizes yourself, run <code>docker pull alpine</code> then <code>docker images</code>, which shows the size once unpacked on disk, larger than the download size.</p>
 
   <figure><img src="/img/what-is-docker-2026-dev.jpg" alt="A developer in headphones working at a monitor full of code in a dark, blue-lit room" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>A developer at a code-filled monitor - Docker lets the same containerised app move from this laptop to a server without surprises.</figcaption></figure>
 

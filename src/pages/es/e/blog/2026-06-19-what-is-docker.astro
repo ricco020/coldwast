@@ -5,12 +5,12 @@ const title = '¿Qué es Docker? Los contenedores explicados con claridad (2026)
 const description = 'Docker es una plataforma que empaqueta una aplicación y todo lo que necesita en un contenedor que se ejecuta igual en cualquier máquina. Qué es Docker, contenedores vs máquinas virtuales, los conceptos clave (imagen, contenedor, Dockerfile, registro), por qué importa, y Docker vs Kubernetes.';
 ---
 <Base title={title} description={description} path={path} type="article" lang="es"
-  image="/img/what-is-docker-2026.jpg" datePublished="2026-06-19" dateModified="2026-06-19">
+  image="/img/what-is-docker-2026.jpg" datePublished="2026-06-19" dateModified="2026-11-19">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/es">Inicio</a><span>/</span><a href="/es/e">Guías</a><span>/</span>Qué es Docker</nav>
   <p class="kicker">Programación · DevOps · contenedores</p>
   <h1>¿Qué es Docker?</h1>
-  <div class="artmeta"><span>Por Coldwast</span><span>Actualizado el 19 de junio de 2026</span><span>8 min de lectura</span><span class="tag">#docker</span><span class="tag">#containers</span><span class="tag">#devops</span></div>
+  <div class="artmeta"><span>Por Coldwast</span><span>Actualizado el 19 de noviembre de 2026</span><span>8 min de lectura</span><span class="tag">#docker</span><span class="tag">#containers</span><span class="tag">#devops</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="/img/what-is-docker-2026.jpg" alt="Un buque portacontenedores cargado de contenedores apilados en un puerto, de noche" width="1200" height="420" loading="eager" />
@@ -25,6 +25,21 @@ const description = 'Docker es una plataforma que empaqueta una aplicación y to
   <h2>Contenedores vs máquinas virtuales</h2>
   <p>Ambos aíslan software, pero a niveles distintos. Una <strong>máquina virtual</strong> emula un ordenador completo, incluido su propio sistema operativo entero, sobre un hipervisor - potente, pero pesada: cada VM ocupa gigabytes y arranca despacio. Un <strong>contenedor</strong> comparte el núcleo del sistema operativo de la máquina anfitriona y solo empaqueta la app y sus dependencias. El resultado es mucho más ligero: los contenedores suelen ocupar megabytes, arrancan en segundos, y puedes ejecutar muchos más en el mismo hardware.</p>
   <p>La contrapartida es el aislamiento. Las VM ofrecen una separación más fuerte porque cada una tiene su propio SO; los contenedores son más eficientes pero comparten el núcleo, así que el aislamiento es bueno más que absoluto. Muchos sistemas reales usan ambos - contenedores ejecutándose dentro de VM en la nube.</p>
+
+  <h2>¿Cuánto pesa realmente una imagen Docker?</h2>
+  <p>«Un contenedor es ligero» se comprueba con cifras. Este es el tamaño de descarga (comprimido, amd64) de algunas imágenes oficiales, consultado en Docker Hub el 19 de noviembre de 2026:</p>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch"><table class="imgsize" style="margin:0;font-size:14.5px">
+    <thead><tr><th>Imagen</th><th>Tamaño de descarga</th><th>Contenido</th></tr></thead>
+    <tbody>
+      <tr><td><code>alpine:latest</code></td><td>3,9 MB</td><td>Linux mínimo (BusyBox, apk)</td></tr>
+      <tr><td><code>debian:bookworm-slim</code></td><td>28,2 MB</td><td>Debian 12 sin documentación</td></tr>
+      <tr><td><code>ubuntu:24.04</code></td><td>29,8 MB</td><td>Espacio de usuario de Ubuntu 24.04</td></tr>
+      <tr><td><code>nginx:alpine</code></td><td>26,3 MB</td><td>Servidor web Nginx listo para servir</td></tr>
+      <tr><td><code>python:3.13-slim</code></td><td>43,1 MB</td><td>Python 3.13 sobre Debian slim</td></tr>
+    </tbody>
+  </table></div>
+  <p>Como comparación, la ISO de Ubuntu Server 24.04.3 que se instala en una máquina virtual pesa 3,3 GB (3.303.444.480 bytes en releases.ubuntu.com), más de 100 veces la imagen ubuntu:24.04. La diferencia viene de lo que le falta al contenedor: ni kernel, ni controladores, ni instalador, porque usa el kernel de la máquina anfitriona. Por eso un contenedor arranca en una fracción de segundo: no hay ningún sistema que iniciar, solo un proceso que lanzar.</p>
+  <p><strong>¿Un contenedor tiene su propio sistema operativo?</strong> Tiene sus propios archivos (las bibliotecas y herramientas de una distribución como Alpine o Debian), pero no su propio kernel. En Windows y macOS, Docker Desktop ejecuta una pequeña máquina virtual Linux para aportar ese kernel. Para comprobar los tamaños: <code>docker pull alpine</code> y luego <code>docker images</code>, que muestra el tamaño ya descomprimido en disco, mayor que el de descarga.</p>
 
   <figure><img src="/img/what-is-docker-2026-dev.jpg" alt="Un desarrollador con auriculares trabajando frente a un monitor lleno de código en una sala oscura iluminada de azul" loading="lazy" width="1200" height="800" style="width:100%;height:auto;border-radius:12px" /><figcaption>Un desarrollador frente a un monitor lleno de código - Docker permite que la misma app en contenedor pase de este portátil a un servidor sin sorpresas.</figcaption></figure>
 
