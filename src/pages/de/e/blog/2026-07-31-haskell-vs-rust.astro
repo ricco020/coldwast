@@ -5,12 +5,12 @@ const title = 'Haskell vs. Rust (2026): zwei Antworten auf dieselbe Frage';
 const description = 'Haskell und Rust versprechen beide Korrektheit über das Typsystem und gehen dann beim Speicher völlig getrennte Wege. Garbage Collector gegen Ownership, Lazy gegen Strict, und welche Frage jede Sprache tatsächlich beantwortet.';
 ---
 <Base title={title} description={description} path={path} type="article" lang="de"
-  image="https://images.pexels.com/photos/17342282/pexels-photo-17342282.jpeg?auto=compress&cs=tinysrgb&w=1200" datePublished="2026-07-31" dateModified="2026-07-31">
+  image="https://images.pexels.com/photos/17342282/pexels-photo-17342282.jpeg?auto=compress&cs=tinysrgb&w=1200" datePublished="2026-07-31" dateModified="2026-11-19">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/de">Startseite</a><span>/</span><a href="/de/e">Guides</a><span>/</span>Haskell vs. Rust</nav>
   <p class="kicker">Haskell · Rust · Sprachdesign</p>
   <h1>Haskell vs. Rust: zwei Antworten auf dieselbe Frage</h1>
-  <div class="artmeta"><span>Von Coldwast</span><span>Aktualisiert am 31. Juli 2026</span><span>8 Min. Lesezeit</span><span class="tag">#haskell</span><span class="tag">#rust</span><span class="tag">#types</span></div>
+  <div class="artmeta"><span>Von Coldwast</span><span>Aktualisiert am 19. November 2026</span><span>12 Min. Lesezeit</span><span class="tag">#haskell</span><span class="tag">#rust</span><span class="tag">#types</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.pexels.com/photos/17342282/pexels-photo-17342282.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Zwei Feldwege, die sich über eine Wiese hinweg unter einem bedeckten Himmel trennen" width="1200" height="420" loading="eager" />
@@ -39,6 +39,27 @@ const description = 'Haskell und Rust versprechen beide Korrektheit über das Ty
   <h2>Reinheit und was sie einbringt</h2>
   <p>Haskell beschreibt jede Funktion als „eine Funktion im mathematischen Sinne (d. h. ‚rein‘)“ und führt „referenzielle Transparenz, Unveränderlichkeit und Lazy Evaluation“ unter seinen Merkmalen auf. Referenzielle Transparenz bedeutet, dass ein Ausdruck durch seinen Wert ersetzt werden kann, ohne das Programm zu verändern, und genau das macht beherztes Nachdenken und Refactoring sicher.</p>
   <p>Rust ist nicht rein und behauptet das auch nicht. Es gibt einem stattdessen kontrollierte Mutation: Der Borrow Checker regelt, wer was wann verändern darf, sodass Mutation sicher bleibt, ohne verboten zu sein.</p>
+
+  <h2>Leistungsmerkmale</h2>
+  <p><strong>Rust kompiliert zu nativem Code ohne Laufzeit-Overhead über das hinaus, was der Programmierer explizit anfordert.</strong> Der Compiler (rustc, gestützt auf LLVM) erzeugt Binaries, die in der Geschwindigkeit mit C und C++ vergleichbar sind. Die Rust-Standardbibliothek vermeidet versteckte Allokationen: Wenn eine Funktion alloziert, sagt sie es in ihrer Signatur, indem sie einen besessenen Typ nimmt oder zurückgibt.</p>
+  <p><strong>Haskell kompiliert zu nativem Code über GHC, aber Lazy Evaluation erschwert das Nachdenken über Leistung.</strong> Lazy Evaluation bedeutet, dass Ausdrücke erst berechnet werden, wenn ihr Wert benötigt wird. Das ermöglicht elegante Abstraktionen (unendliche Listen, komponierbare Pipelines), kann aber auch Ketten unevaluierter Berechnungen aufbauen, sogenannte <em>Thunks</em>, die unerwartet Speicher verbrauchen. Striktheitsannotationen (<code>!</code>, <code>BangPatterns</code>, <code>seq</code>) beheben das, aber zu wissen, wo man sie platziert, ist eine erlernte Fähigkeit.</p>
+
+  <h2>Nebenläufigkeit und Parallelismus</h2>
+  <p>Haskells Laufzeitumgebung bietet leichtgewichtige grüne Threads (gestartet durch <code>forkIO</code>), Software Transactional Memory (<code>STM</code>) und die <code>async</code>-Bibliothek für strukturierte Nebenläufigkeit. Da reiner Code keine Seiteneffekte hat, ist er trivial sicher parallel auszuführen.</p>
+  <p>Rust verhindert Data Races zur Kompilierzeit durch Ownership. <code>Send</code> und <code>Sync</code> sind Marker-Traits, die der Compiler automatisch prüft: Ein Typ, der nicht sicher zwischen Threads gesendet werden kann, wird schlicht nicht in einem Kontext kompilieren, der das versucht. Die <code>tokio</code>-Laufzeitumgebung bietet einen Async-Executor, und <code>rayon</code> bietet Datenparallelismus. Beide sind Bibliotheken, keine Sprachfeatures.</p>
+  <p>Der praktische Unterschied: Haskell macht Nebenläufigkeit leicht zu schreiben, aber schwerer vorherzusagen (lazy Thunks können zwischen Threads migrieren). Rust macht Nebenläufigkeit schwerer zu schreiben (der Borrow Checker ist streng bei geteiltem mutablem Zustand), aber leichter vorherzusagen (du weißt genau, was wo läuft).</p>
+
+  <h2>Ökosystem und Werkzeuge</h2>
+  <p>Rusts Paketmanager ist <code>cargo</code>. Er übernimmt das Bauen, Testen, Benchmarking, Dokumentieren und die Abhängigkeitsauflösung. Die Registry, <a href="https://crates.io" rel="noopener">crates.io</a>, beherbergt 2026 über 150 000 Crates. <code>rustfmt</code> formatiert Code, <code>clippy</code> analysiert ihn, und beide werden mit der Toolchain ausgeliefert.</p>
+  <p>Haskells wichtigste Build-Werkzeuge sind <code>cabal-install</code> und <code>stack</code>, die etwas unbequem koexistieren. <a href="https://hackage.haskell.org" rel="noopener">Hackage</a> beherbergt etwa 17 000 Pakete. <code>ghcup</code> verwaltet GHC- und Toolchain-Versionen. Der Haskell Language Server (HLS) bietet IDE-Funktionen. Das Ökosystem ist kleiner, aber tief in bestimmten Domänen: Parsing (megaparsec, attoparsec), Compiler, formale Methoden und Finanzmodellierung.</p>
+
+  <h2>Lernkurve</h2>
+  <p>Beide Sprachen sind im Vergleich zu Python oder JavaScript schwer zu lernen. Sie sind auf unterschiedliche Weise schwer.</p>
+  <p>Haskell erfordert das Erlernen eines neuen Programmierparadigmas. Wenn du aus einem imperativen Hintergrund kommst, sind Monaden, Funktoren, Applikative, Typklassen und Lazy Evaluation wirklich neue Konzepte. Die Syntax ist ungewohnt, und GHCs Fehlermeldungen können kryptisch sein, bis du lernst, Typ-Diskrepanzberichte zu lesen.</p>
+  <p>Rust erfordert das Erlernen eines neuen Speichermodells. Die Konzepte von Ownership, Borrowing, Lifetimes und die Unterscheidung zwischen <code>Copy</code> und <code>Clone</code> haben in den meisten Sprachen kein direktes Äquivalent. Der Borrow Checker lehnt Code ab, der in C++ ohne Beanstandung kompilieren würde, und zu verstehen <em>warum</em> ist der schwere Teil.</p>
+
+  <h2>Was sie gemeinsam haben</h2>
+  <p>Beide Sprachen verwenden algebraische Datentypen (<code>data</code> in Haskell, <code>enum</code> in Rust). Beide haben erschöpfendes Pattern-Matching, das der Compiler erzwingt. Beide unterstützen Generics (parametrischer Polymorphismus in Haskell, generische Typparameter in Rust). Beide haben Traits oder Typklassen als Mechanismus für Ad-hoc-Polymorphismus. Beide erzeugen eigenständige Binaries ohne Interpreter.</p>
 
   <h2>Welche Frage beantwortest du also?</h2>
   <p>Der nützliche Weg zur Entscheidung ist die Frage, was das Projekt nicht tolerieren kann.</p>

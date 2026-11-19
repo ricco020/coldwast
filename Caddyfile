@@ -21,6 +21,19 @@
 		# www.coldwa.st servait aussi le site entier en 200 (mesure 16/11) : meme 301 vers le domaine nu.
 		@railway_alias host *.up.railway.app www.coldwa.st
 		redir @railway_alias https://coldwa.st{uri} 301
+		# Doublon haskell vs rust fusionne dans 07-31 le 19/11 (cannibalisation Bing).
+		@hvr0 path /e/blog/2026-09-20-haskell-vs-rust.html /e/blog/2026-09-20-haskell-vs-rust
+		redir @hvr0 /e/blog/2026-07-31-haskell-vs-rust.html 301
+		@hvr1 path /fr/e/blog/2026-09-20-haskell-vs-rust.html /fr/e/blog/2026-09-20-haskell-vs-rust
+		redir @hvr1 /fr/e/blog/2026-07-31-haskell-vs-rust.html 301
+		@hvr2 path /de/e/blog/2026-09-20-haskell-vs-rust.html /de/e/blog/2026-09-20-haskell-vs-rust
+		redir @hvr2 /de/e/blog/2026-07-31-haskell-vs-rust.html 301
+		@hvr3 path /es/e/blog/2026-09-20-haskell-vs-rust.html /es/e/blog/2026-09-20-haskell-vs-rust
+		redir @hvr3 /es/e/blog/2026-07-31-haskell-vs-rust.html 301
+		@hvr4 path /it/e/blog/2026-09-20-haskell-vs-rust.html /it/e/blog/2026-09-20-haskell-vs-rust
+		redir @hvr4 /it/e/blog/2026-07-31-haskell-vs-rust.html 301
+		@hvr5 path /pt/e/blog/2026-09-20-haskell-vs-rust.html /pt/e/blog/2026-09-20-haskell-vs-rust
+		redir @hvr5 /pt/e/blog/2026-07-31-haskell-vs-rust.html 301
 		@r0 {
 			path /blog/2013-08-20-Cabal-sandbox.html
 		}

@@ -5,12 +5,12 @@ const title = 'Haskell vs Rust (2026): Two Answers to the Same Question';
 const description = 'Haskell and Rust both promise correctness through the type system, then diverge completely on memory. Garbage collection versus ownership, lazy versus strict, and which question each one actually answers.';
 ---
 <Base title={title} description={description} path={path} type="article"
-  image="https://images.pexels.com/photos/17342282/pexels-photo-17342282.jpeg?auto=compress&cs=tinysrgb&w=1200" datePublished="2026-07-31" dateModified="2026-07-31">
+  image="https://images.pexels.com/photos/17342282/pexels-photo-17342282.jpeg?auto=compress&cs=tinysrgb&w=1200" datePublished="2026-07-31" dateModified="2026-11-19">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e">Guides</a><span>/</span>Haskell vs Rust</nav>
   <p class="kicker">Haskell · Rust · language design</p>
   <h1>Haskell vs Rust: two answers to the same question</h1>
-  <div class="artmeta"><span>By Coldwast</span><span>Updated Jul 31, 2026</span><span>8 min read</span><span class="tag">#haskell</span><span class="tag">#rust</span><span class="tag">#types</span></div>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Nov 19, 2026</span><span>12 min read</span><span class="tag">#haskell</span><span class="tag">#rust</span><span class="tag">#types</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="https://images.pexels.com/photos/17342282/pexels-photo-17342282.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Two dirt tracks diverging across a meadow under an overcast sky" width="1200" height="420" loading="eager" />
@@ -39,6 +39,28 @@ const description = 'Haskell and Rust both promise correctness through the type 
   <h2>Purity, and what it buys</h2>
   <p>Haskell describes every function as "a function in the mathematical sense (i.e., 'pure')", and lists "referential transparency, immutability and lazy evaluation" among its characteristics. Referential transparency means an expression can be replaced by its value without changing the program, which is what makes aggressive reasoning and refactoring safe.</p>
   <p>Rust is not pure, and does not claim to be. It gives you controlled mutation instead: the borrow checker governs who may mutate what and when, so mutation stays safe without being forbidden.</p>
+
+
+  <h2>Performance characteristics</h2>
+  <p><strong>Rust compiles to native code with no runtime overhead beyond what the programmer explicitly requests.</strong> The compiler (rustc, backed by LLVM) produces binaries comparable in speed to C and C++. The Rust standard library avoids hidden allocations: when a function allocates, it says so in its signature by taking or returning an owned type.</p>
+  <p><strong>Haskell compiles to native code through GHC, but laziness makes performance reasoning harder.</strong> Lazy evaluation means expressions are not computed until their value is demanded. This enables elegant abstractions (infinite lists, composable pipelines) but can also build up unevaluated chains of computation called <em>thunks</em> that consume memory unexpectedly. Strict annotations (<code>!</code>, <code>BangPatterns</code>, <code>seq</code>) fix this, but knowing where to place them is a learned skill.</p>
+
+  <h2>Concurrency and parallelism</h2>
+  <p>Haskell's runtime provides lightweight green threads (sparked by <code>forkIO</code>), software transactional memory (<code>STM</code>), and the <code>async</code> library for structured concurrency. Because pure code has no side effects, it is trivially safe to run in parallel.</p>
+  <p>Rust prevents data races at compile time through ownership. <code>Send</code> and <code>Sync</code> are marker traits that the compiler checks automatically: a type that is not safe to send across threads simply will not compile in a context that tries to. The <code>tokio</code> runtime provides an async executor; <code>rayon</code> provides data parallelism. Both are libraries, not language features.</p>
+  <p>The practical difference: Haskell makes concurrency easy to write but harder to predict (lazy thunks can migrate between threads). Rust makes concurrency harder to write (the borrow checker is strict about shared mutable state) but easier to predict (you know exactly what runs where).</p>
+
+  <h2>Ecosystem and tooling</h2>
+  <p>Rust's package manager is <code>cargo</code>. It handles building, testing, benchmarking, documentation and dependency resolution. The registry, <a href="https://crates.io" rel="noopener">crates.io</a>, hosts over 150,000 crates as of 2026. <code>rustfmt</code> formats code, <code>clippy</code> lints it, and both ship with the toolchain.</p>
+  <p>Haskell's main build tools are <code>cabal-install</code> and <code>stack</code>, which coexist somewhat awkwardly. <a href="https://hackage.haskell.org" rel="noopener">Hackage</a> hosts around 17,000 packages. <code>ghcup</code> manages GHC and toolchain versions. The Haskell Language Server (HLS) provides IDE features. The ecosystem is smaller but deep in specific domains: parsing (megaparsec, attoparsec), compilers, formal methods and financial modelling.</p>
+
+  <h2>Learning curve</h2>
+  <p>Both languages are difficult to learn compared to Python or JavaScript. They are difficult in different ways.</p>
+  <p>Haskell requires learning a new programming paradigm. If you come from an imperative background, monads, functors, applicatives, type classes and lazy evaluation are genuinely new concepts. The syntax is unfamiliar, and error messages from GHC can be cryptic until you learn to read type mismatch reports.</p>
+  <p>Rust requires learning a new memory model. The concepts of ownership, borrowing, lifetimes and the distinction between <code>Copy</code> and <code>Clone</code> have no direct equivalent in most languages. The borrow checker rejects code that would compile in C++ without complaint, and learning <em>why</em> is the hard part.</p>
+
+  <h2>What they share</h2>
+  <p>Both languages use algebraic data types (<code>data</code> in Haskell, <code>enum</code> in Rust). Both have exhaustive pattern matching that the compiler enforces. Both support generics (parametric polymorphism in Haskell, generic type parameters in Rust). Both have traits or type classes as the mechanism for ad-hoc polymorphism. Both produce standalone binaries with no interpreter required.</p>
 
   <h2>So which question are you answering?</h2>
   <p>The useful way to choose is to ask what the project cannot tolerate.</p>
