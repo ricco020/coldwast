@@ -1,16 +1,16 @@
 ---
 import Base from '../../../layouts/Base.astro';
 const path = '/e/blog/2026-07-18-what-is-a-cdn.html';
-const title = 'What Is a CDN? Content Delivery Networks, Explained (2026)';
-const description = 'A CDN caches your static content on servers spread around the world so visitors get it from a nearby machine. How the edge, cache hit and miss, TTL and invalidation work, static vs dynamic, and where a CDN fits with your host.';
+const title = "What Is a CDN (Content Delivery Network)? How the CDN Cache Works (2026)";
+const description = "A CDN (content delivery network) keeps cached copies of your files on edge servers near your visitors. What a CDN cache is, cache hit vs miss, TTL and purge, and how to check with curl whether a file came from the cache (real HIT/MISS headers).";
 ---
 <Base title={title} description={description} path={path} type="article"
-  image="/img/2026-07-18-what-is-a-cdn-hero.jpg" datePublished="2026-07-18" dateModified="2026-09-06">
+  image="/img/2026-07-18-what-is-a-cdn-hero.jpg" datePublished="2026-07-18" dateModified="2026-11-19">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e">Guides</a><span>/</span>What is a CDN</nav>
   <p class="kicker">Programming · web · performance</p>
   <h1>What is a CDN?</h1>
-  <div class="artmeta"><span>By Coldwast</span><span>Updated Jul 18, 2026</span><span>8 min read</span><span class="tag">#cdn</span><span class="tag">#performance</span><span class="tag">#web</span></div>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Nov 19, 2026</span><span>8 min read</span><span class="tag">#cdn</span><span class="tag">#performance</span><span class="tag">#web</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="/img/2026-07-18-what-is-a-cdn-hero.jpg" alt="A world map with connected network nodes representing a global delivery network" width="1200" height="420" loading="eager" />
@@ -33,6 +33,31 @@ const description = 'A CDN caches your static content on servers spread around t
   <p>This is why a CDN both speeds up delivery and <strong>offloads the origin</strong>: once content is cached at the edge, most requests are answered without ever reaching your server. Under a traffic spike, the edge network absorbs the bulk of the load.</p>
 
   <figure><img src="/img/2026-07-18-what-is-a-cdn-body.jpg" alt="A server and an orange network cable with streaming binary data" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Edge servers in data centres around the world hold cached copies of your content, close to the people requesting it.</figcaption></figure>
+
+  <h2>What is a CDN cache, and how to check it yourself</h2>
+  <p>The <strong>CDN cache</strong> is the storage on each edge server that holds the copies. You can see whether a file was served from it: ask only for the headers with <code>curl -sI</code> and read the cache status the CDN adds. These are real responses we fetched on 19 November 2026 (headers trimmed to the relevant lines):</p>
+  <pre><code>{`$ curl -sI https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js
+cache-control: public, max-age=31536000, s-maxage=31536000, immutable
+age: 178796
+x-served-by: cache-fra-etou8220158-FRA
+x-cache: HIT
+
+$ curl -sI https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js
+cf-cache-status: HIT
+age: 2929184
+
+$ curl -sI https://aws.amazon.com/
+x-cache: Miss from cloudfront
+
+$ curl -sI https://www.fastly.com/
+x-served-by: cache-sjc1000139-SJC, cache-sjc1000147-SJC, cache-fra-etou8220119-FRA
+x-cache: MISS, HIT, HIT`}</code></pre>
+  <ul>
+    <li><strong>The header name depends on the CDN.</strong> Cloudflare writes <code>cf-cache-status</code> (HIT, MISS, EXPIRED, BYPASS, DYNAMIC and a few more). Fastly, which jsDelivr uses here, writes <code>x-cache: HIT</code> or <code>MISS</code>. Amazon CloudFront writes <code>x-cache: Hit from cloudfront</code> or <code>Miss from cloudfront</code>.</li>
+    <li><strong><code>age</code> is how long the copy has been cached, in seconds</strong> (RFC 9111, section 5.1). 178 796 s is about 2 days for the jsDelivr file, 2 929 184 s about 34 days for the cdnjs one.</li>
+    <li><strong>Several values mean several cache layers.</strong> fastly.com answered <code>MISS, HIT, HIT</code>, one value per cache it crossed, matching the 3 nodes listed in <code>x-served-by</code>.</li>
+    <li><strong>Run the same command twice.</strong> A MISS followed by a HIT means the edge stored the file on the first request. A response that stays MISS, BYPASS or DYNAMIC is not being cached: the origin sends <code>Cache-Control: no-store</code> or <code>private</code>, or the file type is not cached by default (Cloudflare caches by file extension, so HTML pages show DYNAMIC unless a cache rule says otherwise).</li>
+  </ul>
 
   <h2>TTL and invalidation: keeping the cache fresh</h2>
   <p>A cached copy cannot live forever, or visitors would keep seeing an old version after you update a file. Two mechanisms handle this:</p>

@@ -1,16 +1,16 @@
 ---
 import Base from '../../../../layouts/Base.astro';
 const path = '/es/e/blog/2026-07-18-what-is-a-cdn.html';
-const title = "Que es una CDN? Las redes de distribucion de contenido, explicadas (2026)";
-const description = "Una CDN almacena en cache tu contenido estatico en servidores repartidos por el mundo, de modo que cada visitante lo recibe desde una maquina cercana. Como funcionan el edge, el cache hit y miss, el TTL y la invalidacion, estatico vs dinamico, y donde encaja una CDN con tu hosting.";
+const title = "¿Qué es una CDN (red de distribución de contenido)? Cómo funciona la caché CDN (2026)";
+const description = "Una CDN (content delivery network) guarda copias en caché de tus archivos en servidores edge cerca de tus visitantes. Qué es la caché CDN, cache hit y miss, TTL y purga, y cómo comprobar con curl si un archivo salió de la caché (cabeceras HIT/MISS reales).";
 ---
 <Base title={title} description={description} path={path} type="article"
-  image="/img/2026-07-18-what-is-a-cdn-hero.jpg" datePublished="2026-07-18" dateModified="2026-07-18">
+  image="/img/2026-07-18-what-is-a-cdn-hero.jpg" datePublished="2026-07-18" dateModified="2026-11-19">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/es">Inicio</a><span>/</span><a href="/es/e">Guias</a><span>/</span>Que es una CDN</nav>
   <p class="kicker">Programacion · web · rendimiento</p>
   <h1>Que es una CDN?</h1>
-  <div class="artmeta"><span>Por Coldwast</span><span>Actualizado 18 jul. 2026</span><span>8 min de lectura</span><span class="tag">#cdn</span><span class="tag">#rendimiento</span><span class="tag">#web</span></div>
+  <div class="artmeta"><span>Por Coldwast</span><span>Actualizado 19 nov. 2026</span><span>8 min de lectura</span><span class="tag">#cdn</span><span class="tag">#rendimiento</span><span class="tag">#web</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="/img/2026-07-18-what-is-a-cdn-hero.jpg" alt="Un mapa del mundo con nodos de red conectados que representan una red de distribucion global" width="1200" height="420" loading="eager" />
@@ -33,6 +33,31 @@ const description = "Una CDN almacena en cache tu contenido estatico en servidor
   <p>Por eso una CDN acelera la entrega y <strong>descarga el origen</strong>: una vez que el contenido esta cacheado en el edge, la mayoria de las peticiones se atienden sin llegar nunca a tu servidor. Ante un pico de trafico, la red edge absorbe el grueso de la carga.</p>
 
   <figure><img src="/img/2026-07-18-what-is-a-cdn-body.jpg" alt="Un servidor y un cable de red naranja con datos binarios" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Servidores edge en centros de datos de todo el mundo guardan copias en cache de tu contenido, cerca de las personas que lo piden.</figcaption></figure>
+
+  <h2>Qué es la caché de una CDN, y cómo comprobarla tú mismo</h2>
+  <p>La <strong>caché CDN</strong> es el almacenamiento de cada servidor edge que guarda las copias. Puedes ver si un archivo salió de ella: pide solo las cabeceras con <code>curl -sI</code> y lee el estado de caché que añade la CDN. Estas son respuestas reales obtenidas el 19 de noviembre de 2026 (cabeceras reducidas a las líneas útiles):</p>
+  <pre><code>{`$ curl -sI https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js
+cache-control: public, max-age=31536000, s-maxage=31536000, immutable
+age: 178796
+x-served-by: cache-fra-etou8220158-FRA
+x-cache: HIT
+
+$ curl -sI https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js
+cf-cache-status: HIT
+age: 2929184
+
+$ curl -sI https://aws.amazon.com/
+x-cache: Miss from cloudfront
+
+$ curl -sI https://www.fastly.com/
+x-served-by: cache-sjc1000139-SJC, cache-sjc1000147-SJC, cache-fra-etou8220119-FRA
+x-cache: MISS, HIT, HIT`}</code></pre>
+  <ul>
+    <li><strong>El nombre de la cabecera depende de la CDN.</strong> Cloudflare escribe <code>cf-cache-status</code> (HIT, MISS, EXPIRED, BYPASS, DYNAMIC y algunos más). Fastly, que jsDelivr usa aquí, escribe <code>x-cache: HIT</code> o <code>MISS</code>. Amazon CloudFront escribe <code>x-cache: Hit from cloudfront</code> o <code>Miss from cloudfront</code>.</li>
+    <li><strong><code>age</code> indica cuántos segundos lleva la copia en caché</strong> (RFC 9111, sección 5.1). 178 796 s son unos 2 días para el archivo de jsDelivr, 2 929 184 s unos 34 días para el de cdnjs.</li>
+    <li><strong>Varios valores significan varias capas de caché.</strong> fastly.com respondió <code>MISS, HIT, HIT</code>, un valor por caché atravesada, igual que los 3 nodos de <code>x-served-by</code>.</li>
+    <li><strong>Ejecuta el mismo comando dos veces.</strong> Un MISS seguido de un HIT significa que el edge guardó el archivo en la primera petición. Una respuesta que sigue en MISS, BYPASS o DYNAMIC no se está cacheando: el origen envía <code>Cache-Control: no-store</code> o <code>private</code>, o ese tipo de archivo no se cachea por defecto (Cloudflare decide por extensión, así que las páginas HTML salen DYNAMIC sin una regla de caché).</li>
+  </ul>
 
   <h2>TTL e invalidacion: mantener la cache al dia</h2>
   <p>Una copia en cache no puede vivir para siempre, o los visitantes seguirian viendo una version antigua tras actualizar un archivo. Dos mecanismos se encargan de esto:</p>
