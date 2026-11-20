@@ -69,7 +69,7 @@ const RULES = [
   ['api',        /\bapi\b|webhook|websocket|rest|graphql|endpoint/],
   ['database',   /\bsql\b|nosql|database|postgres|mysql|mongo|redis|base de don|base de dat/],
   ['devops',     /devops|ci-cd|ci\/cd|pipeline|github-actions|deployment|deploy/],
-  ['server',     /\bvps\b|\bcdn\b|server|serveur|servidor|linux|hosting|self-host|reverse.proxy|proxy.inver|proxy.rever/],
+  ['server',     /\bvps\b|\bssh\b|\bcron\b|\bcdn\b|server|serveur|servidor|linux|hosting|self-host|reverse.proxy|proxy.inver|proxy.rever/],
 ];
 
 export function ctaAngle(lang, hint = '') {
@@ -82,6 +82,7 @@ export function ctaAngle(lang, hint = '') {
 }
 
 // Second lien sous l encart DigitalOcean, pour les angles « un VPS a vous » (server, containers, haskell, devops : runner auto-heberge et cible de deploiement, 19/11 ;
+// 20/11 : ssh et cron dans l angle server (page SSH FR 31 aff. Bing sans Contabo, se connecter a un serveur = un VPS), database ajoute (Postgres/MySQL heberge soi-meme, l encart DigitalOcean du meme angle parle deja de serveur a vous).
 // api ajoute le 19/11 soir : un receveur de webhook ou une API demande un serveur public toujours allume, page ES webhook 91 aff. Bing sans Contabo).
 // DigitalOcean (Awin 123996) : 165 clics en 90 j, 0 vente au 20/10/2026 ; Contabo (CJ 4639721) est le seul
 // programme du reseau qui vend. PID CJ coldwa 101807052 ; lien texte CJ dans la langue du lecteur quand
@@ -96,7 +97,7 @@ const CONTABO_TXT = {
   pt: ['Outra opção:', 'Cloud VPS da Contabo', ', acesso root e IPv4 pública própria (link de afiliado).'],
 };
 export function contaboAlt(lang, cta, page = '') {
-  if (!cta || !['server', 'containers', 'haskell', 'devops', 'api'].includes(cta.key)) return null;
+  if (!cta || !['server', 'containers', 'haskell', 'devops', 'api', 'database'].includes(cta.key)) return null;
   // Faux positifs des regles d angle (« Hangs Your Server », « container queries » CSS, serverless = pas de VPS).
   if (/regex|css-|serverless/i.test(String(page))) return null;
   const aid = CONTABO_AID[lang] || CONTABO_AID.en;
