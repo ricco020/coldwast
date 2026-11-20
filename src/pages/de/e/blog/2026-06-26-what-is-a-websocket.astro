@@ -1,16 +1,71 @@
 ---
 import Base from '../../../../layouts/Base.astro';
 const path = '/de/e/blog/2026-06-26-what-is-a-websocket.html';
-const title = 'Was ist ein WebSocket? Echtzeit-Verbindungen in beide Richtungen (2026)';
-const description = 'Ein WebSocket hält eine Verbindung offen, damit Server und Browser jederzeit Nachrichten austauschen können. Was ein WebSocket ist, wie er sich von HTTP unterscheidet, der Handshake, ws vs wss und wann man ihn statt Polling verwendet.';
+const title = "Was ist ein WebSocket? Erklärung mit getestetem Beispiel (2026)";
+const description = "Was ist ein WebSocket und wofür braucht man eine WebSocket-Verbindung? Handshake 101, ws vs wss, ein am 20.11.2026 getesteter Server in 12 Zeilen, Nginx- und Caddy-Konfiguration und die häufigsten Fragen.";
+const srv = `// server.js  (npm i ws, ws 8.23.0, Node 22)
+const { WebSocketServer } = require('ws');
+const wss = new WebSocketServer({ port: 8080 });
+
+wss.on('connection', (socket) => {
+  socket.send('bienvenue');
+  socket.on('message', (data) => {
+    for (const client of wss.clients) {
+      if (client.readyState === 1) client.send(\`echo: \${data}\`);
+    }
+  });
+});`;
+const cli = `// client.mjs (Node 22, browser)
+const ws = new WebSocket('ws://localhost:8080');
+ws.onopen = () => ws.send('bonjour');
+ws.onmessage = (e) => console.log('recu:', e.data);`;
+const out = `$ node client.mjs
+recu: bienvenue
+recu: echo: bonjour
+
+$ curl -i -N -H 'Connection: Upgrade' -H 'Upgrade: websocket' \\
+    -H 'Sec-WebSocket-Version: 13' \\
+    -H 'Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==' http://localhost:8080/
+HTTP/1.1 101 Switching Protocols
+Upgrade: websocket
+Connection: Upgrade
+Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=`;
+const ngx = `location /ws/ {
+    proxy_pass http://127.0.0.1:8080;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    proxy_read_timeout 3600s;
+}`;
+const cdy = `example.com {
+    reverse_proxy /ws/* 127.0.0.1:8080
+}`;
+const faq = [
+ {
+  "q": "Ist WebSocket eine Programmiersprache?",
+  "a": "Nein. WebSocket ist ein Netzwerkprotokoll, 2011 als RFC 6455 standardisiert. Man nutzt es aus jeder Sprache: JavaScript im Browser, Node.js, Python, Go, Java, PHP. Die Sprache schreibt das Programm, WebSocket ist nur die Art, wie Client und Server miteinander sprechen."
+ },
+ {
+  "q": "Wofür brauche ich eine WebSocket-Verbindung?",
+  "a": "Immer dann, wenn der Server Daten schicken muss, ohne dass der Client fragt: Chat, Live-Kurse, Benachrichtigungen, Mehrspieler-Spiele, gemeinsame Dokumente. Lädt eine Seite nur Daten auf Anfrage, genügt eine normale HTTP-API."
+ },
+ {
+  "q": "Ist ein WebSocket ein Netzwerk, ein Server oder ein Host?",
+  "a": "Keins davon. Ein WebSocket ist eine einzelne Verbindung zwischen einem Client und einem Server über TCP, auf denselben Ports 80 und 443 wie das Web. Der WebSocket-Server ist das Programm, das diese Verbindungen annimmt, der Host ist die Maschine, auf der es läuft."
+ },
+ {
+  "q": "Was kostet ein WebSocket?",
+  "a": "Das Protokoll ist kostenlos und offen, Browser und Bibliotheken wie ws sind gratis. Kosten entstehen nur durch den Server, der die Verbindungen offen hält: ein kleiner VPS reicht für ein Projekt, Managed-Dienste rechnen oft pro Verbindung oder Nachricht ab."
+ }
+];
 ---
 <Base title={title} description={description} path={path} type="article" lang="de"
-  image="/img/websocket-2026.jpg" datePublished="2026-06-26" dateModified="2026-06-26">
+  image="/img/websocket-2026.jpg" datePublished="2026-06-26" dateModified="2026-11-20">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/de">Startseite</a><span>/</span><a href="/de/e">Guides</a><span>/</span>Was ist ein WebSocket</nav>
   <p class="kicker">Programmierung · Web · Netzwerk</p>
   <h1>Was ist ein WebSocket?</h1>
-  <div class="artmeta"><span>Von Coldwast</span><span>Aktualisiert am 26. Juni 2026</span><span>8 Min. Lesezeit</span><span class="tag">#websocket</span><span class="tag">#realtime</span><span class="tag">#networking</span></div>
+  <div class="artmeta"><span>Von Coldwast</span><span>Aktualisiert am 20. November 2026</span><span>8 Min. Lesezeit</span><span class="tag">#websocket</span><span class="tag">#realtime</span><span class="tag">#networking</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="/img/websocket-2026.jpg" alt="Netzwerkkabel, die in einem Rechenzentrum an ein Server-Rack angeschlossen sind" width="1200" height="420" loading="eager" />
@@ -53,7 +108,30 @@ const description = 'Ein WebSocket hält eine Verbindung offen, damit Server und
   <h2>Eine Anmerkung zur Infrastruktur</h2>
   <p>Weil ein WebSocket eine Verbindung offen hält, verändert er, wie Sie deployen. Langlebige Verbindungen brauchen einen Server und einen <a href="/de/e/blog/2026-06-26-what-is-a-reverse-proxy.html">Reverse Proxy</a>, die so konfiguriert sind, dass sie sie am Leben halten, statt sie per Timeout zu beenden, und das Skalieren vieler gleichzeitiger Verbindungen ist ein eigenes Designproblem. Das ist der Kompromiss: Ein WebSocket verschafft Ihnen sofortige, bidirektionale Kommunikation im Tausch dafür, dass auf dem Server ein Zustand offen gehalten wird.</p>
 
+  <h2>Getestet: ein WebSocket-Server in 12 Zeilen</h2>
+  <p>Am 20.11.2026 unter Node.js 22 mit der Bibliothek <code>ws</code> 8.23.0 ausgeführt. Der Server begrüßt jeden neuen Client und schickt jede empfangene Nachricht an alle verbundenen Clients zurück (Broadcast). Der Client nutzt das in Node 22 und in jedem Browser eingebaute <code>WebSocket</code>-Objekt.</p>
+  <pre><code>{srv}</code></pre>
+  <pre><code>{cli}</code></pre>
+  <p>Die echte Ausgabe. Mit curl sieht man außerdem den Handshake: Der Server antwortet mit <code>101 Switching Protocols</code> und einem <code>Sec-WebSocket-Accept</code>, der aus dem Schlüssel des Clients berechnet wird (der Wert entspricht dem Beispiel aus RFC 6455).</p>
+  <pre><code>{out}</code></pre>
+  <p>Die erste Nachricht kam vom Server, ohne dass der Client etwas angefragt hatte. Genau das kann eine normale HTTP-Anfrage nicht.</p>
+
+  <h2>WebSocket hinter Nginx oder Caddy (wss://)</h2>
+  <p>Im Betrieb läuft der Node-Prozess hinter einem Reverse Proxy, der TLS übernimmt, damit der Browser <code>wss://</code> nutzt. Nginx leitet den Upgrade-Header nicht von selbst weiter, er muss ausdrücklich gesetzt werden:</p>
+  <pre><code>{ngx}</code></pre>
+  <p>Laut Nginx-Dokumentation wird die Verbindung standardmäßig nach 60 Sekunden ohne Daten geschlossen, daher der höhere <code>proxy_read_timeout</code> (oder ein Ping vom Server). Caddy leitet WebSockets ohne zusätzliche Zeilen weiter und holt das Zertifikat selbst:</p>
+  <pre><code>{cdy}</code></pre>
+  <p>Dafür braucht man einen Server, der rund um die Uhr läuft und offene Verbindungen hält, also einen VPS mit eigener öffentlicher IP statt eines Hostings, das Prozesse nach jeder Anfrage beendet.</p>
+
+  <h2>Häufige Fragen zu WebSockets</h2>
+  {faq.map((f) => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}
+
   <h2>Das Fazit</h2>
   <p>Ein WebSocket ist eine einzige, dauerhafte, bidirektionale Verbindung, über die Server und Browser Nachrichten in dem Moment austauschen, in dem sie eintreten - ohne den Frage-und-Warte-Rhythmus von HTTP. Er beginnt sein Leben als HTTP-Anfrage, die upgegradet wird, und befördert dann leichtgewichtige Frames in beide Richtungen. Nutzen Sie <code>wss://</code>, greifen Sie zu ihm, wenn der Server Live-Daten pushen muss, und bleiben Sie bei einer normalen HTTP-API, wenn eine einfache Anfrage und Antwort genügt.</p>
   </div>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faq.map((f) => ({ "@type": "Question", "name": f.q, "acceptedAnswer": { "@type": "Answer", "text": f.a } }))
+  })} />
 </Base>

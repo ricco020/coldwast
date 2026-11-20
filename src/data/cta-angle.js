@@ -66,7 +66,7 @@ const ANGLES = {
 const RULES = [
   ['haskell',    /haskell|cabal|ghc|ghcup|stack-vs|monad|functor|\bhls\b|lambda/],
   ['containers', /docker|kubernetes|k8s|container|conteneur|contenedor/],
-  ['api',        /\bapi\b|webhook|rest|graphql|endpoint/],
+  ['api',        /\bapi\b|webhook|websocket|rest|graphql|endpoint/],
   ['database',   /\bsql\b|nosql|database|postgres|mysql|mongo|redis|base de don|base de dat/],
   ['devops',     /devops|ci-cd|ci\/cd|pipeline|github-actions|deployment|deploy/],
   ['server',     /\bvps\b|\bcdn\b|server|serveur|servidor|linux|hosting|self-host|reverse.proxy|proxy.inver|proxy.rever/],
