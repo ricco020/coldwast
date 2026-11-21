@@ -1,16 +1,16 @@
 ---
 import Base from '../../../../layouts/Base.astro';
 const path = '/pt/e/blog/2026-06-26-what-is-a-reverse-proxy.html';
-const title = 'O que é um proxy reverso? Nginx, Caddy e encaminhamento explicados (2026)';
+const title = 'O que é um proxy reverso? Definição, Nginx, Caddy e erro 502 (2026)';
 const description = 'Um proxy reverso fica à frente dos seus servidores, recebe cada pedido recebido e encaminha-o para o backend correto. O que é um proxy reverso, como difere de um proxy direto e de um balanceador de carga, para que serve (TLS, cache, encaminhamento) e as ferramentas comuns.';
 ---
 <Base title={title} description={description} path={path} type="article" lang="pt"
-  image="/img/reverse-proxy-2026.jpg" datePublished="2026-06-26" dateModified="2026-11-18">
+  image="/img/reverse-proxy-2026.jpg" datePublished="2026-06-26" dateModified="2026-11-21">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/pt">Início</a><span>/</span><a href="/pt/e">Guias</a><span>/</span>O que é um proxy reverso</nav>
   <p class="kicker">Programação · Servidores · Redes</p>
   <h1>O que é um proxy reverso?</h1>
-  <div class="artmeta"><span>Por Coldwast</span><span>Atualizado a 26 jun 2026</span><span>8 min de leitura</span><span class="tag">#reverse-proxy</span><span class="tag">#servers</span><span class="tag">#networking</span></div>
+  <div class="artmeta"><span>Por Coldwast</span><span>Atualizado a 21 nov 2026</span><span>8 min de leitura</span><span class="tag">#reverse-proxy</span><span class="tag">#servers</span><span class="tag">#networking</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="/img/reverse-proxy-2026.jpg" alt="Cabos Ethernet ligados a um painel de switch de rede num data center" width="1200" height="420" loading="eager" />
@@ -18,6 +18,8 @@ const description = 'Um proxy reverso fica à frente dos seus servidores, recebe
   </figure>
 
   <p>Assim que executa mais do que uma aplicação num servidor - um site, uma <a href="/pt/e/blog/2026-06-17-what-is-a-webhook.html">API</a>, talvez alguns <a href="/pt/e/blog/2026-06-19-what-is-docker.html">contentores</a> - depara-se com um problema prático: os visitantes chegam todos às portas 80 e 443, mas cada aplicação escuta noutro sítio. Um <strong>proxy reverso</strong> é a resposta padrão. Este guia explica o que é um proxy reverso, em que difere do proxy que talvez já conheça e porque quase todos os ambientes de produção têm um.</p>
+
+  <p class="note">Para seguir este guia numa máquina real precisa de um servidor Linux com as portas 80 e 443 próprias e um IPv4 público: um <a href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">droplet da DigitalOcean</a> ou um <a href="https://www.tkqlhce.com/click-101807052-12454592?sid=coldwa-pt-rp-top" rel="sponsored nofollow noopener" target="_blank">Cloud VPS da Contabo</a> (links de afiliado). Os comandos abaixo foram testados a 21 de novembro de 2026.</p>
 
   <h2>A definição curta</h2>
   <p><strong>Um proxy reverso é um servidor que fica à frente de um ou mais servidores backend, recebe cada pedido recebido do cliente e encaminha-o para o backend apropriado - e depois devolve a resposta desse backend ao cliente.</strong> Para o visitante, o proxy reverso <em>é</em> o site: só fala com ele e nunca vê os servidores por trás. A palavra «reverso» importa, e a secção seguinte explica porquê.</p>
@@ -66,6 +68,36 @@ api.example.com &#123;
 &#125;</code></pre>
   <p>O Caddy pede e renova sozinho um certificado Let’s Encrypt para cada nome e redireciona HTTP para HTTPS. Só funciona se <code>example.com</code> e <code>api.example.com</code> apontarem (registo DNS A) para o IP público da máquina e as portas 80 e 443 estiverem abertas. É por isso que um proxy reverso costuma correr num <a href="/pt/e/blog/2026-06-19-what-is-a-vps.html">VPS</a> com IPv4 pública própria, e não num portátil nem num alojamento partilhado. Verifique com <code>caddy validate --config /etc/caddy/Caddyfile</code> e depois <code>systemctl reload caddy</code>.</p>
 
+  <h2>O que a sua aplicação recebe de facto atrás do proxy (testado)</h2>
+  <p>Colocámos o Caddy 2.6.2 à frente de um pequeno servidor Python que apenas devolve os cabeçalhos recebidos e enviámos um pedido com <code>curl</code>. Foi isto que a aplicação viu, sem mais configuração do que <code>reverse_proxy 127.0.0.1:3999</code>:</p>
+  <pre><code>Host: localhost:8999
+User-Agent: curl/8.5.0
+X-Forwarded-For: ::1
+X-Forwarded-Host: localhost:8999
+X-Forwarded-Proto: http</code></pre>
+  <p>Três consequências práticas:</p>
+  <ul>
+    <li><strong>O IP do visitante deixa de ser o da ligação.</strong> Para a aplicação, cada pedido vem do proxy (127.0.0.1). O IP real do cliente está em <code>X-Forwarded-For</code>. Os registos, o limite de pedidos e a geolocalização têm de ler esse cabeçalho, e só quando o pedido vem mesmo do seu proxy, senão qualquer pessoa o pode falsificar.</li>
+    <li><strong>O HTTPS termina no proxy.</strong> Entre o proxy e a aplicação tudo passa em HTTP simples. <code>X-Forwarded-Proto</code> diz à aplicação que o visitante estava em HTTPS, o que evita o ciclo de redirecionamento «forçar HTTPS» muito comum depois de pôr uma aplicação atrás de um proxy.</li>
+    <li><strong>O Nginx não acrescenta estes cabeçalhos sozinho.</strong> Por omissão, <code>proxy_pass</code> substitui <code>Host</code> pelo endereço do backend e não envia <code>X-Forwarded-For</code> (documentação do módulo <code>ngx_http_proxy_module</code>). É preciso escrevê-los:</li>
+  </ul>
+  <pre><code>location / &#123;
+    proxy_pass http://127.0.0.1:3000;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+&#125;</code></pre>
+
+  <h2>Erro 502 Bad Gateway: o proxy funciona, a aplicação não responde</h2>
+  <p>No mesmo teste parámos o servidor Python. O pedido seguinte recebeu um <strong>502</strong> e o registo do Caddy indicava <code>dial tcp 127.0.0.1:3999: connect: connection refused</code>. Um 502 servido por um proxy reverso quase sempre significa que o proxy não conseguiu chegar ao backend. Verifique por esta ordem:</p>
+  <ol>
+    <li>A aplicação está a correr? <code>systemctl status minha-app</code> ou <code>docker ps</code>.</li>
+    <li>Escuta na porta esperada? <code>ss -ltnp | grep 3000</code>. Uma aplicação num contentor que escuta em <code>127.0.0.1</code> dentro do contentor não é acessível a partir do host: tem de escutar em <code>0.0.0.0</code>.</li>
+    <li>A porta em <code>proxy_pass</code> ou <code>reverse_proxy</code> está certa? Um erro de escrita dá exatamente o mesmo erro.</li>
+    <li>O registo do proxy dá a causa exata: <code>journalctl -u caddy -n 50</code> ou <code>/var/log/nginx/error.log</code>.</li>
+  </ol>
+  <p>Um <strong>504 Gateway Timeout</strong> é diferente: o backend recebeu o pedido mas não respondeu a tempo (60 segundos por omissão com <code>proxy_read_timeout</code> no Nginx).</p>
+
   <h2>Os compromissos honestos</h2>
   <p>Um proxy reverso acrescenta mais uma peça em movimento. Torna-se o ponto único por onde passa cada pedido, por isso se cair tudo o que está atrás fica inacessível - daí em produção ser executado de forma fiável e por vezes em duplicado. Acrescenta também alguma latência e mais um ficheiro de configuração para entender. Para uma só pequena aplicação que já escuta na porta 443, talvez não precise de um. Mas assim que aloja mais do que um serviço, quer gerir o HTTPS num só sítio ou planeia escalar, um proxy reverso compensa depressa.</p>
 
@@ -74,6 +106,9 @@ api.example.com &#123;
   <details><summary>Qual é a diferença entre um proxy reverso e um proxy direto?</summary><p>Um proxy direto fica à frente dos clientes e faz os pedidos em nome deles: representa quem navega. Um proxy reverso fica à frente dos servidores e representa-os: os clientes ligam-se a ele como se fosse o servidor real, e ele escolhe qual backend trata cada pedido. A mesma ideia de intermediário, mas nas extremidades opostas da ligação.</p></details>
   <details><summary>Um proxy reverso é o mesmo que um balanceador de carga?</summary><p>Não exatamente. Um balanceador de carga distribui o tráfego por vários backends idênticos para partilhar a carga. Um proxy reverso é o conceito mais amplo que encaminha pedidos e também pode fazer encaminhamento, TLS e cache, e o balanceamento de carga é uma dessas coisas. Por isso um balanceador de carga é basicamente um proxy reverso focado na tarefa de balanceamento.</p></details>
   <details><summary>Preciso de um proxy reverso?</summary><p>Precisa de um assim que aloja mais do que uma aplicação num servidor, quer gerir o HTTPS num só sítio ou planeia escalar por vários backends. Para uma só pequena aplicação que já serve HTTPS na sua própria porta, pode dispensá-lo. Assim que há encaminhamento, certificados ou vários serviços envolvidos, um proxy reverso deixa tudo muito mais limpo.</p></details>
+
+  <details><summary>Como obter o IP real do visitante atrás de um proxy reverso?</summary><p>O proxy reverso passa o IP do cliente no cabeçalho X-Forwarded-For. O Caddy acrescenta-o por omissão, o Nginx só com proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for. Na aplicação, confie nesse cabeçalho apenas para pedidos vindos do endereço do seu proxy, senão um visitante pode escrever lá qualquer IP.</p></details>
+  <details><summary>Porque é que o meu proxy reverso mostra um erro 502?</summary><p>Um 502 Bad Gateway significa que o proxy não conseguiu chegar à aplicação que está atrás dele: aplicação parada, porta errada ou aplicação que escuta em 127.0.0.1 dentro de um contentor. O registo do proxy dá a causa exata, por exemplo «connect: connection refused».</p></details>
 
   <div class="note">Guia independente, mantido pela comunidade. <strong>coldwa.st</strong> é um site de recursos de programação; este artigo é um texto explicativo original e inédito sobre proxies reversos. O excerto de Nginx é uma configuração padrão mostrada a título de ilustração; consulte a documentação do seu próprio proxy e versão para os detalhes.</div>
 
@@ -91,6 +126,8 @@ api.example.com &#123;
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
+      {"@type": "Question", "name": "Como obter o IP real do visitante atrás de um proxy reverso?", "acceptedAnswer": {"@type": "Answer", "text": "O proxy reverso passa o IP do cliente no cabeçalho X-Forwarded-For. O Caddy acrescenta-o por omissão, o Nginx só com proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for. Na aplicação, confie nesse cabeçalho apenas para pedidos vindos do endereço do seu proxy, senão um visitante pode escrever lá qualquer IP."}},
+      {"@type": "Question", "name": "Porque é que o meu proxy reverso mostra um erro 502?", "acceptedAnswer": {"@type": "Answer", "text": "Um 502 Bad Gateway significa que o proxy não conseguiu chegar à aplicação que está atrás dele: aplicação parada, porta errada ou aplicação que escuta em 127.0.0.1 dentro de um contentor. O registo do proxy dá a causa exata, por exemplo «connect: connection refused»."}},
       { "@type": "Question", "name": "O que é um proxy reverso em termos simples?", "acceptedAnswer": { "@type": "Answer", "text": "Um proxy reverso é um servidor que se coloca à frente dos seus servidores reais. Cada visitante liga-se a ele em vez de falar diretamente com as suas aplicações, e ele encaminha cada pedido para o backend correto e depois devolve a respetiva resposta. Para o visitante parece o próprio site, enquanto os servidores reais ficam ocultos por trás." } },
       { "@type": "Question", "name": "Qual é a diferença entre um proxy reverso e um proxy direto?", "acceptedAnswer": { "@type": "Answer", "text": "Um proxy direto fica à frente dos clientes e faz os pedidos em nome deles: representa quem navega. Um proxy reverso fica à frente dos servidores e representa-os: os clientes ligam-se a ele como se fosse o servidor real, e ele escolhe qual backend trata cada pedido. A mesma ideia de intermediário, mas nas extremidades opostas da ligação." } },
       { "@type": "Question", "name": "Um proxy reverso é o mesmo que um balanceador de carga?", "acceptedAnswer": { "@type": "Answer", "text": "Não exatamente. Um balanceador de carga distribui o tráfego por vários backends idênticos para partilhar a carga. Um proxy reverso é o conceito mais amplo que encaminha pedidos e também pode fazer encaminhamento, TLS e cache, e o balanceamento de carga é uma dessas coisas. Por isso um balanceador de carga é basicamente um proxy reverso focado na tarefa de balanceamento." } },

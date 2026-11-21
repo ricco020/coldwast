@@ -1,16 +1,16 @@
 ---
 import Base from '../../../layouts/Base.astro';
 const path = '/e/blog/2026-06-26-what-is-a-reverse-proxy.html';
-const title = 'What Is a Reverse Proxy? Nginx, Caddy & Routing Explained (2026)';
+const title = 'What Is a Reverse Proxy? Definition, Nginx, Caddy & 502 Errors (2026)';
 const description = 'A reverse proxy sits in front of your servers, takes every incoming request and forwards it to the right backend. What a reverse proxy is, how it differs from a forward proxy and a load balancer, why you use one (TLS, caching, routing), and the common tools.';
 ---
 <Base title={title} description={description} path={path} type="article"
-  image="/img/reverse-proxy-2026.jpg" datePublished="2026-06-26" dateModified="2026-11-18">
+  image="/img/reverse-proxy-2026.jpg" datePublished="2026-06-26" dateModified="2026-11-21">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e">Guides</a><span>/</span>What is a reverse proxy</nav>
   <p class="kicker">Programming · Servers · Networking</p>
   <h1>What is a reverse proxy?</h1>
-  <div class="artmeta"><span>By Coldwast</span><span>Updated Jun 26, 2026</span><span>8 min read</span><span class="tag">#reverse-proxy</span><span class="tag">#servers</span><span class="tag">#networking</span></div>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Nov 21, 2026</span><span>8 min read</span><span class="tag">#reverse-proxy</span><span class="tag">#servers</span><span class="tag">#networking</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="/img/reverse-proxy-2026.jpg" alt="Ethernet cables plugged into a network switch panel in a data centre" width="1200" height="420" loading="eager" />
@@ -18,6 +18,8 @@ const description = 'A reverse proxy sits in front of your servers, takes every 
   </figure>
 
   <p>Once you run more than one app on a server - a website, an <a href="/e/blog/2026-06-17-what-is-a-webhook.html">API</a>, maybe a few <a href="/e/blog/2026-06-19-what-is-docker.html">containers</a> - you hit a practical problem: visitors all arrive on ports 80 and 443, but each app listens somewhere different. A <strong>reverse proxy</strong> is the standard answer. This guide explains what a reverse proxy is, how it differs from the proxy you may already know, and why almost every production setup has one.</p>
+
+  <p class="note">To follow this guide on a real machine you need a Linux server that owns ports 80 and 443 and has a public IPv4: a <a href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">DigitalOcean droplet</a> or a <a href="https://www.tkqlhce.com/click-101807052-12454592?sid=coldwa-en-rp-top" rel="sponsored nofollow noopener" target="_blank">Contabo Cloud VPS</a> (affiliate links). The commands below were tested on November 21, 2026.</p>
 
   <h2>The short definition</h2>
   <p><strong>A reverse proxy is a server that sits in front of one or more backend servers, receives every incoming client request, and forwards it to the appropriate backend - then returns that backend's response to the client.</strong> To the visitor, the reverse proxy <em>is</em> the website: they only ever talk to it, and they never see the servers behind it. The word "reverse" matters, and the next section explains why.</p>
@@ -66,6 +68,36 @@ api.example.com &#123;
 &#125;</code></pre>
   <p>Caddy requests and renews a Let’s Encrypt certificate for each name on its own, and redirects HTTP to HTTPS. It only works if <code>example.com</code> and <code>api.example.com</code> point (DNS A record) to the public IP of the machine and ports 80 and 443 are open on it. That is why a reverse proxy usually lives on a <a href="/e/blog/2026-06-19-what-is-a-vps.html">VPS</a> with its own public IPv4, not on a laptop or a shared hosting plan. Check the result with <code>caddy validate --config /etc/caddy/Caddyfile</code>, then <code>systemctl reload caddy</code>.</p>
 
+  <h2>What your app actually receives behind the proxy (tested)</h2>
+  <p>We put Caddy 2.6.2 in front of a tiny Python server that just echoes the headers it gets, then sent one request with <code>curl</code>. This is what the app saw, with no configuration beyond <code>reverse_proxy 127.0.0.1:3999</code>:</p>
+  <pre><code>Host: localhost:8999
+User-Agent: curl/8.5.0
+X-Forwarded-For: ::1
+X-Forwarded-Host: localhost:8999
+X-Forwarded-Proto: http</code></pre>
+  <p>Three practical consequences:</p>
+  <ul>
+    <li><strong>The visitor IP is no longer the connection IP.</strong> To the app, every request comes from the proxy (127.0.0.1). The real client IP is in <code>X-Forwarded-For</code>. Your logs, rate limiting and geolocation must read that header, and only when the request really comes from your proxy, otherwise anyone can forge it.</li>
+    <li><strong>HTTPS ends at the proxy.</strong> Between the proxy and the app everything is plain HTTP. <code>X-Forwarded-Proto</code> tells the app the visitor was on HTTPS, which prevents the very common “force HTTPS” redirect loop after moving an app behind a proxy.</li>
+    <li><strong>Nginx does not add these headers by itself.</strong> By default <code>proxy_pass</code> replaces <code>Host</code> with the backend address and sends no <code>X-Forwarded-For</code> (<code>ngx_http_proxy_module</code> documentation). You have to write them:</li>
+  </ul>
+  <pre><code>location / &#123;
+    proxy_pass http://127.0.0.1:3000;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+&#125;</code></pre>
+
+  <h2>502 Bad Gateway: the proxy works, the app does not answer</h2>
+  <p>In the same test we stopped the Python server. The next request got a <strong>502</strong>, and the Caddy log said <code>dial tcp 127.0.0.1:3999: connect: connection refused</code>. A 502 served by a reverse proxy almost always means the proxy could not reach the backend. Check in this order:</p>
+  <ol>
+    <li>Is the app running? <code>systemctl status my-app</code> or <code>docker ps</code>.</li>
+    <li>Is it listening on the expected port? <code>ss -ltnp | grep 3000</code>. An app in a container that listens on <code>127.0.0.1</code> inside the container cannot be reached from the host: it must listen on <code>0.0.0.0</code>.</li>
+    <li>Is the port in <code>proxy_pass</code> or <code>reverse_proxy</code> right? A typo gives exactly the same error.</li>
+    <li>The proxy log gives the exact cause: <code>journalctl -u caddy -n 50</code> or <code>/var/log/nginx/error.log</code>.</li>
+  </ol>
+  <p>A <strong>504 Gateway Timeout</strong> is different: the backend got the request but did not answer in time (60 seconds by default with <code>proxy_read_timeout</code> in Nginx).</p>
+
   <h2>The honest trade-offs</h2>
   <p>A reverse proxy adds one more moving part. It becomes a single point that every request flows through, so if it goes down everything behind it is unreachable - which is why production setups run it reliably and sometimes in pairs. It also adds a small amount of latency and one more config file to understand. For a single small app that already listens on port 443, you may not need one at all. But the moment you host more than one service, want HTTPS handled in one place, or plan to scale, a reverse proxy quickly pays for itself.</p>
 
@@ -74,6 +106,9 @@ api.example.com &#123;
   <details><summary>What is the difference between a reverse proxy and a forward proxy?</summary><p>A forward proxy sits in front of clients and makes requests on their behalf, so it represents the people browsing. A reverse proxy sits in front of servers and represents them: clients connect to it as if it were the real server, and it picks which backend handles each request. Same middleman idea, opposite ends of the connection.</p></details>
   <details><summary>Is a reverse proxy the same as a load balancer?</summary><p>Not exactly. A load balancer spreads traffic across several identical backends to share the load. A reverse proxy is the wider concept that forwards requests and can also do routing, TLS and caching - and load balancing is one of the things it can do. So a load balancer is basically a reverse proxy focused on the balancing job.</p></details>
   <details><summary>Do I need a reverse proxy?</summary><p>You need one once you host more than one app on a server, want HTTPS handled in a single place, or plan to scale across several backends. For a single small app already serving HTTPS on its own port, you can skip it. As soon as routing, certificates or multiple services are involved, a reverse proxy makes the setup much cleaner.</p></details>
+
+  <details><summary>How do I get the real visitor IP behind a reverse proxy?</summary><p>The reverse proxy passes the client IP in the X-Forwarded-For header. Caddy adds it by default, Nginx only with proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for. In the app, trust that header only for requests coming from your proxy address, otherwise a visitor can write any IP into it.</p></details>
+  <details><summary>Why does my reverse proxy show a 502 error?</summary><p>A 502 Bad Gateway means the proxy could not reach the app behind it: app stopped, wrong port, or an app listening on 127.0.0.1 inside a container. The proxy log gives the exact cause, for example “connect: connection refused”.</p></details>
 
   <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about reverse proxies. The Nginx snippet is standard configuration shown for illustration; check the documentation of your own proxy and version for specifics.</div>
 
@@ -91,6 +126,8 @@ api.example.com &#123;
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
+      {"@type": "Question", "name": "How do I get the real visitor IP behind a reverse proxy?", "acceptedAnswer": {"@type": "Answer", "text": "The reverse proxy passes the client IP in the X-Forwarded-For header. Caddy adds it by default, Nginx only with proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for. In the app, trust that header only for requests coming from your proxy address, otherwise a visitor can write any IP into it."}},
+      {"@type": "Question", "name": "Why does my reverse proxy show a 502 error?", "acceptedAnswer": {"@type": "Answer", "text": "A 502 Bad Gateway means the proxy could not reach the app behind it: app stopped, wrong port, or an app listening on 127.0.0.1 inside a container. The proxy log gives the exact cause, for example “connect: connection refused”."}},
       { "@type": "Question", "name": "What is a reverse proxy in simple terms?", "acceptedAnswer": { "@type": "Answer", "text": "A reverse proxy is a server that stands in front of your real servers. Every visitor connects to it instead of to your apps directly, and it forwards each request to the right backend, then sends the backend's reply back. To the visitor it looks like the website, while the actual servers stay hidden behind it." } },
       { "@type": "Question", "name": "What is the difference between a reverse proxy and a forward proxy?", "acceptedAnswer": { "@type": "Answer", "text": "A forward proxy sits in front of clients and makes requests on their behalf, so it represents the people browsing. A reverse proxy sits in front of servers and represents them: clients connect to it as if it were the real server, and it picks which backend handles each request. Same middleman idea, opposite ends of the connection." } },
       { "@type": "Question", "name": "Is a reverse proxy the same as a load balancer?", "acceptedAnswer": { "@type": "Answer", "text": "Not exactly. A load balancer spreads traffic across several identical backends to share the load. A reverse proxy is the wider concept that forwards requests and can also do routing, TLS and caching, and load balancing is one of the things it can do. So a load balancer is basically a reverse proxy focused on the balancing job." } },
