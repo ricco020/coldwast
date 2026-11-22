@@ -14,6 +14,8 @@ export const SELLING_APPS = [
       { q: 'How do I log mileage for IRS taxes on Android?', a: 'Open IRS Mileage Tracker, tap Add Trip, enter distance and purpose (business, medical, charity). The app applies current IRS mileage rates automatically and calculates your deductible amount.' },
       { q: 'Does this mileage app need an account or internet?', a: 'No. Everything is local to your device. No account, no GPS, no internet. Your mileage data never leaves your phone.' },
       { q: 'Can I export my mileage log to PDF?', a: 'Yes. The Pro version exports a formatted PDF and CSV mileage log ready to attach to your tax return or share with your accountant.' },
+      { q: 'Kann ich ein Fahrtenbuch für die Steuererklärung führen?', a: 'Ja. Die App ist ein manuelles Fahrtenbuch für Dienstreisen und berufliche Fahrten. Strecke, Fahrzeug und Zweck eingeben, eigene Kilometerpauschale festlegen, PDF-Export mit Pro. Kein GPS, kein Konto, Daten bleiben auf dem Gerät.' },
+      { q: 'Welche App für Dienstreisen und Kilometerpauschale?', a: 'IRS Mileage Tracker: Tax Log eignet sich für Dienstreisen, Selbstständige und alle, die Steuer-Belege für das Finanzamt brauchen. Sie legen Ihren Kilometerpauschale-Satz fest, erfassen Fahrten manuell und exportieren einen PDF-Bericht.' },
     ],
   },
   {
