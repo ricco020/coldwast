@@ -1,0 +1,85 @@
+---
+import Base from '../../layouts/Base.astro';
+import { SELLING_APPS } from '../../data/android-apps.js';
+
+export function getStaticPaths() {
+  return SELLING_APPS.map((app) => ({ params: { app: app.id }, props: { app } }));
+}
+
+const { app } = Astro.props;
+
+const schema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": app.title,
+      "description": app.longDesc,
+      "applicationCategory": app.category,
+      "operatingSystem": "Android",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": app.rating,
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "installUrl": app.playUrl,
+      "softwareVersion": "latest",
+      "maintainer": {
+        "@type": "Organization",
+        "name": "Play3rs"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": app.faq.map((item) => ({
+        "@type": "Question",
+        "name": item.q,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": item.a
+        }
+      }))
+    }
+  ]
+});
+---
+<Base
+  title={`${app.title} — Android App`}
+  description={app.shortDesc}
+  path={`/apps/${app.id}.html`}
+>
+  <script type="application/ld+json" set:html={schema} />
+
+  <div class="reading" style="margin-top:30px">
+    <p class="kicker">Android app</p>
+    <h1>{app.title}</h1>
+    <p class="dek">{app.longDesc}</p>
+
+    <p>
+      <a href={app.playUrl} rel="noopener" style="font-weight:600">
+        Download on Google Play
+      </a>
+    </p>
+
+    <h2>Frequently asked questions</h2>
+    <dl>
+      {app.faq.map((item) => (
+        <>
+          <dt style="font-weight:600;margin-top:1.2em">{item.q}</dt>
+          <dd style="margin-left:0;margin-top:.4em">{item.a}</dd>
+        </>
+      ))}
+    </dl>
+
+    <p class="meta" style="margin-top:2em">
+      <a href="/">coldwa.st</a>
+    </p>
+  </div>
+</Base>

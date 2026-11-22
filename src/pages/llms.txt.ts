@@ -1,4 +1,5 @@
 import { guides } from '../data/guides.js';
+import { SELLING_APPS } from '../data/android-apps.js';
 
 const SITE = 'https://coldwa.st';
 
@@ -11,6 +12,8 @@ const HEADER = `# coldwa.st
 > Also includes plain-language introductions to core programming concepts
 > (APIs, JSON, SQL, Git, databases, algorithms, variables) and to modern dev
 > tooling and deployment (Docker, Kubernetes, VPS/cloud, REST/GraphQL/gRPC, IDEs).
+> Also lists high-quality Android & iOS mobile apps for productivity, finance,
+> tools and lifestyle, available on Google Play.
 >
 > Available in 6 languages: English (en, default at /), French (fr, /fr),
 > Spanish (es, /es), German (de, /de), Italian (it, /it) and Portuguese (pt, /pt).
@@ -52,6 +55,10 @@ function line(g: Guide): string {
   return `- [${g.title}](${SITE}${g.href}): ${g.dek}`;
 }
 
+function appLine(app: { id: string; title: string; shortDesc: string; query: string; playUrl: string }): string {
+  return `- [${app.title}](${SITE}/apps/${app.id}.html): ${app.shortDesc} Play Store: ${app.playUrl}`;
+}
+
 export async function GET() {
   const all = guides as Guide[];
   const haskell = all.filter(isHaskell);
@@ -64,6 +71,9 @@ export async function GET() {
   if (concepts.length) {
     sections.push(`## Programming concepts & dev tooling\n\n${concepts.map(line).join('\n')}`);
   }
+
+  const appsSection = `## Android & iOS mobile apps\n\nFree and premium Android apps on Google Play. Categories: Productivity, Finance, Tools, Health, Music, Sports, Photography.\n\n${SELLING_APPS.map(appLine).join('\n')}`;
+  sections.push(appsSection);
 
   const text = `${HEADER}\n${sections.join('\n\n')}\n${FOOTER}`;
   return new Response(text, {
