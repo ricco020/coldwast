@@ -19,6 +19,8 @@ const description = 'Docker, définition simple : un outil qui empaquette une ap
 
   <p>« Ça marche sur ma machine » est l’une des plus vieilles blagues du logiciel - et le problème que <strong>Docker</strong> a été conçu pour tuer. Docker empaquette une application avec tout ce dont elle a besoin pour s’exécuter, afin qu’elle se comporte pareil sur un portable, la machine d’un collègue et un serveur de production. Ce guide explique ce qu’est Docker, en quoi les conteneurs diffèrent des machines virtuelles, les concepts qui comptent, et où se situe Docker à côté d’outils comme Kubernetes.</p>
 
+  <p class="note">Pour faire tourner Docker sur un vrai serveur Linux (Docker Engine y tourne nativement, sans la machine virtuelle dont Docker Desktop a besoin sous Windows et macOS), un <a href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">droplet DigitalOcean</a> ou un <a href="https://www.tkqlhce.com/click-101807052-12454592?sid=coldwa-fr-docker-top" rel="sponsored nofollow noopener" target="_blank">Cloud VPS Contabo</a> (liens affiliés) suffit. Sous Ubuntu 24.04, installez Docker Engine depuis le dépôt apt officiel de Docker (docs.docker.com/engine/install/ubuntu), pas l’ancien paquet docker.io.</p>
+
   <h2>La définition courte</h2>
   <p><strong>Docker est une plateforme pour construire, partager et exécuter des applications dans des conteneurs.</strong> Un conteneur regroupe votre code et ses dépendances - bibliothèques, runtime, configuration - en une unité isolée et portable. Comme le conteneur transporte son propre environnement, il s’exécute pareil partout où Docker est installé, éliminant la catégorie de bugs « ça marche ici mais pas là ».</p>
 
