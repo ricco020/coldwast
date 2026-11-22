@@ -23,12 +23,6 @@ const schema = JSON.stringify({
         "priceCurrency": "USD",
         "availability": "https://schema.org/InStock"
       },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": app.rating,
-        "bestRating": "5",
-        "worstRating": "1"
-      },
       "installUrl": app.playUrl,
       "softwareVersion": "latest",
       "maintainer": {
@@ -51,7 +45,7 @@ const schema = JSON.stringify({
 });
 ---
 <Base
-  title={`${app.title} — Android App`}
+  title={`${app.title} (Android app)`}
   description={app.shortDesc}
   path={`/apps/${app.id}.html`}
 >
