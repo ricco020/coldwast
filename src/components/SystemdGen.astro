@@ -3,11 +3,13 @@
 // Tout tourne dans le navigateur. Les avertissements viennent de systemd.service(5)
 // et systemd.exec(5) (voir src/data/systemd-i18n.js).
 import { SD } from '../data/systemd-i18n.js';
-import { ctaAngle } from '../data/cta-angle.js';
+import { ctaAngle, contaboAlt } from '../data/cta-angle.js';
 interface Props { lang?: string }
 const { lang = 'en' } = Astro.props;
 const S = SD[lang] || SD.en;
 const cta = ctaAngle(lang, 'vps server');
+// 22/11 : seconde sortie serveur (Contabo via CJ), SID par langue pour mesurer l outil a part.
+const alt = contaboAlt(lang, cta, '/systemd-service-generator');
 ---
 <div class="sdg" id="sdg">
   <div class="sdg-presets">
@@ -58,6 +60,7 @@ PORT=3000</textarea></label>
     <h4>{cta.h}</h4>
     <p>{cta.p}</p>
     <a class="go" href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">{S.cta_go}</a>
+    {alt && <p class="alt">{alt.pre} <a href={alt.url} rel="sponsored nofollow noopener" target="_blank">{alt.link}</a>{alt.post}</p>}
     <p class="disc">{S.cta_disc}</p>
   </aside>
 </div>
