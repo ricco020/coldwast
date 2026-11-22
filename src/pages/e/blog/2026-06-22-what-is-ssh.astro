@@ -1,16 +1,16 @@
 ---
 import Base from '../../../layouts/Base.astro';
 const path = '/e/blog/2026-06-22-what-is-ssh.html';
-const title = 'What Is SSH? Secure Shell Explained for Developers (2026)';
-const description = 'SSH (Secure Shell) is the encrypted protocol you use to log in to and run commands on a remote server safely. What SSH is, how the handshake and keys work, passwords vs SSH keys, and the everyday commands you actually need.';
+const title = 'What Is SSH? Definition, Keys and 15,000 Attacks Measured in 7 Days';
+const description = 'SSH (Secure Shell) is the encrypted protocol for running a remote server. Simple definition, keys vs passwords, the break-in attempts logged on our own server in one week and the setup that blocks them, tested on Ubuntu 24.04.';
 ---
 <Base title={title} description={description} path={path} type="article"
-  image="/img/px-3a3f8ed9e2ea.jpg" datePublished="2026-06-22" dateModified="2026-09-06">
+  image="/img/px-3a3f8ed9e2ea.jpg" datePublished="2026-06-22" dateModified="2026-11-22">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/e">Guides</a><span>/</span>What is SSH</nav>
   <p class="kicker">Programming · Servers · security</p>
   <h1>What is SSH?</h1>
-  <div class="artmeta"><span>By Coldwast</span><span>Updated Jun 22, 2026</span><span>8 min read</span><span class="tag">#ssh</span><span class="tag">#servers</span><span class="tag">#security</span></div>
+  <div class="artmeta"><span>By Coldwast</span><span>Updated Nov 22, 2026</span><span>10 min read</span><span class="tag">#ssh</span><span class="tag">#servers</span><span class="tag">#security</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="/img/px-3a3f8ed9e2ea.jpg" alt="Lines of source code and a network port shown on a dark screen" width="1200" height="420" loading="eager" />
@@ -18,6 +18,8 @@ const description = 'SSH (Secure Shell) is the encrypted protocol you use to log
   </figure>
 
   <p>The moment you rent a <a href="/e/blog/2026-06-19-what-is-a-vps.html">VPS</a> or deploy to a remote server, you hit the same question: how do you actually log in and run commands on a machine that lives in a data centre? The answer is almost always <strong>SSH</strong>. This guide explains what SSH is, how it keeps your session safe, and the handful of commands you really need.</p>
+
+  <p class="note">To practise, you need a Linux server reachable over SSH with root access: a <a href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">DigitalOcean droplet</a> or a <a href="https://www.tkqlhce.com/click-101807052-12454592?sid=coldwa-en-ssh-top" rel="sponsored nofollow noopener" target="_blank">Contabo Cloud VPS</a> (affiliate links). The figures and commands below were collected and tested on 22 November 2026 on an Ubuntu 24.04 server.</p>
 
   <h2>The short definition</h2>
   <p><strong>SSH - Secure Shell - is a protocol for logging in to a remote computer and running commands over an encrypted connection.</strong> It gives you a terminal on a machine somewhere else, as if it were right in front of you, and it scrambles everything that passes between you and the server. That encryption is the whole point: it replaced older tools like Telnet, which sent passwords and commands in plain text for anyone on the network to read. The version everyone runs today is SSH-2, specified in January 2006 across a set of RFCs, with the transport layer itself in <strong>RFC 4253</strong>.</p>
@@ -29,6 +31,31 @@ const description = 'SSH (Secure Shell) is the encrypted protocol you use to log
 
   <h2>Passwords vs SSH keys</h2>
   <p>You can log in two ways. A <strong>password</strong> is simple but weaker: it can be guessed or brute-forced, and bots try this on public servers all day. <strong>SSH keys</strong> are the better way. You generate a pair of files: a private key that stays on your computer, and a public key you copy to the server. The server then lets you in only if your private key matches, and the private key never leaves your machine. Keys are both more secure and more convenient, since you skip typing a password each time.</p>
+
+  <h2>How many bots try to get in? One week on our server</h2>
+  <p>We counted the refused SSH connections in <code>/var/log/auth.log</code> on the server that hosts this site (an Ubuntu 24.04 VPS, port 22 open to the Internet), from 15 to 22 November 2026:</p>
+  <table>
+    <thead><tr><th>What the log says</th><th>7 days</th></tr></thead>
+    <tbody>
+      <tr><td>Attempts on the <code>root</code> account ("authenticating user root")</td><td>11,558</td></tr>
+      <tr><td>Attempts with a username that does not exist ("Invalid user")</td><td>3,597</td></tr>
+      <tr><td>Distinct IP addresses behind those attempts</td><td>712</td></tr>
+      <tr><td>Successful password logins</td><td>0</td></tr>
+    </tbody>
+  </table>
+  <p>That is more than 15,000 attempts in 7 days, about 2,100 a day, on a server nobody has heard of: bots simply sweep every public IP address. The most tried usernames were <code>admin</code> (744 times), <code>deploy</code> (147), <code>user</code> (103), <code>support</code>, <code>administrator</code>, <code>debian</code> and <code>test</code>. None got in, for a simple reason: on this server <code>sshd -T</code> prints <code>passwordauthentication no</code> and <code>permitrootlogin without-password</code>. Without the right private key there is nothing to guess.</p>
+
+  <h2>Switching a fresh server to key-only login (tested on Ubuntu 24.04)</h2>
+  <p>Order matters: install the key, check it works, and only then turn passwords off.</p>
+  <ol>
+    <li><strong>On your computer</strong>, create a key pair: <code>ssh-keygen -t ed25519 -C "my-laptop"</code>. You get <code>~/.ssh/id_ed25519</code> (private, never copy it anywhere) and <code>~/.ssh/id_ed25519.pub</code> (public, a single line of about 80 characters).</li>
+    <li><strong>Send the public key</strong>: <code>ssh-copy-id user@server-address</code>. This is the last time you type the password.</li>
+    <li><strong>Test it</strong>: <code>ssh user@server-address</code> should open a session without asking for a password (only the key passphrase if you set one).</li>
+    <li><strong>On the server</strong>, create <code>/etc/ssh/sshd_config.d/00-keys.conf</code> with two lines: <code>PasswordAuthentication no</code> and <code>PermitRootLogin prohibit-password</code>.</li>
+    <li><strong>Check, then reload</strong>: <code>sudo sshd -t</code> (no output means the config is valid), then <code>sudo systemctl reload ssh</code>.</li>
+    <li><strong>Keep your session open</strong> and open a second one in another terminal to confirm you still get in. Only close the first one after that.</li>
+  </ol>
+  <p>The trap to know: for each setting, <code>sshd</code> keeps the <em>first</em> value it reads, and the files in <code>sshd_config.d</code> are read in alphabetical order before the rest of <code>sshd_config</code>. If a file dropped by your host sets <code>PasswordAuthentication yes</code>, the first one in that order wins, hence the <code>00-</code> prefix. To see what the server really applies, read <code>sudo sshd -T | grep -i passwordauthentication</code> rather than the file.</p>
 
   <h2>The commands you actually use</h2>
   <ul>
@@ -46,10 +73,13 @@ const description = 'SSH (Secure Shell) is the encrypted protocol you use to log
   <p>SSH is secure, but the security still depends on you. Leaving password login on, or exposing the default port with a weak password, is how servers get broken into. The safe setup is well known: use SSH keys, turn off password login, and keep your private key protected. Beginners also find the command line a hurdle at first. But the basics are quickly learned, and the skill carries over to every server and cloud platform you'll use.</p>
 
   <h2>Frequently asked questions</h2>
+  <details><summary>What is an SSH server?</summary><p>It is the program that waits for SSH connections on the remote machine, usually OpenSSH (<code>sshd</code>), listening on port 22. It checks who is connecting (key or password) and then opens a terminal for them. On Ubuntu it is installed with the <code>openssh-server</code> package and the service is called <code>ssh</code>.</p></details>
+  <details><summary>What does "doing SSH" mean in development?</summary><p>It means opening a terminal on a remote machine (a VPS, a build server, a Raspberry Pi) to run commands there: deploy code, read logs, restart a service. Git also uses SSH under the hood when you push to an address like <code>git@github.com:...</code>.</p></details>
+  <details><summary>Are SSH keys just for developers?</summary><p>No. Anyone who manages a server, a NAS or web hosting with SSH access should use them. Setting them up takes three commands (<code>ssh-keygen</code>, <code>ssh-copy-id</code>, then a test login) and needs no programming skills.</p></details>
   <details><summary>What is SSH in simple terms?</summary><p>SSH, or Secure Shell, is a way to log in to a computer somewhere else and run commands on it over an encrypted connection. It gives you a terminal on a remote machine as if it were in front of you, while scrambling everything sent between you and the server so no one on the network can read it.</p></details>
   <details><summary>What is the difference between an SSH password and an SSH key?</summary><p>A password is a secret you type, and it can be guessed or brute-forced by bots. An SSH key is a pair of files: a private key kept on your machine and a public key placed on the server. You're let in only if they match, and the private key never leaves your computer, which makes keys both safer and more convenient than passwords.</p></details>
   <details><summary>What port does SSH use?</summary><p>SSH uses TCP port 22 by default, a number registered with the IANA and officially assigned to SSH. Some administrators change it to a different port to cut down on automated login attempts, but that is a small obstacle rather than real security. The real protections are using SSH keys and turning off password login, not hiding the port.</p></details>
-  <details><summary>Is SSH secure?</summary><p>Yes, SSH is secure when set up properly, because it encrypts the whole session. Most break-ins come from weak configuration, not from SSH itself - usually password login left on with a guessable password. Using SSH keys, disabling password login and protecting your private key make it very safe.</p></details>
+  <details><summary>Is SSH secure?</summary><p>Yes, SSH is secure when set up properly, because it encrypts the whole session. The risk comes from weak configuration, not SSH itself: typically password login left on with a guessable password, which bots try over and over. Using SSH keys, disabling password login and protecting your private key make it very safe.</p></details>
 
   <div class="note">Independent, community-maintained guide. <strong>coldwa.st</strong> is a programming-resources site; this article is new, original explanatory writing about the SSH protocol. Commands shown are standard OpenSSH usage; check your own client and server documentation for specifics.</div>
 
@@ -67,10 +97,13 @@ const description = 'SSH (Secure Shell) is the encrypted protocol you use to log
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
+      { "@type": "Question", "name": "What is an SSH server?", "acceptedAnswer": { "@type": "Answer", "text": "It is the program that waits for SSH connections on the remote machine, usually OpenSSH (sshd), listening on port 22. It checks who is connecting (key or password) and then opens a terminal for them. On Ubuntu it is installed with the openssh-server package and the service is called ssh." } },
+      { "@type": "Question", "name": "What does doing SSH mean in development?", "acceptedAnswer": { "@type": "Answer", "text": "It means opening a terminal on a remote machine (a VPS, a build server, a Raspberry Pi) to run commands there: deploy code, read logs, restart a service. Git also uses SSH when you push to an address like git@github.com." } },
+      { "@type": "Question", "name": "Are SSH keys just for developers?", "acceptedAnswer": { "@type": "Answer", "text": "No. Anyone who manages a server, a NAS or web hosting with SSH access should use them. Setting them up takes three commands (ssh-keygen, ssh-copy-id, then a test login)." } },
       { "@type": "Question", "name": "What is SSH in simple terms?", "acceptedAnswer": { "@type": "Answer", "text": "SSH, or Secure Shell, is a way to log in to a computer somewhere else and run commands on it over an encrypted connection. It gives you a terminal on a remote machine as if it were in front of you, while scrambling everything sent between you and the server." } },
       { "@type": "Question", "name": "What is the difference between an SSH password and an SSH key?", "acceptedAnswer": { "@type": "Answer", "text": "A password is a secret you type, and it can be guessed or brute-forced. An SSH key is a pair of files: a private key kept on your machine and a public key placed on the server. You're let in only if they match, and the private key never leaves your computer, which makes keys safer and more convenient." } },
       { "@type": "Question", "name": "What port does SSH use?", "acceptedAnswer": { "@type": "Answer", "text": "SSH uses TCP port 22 by default. Some administrators change it to reduce automated login attempts, but that is a small obstacle rather than real security. The real protections are using SSH keys and turning off password login." } },
-      { "@type": "Question", "name": "Is SSH secure?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, SSH is secure when set up properly, because it encrypts the whole session. Most break-ins come from weak configuration, usually password login left on with a guessable password. Using SSH keys, disabling password login and protecting your private key make it very safe." } }
+      { "@type": "Question", "name": "Is SSH secure?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, SSH is secure when set up properly, because it encrypts the whole session. The risk comes from weak configuration, not SSH itself: typically password login left on with a guessable password, which bots try over and over. Using SSH keys, disabling password login and protecting your private key make it very safe." } }
     ]
   })} />
   <p class="related-guides">Related guides: <a href="/e/blog/2026-06-22-what-is-ci-cd.html">what CI/CD is</a>, <a href="/e/blog/2026-06-26-what-is-a-reverse-proxy.html">what a reverse proxy is</a>.</p>
