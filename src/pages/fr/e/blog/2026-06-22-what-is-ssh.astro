@@ -1,16 +1,16 @@
 ---
 import Base from '../../../../layouts/Base.astro';
 const path = '/fr/e/blog/2026-06-22-what-is-ssh.html';
-const title = 'C’est quoi SSH ? Le Secure Shell expliqué aux développeurs (2026)';
-const description = 'SSH (Secure Shell) est le protocole chiffré qui vous sert à vous connecter et à lancer des commandes sur un serveur distant en toute sécurité. Ce qu’est SSH, comment marchent la poignée de main et les clés, mots de passe vs clés SSH, et les commandes du quotidien dont vous avez vraiment besoin.';
+const title = 'C’est quoi SSH ? Définition, clés et 15 000 attaques mesurées en 7 jours';
+const description = 'SSH (Secure Shell) : le protocole chiffré pour piloter un serveur distant. Définition simple, clés contre mots de passe, les tentatives d’intrusion relevées sur notre propre serveur en une semaine et la configuration qui les bloque, testée sur Ubuntu 24.04.';
 ---
 <Base title={title} description={description} path={path} type="article" lang="fr"
-  image="/img/px-3a3f8ed9e2ea.jpg" datePublished="2026-06-22" dateModified="2026-06-22">
+  image="/img/px-3a3f8ed9e2ea.jpg" datePublished="2026-06-22" dateModified="2026-11-22">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/fr">Accueil</a><span>/</span><a href="/fr/e">Guides</a><span>/</span>C’est quoi SSH</nav>
   <p class="kicker">Programmation · Serveurs · sécurité</p>
   <h1>C’est quoi SSH ?</h1>
-  <div class="artmeta"><span>Par Coldwast</span><span>Mis à jour le 22 juin 2026</span><span>8 min de lecture</span><span class="tag">#ssh</span><span class="tag">#servers</span><span class="tag">#security</span></div>
+  <div class="artmeta"><span>Par Coldwast</span><span>Mis à jour le 22 novembre 2026</span><span>10 min de lecture</span><span class="tag">#ssh</span><span class="tag">#servers</span><span class="tag">#security</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="/img/px-3a3f8ed9e2ea.jpg" alt="Des lignes de code source et un port réseau affichés sur un écran sombre" width="1200" height="420" loading="eager" />
@@ -18,6 +18,8 @@ const description = 'SSH (Secure Shell) est le protocole chiffré qui vous sert 
   </figure>
 
   <p>Dès que vous louez un <a href="/fr/e/blog/2026-06-19-what-is-a-vps.html">VPS</a> ou que vous déployez sur un serveur distant, vous tombez sur la même question : comment se connecter et lancer des commandes sur une machine qui vit dans un centre de données ? La réponse est presque toujours <strong>SSH</strong>. Ce guide explique ce qu’est SSH, comment il protège votre session, et les quelques commandes dont vous avez réellement besoin.</p>
+
+  <p class="note">Pour pratiquer, il vous faut un serveur Linux joignable par SSH avec un accès root : un <a href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">droplet DigitalOcean</a> ou un <a href="https://www.tkqlhce.com/click-101807052-12454592?sid=coldwa-fr-ssh-top" rel="sponsored nofollow noopener" target="_blank">Cloud VPS Contabo</a> (liens affiliés). Les chiffres et commandes ci-dessous ont été relevés et testés le 22 novembre 2026 sur un serveur Ubuntu 24.04.</p>
 
   <h2>La définition courte</h2>
   <p><strong>SSH - Secure Shell - est un protocole pour se connecter à un ordinateur distant et y lancer des commandes via une connexion chiffrée.</strong> Il vous donne un terminal sur une machine ailleurs, comme si elle était juste devant vous, et il brouille tout ce qui passe entre vous et le serveur. Ce chiffrement, c’est tout l’intérêt : il a remplacé d’anciens outils comme Telnet, qui envoyaient mots de passe et commandes en clair, lisibles par quiconque sur le réseau.</p>
@@ -29,6 +31,31 @@ const description = 'SSH (Secure Shell) est le protocole chiffré qui vous sert 
 
   <h2>Mots de passe vs clés SSH</h2>
   <p>Vous pouvez vous connecter de deux façons. Un <strong>mot de passe</strong> est simple mais plus faible : il peut être deviné ou cassé par force brute, et des bots tentent ça sur les serveurs publics toute la journée. Les <strong>clés SSH</strong> sont la meilleure méthode. Vous générez une paire de fichiers : une clé privée qui reste sur votre ordinateur, et une clé publique que vous copiez sur le serveur. Le serveur ne vous laisse alors entrer que si votre clé privée correspond, et la clé privée ne quitte jamais votre machine. Les clés sont à la fois plus sûres et plus pratiques, puisque vous évitez de taper un mot de passe à chaque fois.</p>
+
+  <h2>Combien de bots essaient d’entrer ? Une semaine sur notre serveur</h2>
+  <p>Nous avons compté les connexions SSH refusées dans le journal <code>/var/log/auth.log</code> du serveur qui héberge ce site (un VPS Ubuntu 24.04, port 22 ouvert sur Internet), du 15 au 22 novembre 2026 :</p>
+  <table>
+    <thead><tr><th>Ce que dit le journal</th><th>7 jours</th></tr></thead>
+    <tbody>
+      <tr><td>Tentatives sur le compte <code>root</code> (« authenticating user root »)</td><td>11 558</td></tr>
+      <tr><td>Tentatives avec un nom d’utilisateur qui n’existe pas (« Invalid user »)</td><td>3 597</td></tr>
+      <tr><td>Adresses IP différentes à l’origine de ces tentatives</td><td>712</td></tr>
+      <tr><td>Connexions réussies par mot de passe</td><td>0</td></tr>
+    </tbody>
+  </table>
+  <p>Cela fait plus de 15 000 essais en 7 jours, environ 2 100 par jour, sur un serveur qui n’a rien de célèbre : les robots balaient simplement toutes les adresses IP publiques. Les noms tentés le plus souvent sont <code>admin</code> (744 fois), <code>deploy</code> (147), <code>user</code> (103), <code>support</code>, <code>administrator</code>, <code>debian</code> et <code>test</code>. Aucune n’a abouti, pour une raison simple : sur ce serveur, <code>sshd -T</code> affiche <code>passwordauthentication no</code> et <code>permitrootlogin without-password</code>. Sans la bonne clé privée, il n’y a rien à deviner.</p>
+
+  <h2>Passer un serveur neuf en connexion par clé (testé sur Ubuntu 24.04)</h2>
+  <p>L’ordre compte : on installe la clé, on vérifie qu’elle marche, et seulement ensuite on coupe les mots de passe.</p>
+  <ol>
+    <li><strong>Sur votre ordinateur</strong>, créez une paire de clés : <code>ssh-keygen -t ed25519 -C "mon-portable"</code>. Vous obtenez <code>~/.ssh/id_ed25519</code> (privée, à ne jamais copier) et <code>~/.ssh/id_ed25519.pub</code> (publique, une seule ligne d’environ 80 caractères).</li>
+    <li><strong>Envoyez la clé publique</strong> : <code>ssh-copy-id user@adresse-du-serveur</code>. C’est la dernière fois que vous tapez le mot de passe.</li>
+    <li><strong>Testez</strong> : <code>ssh user@adresse-du-serveur</code> doit ouvrir la session sans demander de mot de passe (seulement la phrase de passe de la clé si vous en avez mis une).</li>
+    <li><strong>Sur le serveur</strong>, créez <code>/etc/ssh/sshd_config.d/00-cles.conf</code> avec deux lignes : <code>PasswordAuthentication no</code> et <code>PermitRootLogin prohibit-password</code>.</li>
+    <li><strong>Vérifiez puis rechargez</strong> : <code>sudo sshd -t</code> (aucune sortie = configuration valide), puis <code>sudo systemctl reload ssh</code>.</li>
+    <li><strong>Gardez votre session ouverte</strong> et ouvrez-en une seconde dans un autre terminal pour confirmer que vous entrez toujours. Ne fermez la première qu’après.</li>
+  </ol>
+  <p>Le piège à connaître : pour chaque réglage, <code>sshd</code> garde la <em>première</em> valeur lue, et les fichiers de <code>sshd_config.d</code> sont lus par ordre alphabétique avant le reste de <code>sshd_config</code>. Si un fichier déposé par l’hébergeur remet <code>PasswordAuthentication yes</code>, c’est le premier dans l’ordre qui gagne, d’où le préfixe <code>00-</code>. Pour savoir ce que le serveur applique vraiment, lisez <code>sudo sshd -T | grep -i passwordauthentication</code> plutôt que le fichier.</p>
 
   <h2>Les commandes que vous utilisez vraiment</h2>
   <ul>
@@ -46,6 +73,9 @@ const description = 'SSH (Secure Shell) est le protocole chiffré qui vous sert 
   <p>SSH est sécurisé, mais la sécurité dépend toujours de vous. Laisser la connexion par mot de passe activée, ou exposer le port par défaut avec un mot de passe faible, c’est comme ça que des serveurs se font compromettre. La configuration sûre est bien connue : utilisez des clés SSH, désactivez la connexion par mot de passe, et gardez votre clé privée protégée. Les débutants trouvent aussi la ligne de commande intimidante au début. Mais les bases s’apprennent vite, et la compétence se transpose à chaque serveur et plateforme cloud que vous utiliserez.</p>
 
   <h2>Questions fréquentes</h2>
+  <details><summary>Qu’est-ce qu’un serveur SSH ?</summary><p>C’est le programme qui attend les connexions SSH sur la machine distante, le plus souvent OpenSSH (<code>sshd</code>), à l’écoute sur le port 22. Il vérifie l’identité de la personne qui se connecte (clé ou mot de passe) puis lui ouvre un terminal. Sur Ubuntu, il s’installe avec le paquet <code>openssh-server</code> et le service s’appelle <code>ssh</code>.</p></details>
+  <details><summary>Quels avantages SSH apporte-t-il en sécurité ?</summary><p>Trois : tout est chiffré (personne sur le réseau ne lit vos commandes ni vos mots de passe), le serveur prouve son identité par sa clé d’hôte (votre client vous alerte si elle change), et vous pouvez vous authentifier par clé au lieu d’un mot de passe. Ce dernier point est décisif : sur notre serveur, plus de 15 000 tentatives en une semaine ont échoué parce que la connexion par mot de passe est coupée.</p></details>
+  <details><summary>Les clés SSH, c’est seulement pour les développeurs ?</summary><p>Non. Toute personne qui administre un serveur, un NAS ou un hébergement web avec accès SSH a intérêt à les utiliser. La mise en place prend trois commandes (<code>ssh-keygen</code>, <code>ssh-copy-id</code>, puis un test de connexion) et ne demande aucune compétence en programmation.</p></details>
   <details><summary>C’est quoi SSH en termes simples ?</summary><p>SSH, ou Secure Shell, est une façon de se connecter à un ordinateur ailleurs et d’y lancer des commandes via une connexion chiffrée. Il vous donne un terminal sur une machine distante comme si elle était devant vous, tout en brouillant tout ce qui s’échange entre vous et le serveur pour que personne sur le réseau ne puisse le lire.</p></details>
   <details><summary>Quelle différence entre un mot de passe SSH et une clé SSH ?</summary><p>Un mot de passe est un secret que vous tapez, et il peut être deviné ou cassé par force brute par des bots. Une clé SSH est une paire de fichiers : une clé privée gardée sur votre machine et une clé publique placée sur le serveur. On vous laisse entrer seulement si elles correspondent, et la clé privée ne quitte jamais votre ordinateur, ce qui rend les clés à la fois plus sûres et plus pratiques que les mots de passe.</p></details>
   <details><summary>Quel port SSH utilise-t-il ?</summary><p>SSH utilise le port TCP 22 par défaut. Certains administrateurs le changent pour un autre port afin de réduire les tentatives de connexion automatisées, mais c’est un petit obstacle plutôt qu’une vraie sécurité. Les vraies protections sont d’utiliser des clés SSH et de désactiver la connexion par mot de passe, pas de cacher le port.</p></details>
@@ -67,6 +97,9 @@ const description = 'SSH (Secure Shell) est le protocole chiffré qui vous sert 
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
+      { "@type": "Question", "name": "Qu’est-ce qu’un serveur SSH ?", "acceptedAnswer": { "@type": "Answer", "text": "C’est le programme qui attend les connexions SSH sur la machine distante, le plus souvent OpenSSH (sshd), à l’écoute sur le port 22. Il vérifie l’identité de la personne qui se connecte (clé ou mot de passe) puis lui ouvre un terminal. Sur Ubuntu, il s’installe avec le paquet openssh-server et le service s’appelle ssh." } },
+      { "@type": "Question", "name": "Quels avantages SSH apporte-t-il en sécurité ?", "acceptedAnswer": { "@type": "Answer", "text": "Tout est chiffré, le serveur prouve son identité par sa clé d’hôte, et vous pouvez vous authentifier par clé au lieu d’un mot de passe. Sur notre serveur, plus de 15 000 tentatives en une semaine ont échoué parce que la connexion par mot de passe est coupée." } },
+      { "@type": "Question", "name": "Les clés SSH, c’est seulement pour les développeurs ?", "acceptedAnswer": { "@type": "Answer", "text": "Non. Toute personne qui administre un serveur, un NAS ou un hébergement web avec accès SSH a intérêt à les utiliser. La mise en place prend trois commandes (ssh-keygen, ssh-copy-id, puis un test de connexion)." } },
       { "@type": "Question", "name": "C’est quoi SSH en termes simples ?", "acceptedAnswer": { "@type": "Answer", "text": "SSH, ou Secure Shell, est une façon de se connecter à un ordinateur ailleurs et d’y lancer des commandes via une connexion chiffrée. Il vous donne un terminal sur une machine distante comme si elle était devant vous, tout en brouillant tout ce qui s’échange entre vous et le serveur." } },
       { "@type": "Question", "name": "Quelle différence entre un mot de passe SSH et une clé SSH ?", "acceptedAnswer": { "@type": "Answer", "text": "Un mot de passe est un secret que vous tapez, et il peut être deviné ou cassé par force brute. Une clé SSH est une paire de fichiers : une clé privée gardée sur votre machine et une clé publique placée sur le serveur. On vous laisse entrer seulement si elles correspondent, et la clé privée ne quitte jamais votre ordinateur, ce qui rend les clés plus sûres et plus pratiques." } },
       { "@type": "Question", "name": "Quel port SSH utilise-t-il ?", "acceptedAnswer": { "@type": "Answer", "text": "SSH utilise le port TCP 22 par défaut. Certains administrateurs le changent pour réduire les tentatives de connexion automatisées, mais c’est un petit obstacle plutôt qu’une vraie sécurité. Les vraies protections sont d’utiliser des clés SSH et de désactiver la connexion par mot de passe." } },
