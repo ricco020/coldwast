@@ -1,16 +1,16 @@
 ---
 import Base from '../../../../layouts/Base.astro';
 const path = '/pt/e/blog/2026-06-22-what-is-ssh.html';
-const title = 'O que é o SSH? O Secure Shell explicado para programadores (2026)';
-const description = 'O SSH (Secure Shell) é o protocolo encriptado que usa para entrar e correr comandos num servidor remoto com segurança. O que é o SSH, como funcionam o handshake e as chaves, palavras-passe vs chaves SSH e os comandos do dia a dia de que realmente precisa.';
+const title = 'O que é o SSH? Definição, chaves e 15 000 ataques medidos em 7 dias';
+const description = 'SSH (Secure Shell): o protocolo encriptado para gerir um servidor remoto. Definição simples, chaves contra palavras-passe, as tentativas de intrusão registadas no nosso próprio servidor numa semana e a configuração que as bloqueia, testada no Ubuntu 24.04.';
 ---
 <Base title={title} description={description} path={path} type="article" lang="pt"
-  image="/img/px-3a3f8ed9e2ea.jpg" datePublished="2026-06-22" dateModified="2026-06-22">
+  image="/img/px-3a3f8ed9e2ea.jpg" datePublished="2026-06-22" dateModified="2026-11-22">
   <div class="reading">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/pt">Início</a><span>/</span><a href="/pt/e">Guias</a><span>/</span>O que é o SSH</nav>
   <p class="kicker">Programação · Servidores · segurança</p>
   <h1>O que é o SSH?</h1>
-  <div class="artmeta"><span>Por Coldwast</span><span>Atualizado a 22 de junho de 2026</span><span>8 min de leitura</span><span class="tag">#ssh</span><span class="tag">#servers</span><span class="tag">#security</span></div>
+  <div class="artmeta"><span>Por Coldwast</span><span>Atualizado a 22 de novembro de 2026</span><span>10 min de leitura</span><span class="tag">#ssh</span><span class="tag">#servers</span><span class="tag">#security</span></div>
   <nav class="toc" id="toc"></nav>
   <figure>
     <img class="hero" src="/img/px-3a3f8ed9e2ea.jpg" alt="Linhas de código-fonte e uma porta de rede mostradas num ecrã escuro" width="1200" height="420" loading="eager" />
@@ -18,6 +18,8 @@ const description = 'O SSH (Secure Shell) é o protocolo encriptado que usa para
   </figure>
 
   <p>No momento em que aluga um <a href="/pt/e/blog/2026-06-19-what-is-a-vps.html">VPS</a> ou implementa num servidor remoto, depara-se com a mesma questão: como entra e corre comandos numa máquina que vive num centro de dados? A resposta é quase sempre <strong>SSH</strong>. Este guia explica o que é o SSH, como mantém a sua sessão segura e o punhado de comandos de que realmente precisa.</p>
+
+  <p class="note">Para praticar, precisa de um servidor Linux acessível por SSH com acesso root: um <a href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">droplet DigitalOcean</a> ou um <a href="https://www.tkqlhce.com/click-101807052-12454592?sid=coldwa-pt-ssh-top" rel="sponsored nofollow noopener" target="_blank">Cloud VPS Contabo</a> (links de afiliado). Os números e comandos abaixo foram recolhidos e testados a 22 de novembro de 2026 num servidor Ubuntu 24.04.</p>
 
   <h2>A definição curta</h2>
   <p><strong>SSH - Secure Shell - é um protocolo para entrar num computador remoto e correr comandos através de uma ligação encriptada.</strong> Dá-lhe um terminal numa máquina noutro lugar, como se estivesse mesmo à sua frente, e cifra tudo o que passa entre si e o servidor. Essa encriptação é o ponto central: substituiu ferramentas mais antigas como o Telnet, que enviava palavras-passe e comandos em texto simples, ao alcance de qualquer um na rede.</p>
@@ -29,6 +31,31 @@ const description = 'O SSH (Secure Shell) é o protocolo encriptado que usa para
 
   <h2>Palavras-passe vs chaves SSH</h2>
   <p>Pode entrar de duas formas. Uma <strong>palavra-passe</strong> é simples, mas mais fraca: pode ser adivinhada ou descoberta por força bruta, e os bots tentam isto em servidores públicos o dia todo. As <strong>chaves SSH</strong> são a melhor opção. Gera um par de ficheiros: uma chave privada que fica no seu computador e uma chave pública que copia para o servidor. O servidor só o deixa entrar se a sua chave privada corresponder, e a chave privada nunca sai da sua máquina. As chaves são mais seguras e mais práticas, já que dispensa escrever uma palavra-passe de cada vez.</p>
+
+  <h2>Quantos bots tentam entrar? Uma semana no nosso servidor</h2>
+  <p>Contámos as ligações SSH recusadas em <code>/var/log/auth.log</code> no servidor que aloja este site (um VPS Ubuntu 24.04, porta 22 aberta à Internet), de 15 a 22 de novembro de 2026:</p>
+  <table>
+    <thead><tr><th>O que diz o registo</th><th>7 dias</th></tr></thead>
+    <tbody>
+      <tr><td>Tentativas na conta <code>root</code> («authenticating user root»)</td><td>11 558</td></tr>
+      <tr><td>Tentativas com um nome de utilizador que não existe («Invalid user»)</td><td>3 597</td></tr>
+      <tr><td>Endereços IP diferentes por trás dessas tentativas</td><td>712</td></tr>
+      <tr><td>Inícios de sessão por palavra-passe bem-sucedidos</td><td>0</td></tr>
+    </tbody>
+  </table>
+  <p>São mais de 15 000 tentativas em 7 dias, cerca de 2 100 por dia, contra um servidor que ninguém conhece: os bots varrem simplesmente todos os endereços IP públicos. Os nomes mais tentados foram <code>admin</code> (744 vezes), <code>deploy</code> (147), <code>user</code> (103), <code>support</code>, <code>administrator</code>, <code>debian</code> e <code>test</code>. Nenhum entrou, por uma razão simples: neste servidor <code>sshd -T</code> mostra <code>passwordauthentication no</code> e <code>permitrootlogin without-password</code>. Sem a chave privada certa, não há nada para adivinhar.</p>
+
+  <h2>Passar um servidor novo para início de sessão só com chave (testado no Ubuntu 24.04)</h2>
+  <p>A ordem conta: instala a chave, confirma que funciona e só depois desliga as palavras-passe.</p>
+  <ol>
+    <li><strong>No seu computador</strong>, crie um par de chaves: <code>ssh-keygen -t ed25519 -C "meu-portatil"</code>. Obtém <code>~/.ssh/id_ed25519</code> (privada, nunca a copie) e <code>~/.ssh/id_ed25519.pub</code> (pública, uma única linha com cerca de 80 caracteres).</li>
+    <li><strong>Envie a chave pública</strong>: <code>ssh-copy-id utilizador@endereco-do-servidor</code>. É a última vez que escreve a palavra-passe.</li>
+    <li><strong>Teste</strong>: <code>ssh utilizador@endereco-do-servidor</code> deve abrir a sessão sem pedir palavra-passe (apenas a frase-passe da chave, se definiu uma).</li>
+    <li><strong>No servidor</strong>, crie <code>/etc/ssh/sshd_config.d/00-chaves.conf</code> com duas linhas: <code>PasswordAuthentication no</code> e <code>PermitRootLogin prohibit-password</code>.</li>
+    <li><strong>Verifique e recarregue</strong>: <code>sudo sshd -t</code> (sem saída = configuração válida), depois <code>sudo systemctl reload ssh</code>.</li>
+    <li><strong>Mantenha a sessão aberta</strong> e abra uma segunda noutro terminal para confirmar que continua a entrar. Só depois feche a primeira.</li>
+  </ol>
+  <p>A armadilha a conhecer: para cada opção, o <code>sshd</code> fica com o <em>primeiro</em> valor que lê, e os ficheiros de <code>sshd_config.d</code> são lidos por ordem alfabética antes do resto do <code>sshd_config</code>. Se um ficheiro do fornecedor definir <code>PasswordAuthentication yes</code>, ganha o primeiro nessa ordem, daí o prefixo <code>00-</code>. Para saber o que o servidor aplica de facto, leia <code>sudo sshd -T | grep -i passwordauthentication</code> em vez do ficheiro.</p>
 
   <h2>Os comandos que realmente usa</h2>
   <ul>
@@ -46,10 +73,12 @@ const description = 'O SSH (Secure Shell) é o protocolo encriptado que usa para
   <p>O SSH é seguro, mas a segurança continua a depender de si. Deixar o início de sessão por palavra-passe ativo, ou expor a porta padrão com uma palavra-passe fraca, é a forma como os servidores são invadidos. A configuração segura é bem conhecida: use chaves SSH, desative o início de sessão por palavra-passe e mantenha a sua chave privada protegida. Os principiantes também sentem a linha de comandos como um obstáculo no início. Mas o básico aprende-se depressa, e a competência transfere-se para todos os servidores e plataformas cloud que vier a usar.</p>
 
   <h2>Perguntas frequentes</h2>
+  <details><summary>O que é um servidor SSH?</summary><p>É o programa que espera as ligações SSH na máquina remota, normalmente o OpenSSH (<code>sshd</code>) à escuta na porta 22. Verifica quem se liga (chave ou palavra-passe) e depois abre um terminal. No Ubuntu instala-se com o pacote <code>openssh-server</code> e o serviço chama-se <code>ssh</code>.</p></details>
+  <details><summary>As chaves SSH são só para programadores?</summary><p>Não. Quem gere um servidor, um NAS ou um alojamento web com acesso SSH deve usá-las. Configurá-las leva três comandos (<code>ssh-keygen</code>, <code>ssh-copy-id</code> e um início de sessão de teste) e não exige saber programar.</p></details>
   <details><summary>O que é o SSH em termos simples?</summary><p>SSH, ou Secure Shell, é uma forma de entrar num computador noutro lugar e correr comandos nele através de uma ligação encriptada. Dá-lhe um terminal numa máquina remota como se estivesse à sua frente, cifrando tudo o que é enviado entre si e o servidor para que ninguém na rede o consiga ler.</p></details>
   <details><summary>Qual é a diferença entre uma palavra-passe SSH e uma chave SSH?</summary><p>Uma palavra-passe é um segredo que escreve, e pode ser adivinhada ou descoberta por força bruta por bots. Uma chave SSH é um par de ficheiros: uma chave privada guardada na sua máquina e uma chave pública colocada no servidor. Só é deixado entrar se corresponderem, e a chave privada nunca sai do seu computador, o que torna as chaves mais seguras e mais práticas do que as palavras-passe.</p></details>
   <details><summary>Que porta usa o SSH?</summary><p>O SSH usa por predefinição a porta TCP 22. Alguns administradores mudam-na para outra porta para reduzir as tentativas automáticas de início de sessão, mas isso é um pequeno obstáculo, não segurança a sério. As verdadeiras proteções são usar chaves SSH e desativar o início de sessão por palavra-passe, não esconder a porta.</p></details>
-  <details><summary>O SSH é seguro?</summary><p>Sim, o SSH é seguro quando bem configurado, porque encripta toda a sessão. A maioria das invasões vem de uma configuração fraca, não do próprio SSH - normalmente o início de sessão por palavra-passe deixado ativo com uma palavra-passe fácil de adivinhar. Usar chaves SSH, desativar o início de sessão por palavra-passe e proteger a sua chave privada tornam-no muito seguro.</p></details>
+  <details><summary>O SSH é seguro?</summary><p>Sim, o SSH é seguro quando bem configurado, porque encripta toda a sessão. O risco vem de uma configuração fraca, não do próprio SSH: tipicamente o início de sessão por palavra-passe deixado ativo com uma palavra-passe fácil de adivinhar, que os bots tentam sem parar. Usar chaves SSH, desativar o início de sessão por palavra-passe e proteger a sua chave privada tornam-no muito seguro.</p></details>
 
   <div class="note">Guia independente, mantido pela comunidade. <strong>coldwa.st</strong> é um site de recursos de programação; este artigo é um texto explicativo novo e original sobre o protocolo SSH. Os comandos apresentados são uso padrão do OpenSSH; consulte a documentação do seu próprio cliente e servidor para detalhes específicos.</div>
 
@@ -67,10 +96,12 @@ const description = 'O SSH (Secure Shell) é o protocolo encriptado que usa para
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
+      { "@type": "Question", "name": "O que é um servidor SSH?", "acceptedAnswer": { "@type": "Answer", "text": "É o programa que espera as ligações SSH na máquina remota, normalmente o OpenSSH (sshd) à escuta na porta 22. Verifica quem se liga (chave ou palavra-passe) e depois abre um terminal. No Ubuntu instala-se com o pacote openssh-server e o serviço chama-se ssh." } },
+      { "@type": "Question", "name": "As chaves SSH são só para programadores?", "acceptedAnswer": { "@type": "Answer", "text": "Não. Quem gere um servidor, um NAS ou um alojamento web com acesso SSH deve usá-las. Configurá-las leva três comandos (ssh-keygen, ssh-copy-id e um início de sessão de teste) e não exige saber programar." } },
       { "@type": "Question", "name": "O que é o SSH em termos simples?", "acceptedAnswer": { "@type": "Answer", "text": "SSH, ou Secure Shell, é uma forma de entrar num computador noutro lugar e correr comandos nele através de uma ligação encriptada. Dá-lhe um terminal numa máquina remota como se estivesse à sua frente, cifrando tudo o que é enviado entre si e o servidor." } },
       { "@type": "Question", "name": "Qual é a diferença entre uma palavra-passe SSH e uma chave SSH?", "acceptedAnswer": { "@type": "Answer", "text": "Uma palavra-passe é um segredo que escreve, e pode ser adivinhada ou descoberta por força bruta. Uma chave SSH é um par de ficheiros: uma chave privada guardada na sua máquina e uma chave pública colocada no servidor. Só é deixado entrar se corresponderem, e a chave privada nunca sai do seu computador, o que torna as chaves mais seguras e mais práticas." } },
       { "@type": "Question", "name": "Que porta usa o SSH?", "acceptedAnswer": { "@type": "Answer", "text": "O SSH usa por predefinição a porta TCP 22. Alguns administradores mudam-na para reduzir as tentativas automáticas de início de sessão, mas isso é um pequeno obstáculo, não segurança a sério. As verdadeiras proteções são usar chaves SSH e desativar o início de sessão por palavra-passe." } },
-      { "@type": "Question", "name": "O SSH é seguro?", "acceptedAnswer": { "@type": "Answer", "text": "Sim, o SSH é seguro quando bem configurado, porque encripta toda a sessão. A maioria das invasões vem de uma configuração fraca, normalmente o início de sessão por palavra-passe deixado ativo com uma palavra-passe fácil de adivinhar. Usar chaves SSH, desativar o início de sessão por palavra-passe e proteger a sua chave privada tornam-no muito seguro." } }
+      { "@type": "Question", "name": "O SSH é seguro?", "acceptedAnswer": { "@type": "Answer", "text": "Sim, o SSH é seguro quando bem configurado, porque encripta toda a sessão. O risco vem de uma configuração fraca, não do próprio SSH: tipicamente o início de sessão por palavra-passe deixado ativo com uma palavra-passe fácil de adivinhar, que os bots tentam sem parar. Usar chaves SSH, desativar o início de sessão por palavra-passe e proteger a sua chave privada tornam-no muito seguro." } }
     ]
   })} />
   <p class="related-guides">Guias relacionados: <a href="/pt/e/blog/2026-06-22-what-is-ci-cd.html">o que é o CI/CD</a>, <a href="/pt/e/blog/2026-06-26-what-is-a-reverse-proxy.html">o que é um proxy reverso</a>.</p>
