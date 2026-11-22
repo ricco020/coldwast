@@ -52,6 +52,8 @@ jobs:
 
   <p>Sobald ein Team regelmäßig Software ausliefert, entscheidet eine Frage darüber, wie schnell und wie sicher es vorankommt: Wie gelangt eine Code-Änderung vom Laptop eines Entwicklers in die Produktion, wo sie live läuft? Die moderne Antwort heißt <strong>CI/CD</strong>. Dieser Leitfaden erklärt, was CI/CD bedeutet, wie eine Pipeline funktioniert, welche Tools beteiligt sind und warum es zum Standard geworden ist.</p>
 
+  <p class="note">Die echte GitHub-Actions-Pipeline weiter unten endet mit einem SSH-Deploy auf Ihren eigenen Server (DEPLOY_HOST, Benutzer deploy). Für diesen letzten Schritt eignet sich jeder Linux-VPS mit SSH-Zugang, zum Beispiel ein <a href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">DigitalOcean-Droplet</a> oder ein <a href="https://www.tkqlhce.com/click-101807052-17058456?sid=coldwa-de-ci-cd-top" rel="sponsored nofollow noopener" target="_blank">Contabo Cloud VPS</a> (Affiliate-Links).</p>
+
   <h2>Die kurze Definition</h2>
   <p><strong>CI/CD automatisiert den Weg von einer Code-Änderung zu einer getesteten, ausgelieferten Anwendung.</strong> Es steht für <strong>Continuous Integration</strong> und <strong>Continuous Delivery</strong> (oder Deployment). Zusammen ersetzen sie langsame, fehleranfällige manuelle Schritte - Bauen, Testen, Ausliefern - durch eine automatisierte <em>Pipeline</em>, die bei jeder Code-Änderung läuft. Weniger Handarbeit, weniger Fehler, schnellere Releases.</p>
 
