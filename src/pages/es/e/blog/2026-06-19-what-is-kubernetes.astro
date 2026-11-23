@@ -19,6 +19,8 @@ const description = 'Kubernetes es un sistema de código abierto que ejecuta y c
 
   <p>Una vez que empaquetas una app en un <a href="/es/e/blog/2026-06-19-what-is-docker.html">contenedor</a>, surge un nuevo problema: quién lo arranca, lo reinicia cuando falla, ejecuta más copias bajo carga y los conecta a todos - ¿en decenas de máquinas? Ese trabajo es la <strong>orquestación</strong>, y <strong>Kubernetes</strong> es el sistema que la mayoría de los equipos usan para ello. Esta guía explica qué es Kubernetes, los conceptos que importan, su relación con Docker, y cuándo lo necesitas de verdad.</p>
 
+  <p class="note">Para probar Kubernetes en un servidor real sin un clúster gestionado, K3s (una distribución ligera de Kubernetes) funciona en una sola máquina Linux: su documentación indica 2 núcleos de CPU y 2 GB de RAM como mínimo para un nodo servidor (docs.k3s.io, leído el 23/11). Un <a href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">droplet de DigitalOcean</a> o un <a href="https://www.tkqlhce.com/click-101807052-17248464?sid=coldwa-es-kubernetes-top" rel="sponsored nofollow noopener" target="_blank">Cloud VPS de Contabo</a> (enlaces de afiliado) de ese tamaño basta para un clúster de prueba de un nodo.</p>
+
   <h2>La definición corta</h2>
   <p><strong>Kubernetes es una plataforma de código abierto para ejecutar y coordinar contenedores en un grupo de máquinas.</strong> Le dices el estado deseado - «ejecuta cinco copias de esta app, mantenlas sanas, exponlas en esta dirección» - y Kubernetes trabaja sin parar para que la realidad coincida: coloca contenedores en las máquinas, reinicia los que fallan, ajusta la escala y enruta el tráfico hacia ellos. Suele abreviarse como <strong>K8s</strong> (K, ocho letras, s).</p>
 
