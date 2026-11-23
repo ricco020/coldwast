@@ -30,6 +30,8 @@ const faq = [
 
   <p>Vous configurez un paiement, et votre application réagit à l’instant où l’argent est encaissé. Vous poussez un commit, et un build démarre tout seul. Derrière cette immédiateté, il y a presque toujours un <strong>webhook</strong>. Ce guide explique, simplement, ce qu’est un webhook, en quoi il diffère d’un appel d’API classique, comment le recevoir en sécurité, et où vous en dépendez déjà.</p>
 
+  <p class="note">Pour recevoir des webhooks, il faut un serveur allumé en permanence avec une URL HTTPS publique, ce qu’un portable qui se met en veille n’est pas. Un <a href="/go/cloud.html" rel="sponsored nofollow noopener" target="_blank">droplet DigitalOcean</a> ou un <a href="https://www.tkqlhce.com/click-101807052-12454592?sid=coldwa-fr-webhook-top" rel="sponsored nofollow noopener" target="_blank">Cloud VPS Contabo</a> (liens affiliés) peut faire tourner le récepteur Python plus bas (bibliothèque standard seule, port 8080) derrière un <a href="/fr/e/blog/2026-06-26-what-is-a-reverse-proxy.html">reverse proxy</a> qui sert le HTTPS.</p>
+
   <h2>La définition courte</h2>
   <p>Un <strong>webhook est une requête HTTP automatique qu’un service envoie à une URL que vous contrôlez quand un événement se produit.</strong> Plutôt que de demander des nouvelles à un service, c’est lui qui <em>vous</em> prévient dès qu’il y en a.</p>
   <p>D’où le surnom d’<strong>« API inversée »</strong>. Avec une <a href="/fr/e/blog/2026-06-14-what-is-an-api.html">API</a> classique, vous êtes le client : vous faites la requête, le serveur répond. Avec un webhook les rôles s’inversent - le fournisseur devient le client et <em>votre</em> endpoint est le serveur qu’il appelle.</p>
