@@ -88,6 +88,14 @@ export function ctaAngle(lang, hint = '') {
 // programme du reseau qui vend. PID CJ coldwa 101807052 ; lien texte CJ dans la langue du lecteur quand
 // Contabo en publie un (DE 17058456, ES 17248464), sinon EN 12454592. Aucun prix cite.
 const CONTABO_AID = { en: 12454592, de: 17058456, es: 17248464 };
+// 25/11 : vente Black Friday Contabo ouverte (contabo.com/en/black-friday/, Core VPS des 4,40, VPS Plus 2 -20 %),
+// lien CJ 17389597 « VPS Plus 2 LP - Black Friday 2026 » a la place du lien EN pendant la fenetre seulement.
+// Evalue au build : tout build apres le 03/12 00h revient seul a 12454592 (les liens en dur des pages, eux, se remettent par sed).
+const CONTABO_BF = { aid: 17389597, from: Date.parse('2026-11-25T00:00:00+01:00'), until: Date.parse('2026-12-03T00:00:00+01:00') };
+function contaboEnAid() {
+  const t = Date.now();
+  return t >= CONTABO_BF.from && t < CONTABO_BF.until ? CONTABO_BF.aid : CONTABO_AID.en;
+}
 const CONTABO_TXT = {
   en: ['Another option:', 'Contabo Cloud VPS', ', root access and its own public IPv4 (affiliate link).'],
   fr: ['Autre option :', 'Cloud VPS Contabo', ', accès root et IPv4 publique dédiée (lien affilié).'],
@@ -100,7 +108,7 @@ export function contaboAlt(lang, cta, page = '') {
   if (!cta || !['server', 'containers', 'haskell', 'devops', 'api', 'database'].includes(cta.key)) return null;
   // Faux positifs des regles d angle (« Hangs Your Server », « container queries » CSS, serverless = pas de VPS).
   if (/regex|css-|serverless/i.test(String(page))) return null;
-  const aid = CONTABO_AID[lang] || CONTABO_AID.en;
+  const aid = (lang !== 'en' && CONTABO_AID[lang]) || contaboEnAid();
   // 19/11 : langue en tete du SID (canonPath est le chemin EN, donc les 6 langues partageaient le meme SID)
   // et prefixe e-blog- retire : le SID le plus long depassait 64 caracteres et sa fin risquait d etre coupee.
   const slug = String(page).replace(/^\/+|\.html$/g, '').replace(/^e\/blog\//, '').replace(/[^a-z0-9]+/gi, '-').slice(0, 44);
